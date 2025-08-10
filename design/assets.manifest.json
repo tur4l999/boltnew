@@ -1,0 +1,72 @@
+{
+  "icons": [
+    {
+      "name": "home",
+      "emoji": "🏠",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Home tab icon"
+    },
+    {
+      "name": "topics",
+      "emoji": "📚",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Topics tab icon"
+    },
+    {
+      "name": "exam",
+      "emoji": "🧪",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Exam tab icon"
+    },
+    {
+      "name": "mistakes",
+      "emoji": "⚠️",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Mistakes tab icon"
+    },
+    {
+      "name": "store",
+      "emoji": "🛍️",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Store tab icon"
+    },
+    {
+      "name": "more",
+      "emoji": "➕",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "More menu icon"
+    },
+    {
+      "name": "video",
+      "emoji": "🎬",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Video lessons icon"
+    },
+    {
+      "name": "notifications",
+      "emoji": "🔔",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Notifications icon"
+    },
+    {
+      "name": "assistant",
+      "emoji": "🤖",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "AI assistant icon"
+    },
+    {
+      "name": "language",
+      "emoji": "🌐",
+      "sizes": ["16x16", "24x24", "32x32"],
+      "usage": "Language switcher icon"
+    }
+  ],
+  "images": [
+    {
+      "name": "question-placeholder",
+      "url": "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+      "sizes": ["400x300", "800x600"],
+      "usage": "Question image placeholder"
+    }
+  ]
+}

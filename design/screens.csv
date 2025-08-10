@@ -1,0 +1,11 @@
+Screen Name,Route,Description,Components Used,Status
+Home,/,Ana səhifə - tələbə proqresi və əsas funksiyalar,"Header, Card, Progress, Button",Active
+Topics,/topics,Təlim mövzuları siyahısı,"Header, Card, Button, Progress, SearchInput",Active
+Lesson,/lesson/:id,Dərs məzmunu - video və materiallar,"Header, VideoPlayer, TabBar, Card, Button",Active
+Practice,/practice,Sürətli test və məşq,"Card, Button, RadioButton",Active
+ExamConfig,/exam/config,İmtahan tənzimləmələri,"Card, Button, Slider, RadioButton",Active
+ExamRun,/exam/run,İmtahan icra ekranı,"Card, Button, Timer, RadioButton",Active
+Results,/results,İmtahan nəticələri,"Card, Button, ScoreDisplay",Active
+Mistakes,/mistakes,Səhv edilmiş suallar,"Card, List",Active
+Store,/store,Mağaza və məhsullar,"Card, Button, PriceTag",Active
+More,/more,Əlavə funksiyalar,"Sheet, Button, Grid",Active
