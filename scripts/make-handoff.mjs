@@ -26,6 +26,7 @@ const filesToCopy = [
   { src: 'design/screens.csv', dest: 'design/screens.csv' },
   { src: 'design/components.csv', dest: 'design/components.csv' },
   { src: 'design/assets.manifest.json', dest: 'design/assets.manifest.json' },
+  { src: 'public/styles.css', dest: 'public/styles.css' },
   { src: 'src/theme.ts', dest: 'src/theme.ts' },
   { src: 'README.md', dest: 'README.md' }
 ];

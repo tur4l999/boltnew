@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "tokens": "node scripts/generate-tokens.mjs",
     "validate": "node scripts/validate.mjs",
-    "handoff": "node scripts/make-handoff.mjs",
+    "handoff": "npm run tokens && node scripts/make-handoff.mjs",
     "dev:inspect": "vite"
   },
   "dependencies": {
