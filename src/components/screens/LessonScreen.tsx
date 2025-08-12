@@ -16,11 +16,10 @@ export function LessonScreen() {
 
   const lessonTabs = [
     { key: 'article', label: t.article },
-    { key: 'video', label: t.video },
+    { key: 'video3d', label: '3D video' },
+    { key: 'video', label: t.video + ' dərs' },
     { key: 'materials', label: t.materials },
     { key: 'questions', label: t.questions },
-    { key: 'video3d', label: t.video3d },
-    { key: 'contactTeacher', label: t.contactTeacher },
   ];
 
   function renderTabContent() {
@@ -46,6 +45,45 @@ export function LessonScreen() {
                 </label>
               </div>
               <div className="text-xs text-gray-500">(demo)</div>
+            </Card>
+            
+            {/* Müəllimlə əlaqə */}
+            <Card>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="text-emerald-600 text-xl">💬</div>
+                <div>
+                  <div className="font-bold text-gray-900">Müəllimlə əlaqə</div>
+                  <div className="text-sm text-gray-500">
+                    Sualınızı göndərin, cavab bildirişlə gələcək.
+                  </div>
+                </div>
+              </div>
+              <textarea
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                placeholder="Sualınızı yazın..."
+                className="w-full rounded-xl border border-gray-300 p-3 outline-none min-h-[80px] resize-vertical text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              />
+              <div className="flex justify-between items-center mt-2">
+                <button
+                  onClick={() => alert('Video şərhi əlavə edildi (demo)')}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  💭 Şərh et
+                </button>
+                <Button
+                  onClick={() => {
+                    if (contactMessage.trim()) {
+                      console.log('Sending message:', contactMessage);
+                      setContactMessage('');
+                    }
+                  }}
+                  disabled={!contactMessage.trim()}
+                  size="sm"
+                >
+                  Göndər
+                </Button>
+              </div>
             </Card>
           </div>
         );
@@ -78,44 +116,9 @@ export function LessonScreen() {
       case 'video3d':
         return (
           <Card>
-            <div className="font-bold mb-2 text-gray-900">3D Səhnə (Demo)</div>
+            <div className="font-bold mb-2 text-gray-900">3D Video (Demo)</div>
             <div className="text-sm text-gray-700">
-              3D səhnələrin video və ya interaktiv versiyası burada açılacaq.
-            </div>
-          </Card>
-        );
-
-      case 'contactTeacher':
-        return (
-          <Card>
-            <div className="flex items-center gap-3 mb-3">
-              <div className="text-emerald-600 text-xl">💬</div>
-              <div>
-                <div className="font-bold text-gray-900">Müəllimlə əlaqə</div>
-                <div className="text-sm text-gray-500">
-                  Sualınızı göndərin, cavab bildirişlə gələcək.
-                </div>
-              </div>
-            </div>
-            <textarea
-              value={contactMessage}
-              onChange={(e) => setContactMessage(e.target.value)}
-              placeholder="Sualınızı yazın..."
-              className="w-full rounded-xl border border-gray-300 p-3 outline-none min-h-[80px] resize-vertical text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-            />
-            <div className="flex justify-end mt-2">
-              <Button
-                onClick={() => {
-                  if (contactMessage.trim()) {
-                    console.log('Sending message:', contactMessage);
-                    setContactMessage('');
-                  }
-                }}
-                disabled={!contactMessage.trim()}
-                size="sm"
-              >
-                Göndər
-              </Button>
+              3D video məzmunu burada göstəriləcək.
             </div>
           </Card>
         );
