@@ -10,6 +10,7 @@ export function LessonScreen() {
   const [activeTab, setActiveTab] = useState('video');
   const [offlineDownload, setOfflineDownload] = useState(false);
   const [contactMessage, setContactMessage] = useState('');
+  const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);
   
   const { moduleId } = currentScreen.params;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
@@ -17,7 +18,7 @@ export function LessonScreen() {
   const lessonTabs = [
     { key: 'article', label: t.article },
     { key: 'video3d', label: '3D video' },
-    { key: 'video', label: t.video + ' dərs' },
+    { key: 'video', label: 'Video dərs' },
     { key: 'materials', label: t.materials },
     { key: 'questions', label: t.questions },
   ];
@@ -130,21 +131,36 @@ export function LessonScreen() {
 
   return (
     <div className="p-3 pb-32">
-      {/* Topic Chips */}
-      <div className="flex gap-2 overflow-x-auto pb-1 mb-3 scrollbar-hide">
-        {Array.from({ length: 27 }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => navigate('Lesson', { moduleId: `M${i + 1}` })}
-            className={`px-3 py-2 rounded-lg whitespace-nowrap text-xs border min-h-[36px] ${
-              moduleId === `M${i + 1}`
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-gray-100 text-gray-700 border-gray-300'
-            }`}
-          >
-            M{i + 1}
-          </button>
-        ))}
+      {/* Module Dropdown */}
+      <div className="relative mb-3">
+        <button
+          onClick={() => setModuleDropdownOpen(!moduleDropdownOpen)}
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-left flex items-center justify-between min-h-[44px] focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          <span className="font-medium text-gray-900">{moduleId}: Yol nişanları</span>
+          <span className={`transform transition-transform ${moduleDropdownOpen ? 'rotate-180' : ''}`}>
+            ▼
+          </span>
+        </button>
+        
+        {moduleDropdownOpen && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
+            {Array.from({ length: 27 }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  navigate('Lesson', { moduleId: `M${i + 1}` });
+                  setModuleDropdownOpen(false);
+                }}
+                className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 min-h-[44px] ${
+                  moduleId === `M${i + 1}` ? 'bg-emerald-50 text-emerald-700 font-medium' : 'text-gray-700'
+                }`}
+              >
+                M{i + 1}: Module {i + 1} — Traffic Rules & Safety
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Internal Tabs */}
