@@ -4,7 +4,6 @@ import { AppProvider } from './contexts/AppContext';
 import { Header } from './components/layout/Header';
 import { TabBar } from './components/layout/TabBar';
 import { ScreenRenderer } from './components/navigation/ScreenRenderer';
-import { MoreSheet } from './components/sheets/MoreSheet';
 import { InspectPage } from './pages/inspect';
 
 export default function App() {
@@ -19,7 +18,6 @@ export default function App() {
                 <Header />
                 <ScreenRenderer />
                 <TabBar />
-                <MoreSheet />
               </div>
             </div>
           </AppProvider>
