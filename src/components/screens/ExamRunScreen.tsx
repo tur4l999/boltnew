@@ -163,9 +163,7 @@ export function ExamRunScreen() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
+      
       <Card className="mb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-700">
