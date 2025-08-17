@@ -7,8 +7,9 @@ export function MoreSheet() {
   if (!moreSheetVisible) return null;
 
   const items = [
-    'Praktiki təcrübə', 'Sual-cavab', 'Apellyasiya',
-    'Ödənişlər', 'Daxili balans', 'Parametrlər'
+    'Səhvlərim', 'Praktiki təcrübə', 'Sual-cavab', 
+    'Apellyasiya', 'Ödənişlər', 'Daxili balans', 
+    'Parametrlər', 'Bildirişlər', 'Köməkçi'
   ];
 
   return (
@@ -24,7 +25,12 @@ export function MoreSheet() {
             <button
               key={i}
               onClick={() => {
-                console.log('More item clicked:', item);
+                if (item === 'Səhvlərim') {
+                  // Navigate to mistakes screen
+                  console.log('Navigate to Mistakes');
+                } else {
+                  console.log('More item clicked:', item);
+                }
                 setMoreSheetVisible(false);
               }}
               className="p-3 rounded-lg border border-gray-300 text-center text-sm text-gray-700 min-h-[44px] flex items-center justify-center hover:bg-gray-50"

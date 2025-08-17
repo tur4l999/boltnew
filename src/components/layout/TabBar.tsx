@@ -6,15 +6,14 @@ export function TabBar() {
   
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠' },
-    { key: 'Topics', label: t.topics, emoji: '📚' },
+    { key: 'Topics', label: 'Təlimlər', emoji: '📚' },
     { key: 'Exam', label: t.exam, emoji: '🧪' },
-    { key: 'Mistakes', label: t.mistakes, emoji: '⚠️' },
     { key: 'Store', label: t.store, emoji: '🛍️' },
   ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-sm border-t border-gray-200">
-      <div className="max-w-md mx-auto grid grid-cols-6">
+      <div className="max-w-md mx-auto grid grid-cols-5">
         {tabs.map((tab) => (
           <button
             key={tab.key}
