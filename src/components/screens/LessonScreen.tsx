@@ -19,7 +19,7 @@ export function LessonScreen() {
     { key: 'article', label: t.article },
     { key: 'video3d', label: '3D video' },
     { key: 'video', label: 'Video dərs' },
-    { key: 'materials', label: t.materials },
+    { key: 'materials', label: 'Konspekt' },
     { key: 'questions', label: t.questions },
   ];
 
@@ -49,43 +49,20 @@ export function LessonScreen() {
             </Card>
             
             {/* Müəllimlə əlaqə */}
-            <Card>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="text-emerald-600 text-xl">💬</div>
-                <div>
-                  <div className="font-bold text-gray-900">Müəllimlə əlaqə</div>
-                  <div className="text-sm text-gray-500">
-                    Sualınızı göndərin, cavab bildirişlə gələcək.
-                  </div>
-                </div>
-              </div>
-              <textarea
-                value={contactMessage}
-                onChange={(e) => setContactMessage(e.target.value)}
-                placeholder="Sualınızı yazın..."
-                className="w-full rounded-xl border border-gray-300 p-3 outline-none min-h-[80px] resize-vertical text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <button
-                  onClick={() => alert('Video şərhi əlavə edildi (demo)')}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  💭 Şərh et
-                </button>
-                <Button
-                  onClick={() => {
-                    if (contactMessage.trim()) {
-                      console.log('Sending message:', contactMessage);
-                      setContactMessage('');
-                    }
-                  }}
-                  disabled={!contactMessage.trim()}
-                  size="sm"
-                >
-                  Göndər
-                </Button>
-              </div>
-            </Card>
+            <div className="flex gap-2">
+              <button
+                onClick={() => alert('Müəllimlə əlaqə və sual-cavab səhifəsi (demo)')}
+                className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors min-h-[36px]"
+              >
+                💬 Müəllimlə əlaqə
+              </button>
+              <button
+                onClick={() => alert('Video şərhi əlavə edildi (demo)')}
+                className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors min-h-[36px]"
+              >
+                💭 Şərh et
+              </button>
+            </div>
           </div>
         );
 
@@ -104,9 +81,9 @@ export function LessonScreen() {
       case 'materials':
         return (
           <Card>
-            <div className="font-bold mb-2 text-gray-900">PDF / şəkillər</div>
+            <div className="font-bold mb-2 text-gray-900">Konspekt</div>
             <div className="text-sm text-gray-700">
-              Materiallar siyahısı buraya düşəcək. (Demo)
+              Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
             </div>
           </Card>
         );

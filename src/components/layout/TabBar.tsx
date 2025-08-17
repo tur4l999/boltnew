@@ -31,7 +31,7 @@ export function TabBar() {
           </button>
         ))}
         <button
-          onClick={() => setMoreSheetVisible(true)}
+          onClick={() => switchTab('More')}
           className="p-2 flex flex-col items-center gap-1 min-h-[56px] text-gray-500"
         >
           <div className="p-1.5 rounded-lg">

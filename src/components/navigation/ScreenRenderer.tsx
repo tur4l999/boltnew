@@ -9,6 +9,7 @@ import { ExamRunScreen } from '../screens/ExamRunScreen';
 import { ResultsScreen } from '../screens/ResultsScreen';
 import { MistakesScreen } from '../screens/MistakesScreen';
 import { StoreScreen } from '../screens/StoreScreen';
+import { MoreScreen } from '../screens/MoreScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -25,6 +26,9 @@ export function ScreenRenderer() {
   }
   if (currentScreen.screen === 'Store' || (currentTab === 'Store' && currentScreen.screen === 'Store')) {
     return <StoreScreen />;
+  }
+  if (currentScreen.screen === 'More' || (currentTab === 'More' && currentScreen.screen === 'More')) {
+    return <MoreScreen />;
   }
   
   // Stack screens
