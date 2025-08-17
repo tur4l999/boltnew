@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 
 export function TabBar() {
-  const { t, currentTab, switchTab, navigate, currentScreen } = useApp();
+  const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible } = useApp();
   
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠' },
@@ -40,17 +40,12 @@ export function TabBar() {
           </button>
         ))}
         <button
-          onClick={() => {
-            switchTab('Home');
-            navigate('More');
-          }}
+          onClick={() => setMoreSheetVisible(true)}
           className={`p-2 flex flex-col items-center gap-1 min-h-[56px] ${
-            currentScreen.screen === 'More' ? 'text-emerald-600' : 'text-gray-500'
+            'text-gray-500'
           }`}
         >
-          <div className={`p-1.5 rounded-lg ${
-            currentScreen.screen === 'More' ? 'bg-gray-50' : 'bg-transparent'
-          }`}>
+          <div className="p-1.5 rounded-lg bg-transparent">
             <span className="text-base">➕</span>
           </div>
           <div className="text-xs font-semibold">{t.more}</div>
