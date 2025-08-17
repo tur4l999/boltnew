@@ -40,12 +40,14 @@ export function TabBar() {
           </button>
         ))}
         <button
-          onClick={() => setMoreSheetVisible(true)}
+          onClick={() => switchTab('More')}
           className={`p-2 flex flex-col items-center gap-1 min-h-[56px] ${
-            'text-gray-500'
+            currentTab === 'More' ? 'text-emerald-600' : 'text-gray-500'
           }`}
         >
-          <div className="p-1.5 rounded-lg bg-transparent">
+          <div className={`p-1.5 rounded-lg ${
+            currentTab === 'More' ? 'bg-gray-50' : 'bg-transparent'
+          }`}>
             <span className="text-base">➕</span>
           </div>
           <div className="text-xs font-semibold">{t.more}</div>
