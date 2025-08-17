@@ -49,16 +49,16 @@ export function LessonScreen() {
             </Card>
             
             {/* Müəllimlə əlaqə */}
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button
-                onClick={() => alert('Müəllimlə əlaqə və sual-cavab səhifəsi (demo)')}
-                className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors min-h-[36px]"
+                onClick={() => alert('Digər istifadəçilərin sualları və müəllim cavabları (demo)')}
+                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
               >
                 💬 Müəllimlə əlaqə
               </button>
               <button
                 onClick={() => alert('Video şərhi əlavə edildi (demo)')}
-                className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors min-h-[36px]"
+                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
               >
                 💭 Şərh et
               </button>

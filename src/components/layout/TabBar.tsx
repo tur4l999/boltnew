@@ -2,12 +2,12 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 
 export function TabBar() {
-  const { t, currentTab, switchTab, setMoreSheetVisible } = useApp();
+  const { t, currentTab, switchTab, navigate, currentScreen } = useApp();
   
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠' },
     { key: 'Topics', label: 'Təlimlər', emoji: '📚' },
-    { key: 'Exam', label: t.exam, emoji: '🧪' },
+    { key: 'ExamConfig', label: t.exam, emoji: '🧪' },
     { key: 'Store', label: t.store, emoji: '🛍️' },
   ];
 
@@ -17,13 +17,22 @@ export function TabBar() {
         {tabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => switchTab(tab.key)}
+            onClick={() => {
+              if (tab.key === 'ExamConfig') {
+                switchTab('Home');
+                navigate('ExamConfig');
+              } else {
+                switchTab(tab.key);
+              }
+            }}
             className={`p-2 flex flex-col items-center gap-1 min-h-[56px] ${
-              currentTab === tab.key ? 'text-emerald-600' : 'text-gray-500'
+              (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig')) 
+                ? 'text-emerald-600' : 'text-gray-500'
             }`}
           >
             <div className={`p-1.5 rounded-lg ${
-              currentTab === tab.key ? 'bg-gray-50' : 'bg-transparent'
+              (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
+                ? 'bg-gray-50' : 'bg-transparent'
             }`}>
               <span className="text-base">{tab.emoji}</span>
             </div>
@@ -31,10 +40,17 @@ export function TabBar() {
           </button>
         ))}
         <button
-          onClick={() => switchTab('More')}
-          className="p-2 flex flex-col items-center gap-1 min-h-[56px] text-gray-500"
+          onClick={() => {
+            switchTab('Home');
+            navigate('More');
+          }}
+          className={`p-2 flex flex-col items-center gap-1 min-h-[56px] ${
+            currentScreen.screen === 'More' ? 'text-emerald-600' : 'text-gray-500'
+          }`}
         >
-          <div className="p-1.5 rounded-lg">
+          <div className={`p-1.5 rounded-lg ${
+            currentScreen.screen === 'More' ? 'bg-gray-50' : 'bg-transparent'
+          }`}>
             <span className="text-base">➕</span>
           </div>
           <div className="text-xs font-semibold">{t.more}</div>

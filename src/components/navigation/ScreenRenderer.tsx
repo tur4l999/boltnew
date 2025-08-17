@@ -21,14 +21,8 @@ export function ScreenRenderer() {
   if (currentScreen.screen === 'Topics' || (currentTab === 'Topics' && currentScreen.screen === 'Topics')) {
     return <TopicsScreen />;
   }
-  if (currentScreen.screen === 'Mistakes' || (currentTab === 'Mistakes' && currentScreen.screen === 'Mistakes')) {
-    return <MistakesScreen />;
-  }
   if (currentScreen.screen === 'Store' || (currentTab === 'Store' && currentScreen.screen === 'Store')) {
     return <StoreScreen />;
-  }
-  if (currentScreen.screen === 'More' || (currentTab === 'More' && currentScreen.screen === 'More')) {
-    return <MoreScreen />;
   }
   
   // Stack screens
@@ -43,6 +37,10 @@ export function ScreenRenderer() {
       return <ExamRunScreen />;
     case 'Results':
       return <ResultsScreen />;
+    case 'Mistakes':
+      return <MistakesScreen />;
+    case 'More':
+      return <MoreScreen />;
     default:
       return <HomeScreen />;
   }
