@@ -9,6 +9,7 @@ import { ExamRunScreen } from '../screens/ExamRunScreen';
 import { ResultsScreen } from '../screens/ResultsScreen';
 import { MistakesScreen } from '../screens/MistakesScreen';
 import { StoreScreen } from '../screens/StoreScreen';
+import { MoreScreen } from '../screens/MoreScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
