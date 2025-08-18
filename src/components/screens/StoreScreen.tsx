@@ -14,8 +14,8 @@ export function StoreScreen() {
   const [cart, setCart] = useState<Product[]>([]);
   
   const products: Product[] = [
-    { id: 'p1', title: 'Qaydalar kitabı (AZ)', price: 19, image: '/public/images/books/yeni-book.jpg' },
-    { id: 'p2', title: 'Test çalışmaları (AZ)', price: 24, image: '/public/images/books/talibov-suruculuk-rus-book.jpg' },
+    { id: 'p1', title: 'Qaydalar kitabi (AZ)', price: 19, image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400' },
+    { id: 'p2', title: 'Test calishmalari (AZ)', price: 24, image: 'https://images.pexels.com/photos/1370295/pexels-photo-1370295.jpeg?auto=compress&cs=tinysrgb&w=400' },
   ];
 
   function addToCart(product: Product) {
