@@ -14,8 +14,8 @@ export function StoreScreen() {
   const [cart, setCart] = useState<Product[]>([]);
   
   const products: Product[] = [
-    { id: 'p1', title: 'Qaydalar kitabı (AZ)', price: 19 },
-    { id: 'p2', title: 'Test çalışmaları (AZ)', price: 24 },
+    { id: 'p1', title: 'Qaydalar kitabı (AZ)', price: 19, image: '/public/images/books/yeni-book.jpg' },
+    { id: 'p2', title: 'Test çalışmaları (AZ)', price: 24, image: '/public/images/books/talibov-suruculuk-rus-book.jpg' },
   ];
 
   function addToCart(product: Product) {
@@ -33,14 +33,22 @@ export function StoreScreen() {
     <div className="p-3 pb-24">
       {products.map((product) => (
         <Card key={product.id} className="mb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-bold text-gray-900">{product.title}</div>
-              <div className="text-sm text-gray-500">{product.price} AZN</div>
+          <div className="flex items-center gap-4">
+            <img 
+              src={product.image} 
+              alt={product.title}
+              className="w-16 h-20 object-cover rounded-lg border border-gray-200"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+            <div className="flex-1">
+              <div className="font-bold text-gray-900 text-sm">{product.title}</div>
+              <div className="text-lg font-bold text-gray-900 mt-1">{product.price} AZN</div>
             </div>
-            <Button onClick={() => addToCart(product)} size="sm">
-              {t.addToCart}
-            </Button>
+            <div>
+              <Button onClick={() => addToCart(product)} size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+                {t.addToCart}
+              </Button>
+            </div>
           </div>
         </Card>
       ))}
