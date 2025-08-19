@@ -168,8 +168,6 @@ export function LessonScreen() {
           🧪 İmtahana başla
         </Button>
       </div>
-        </div>
-      </div>
     </div>
   );
 }
