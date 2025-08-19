@@ -12,6 +12,7 @@ import { StoreScreen } from '../screens/StoreScreen';
 import { MoreScreen } from '../screens/MoreScreen';
 import { TeacherContactScreen } from '../screens/TeacherContactScreen';
 import { PackagesScreen } from '../screens/PackagesScreen';
+import { AIChatScreen } from '../screens/AIChatScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -48,6 +49,8 @@ export function ScreenRenderer() {
       return <TeacherContactScreen />;
     case 'Packages':
       return <PackagesScreen />;
+    case 'AIChat':
+      return <AIChatScreen />;
     default:
       return <HomeScreen />;
   }
