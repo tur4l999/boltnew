@@ -1,5 +1,7 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { Header } from '../layout/Header';
+import { TabBar } from '../layout/TabBar';
 import { HomeScreen } from '../screens/HomeScreen';
 import { TopicsScreen } from '../screens/TopicsScreen';
 import { LessonScreen } from '../screens/LessonScreen';
@@ -15,6 +17,24 @@ import { PackagesScreen } from '../screens/PackagesScreen';
 import { AIChatScreen } from '../screens/AIChatScreen';
 
 export function ScreenRenderer() {
+  const { currentScreen, currentTab } = useApp();
+  
+  // AI Chat screen - no header or navigation
+  if (currentScreen.screen === 'AIChat') {
+    return <AIChatScreen />;
+  }
+  
+  // All other screens with header and navigation
+  return (
+    <>
+      <Header />
+      <MainContent />
+      <TabBar />
+    </>
+  );
+}
+
+function MainContent() {
   const { currentScreen, currentTab } = useApp();
   
   // Tab screens
@@ -49,8 +69,6 @@ export function ScreenRenderer() {
       return <TeacherContactScreen />;
     case 'Packages':
       return <PackagesScreen />;
-    case 'AIChat':
-      return <AIChatScreen />;
     default:
       return <HomeScreen />;
   }
