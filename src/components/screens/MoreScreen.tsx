@@ -11,7 +11,7 @@ export function MoreScreen() {
     { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },
     { key: 'mistakes', label: 'Səhvlərim', emoji: '⚠️', action: () => navigate('Mistakes') },
     { key: 'qa', label: 'Sual-cavab', emoji: '❓', action: () => alert('Sual-cavab (demo)') },
-    { key: 'appeal', label: 'Apellyasiya', emoji: '📝', action: () => alert('Apellyasiya (demo)') },
+    { key: 'appeal', label: 'Apellyasiyalarım', emoji: '📝', action: () => alert('Apellyasiya (demo)') },
     { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildirişlər (demo)') },
     { key: 'settings', label: 'Parametrlər', emoji: '⚙️', action: () => alert('Parametrlər (demo)') },
     { key: 'help', label: 'Köməkçi', emoji: '🆘', action: () => alert('Köməkçi (demo)') },
