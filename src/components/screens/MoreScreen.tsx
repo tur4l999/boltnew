@@ -19,19 +19,20 @@ export function MoreScreen() {
 
   return (
     <div className="p-4 pb-24">
-      {/* Balance and Tickets Display */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Balans:</span>
-          <span className="text-sm font-medium text-gray-900">5.00 AZN</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Simulyator Bileti:</span>
-          <span className="text-sm font-bold text-black">3</span>
+      {/* Title with Balance and Tickets in same row */}
+      <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-xl">
+        <h1 className="text-xl font-bold text-gray-900">Daha çox</h1>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            <span className="text-sm text-gray-500">Balans:</span>
+            <span className="text-sm font-medium text-gray-900">5.00 AZN</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-sm text-gray-500">Simulyator Bileti:</span>
+            <span className="text-sm font-bold text-black">3</span>
+          </div>
         </div>
       </div>
-      
-      <h1 className="text-xl font-bold text-gray-900 mb-6">Daha çox</h1>
       
       <div className="space-y-3">
         {moreItems.map((item) => (
