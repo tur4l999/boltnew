@@ -5,7 +5,7 @@ export function MoreScreen() {
   const { navigate } = useApp();
   
   const moreItems = [
-    { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Store') },
+    { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
     { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => alert('Daxili balans (demo)') },
     { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
     { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },

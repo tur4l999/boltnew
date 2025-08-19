@@ -11,6 +11,7 @@ import { MistakesScreen } from '../screens/MistakesScreen';
 import { StoreScreen } from '../screens/StoreScreen';
 import { MoreScreen } from '../screens/MoreScreen';
 import { TeacherContactScreen } from '../screens/TeacherContactScreen';
+import { PackagesScreen } from '../screens/PackagesScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -45,6 +46,8 @@ export function ScreenRenderer() {
       return <MistakesScreen />;
     case 'TeacherContact':
       return <TeacherContactScreen />;
+    case 'Packages':
+      return <PackagesScreen />;
     default:
       return <HomeScreen />;
   }

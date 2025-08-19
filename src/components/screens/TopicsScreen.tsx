@@ -27,7 +27,7 @@ export function TopicsScreen() {
           </div>
         </div>
         <button
-          onClick={() => navigate('Store')}
+          onClick={() => navigate('Packages')}
           className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
         >
           Paket al
