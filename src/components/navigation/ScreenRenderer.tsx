@@ -1,7 +1,5 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
-import { Header } from '../layout/Header';
-import { TabBar } from '../layout/TabBar';
 import { HomeScreen } from '../screens/HomeScreen';
 import { TopicsScreen } from '../screens/TopicsScreen';
 import { LessonScreen } from '../screens/LessonScreen';
@@ -23,19 +21,6 @@ export function ScreenRenderer() {
   if (currentScreen.screen === 'AIChat') {
     return <AIChatScreen />;
   }
-  
-  // All other screens with header and navigation
-  return (
-    <>
-      <Header />
-      <MainContent />
-      <TabBar />
-    </>
-  );
-}
-
-function MainContent() {
-  const { currentScreen, currentTab } = useApp();
   
   // Tab screens
   if (currentScreen.screen === 'Home' || (currentTab === 'Home' && currentScreen.screen === 'Home')) {
