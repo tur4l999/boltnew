@@ -20,7 +20,6 @@ export function LessonScreen() {
     { key: 'video3d', label: '3D video' },
     { key: 'video', label: 'Video dərs' },
     { key: 'materials', label: 'Konspekt' },
-    { key: 'questions', label: t.questions },
   ];
 
   function renderTabContent() {
@@ -84,9 +83,6 @@ export function LessonScreen() {
             </div>
           </Card>
         );
-
-      case 'questions':
-        return <PracticeInline />;
 
       case 'video3d':
         return (
@@ -157,37 +153,22 @@ export function LessonScreen() {
       {/* Tab Content */}
       {renderTabContent()}
 
-      {/* Alt hissə - Suallar və düymələr */}
+      {/* Alt hissə - 2 düymə */}
       <div className="fixed left-0 right-0 bottom-20 z-40">
         <div className="max-w-md mx-auto px-3">
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-3 space-y-2">
-            {/* Suallar bölümü */}
-            <div className="mb-3">
-              <button
-                onClick={() => setActiveTab('questions')}
-                className={`w-full px-3 py-2 rounded-lg text-sm font-bold border ${
-                  activeTab === 'questions'
-                    ? 'bg-emerald-600 text-white border-emerald-600'
-                    : 'bg-gray-100 text-gray-700 border-gray-300'
-                }`}
-              >
-                📝 Suallar
-              </button>
-            </div>
-            
-            {/* Düymələr */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button onClick={() => navigate('Practice', { moduleId })} size="sm">
-                Testə başla
-              </Button>
-              <Button 
-                onClick={() => navigate('ExamConfig')}
-                variant="secondary"
-                size="sm"
-              >
-                İmtahana keç
-              </Button>
-            </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Button 
+              onClick={() => navigate('Practice', { moduleId })}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              📝 Suallar
+            </Button>
+            <Button 
+              onClick={() => navigate('ExamConfig')}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              🧪 İmtahana başla
+            </Button>
           </div>
         </div>
       </div>
