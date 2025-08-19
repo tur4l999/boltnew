@@ -9,6 +9,7 @@ interface LoginScreenProps {
 export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
@@ -28,35 +29,35 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-green-100 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* Background Elements - Lower opacity and behind content */}
+      <div className="absolute inset-0 pointer-events-none z-0">
         {/* Traffic Signs */}
-        <div className="absolute top-20 left-10 w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center text-2xl">
+        <div className="absolute top-20 left-10 w-16 h-16 bg-red-500/5 rounded-full flex items-center justify-center text-2xl opacity-20">
           🛑
         </div>
-        <div className="absolute top-32 right-16 w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center text-xl">
+        <div className="absolute top-32 right-16 w-12 h-12 bg-yellow-500/5 rounded-full flex items-center justify-center text-xl opacity-15">
           ⚠️
         </div>
-        <div className="absolute bottom-40 left-8 w-14 h-14 bg-blue-500/10 rounded-full flex items-center justify-center text-2xl">
+        <div className="absolute bottom-40 left-8 w-14 h-14 bg-blue-500/5 rounded-full flex items-center justify-center text-2xl opacity-20">
           🚗
         </div>
-        <div className="absolute bottom-60 right-12 w-10 h-10 bg-green-500/10 rounded-full flex items-center justify-center text-lg">
+        <div className="absolute bottom-60 right-12 w-10 h-10 bg-green-500/5 rounded-full flex items-center justify-center text-lg opacity-15">
           🚦
         </div>
-        <div className="absolute top-1/2 left-4 w-8 h-8 bg-orange-500/10 rounded-full flex items-center justify-center text-sm">
+        <div className="absolute top-1/2 left-4 w-8 h-8 bg-orange-500/5 rounded-full flex items-center justify-center text-sm opacity-10">
           🛣️
         </div>
-        <div className="absolute top-1/3 right-8 w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center text-xl">
+        <div className="absolute top-1/3 right-8 w-12 h-12 bg-purple-500/5 rounded-full flex items-center justify-center text-xl opacity-15">
           📚
         </div>
         
         {/* Decorative Lines */}
-        <div className="absolute top-1/4 left-0 w-32 h-0.5 bg-emerald-200/30 rotate-12"></div>
-        <div className="absolute bottom-1/3 right-0 w-24 h-0.5 bg-green-200/30 -rotate-12"></div>
-        <div className="absolute top-2/3 left-1/4 w-16 h-0.5 bg-emerald-300/20 rotate-45"></div>
+        <div className="absolute top-1/4 left-0 w-32 h-0.5 bg-emerald-200/10 rotate-12 opacity-20"></div>
+        <div className="absolute bottom-1/3 right-0 w-24 h-0.5 bg-green-200/10 -rotate-12 opacity-20"></div>
+        <div className="absolute top-2/3 left-1/4 w-16 h-0.5 bg-emerald-300/10 rotate-45 opacity-15"></div>
       </div>
       
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md relative z-10">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="w-24 h-24 mx-auto mb-4 rounded-2xl bg-white shadow-lg flex items-center justify-center">
@@ -105,6 +106,20 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 placeholder="Şifrənizi daxil edin"
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               />
+            </div>
+
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 focus:ring-2"
+              />
+              <label htmlFor="remember-me" className="ml-2 text-sm text-gray-700">
+                Yadda saxla
+              </label>
             </div>
 
             <Button
