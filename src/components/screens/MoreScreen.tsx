@@ -18,7 +18,10 @@ export function MoreScreen() {
   ];
 
   return (
-    <div className="p-4 pb-24">
+  
+      
+      <h1 className="text-xl font-bold text-gray-900 mb-6">Daha çox</h1>
+        <div className="p-4 pb-24">
       {/* Balance and Tickets Display */}
       <div className="flex items-center justify-between mb-4 p-3 bg-white rounded-xl border border-gray-200">
         <div className="flex items-center gap-2">
@@ -30,9 +33,6 @@ export function MoreScreen() {
           <span className="text-sm font-bold text-emerald-600">3</span>
         </div>
       </div>
-      
-      <h1 className="text-xl font-bold text-gray-900 mb-6">Daha çox</h1>
-      
       <div className="space-y-3">
         {moreItems.map((item) => (
           <button
