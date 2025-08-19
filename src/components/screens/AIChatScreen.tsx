@@ -133,11 +133,19 @@ export function AIChatScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Backdrop */}
+      {historyOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setHistoryOpen(false)}
+        />
+      )}
+      
       {/* Chat History Sidebar */}
-      <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
-        historyOpen ? 'w-1/2' : 'w-0'
-      } overflow-hidden`}>
+      <div className={`fixed top-0 left-0 h-full bg-white border-r border-gray-200 transition-transform duration-300 z-50 ${
+        historyOpen ? 'translate-x-0' : '-translate-x-full'
+      } w-80 shadow-xl`}>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-bold text-gray-900">Söhbət Tarixçəsi</h3>
@@ -153,7 +161,7 @@ export function AIChatScreen() {
           </Button>
         </div>
         
-        <div className="p-2 space-y-2 overflow-y-auto h-full">
+        <div className="p-2 space-y-2 overflow-y-auto" style={{ height: 'calc(100vh - 120px)' }}>
           {chatHistory.map((chat) => (
             <button
               key={chat.id}
@@ -174,7 +182,7 @@ export function AIChatScreen() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-col h-screen">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 bg-white">
           <div className="flex items-center justify-between">
@@ -205,7 +213,7 @@ export function AIChatScreen() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: 'calc(100vh - 140px)' }}>
           {messages.map((message) => (
             <div
               key={message.id}
