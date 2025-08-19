@@ -136,7 +136,7 @@ export function AIChatScreen() {
     <div className="min-h-screen bg-gray-50 flex">
       {/* Chat History Sidebar */}
       <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
-        historyOpen ? 'w-80' : 'w-0'
+        historyOpen ? 'w-1/2' : 'w-0'
       } overflow-hidden`}>
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-3">
