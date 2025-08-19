@@ -32,24 +32,21 @@ export function LessonScreen() {
               src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
               watermark={watermark} 
             />
-            <Card className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            
+            {/* Offline və əlaqə düymələri */}
+            <div className="flex gap-1 items-center">
+              <div className="flex items-center gap-1">
                 <input
                   id="offline"
                   type="checkbox"
                   checked={offlineDownload}
                   onChange={(e) => setOfflineDownload(e.target.checked)}
-                  className="w-4 h-4 text-emerald-600 focus:ring-emerald-500"
+                  className="w-3 h-3 text-emerald-600 focus:ring-emerald-500"
                 />
-                <label htmlFor="offline" className="text-sm text-gray-700">
-                  {t.download}
+                <label htmlFor="offline" className="text-xs text-gray-600">
+                  📱 {t.download}
                 </label>
               </div>
-              <div className="text-xs text-gray-500">(demo)</div>
-            </Card>
-            
-            {/* Müəllimlə əlaqə */}
-            <div className="flex gap-1">
               <button
                 onClick={() => alert('Digər istifadəçilərin sualları və müəllim cavabları (demo)')}
                 className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
@@ -160,19 +157,37 @@ export function LessonScreen() {
       {/* Tab Content */}
       {renderTabContent()}
 
-      {/* Floating CTAs */}
+      {/* Alt hissə - Suallar və düymələr */}
       <div className="fixed left-0 right-0 bottom-20 z-40">
         <div className="max-w-md mx-auto px-3">
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 grid grid-cols-2 gap-2 p-2">
-            <Button onClick={() => navigate('Practice', { moduleId })}>
-              {t.startTest}
-            </Button>
-            <Button 
-              onClick={() => navigate('ExamConfig')}
-              variant="secondary"
-            >
-              {t.goToExam}
-            </Button>
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-gray-200 p-3 space-y-2">
+            {/* Suallar bölümü */}
+            <div className="mb-3">
+              <button
+                onClick={() => setActiveTab('questions')}
+                className={`w-full px-3 py-2 rounded-lg text-sm font-bold border ${
+                  activeTab === 'questions'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-gray-100 text-gray-700 border-gray-300'
+                }`}
+              >
+                📝 Suallar
+              </button>
+            </div>
+            
+            {/* Düymələr */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button onClick={() => navigate('Practice', { moduleId })} size="sm">
+                Testə başla
+              </Button>
+              <Button 
+                onClick={() => navigate('ExamConfig')}
+                variant="secondary"
+                size="sm"
+              >
+                İmtahana keç
+              </Button>
+            </div>
           </div>
         </div>
       </div>
