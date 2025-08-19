@@ -85,7 +85,7 @@ export function StoreScreen() {
                   size="sm"
                   className="text-xs px-3 py-1"
                 >
-                  Al
+                  Səbətə at
                 </Button>
               </div>
             </div>
