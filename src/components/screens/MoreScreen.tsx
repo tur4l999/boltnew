@@ -14,7 +14,7 @@ export function MoreScreen() {
     { key: 'appeal', label: 'Apellyasiyalarım', emoji: '📝', action: () => alert('Apellyasiya (demo)') },
     { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildirişlər (demo)') },
     { key: 'settings', label: 'Parametrlər', emoji: '⚙️', action: () => alert('Parametrlər (demo)') },
-    { key: 'help', label: 'Köməkçi', emoji: '🆘', action: () => alert('Köməkçi (demo)') },
+    { key: 'help', label: 'Dəstək', emoji: '🆘', action: () => alert('Köməkçi (demo)') },
   ];
 
   return (
