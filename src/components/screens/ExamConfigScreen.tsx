@@ -5,19 +5,23 @@ import { Button } from '../ui/Button';
 
 export function ExamConfigScreen() {
   const { t, navigate } = useApp();
-  const [examMode, setExamMode] = useState('mixed');
-  const [questionCount, setQuestionCount] = useState(10);
 
   return (
     <div className="p-3 pb-24">
       <Card>
-        <div className="font-bold mb-3 text-gray-900">{t.examSettings}</div>
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Button 
-            onClick={() => navigate('ExamRun', { config: { mode: 'mixed', questionsCount: 10 } })}
+            onClick={() => navigate('ExamRun', { config: { mode: 'simulator', questionsCount: 10 } })}
             className="w-full"
           >
-            {t.startExam}
+            🧪 İmtahan Simulyatoru
+          </Button>
+          <Button 
+            onClick={() => navigate('ExamRun', { config: { mode: 'final', questionsCount: 20 } })}
+            className="w-full"
+            variant="secondary"
+          >
+            📋 Yekun imtahan
           </Button>
         </div>
       </Card>
