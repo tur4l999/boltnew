@@ -153,38 +153,21 @@ export function LessonScreen() {
       {/* Tab Content */}
       {renderTabContent()}
 
-      {/* Exam Configuration Section */}
-      <div className="mt-4 space-y-2">
-        <button
-          onClick={() => navigate('ExamRun', { config: { mode: 'simulator', questionsCount: 10 } })}
-          className="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors min-h-[36px]"
+      {/* Main Action Buttons */}
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <Button 
+          onClick={() => navigate('Practice', { moduleId })}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          İmtahan Simulyatoru
-        </button>
-        <button
-          onClick={() => navigate('ExamRun', { config: { mode: 'final', questionsCount: 20 } })}
-          className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors min-h-[36px]"
+          📝 Suallar
+        </Button>
+        <Button 
+          onClick={() => alert('Başqa imtahan növü (demo)')}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          Yekun imtahan
-        </button>
+          🧪 İmtahana başla
+        </Button>
       </div>
-      {/* Alt hissə - 2 düymə */}
-      <div className="fixed left-0 right-0 bottom-20 z-40">
-        <div className="max-w-md mx-auto px-3">
-          <div className="grid grid-cols-2 gap-3">
-            <Button 
-              onClick={() => navigate('Practice', { moduleId })}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              Suallar
-            </Button>
-            <Button 
-              onClick={() => alert('Başqa imtahan növü (demo)')}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              İmtahana başla
-            </Button>
-          </div>
         </div>
       </div>
     </div>
