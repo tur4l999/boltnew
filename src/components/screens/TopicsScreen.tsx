@@ -16,6 +16,24 @@ export function TopicsScreen() {
 
   return (
     <div className="p-3 pb-24">
+      {/* Package Notification - Small */}
+      <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
+        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+          <span className="text-blue-600 text-xs">📦</span>
+        </div>
+        <div className="flex-1">
+          <div className="text-blue-900 text-xs font-medium">
+            Aktiv paketiniz yoxdur
+          </div>
+        </div>
+        <button
+          onClick={() => navigate('Store')}
+          className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
+        >
+          Paket al
+        </button>
+      </div>
+
       <input
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
