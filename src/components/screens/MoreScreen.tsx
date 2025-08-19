@@ -21,7 +21,7 @@ export function MoreScreen() {
     <div className="p-4 pb-24">
       {/* Title with Balance and Tickets in same row */}
       <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-xl">
-        <h1 className="text-xl font-bold text-gray-900">Daha çox</h1>
+        <h1 className="text-xl font-bold text-gray-900">...</h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             <span className="text-sm text-gray-500">Balans:</span>
