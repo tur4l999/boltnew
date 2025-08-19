@@ -10,6 +10,7 @@ import { ResultsScreen } from '../screens/ResultsScreen';
 import { MistakesScreen } from '../screens/MistakesScreen';
 import { StoreScreen } from '../screens/StoreScreen';
 import { MoreScreen } from '../screens/MoreScreen';
+import { TeacherContactScreen } from '../screens/TeacherContactScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -42,6 +43,8 @@ export function ScreenRenderer() {
       return <ResultsScreen />;
     case 'Mistakes':
       return <MistakesScreen />;
+    case 'TeacherContact':
+      return <TeacherContactScreen />;
     default:
       return <HomeScreen />;
   }

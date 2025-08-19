@@ -34,29 +34,19 @@ export function LessonScreen() {
             
             {/* Offline və əlaqə düymələri */}
             <div className="flex gap-1 items-center">
-              <div className="flex items-center gap-1">
-                <input
-                  id="offline"
-                  type="checkbox"
-                  checked={offlineDownload}
-                  onChange={(e) => setOfflineDownload(e.target.checked)}
-                  className="w-3 h-3 text-emerald-600 focus:ring-emerald-500"
-                />
-                <label htmlFor="offline" className="text-xs text-gray-600">
-                  📱 {t.download}
-                </label>
-              </div>
               <button
-                onClick={() => alert('Digər istifadəçilərin sualları və müəllim cavabları (demo)')}
-                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
+                onClick={() => setOfflineDownload(!offlineDownload)}
+                className={`flex items-center gap-1 px-2 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50 transition-colors min-h-[28px] ${
+                  offlineDownload ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-gray-600'
+                }`}
               >
-                💬 Müəllimlə əlaqə
+                📱 {t.download}
               </button>
               <button
-                onClick={() => alert('Video şərhi əlavə edildi (demo)')}
+                onClick={() => navigate('TeacherContact')}
                 className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
               >
-                💭 Şərh et
+                💬 Sualını qeyd et
               </button>
             </div>
           </div>
