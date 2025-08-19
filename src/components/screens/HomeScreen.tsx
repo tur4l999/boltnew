@@ -25,6 +25,24 @@ export function HomeScreen() {
 
   return (
     <div className="p-3 pb-24">
+      {/* Package Notification - Small */}
+      <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
+        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+          <span className="text-blue-600 text-xs">📦</span>
+        </div>
+        <div className="flex-1">
+          <div className="text-blue-900 text-xs font-medium">
+            Aktiv paketiniz yoxdur
+          </div>
+        </div>
+        <button
+          onClick={() => navigate('Store')}
+          className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
+        >
+          Paket al
+        </button>
+      </div>
+
       {/* Progress Card */}
       <Card className="mb-3">
         <div className="text-xs text-gray-500 mb-2">{t.progress}</div>
@@ -34,28 +52,6 @@ export function HomeScreen() {
         </div>
       </Card>
 
-      {/* Package Notification */}
-      <div className="mb-3 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <span className="text-blue-600 text-sm">📦</span>
-          </div>
-          <div className="flex-1">
-            <div className="font-medium text-blue-900 text-sm mb-1">
-              Aktiv paketiniz yoxdur
-            </div>
-            <div className="text-blue-700 text-xs mb-3 leading-relaxed">
-              Bütün funksiyalardan istifadə etmək üçün paket almalısınız. Mağazadan uyğun paketi seçə bilərsiniz.
-            </div>
-            <button
-              onClick={() => navigate('Store')}
-              className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors min-h-[32px]"
-            >
-              Paket al
-            </button>
-          </div>
-        </div>
-      </div>
       {/* Grid Layout */}
       <div className="space-y-2">
         {rows.map((row, idx) => (
