@@ -138,7 +138,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 focus:ring-2"
               />
-              <label htmlFor="remember-me" className="ml-2 text-sm text-gray-700">
               <label htmlFor="remember-me" className={`ml-2 text-sm transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-700'
               }`}>
