@@ -19,10 +19,10 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack } = useApp();
+  const { t, goBack, balance, purchasePackage } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
-    premium: 45,
+    standart: 45,
     pro: 60
   });
   
@@ -89,13 +89,19 @@ export function PackagesScreen() {
     return Math.round(pkg.basePrice * dayOption.multiplier);
   }
 
-  function purchasePackage(packageId: string) {
+  function handlePurchasePackage(packageId: string) {
     const pkg = packages.find(p => p.id === packageId);
     const price = calculatePrice(packageId);
     const days = selectedDays[packageId];
     
     if (pkg) {
-      alert(`${pkg.name} (${price} AZN - ${days} gün) satın alındı! (Demo)`);
+      const success = purchasePackage(packageId, pkg.name, price, days);
+      if (success) {
+        alert(`${pkg.name} (${price} AZN - ${days} gün) uğurla satın alındı!`);
+        goBack();
+      } else {
+        alert('Balansınız kifayət etmir. Balansınızı artırın.');
+      }
     }
   }
 
@@ -130,6 +136,9 @@ export function PackagesScreen() {
         <p className="text-sm text-gray-600">
           Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
         </p>
+        </p>
+        <div className="mt-2 text-lg font-bold text-emerald-600">
+          Balans: {balance} AZN
       </div>
 
       <div className="space-y-4">
@@ -195,7 +204,7 @@ export function PackagesScreen() {
               </div>
 
               <Button
-                onClick={() => purchasePackage(pkg.id)}
+                onClick={() => handlePurchasePackage(pkg.id)}
                 className={getButtonClass(pkg)}
                 variant={pkg.popular ? 'primary' : 'secondary'}
               >

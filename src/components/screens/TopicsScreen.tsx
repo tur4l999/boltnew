@@ -6,7 +6,7 @@ import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
 
 export function TopicsScreen() {
-  const { t, navigate } = useApp();
+  const { t, navigate, isModuleUnlocked, hasActivePackage } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   
   const filteredModules = useMemo(
@@ -14,10 +14,49 @@ export function TopicsScreen() {
     [searchQuery]
   );
 
+  const handleModuleClick = (module: any) => {
+    if (isModuleUnlocked(module.id)) {
+      navigate('Lesson', { moduleId: module.id });
+    } else {
+      alert('Bu mövzu üçün aktiv paket lazımdır. Paket almaq üçün mağazaya keçin.');
+    }
+  };
+
   return (
     <div className="p-3 pb-24">
       {/* Package Notification - Small */}
-      <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
+      {!hasActivePackage() && (
+        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
+          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <span className="text-blue-600 text-xs">📦</span>
+          </div>
+          <div className="flex-1">
+            <div className="text-blue-900 text-xs font-medium">
+              Aktiv paketiniz yoxdur
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('Packages')}
+            className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
+          >
+            Paket al
+          </button>
+        </div>
+      )}
+
+      {hasActivePackage() && (
+        <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
+          <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+            <span className="text-green-600 text-xs">✅</span>
+          </div>
+          <div className="flex-1">
+            <div className="text-green-900 text-xs font-medium">
+              Aktiv paket: {useApp().activePackage?.name}
+            </div>
+          </div>
+        </div>
+      )}
+
         <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
           <span className="text-blue-600 text-xs">📦</span>
         </div>
@@ -42,22 +81,28 @@ export function TopicsScreen() {
       />
       <div className="space-y-2">
         {filteredModules.map((module) => (
-          <Card key={module.id}>
+          <Card key={module.id} className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
             <div className="flex items-center justify-between mb-2">
-              <div>
+              <div className="flex items-center gap-2">
+                {!isModuleUnlocked(module.id) && (
+                  <span className="text-gray-400 text-lg">🔒</span>
+                )}
+                <div>
                 <div className="font-bold text-gray-900 text-sm">{module.title}</div>
                 <div className="text-xs text-gray-500">
                   {t.progress}: {module.progress}%
                 </div>
+                </div>
               </div>
               <Button 
-                onClick={() => navigate('Lesson', { moduleId: module.id })}
+                onClick={() => handleModuleClick(module)}
+                disabled={!isModuleUnlocked(module.id)}
                 size="sm"
               >
-                {t.startLesson}
+                {isModuleUnlocked(module.id) ? t.startLesson : 'Kilidli'}
               </Button>
             </div>
-            <Progress value={module.progress} />
+            <Progress value={isModuleUnlocked(module.id) ? module.progress : 0} />
           </Card>
         ))}
       </div>
