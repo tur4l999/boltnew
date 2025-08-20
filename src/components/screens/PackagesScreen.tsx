@@ -19,7 +19,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage } = useApp();
+  const { t, goBack, balance, purchasePackage, isDarkMode } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 45,
@@ -120,20 +120,30 @@ export function PackagesScreen() {
   }
 
   return (
-    <div className="p-3 pb-24">
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={goBack}
-          className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 flex items-center justify-center hover:bg-gray-100"
+          className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
+              : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
+          }`}
         >
           ←
         </button>
-        <h1 className="text-lg font-bold text-gray-900">Təlim Paketləri</h1>
+        <h1 className={`text-lg font-bold transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Təlim Paketləri</h1>
       </div>
 
       <div className="mb-6 text-center">
-        <p className="text-sm text-gray-600">
+        <p className={`text-sm transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+        }`}>
           Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
         </p>
         <div className="mt-2 text-lg font-bold text-emerald-600">
@@ -143,7 +153,9 @@ export function PackagesScreen() {
 
       <div className="space-y-4">
         {packages.map((pkg) => (
-          <Card key={pkg.id} className={getPackageCardClass(pkg)}>
+          <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
+            isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
+          }`}>
             {pkg.popular && (
               <>
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
@@ -157,20 +169,32 @@ export function PackagesScreen() {
             
             <div className="space-y-4 pt-2">
               <div className="text-center">
-                <h3 className={`text-xl font-bold ${pkg.popular ? 'text-emerald-700' : 'text-gray-900'}`}>
+                <h3 className={`text-xl font-bold transition-colors duration-200 ${
+                  pkg.popular 
+                    ? 'text-emerald-700' 
+                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                }`}>
                   {pkg.name}
                 </h3>
-                <div className={`text-3xl font-black mt-2 ${pkg.popular ? 'text-emerald-600' : 'text-gray-900'}`}>
+                <div className={`text-3xl font-black mt-2 transition-colors duration-200 ${
+                  pkg.popular 
+                    ? 'text-emerald-600' 
+                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                }`}>
                   {calculatePrice(pkg.id)} AZN
                 </div>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className={`text-sm mt-1 transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}>
                   {selectedDays[pkg.id]} gün müddətinə
                 </p>
               </div>
 
               {/* Day Selection */}
               <div className="space-y-2">
-                <h4 className="font-medium text-gray-900 text-sm text-center">Müddət seçin:</h4>
+                <h4 className={`font-medium text-sm text-center transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                }`}>Müddət seçin:</h4>
                 <div className="grid grid-cols-3 gap-2">
                   {dayOptions.map((option) => (
                     <button
@@ -181,7 +205,9 @@ export function PackagesScreen() {
                           ? pkg.popular
                             ? 'bg-emerald-600 text-white shadow-md'
                             : 'bg-gray-800 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : isDarkMode
+                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
                       {option.label}
@@ -192,10 +218,14 @@ export function PackagesScreen() {
 
               {/* Features */}
               <div className="space-y-2">
-                <h4 className="font-medium text-gray-900 text-sm">Daxil olan xidmətlər:</h4>
+                <h4 className={`font-medium text-sm transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                }`}>Daxil olan xidmətlər:</h4>
                 <div className="grid grid-cols-1 gap-1">
                   {pkg.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                    <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       <span className={pkg.popular ? 'text-emerald-500' : 'text-emerald-500'}>✓</span>
                       {feature}
                     </div>
@@ -216,27 +246,51 @@ export function PackagesScreen() {
       </div>
 
       {/* Payment Methods */}
-      <Card className="mt-6">
-        <h3 className="font-bold text-gray-900 mb-3 text-center">Ödəniş üsulları</h3>
+      <Card className={`mt-6 transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <h3 className={`font-bold mb-3 text-center transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Ödəniş üsulları</h3>
         <div className="grid grid-cols-3 gap-3">
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">💳</div>
-            <div className="text-xs text-gray-600">Kart</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Kart</div>
           </div>
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">📱</div>
-            <div className="text-xs text-gray-600">Mobil</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Mobil</div>
           </div>
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">🏦</div>
-            <div className="text-xs text-gray-600">Bank</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Bank</div>
           </div>
         </div>
       </Card>
 
       {/* Trust Indicators */}
       <div className="mt-4 text-center">
-        <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+        <div className={`flex items-center justify-center gap-4 text-xs transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-500' : 'text-gray-500'
+        }`}>
           <span className="flex items-center gap-1">
             🔒 Təhlükəsiz ödəniş
           </span>

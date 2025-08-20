@@ -3,24 +3,36 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 
 export function TransactionsScreen() {
-  const { goBack, balance, transactions } = useApp();
+  const { goBack, balance, transactions, isDarkMode } = useApp();
 
   return (
-    <div className="p-3 pb-24">
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={goBack}
-          className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 flex items-center justify-center hover:bg-gray-100"
+          className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
+              : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
+          }`}
         >
           ←
         </button>
-        <h1 className="text-lg font-bold text-gray-900">Daxili Balans</h1>
+        <h1 className={`text-lg font-bold transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Daxili Balans</h1>
       </div>
 
       {/* Balance Card */}
-      <Card className="mb-4 text-center">
-        <div className="text-sm text-gray-500 mb-1">Cari Balans</div>
+      <Card className={`mb-4 text-center transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <div className={`text-sm mb-1 transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-400' : 'text-gray-500'
+        }`}>Cari Balans</div>
         <div className="text-3xl font-bold text-emerald-600 mb-2">{balance} AZN</div>
         <button
           onClick={() => alert('Balans artırma (demo)')}
@@ -32,11 +44,17 @@ export function TransactionsScreen() {
 
       {/* Transactions */}
       <div className="mb-4">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">Ödənişlər Tarixçəsi</h2>
+        <h2 className={`text-lg font-bold mb-3 transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Ödənişlər Tarixçəsi</h2>
         
         {transactions.length === 0 ? (
-          <Card>
-            <div className="text-center text-gray-500 py-8">
+          <Card className={`transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <div className={`text-center py-8 transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               <div className="text-4xl mb-2">📋</div>
               <div className="text-sm">Hələlik ödəniş yoxdur</div>
             </div>
@@ -44,7 +62,9 @@ export function TransactionsScreen() {
         ) : (
           <div className="space-y-2">
             {transactions.map((transaction) => (
-              <Card key={transaction.id}>
+              <Card key={transaction.id} className={`transition-colors duration-200 ${
+                isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+              }`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -55,10 +75,14 @@ export function TransactionsScreen() {
                       {transaction.type === 'purchase' ? '📦' : '💰'}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900 text-sm">
+                      <div className={`font-medium text-sm transition-colors duration-200 ${
+                        isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                      }`}>
                         {transaction.description}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className={`text-xs transition-colors duration-200 ${
+                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                         {transaction.date.toLocaleDateString('az-AZ')} - {transaction.date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -76,29 +100,51 @@ export function TransactionsScreen() {
       </div>
 
       {/* Payment Methods */}
-      <Card>
-        <h3 className="font-bold text-gray-900 mb-3 text-center">Balans artırma üsulları</h3>
+      <Card className={`transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <h3 className={`font-bold mb-3 text-center transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Balans artırma üsulları</h3>
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => alert('Kart ilə ödəniş (demo)')}
-            className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors"
+            className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+              isDarkMode 
+                ? 'border-gray-600 hover:bg-gray-700' 
+                : 'border-gray-200 hover:bg-gray-50'
+            }`}
           >
             <div className="text-2xl mb-1">💳</div>
-            <div className="text-xs text-gray-600">Kart</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Kart</div>
           </button>
           <button
             onClick={() => alert('Mobil ödəniş (demo)')}
-            className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors"
+            className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+              isDarkMode 
+                ? 'border-gray-600 hover:bg-gray-700' 
+                : 'border-gray-200 hover:bg-gray-50'
+            }`}
           >
             <div className="text-2xl mb-1">📱</div>
-            <div className="text-xs text-gray-600">Mobil</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Mobil</div>
           </button>
           <button
             onClick={() => alert('Bank köçürməsi (demo)')}
-            className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors"
+            className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+              isDarkMode 
+                ? 'border-gray-600 hover:bg-gray-700' 
+                : 'border-gray-200 hover:bg-gray-50'
+            }`}
           >
             <div className="text-2xl mb-1">🏦</div>
-            <div className="text-xs text-gray-600">Bank</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Bank</div>
           </button>
         </div>
       </Card>
