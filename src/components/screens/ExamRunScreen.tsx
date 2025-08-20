@@ -7,7 +7,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
 
 export function ExamRunScreen() {
-  const { t, navigate, currentScreen } = useApp();
+  const { t, navigate, currentScreen, isDarkMode } = useApp();
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(14 * 60 + 34); // 14:34 format
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,7 +64,9 @@ export function ExamRunScreen() {
   }
 
   return (
-    <div className="p-3 pb-24 bg-gray-900 min-h-screen">
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-900'
+    }`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 text-white">
         <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
@@ -109,18 +111,30 @@ export function ExamRunScreen() {
 
       {/* Current Question Detail */}
       {currentQuestion && (
-        <div className="mt-6 bg-white rounded-xl p-4">
-          <div className="font-bold mb-3 text-gray-900">
+        <div className={`mt-6 rounded-xl p-4 transition-colors duration-200 ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <div className={`font-bold mb-3 transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>
             {currentIndex + 1}. {currentQuestion.text}
           </div>
           <div className="space-y-2">
             {currentQuestion.options.map((option) => (
               <label
                 key={option.id}
-                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] ${
+                className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] transition-colors duration-200 ${
                   answers[currentQuestion.id] === option.id
-                    ? 'border-emerald-600 bg-emerald-50'
-                    : 'border-gray-300 bg-white'
+                    ? isDarkMode
+                      ? 'border-emerald-500 bg-emerald-900/20'
+                      : 'border-emerald-600 bg-gray-50'
+                    : isDarkMode
+                      ? 'border-gray-600 bg-gray-700'
+                      : 'border-gray-300 bg-white'
+                      : 'border-emerald-600 bg-emerald-50'
+                    : isDarkMode
+                      ? 'border-gray-600 bg-gray-700'
+                      : 'border-gray-300 bg-white'
                 }`}
               >
                 <input
@@ -130,7 +144,11 @@ export function ExamRunScreen() {
                   onChange={() => setAnswer(option.id)}
                   className="w-4 h-4 text-emerald-600"
                 />
-                <span className="text-sm text-gray-700">{option.text}</span>
+                <span className={`text-sm transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>{option.text}</span>
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>{option.text}</span>
               </label>
             ))}
           </div>
@@ -166,18 +184,24 @@ export function ExamRunScreen() {
       
       <Card className="mb-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-700">
+          <div className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+          }`}>
             <span>⏱️</span>
             <span>{t.timeLeft}: {formatTime(timeLeft)}</span>
           </div>
-          <div className="text-sm text-gray-700">
+          <div className={`text-sm transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+          }`}>
             {currentIndex + 1}/{questions.length}
           </div>
         </div>
       </Card>
       
       <Card>
-        <div className="font-bold mb-3 text-gray-900">
+        <div className={`font-bold mb-3 transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>
           {currentQuestion.text}
         </div>
         {currentQuestion.imageUrl && (

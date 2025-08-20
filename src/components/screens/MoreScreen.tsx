@@ -18,16 +18,16 @@ export function MoreScreen() {
   ];
 
   return (
-    <div className={`p-4 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      {/* Title with Balance and Tickets in same row */}
-      <div className={`flex items-center justify-between mb-6 p-4 rounded-xl transition-colors duration-200 ${
+      {/* Balance and Tickets Info */}
+      <div className={`flex items-center justify-between mb-4 p-4 rounded-xl border transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
-        <h1 className={`text-xl font-bold transition-colors duration-200 ${
+        <h1 className={`text-lg font-bold transition-colors duration-200 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>...</h1>
+        }`}>Daha çox</h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             <span className={`text-sm transition-colors duration-200 ${
@@ -40,7 +40,7 @@ export function MoreScreen() {
           <div className="flex items-center gap-1">
             <span className={`text-sm transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
-            }`}>Simulyator Bileti:</span>
+            }`}>Bilet:</span>
             <span className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-black'
             }`}>3</span>
@@ -50,7 +50,7 @@ export function MoreScreen() {
       
       {/* Active Package Info */}
       {hasActivePackage() && activePackage && (
-        <div className={`mb-4 p-4 rounded-xl border transition-colors duration-200 ${
+        <div className={`mb-3 p-3 rounded-xl border transition-colors duration-200 ${
           isDarkMode 
             ? 'bg-green-900/20 border-green-700' 
             : 'bg-green-50 border-green-200'
@@ -62,10 +62,10 @@ export function MoreScreen() {
               ✅
             </div>
             <div className="flex-1">
-              <div className={`font-medium text-base transition-colors duration-200 ${
+              <div className={`font-medium text-sm transition-colors duration-200 ${
                 isDarkMode ? 'text-green-300' : 'text-green-900'
               }`}>Aktiv Paket</div>
-              <div className={`text-sm transition-colors duration-200 ${
+              <div className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-green-400' : 'text-green-700'
               }`}>{activePackage.name}</div>
               <div className={`text-xs transition-colors duration-200 ${
@@ -78,26 +78,26 @@ export function MoreScreen() {
         </div>
       )}
       
-      <div className="space-y-3">
+      <div className="space-y-2">
         {moreItems.map((item) => (
           <button
             key={item.key}
             onClick={item.action}
-            className={`w-full p-4 flex items-center gap-4 text-left transition-colors min-h-[60px] rounded-xl border ${
+            className={`w-full p-3 flex items-center gap-3 text-left transition-colors min-h-[56px] rounded-xl border ${
               isDarkMode 
                 ? 'border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-100' 
                 : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-900'
             }`}
           >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-colors duration-200 ${
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
             }`}>
               {item.emoji}
             </div>
             <div className="flex-1">
-              <div className="font-medium text-base">{item.label}</div>
+              <div className="font-medium text-sm">{item.label}</div>
             </div>
-            <div className={`text-lg transition-colors duration-200 ${
+            <div className={`text-base transition-colors duration-200 ${
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>›</div>
           </button>

@@ -12,7 +12,7 @@ interface Book {
 }
 
 export function StoreScreen() {
-  const { t } = useApp();
+  const { t, isDarkMode } = useApp();
   
   const books: Book[] = [
     {
@@ -50,17 +50,25 @@ export function StoreScreen() {
   }
 
   return (
-    <div className="p-3 pb-24">
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Mağaza</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className={`text-2xl font-bold mb-2 transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Mağaza</h1>
+        <p className={`text-sm transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+        }`}>
           Sürücülük kitabları və materialları
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         {books.map((book) => (
-          <Card key={book.id} className="p-3">
+          <Card key={book.id} className={`p-3 transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
             <img
               src={book.image}
               alt={book.title}
@@ -70,10 +78,14 @@ export function StoreScreen() {
               }}
             />
             <div className="space-y-2">
-              <h3 className="font-bold text-sm text-gray-900 leading-tight">
+              <h3 className={`font-bold text-sm leading-tight transition-colors duration-200 ${
+                isDarkMode ? 'text-gray-100' : 'text-gray-900'
+              }`}>
                 {book.title}
               </h3>
-              <p className="text-xs text-gray-600 leading-tight">
+              <p className={`text-xs leading-tight transition-colors duration-200 ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>
                 {book.description}
               </p>
               <div className="flex items-center justify-between">
@@ -94,27 +106,51 @@ export function StoreScreen() {
       </div>
 
       {/* Payment Methods */}
-      <Card className="mt-6">
-        <h3 className="font-bold text-gray-900 mb-3 text-center">Ödəniş üsulları</h3>
+      <Card className={`mt-6 transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <h3 className={`font-bold mb-3 text-center transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Ödəniş üsulları</h3>
         <div className="grid grid-cols-3 gap-3">
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">💳</div>
-            <div className="text-xs text-gray-600">Kart</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Kart</div>
           </div>
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">📱</div>
-            <div className="text-xs text-gray-600">Mobil</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Mobil</div>
           </div>
-          <div className="p-3 border border-gray-200 rounded-lg text-center hover:bg-gray-50 transition-colors">
+          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
+            isDarkMode 
+              ? 'border-gray-600 hover:bg-gray-700' 
+              : 'border-gray-200 hover:bg-gray-50'
+          }`}>
             <div className="text-2xl mb-1">🏦</div>
-            <div className="text-xs text-gray-600">Bank</div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>Bank</div>
           </div>
         </div>
       </Card>
 
       {/* Trust Indicators */}
       <div className="mt-4 text-center">
-        <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+        <div className={`flex items-center justify-center gap-4 text-xs transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-500' : 'text-gray-500'
+        }`}>
           <span className="flex items-center gap-1">
             🔒 Təhlükəsiz ödəniş
           </span>
