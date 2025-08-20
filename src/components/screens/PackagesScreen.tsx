@@ -35,30 +35,29 @@ export function PackagesScreen() {
   const packages: Package[] = [
     {
       id: 'basic',
-      name: 'Əsas Paket',
+      name: 'Sadə Paket',
       basePrice: 15,
       color: 'gray',
       features: [
-        'Bütün video dərslər',
-        'Test sualları',
-        'İmtahan simulyatoru',
-        'Səhvlərin analizi'
+        '3D video dərslər',
+        'Dərs materialları',
+        'Mövzu üzrə testlər',
+        'Mövzu üzrə imtahanlar',
+        'İmtahan simulyatoru - 5 bilet',
+        'Müəllimlə sual-cavab',
+        'Sualların video izahı'
       ]
     },
     {
-      id: 'premium',
-      name: 'Premium Paket',
+      id: 'standart',
+      name: 'Standart Paket',
       basePrice: 25,
       color: 'emerald',
       features: [
-        'Bütün video dərslər',
-        'Test sualları',
-        'İmtahan simulyatoru',
-        'Səhvlərin analizi',
-        '3D video dərslər',
-        'Müəllimlə əlaqə',
-        'Praktiki təcrübə',
-        'Prioritet dəstək'
+        'Sadə paketdəki hər şey əlavə olaraq:',
+        'İmtahan simulyatoru - 5 bilet (əlavə)',
+        'İmtahanlara hazirliq vəsaiti 2025 Ə.Talıbov (kitab)',
+        'Test-imtahan çalışmaları kitabı 2025 (kitab)',
       ],
       popular: true
     },
