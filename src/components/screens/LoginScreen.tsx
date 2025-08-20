@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import { useApp } from '../../contexts/AppContext';
 
 interface LoginScreenProps {
   onLogin: () => void;

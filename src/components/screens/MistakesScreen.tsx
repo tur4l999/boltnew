@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '../ui/Card';
 import { mistakesStore } from '../../lib/mistakesStore';
+import { useApp } from '../../contexts/AppContext';
 
 export function MistakesScreen() {
   const { isDarkMode } = useApp();

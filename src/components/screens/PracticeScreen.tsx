@@ -1,5 +1,6 @@
 import React from 'react';
 import { PracticeInline } from '../practice/PracticeInline';
+import { useApp } from '../../contexts/AppContext';
 
 export function PracticeScreen() {
   const { isDarkMode } = useApp();
