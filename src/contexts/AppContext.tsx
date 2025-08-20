@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
 import type { Language, NavigationScreen } from '../lib/types';
 
+type ThemeMode = 'light' | 'dark' | 'system';
+
 interface UserPackage {
   id: string;
   name: string;
@@ -22,6 +24,9 @@ interface Transaction {
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
+  isDarkMode: boolean;
   t: typeof dictionaries.az;
   currentTab: string;
   currentScreen: NavigationScreen;
@@ -42,6 +47,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('az');
+  const [theme, setTheme] = useState<ThemeMode>('system');
   const [currentTab, setCurrentTab] = useState('Home');
   const [navigationStack, setNavigationStack] = useState<NavigationScreen[]>([
     { screen: 'Home', params: {} }
@@ -51,6 +57,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   
+  // Determine if dark mode should be active
+  const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
   const t = dictionaries[language];
   
   const navigate = (screen: string, params = {}) => {
@@ -120,6 +129,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     <AppContext.Provider value={{
       language,
       setLanguage,
+      theme,
+      setTheme,
+      isDarkMode,
       t,
       currentTab,
       currentScreen,

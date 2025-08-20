@@ -36,7 +36,7 @@ export default function App() {
 }
 
 function AppContent() {
-  const { currentScreen } = useApp();
+  const { currentScreen, isDarkMode } = useApp();
   const isAIChat = currentScreen.screen === 'AIChat';
 
   if (isAIChat) {
@@ -44,8 +44,14 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <div className="max-w-md mx-auto min-h-screen relative bg-gray-50">
+    <div className={`min-h-screen transition-colors duration-200 ${
+      isDarkMode 
+        ? 'bg-gray-900 text-gray-100' 
+        : 'bg-gray-50 text-gray-900'
+    }`}>
+      <div className={`max-w-md mx-auto min-h-screen relative transition-colors duration-200 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         <Header />
         <ScreenRenderer />
         <TabBar />
