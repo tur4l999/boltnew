@@ -178,24 +178,18 @@ export function ExamRunScreen() {
       
       <Card className="mb-3">
         <div className="flex items-center justify-between">
-          <div className={\`flex items-center gap-2 text-sm transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-700'
-          }`}>
+          <div className={`flex items-center gap-2 text-sm transition-colors duration-200 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
             <span>⏱️</span>
             <span>{t.timeLeft}: {formatTime(timeLeft)}</span>
           </div>
-          <div className={\`text-sm transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-700'
-          }`}>
+          <div className={`text-sm transition-colors duration-200 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
             {currentIndex + 1}/{questions.length}
           </div>
         </div>
       </Card>
       
       <Card>
-        <div className={\`font-bold mb-3 transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>
+        <div className={`font-bold mb-3 transition-colors duration-200 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
           {currentQuestion.text}
         </div>
         {currentQuestion.imageUrl && (
@@ -210,11 +204,7 @@ export function ExamRunScreen() {
           {currentQuestion.options.map((option) => (
             <label
               key={option.id}
-              className={\`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] ${
-                answers[currentQuestion.id] === option.id
-                  ? 'border-emerald-600 bg-gray-50'
-                  : 'border-gray-300 bg-white'
-              }`}
+              className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] ${answers[currentQuestion.id] === option.id ? 'border-emerald-600 bg-gray-50' : 'border-gray-300 bg-white'}`}
             >
               <input
                 type="radio"
