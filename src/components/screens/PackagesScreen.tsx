@@ -136,10 +136,8 @@ export function PackagesScreen() {
         <p className="text-sm text-gray-600">
           Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
         </p>
-        </p>
         <div className="mt-2 text-lg font-bold text-emerald-600">
           Balans: {balance} AZN
-      </div>
 
       <div className="space-y-4">
         {packages.map((pkg) => (

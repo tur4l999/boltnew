@@ -46,6 +46,7 @@ export function HomeScreen() {
       )}
 
       {hasActivePackage() && (
+        <>
         <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
           <span className="text-blue-600 text-xs">📦</span>
         </div>
@@ -70,6 +71,7 @@ export function HomeScreen() {
             </div>
           </div>
         </div>
+        </>
       )}
 
       {/* Progress Card */}
