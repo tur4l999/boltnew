@@ -131,10 +131,6 @@ export function ExamRunScreen() {
                     : isDarkMode
                       ? 'border-gray-600 bg-gray-700'
                       : 'border-gray-300 bg-white'
-                      : 'border-emerald-600 bg-emerald-50'
-                    : isDarkMode
-                      ? 'border-gray-600 bg-gray-700'
-                      : 'border-gray-300 bg-white'
                 }`}
               >
                 <input
@@ -145,8 +141,6 @@ export function ExamRunScreen() {
                   className="w-4 h-4 text-emerald-600"
                 />
                 <span className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                }`}>{option.text}</span>
                   isDarkMode ? 'text-gray-200' : 'text-gray-700'
                 }`}>{option.text}</span>
               </label>
