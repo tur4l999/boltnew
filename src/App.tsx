@@ -8,35 +8,26 @@ import { InspectPage } from './pages/inspect';
 import { LoginScreen } from './components/screens/LoginScreen';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  if (!isLoggedIn) {
-    return (
+  return (
+    <AppProvider>
       <Router>
         <Routes>
           <Route path="/inspect" element={<InspectPage />} />
-          <Route path="/*" element={<LoginScreen onLogin={() => setIsLoggedIn(true)} />} />
+          <Route path="/*" element={<AppContent />} />
         </Routes>
       </Router>
-    );
-  }
-
-  return (
-    <Router>
-      <Routes>
-        <Route path="/inspect" element={<InspectPage />} />
-        <Route path="/*" element={
-          <AppProvider>
-            <AppContent />
-          </AppProvider>
-        } />
-      </Routes>
-    </Router>
+    </AppProvider>
   );
 }
 
 function AppContent() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { currentScreen, isDarkMode } = useApp();
+
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;
+  }
+
   const isAIChat = currentScreen.screen === 'AIChat';
 
   if (isAIChat) {
