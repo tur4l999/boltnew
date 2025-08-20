@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useApp } from '../../contexts/AppContext';
 
 interface ButtonProps {
   children: ReactNode;
@@ -17,6 +18,7 @@ export function Button({
   size = 'md',
   className = ''
 }: ButtonProps) {
+  const { isDarkMode } = useApp();
   const baseClasses = 'font-bold rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const sizeClasses = {
@@ -27,14 +29,24 @@ export function Button({
   
   const variantClasses = {
     primary: disabled 
-      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+      ? isDarkMode
+        ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
       : 'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500',
     secondary: disabled
-      ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-      : 'bg-gray-800 text-white hover:bg-gray-900 focus:ring-gray-600',
+      ? isDarkMode
+        ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
+        : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+      : isDarkMode
+        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-gray-500'
+        : 'bg-gray-800 text-white hover:bg-gray-900 focus:ring-gray-600',
     ghost: disabled
-      ? 'bg-transparent border border-gray-300 text-gray-500 cursor-not-allowed'
-      : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+      ? isDarkMode
+        ? 'bg-transparent border border-gray-700 text-gray-600 cursor-not-allowed'
+        : 'bg-transparent border border-gray-300 text-gray-500 cursor-not-allowed'
+      : isDarkMode
+        ? 'bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 focus:ring-gray-500'
+        : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
   };
   
   return (

@@ -4,7 +4,7 @@ import { Card } from '../ui/Card';
 import { Progress } from '../ui/Progress';
 
 export function HomeScreen() {
-  const { t, navigate, hasActivePackage } = useApp();
+  const { t, navigate, hasActivePackage, isDarkMode } = useApp();
   
   const gridItems = [
     { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
@@ -24,21 +24,37 @@ export function HomeScreen() {
   }, [gridItems]);
 
   return (
-    <div className="p-3 pb-24">
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       {/* Package Status */}
       {!hasActivePackage() && (
-        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
-          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <span className="text-blue-600 text-xs">📦</span>
+        <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
+          isDarkMode 
+            ? 'bg-blue-900/20 border-blue-700' 
+            : 'bg-blue-50 border-blue-200'
+        }`}>
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
+            isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
+          }`}>
+            <span className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-blue-300' : 'text-blue-600'
+            }`}>📦</span>
           </div>
           <div className="flex-1">
-            <div className="text-blue-900 text-xs font-medium">
+            <div className={`text-xs font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-blue-300' : 'text-blue-900'
+            }`}>
               Aktiv paketiniz yoxdur
             </div>
           </div>
           <button
             onClick={() => navigate('Packages')}
-            className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
+            className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
+              isDarkMode 
+                ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
             Paket al
           </button>
@@ -81,12 +97,20 @@ export function HomeScreen() {
               <button
                 key={item.key}
                 onClick={item.action}
-                className="bg-white rounded-xl border border-gray-200 shadow-sm p-3 flex items-center gap-3 hover:bg-gray-50 transition-colors min-h-[44px]"
+                className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[44px] ${
+                  isDarkMode 
+                    ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
+                    : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
+                }`}
               >
-                <div className="w-10 h-10 rounded-lg bg-gray-50 text-emerald-600 flex items-center justify-center text-lg">
+                <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                }`}>
                   {item.emoji}
                 </div>
-                <div className="text-left font-bold text-gray-700 text-sm leading-tight">
+                <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                }`}>
                   {item.label}
                 </div>
               </button>
