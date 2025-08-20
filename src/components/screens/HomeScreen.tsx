@@ -25,7 +25,7 @@ export function HomeScreen() {
 
   return (
     <div className="p-3 pb-24">
-      {/* Package Notification - Small */}
+      {/* Package Status */}
       {!hasActivePackage() && (
         <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center gap-3">
           <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
@@ -46,32 +46,22 @@ export function HomeScreen() {
       )}
 
       {hasActivePackage() && (
-        <>
-        <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-          <span className="text-blue-600 text-xs">📦</span>
-        </div>
-        <div className="flex-1">
-          <div className="text-blue-900 text-xs font-medium">
-            Aktiv paketiniz yoxdur
-          </div>
-        </div>
-        <button
-          onClick={() => navigate('Packages')}
-          className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium hover:bg-blue-700 transition-colors min-h-[24px]"
-        >
-          Paket al
-        </button>
-        <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
+        <div className="mb-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg flex items-center gap-3">
           <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-            <span className="text-green-600 text-xs">✅</span>
+            <span className="text-emerald-600 text-xs">👑</span>
           </div>
           <div className="flex-1">
-            <div className="text-green-900 text-xs font-medium">
-              Bütün təlimlər açıqdır
+            <div className="text-emerald-900 text-xs font-medium">
+              Premium üzv - Bütün funksiyalar aktiv
+            </div>
+            <div className="text-emerald-700 text-xs">
+              {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
             </div>
           </div>
+          <div className="text-emerald-600 text-lg">
+            ⭐
+          </div>
         </div>
-        </>
       )}
 
       {/* Progress Card */}
