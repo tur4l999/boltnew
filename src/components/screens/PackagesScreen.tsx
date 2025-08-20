@@ -138,6 +138,8 @@ export function PackagesScreen() {
         </p>
         <div className="mt-2 text-lg font-bold text-emerald-600">
           Balans: {balance} AZN
+        </div>
+      </div>
 
       <div className="space-y-4">
         {packages.map((pkg) => (
