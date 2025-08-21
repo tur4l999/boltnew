@@ -18,10 +18,16 @@ const FIGMA_FILE_KEY = process.env.FIGMA_FILE_KEY;
 
 if (!FIGMA_API_TOKEN || !FIGMA_FILE_KEY) {
   console.error('❌ FIGMA_API_TOKEN və FIGMA_FILE_KEY environment variables lazımdır');
+  console.log('');
+  console.log('🔧 Quraşdırma:');
+  console.log('1. Figma → Settings → Personal Access Tokens');
+  console.log('2. Token yaradın və .env faylına əlavə edin');
+  console.log('3. Figma faylının URL-indən key götürün');
+  console.log('');
   process.exit(1);
 }
 
-// Figma API client
+// Figma API client (native fetch istifadə edərək)
 class FigmaAPI {
   constructor(token) {
     this.token = token;
@@ -30,67 +36,31 @@ class FigmaAPI {
 
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        'X-Figma-Token': this.token,
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`Figma API error: ${response.status} ${response.statusText}`);
-    }
-
-    return response.json();
-  }
-
-  // Rəng stillərini yarat
-  async createColorStyles(fileKey, colors) {
-    const styles = [];
     
-    Object.entries(colors).forEach(([colorName, shades]) => {
-      if (typeof shades === 'object') {
-        Object.entries(shades).forEach(([shade, hex]) => {
-          styles.push({
-            name: `Colors/${colorName}/${shade}`,
-            styleType: 'FILL',
-            fills: [{
-              type: 'SOLID',
-              color: this.hexToRgb(hex)
-            }]
-          });
-        });
-      }
-    });
-
-    return this.request(`/files/${fileKey}/styles`, {
-      method: 'POST',
-      body: JSON.stringify({ styles })
-    });
-  }
-
-  // Typography stillərini yarat
-  async createTextStyles(fileKey, typography) {
-    const styles = [];
-    
-    Object.entries(typography.fontSize).forEach(([size, value]) => {
-      styles.push({
-        name: `Typography/${size}`,
-        styleType: 'TEXT',
-        fontSize: parseInt(value),
-        fontName: {
-          family: typography.fontFamily.primary.split(',')[0].trim(),
-          style: 'Regular'
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          'X-Figma-Token': this.token,
+          'Content-Type': 'application/json',
+          ...options.headers
         }
       });
-    });
 
-    return this.request(`/files/${fileKey}/styles`, {
-      method: 'POST',
-      body: JSON.stringify({ styles })
-    });
+      if (!response.ok) {
+        throw new Error(`Figma API error: ${response.status} ${response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('❌ Figma API xətası:', error.message);
+      throw error;
+    }
+  }
+
+  // Fayl məlumatlarını al
+  async getFile(fileKey) {
+    return this.request(`/files/${fileKey}`);
   }
 
   // Hex rəngi RGB-yə çevir
@@ -110,6 +80,65 @@ class ComponentGenerator {
     this.tokens = tokens;
   }
 
+  // Design system strukturunu yarat
+  generateDesignSystem() {
+    return {
+      colors: this.generateColorSystem(),
+      typography: this.generateTypographySystem(),
+      spacing: this.generateSpacingSystem(),
+      components: this.generateComponents(),
+      screens: this.generateScreens()
+    };
+  }
+
+  generateColorSystem() {
+    const colorSystem = {};
+    
+    Object.entries(this.tokens.colors).forEach(([colorName, shades]) => {
+      if (typeof shades === 'object' && shades !== null) {
+        colorSystem[colorName] = {};
+        Object.entries(shades).forEach(([shade, hex]) => {
+          colorSystem[colorName][shade] = {
+            name: `Colors/${colorName}/${shade}`,
+            value: hex,
+            type: 'color'
+          };
+        });
+      }
+    });
+
+    return colorSystem;
+  }
+
+  generateTypographySystem() {
+    const typography = {};
+    
+    Object.entries(this.tokens.typography.fontSize).forEach(([size, value]) => {
+      typography[size] = {
+        name: `Typography/${size}`,
+        fontSize: parseInt(value),
+        fontFamily: this.tokens.typography.fontFamily.primary,
+        type: 'text'
+      };
+    });
+
+    return typography;
+  }
+
+  generateSpacingSystem() {
+    const spacing = {};
+    
+    Object.entries(this.tokens.spacing).forEach(([size, value]) => {
+      spacing[size] = {
+        name: `Spacing/${size}`,
+        value: `${value}px`,
+        type: 'spacing'
+      };
+    });
+
+    return spacing;
+  }
+
   // Komponent strukturunu yarat
   generateComponents() {
     return {
@@ -125,7 +154,8 @@ class ComponentGenerator {
         styles: {
           borderRadius: this.tokens.borderRadius.lg,
           padding: `${this.tokens.spacing.md}px ${this.tokens.spacing.lg}px`,
-          fontSize: this.tokens.typography.fontSize.sm
+          fontSize: this.tokens.typography.fontSize.sm,
+          minHeight: '44px'
         }
       },
 
@@ -157,6 +187,19 @@ class ComponentGenerator {
           backgroundColor: this.tokens.colors.semantic.surface,
           borderBottom: `1px solid ${this.tokens.colors.semantic.border}`
         }
+      },
+
+      // TabBar komponenti
+      TabBar: {
+        name: 'TabBar',
+        variants: [
+          { name: 'Default', props: {} }
+        ],
+        styles: {
+          height: '80px',
+          backgroundColor: this.tokens.colors.semantic.surface,
+          borderTop: `1px solid ${this.tokens.colors.semantic.border}`
+        }
       }
     };
   }
@@ -169,35 +212,48 @@ class ComponentGenerator {
         width: 375,
         height: 812,
         components: ['Logo', 'LoginForm', 'SocialButtons'],
-        layout: 'vertical'
+        layout: 'vertical',
+        description: 'User authentication screen'
       },
       {
         name: 'Home',
         width: 375,
         height: 812,
         components: ['Header', 'ProgressCard', 'ActionGrid', 'TabBar'],
-        layout: 'vertical'
+        layout: 'vertical',
+        description: 'Main dashboard with user progress'
       },
       {
         name: 'Topics',
         width: 375,
         height: 812,
         components: ['Header', 'SearchBar', 'ModuleList', 'TabBar'],
-        layout: 'vertical'
+        layout: 'vertical',
+        description: 'Learning topics and modules'
       },
       {
         name: 'Lesson',
         width: 375,
         height: 812,
         components: ['Header', 'VideoPlayer', 'TabNavigation', 'Content'],
-        layout: 'vertical'
+        layout: 'vertical',
+        description: 'Video lesson with materials'
       },
       {
         name: 'Exam',
         width: 375,
         height: 812,
         components: ['Timer', 'QuestionCard', 'AnswerOptions', 'Navigation'],
-        layout: 'vertical'
+        layout: 'vertical',
+        description: 'Exam simulation interface'
+      },
+      {
+        name: 'Store',
+        width: 375,
+        height: 812,
+        components: ['Header', 'ProductGrid', 'PaymentMethods', 'TabBar'],
+        layout: 'vertical',
+        description: 'Digital store for books and materials'
       }
     ];
   }
@@ -211,46 +267,61 @@ async function syncToFigma() {
     const figma = new FigmaAPI(FIGMA_API_TOKEN);
     const generator = new ComponentGenerator(tokens);
 
-    // 1. Rəng stillərini yarat
-    console.log('🎨 Rəng stilləri yaradılır...');
-    await figma.createColorStyles(FIGMA_FILE_KEY, tokens.colors);
-    console.log('✅ Rəng stilləri yaradıldı');
+    // 1. Figma faylını yoxla
+    console.log('📁 Figma faylı yoxlanılır...');
+    const fileData = await figma.getFile(FIGMA_FILE_KEY);
+    console.log(`✅ Fayl tapıldı: ${fileData.name}`);
 
-    // 2. Typography stillərini yarat
-    console.log('📝 Typography stilləri yaradılır...');
-    await figma.createTextStyles(FIGMA_FILE_KEY, tokens.typography);
-    console.log('✅ Typography stilləri yaradıldı');
+    // 2. Design system yarat
+    console.log('🎨 Design system yaradılır...');
+    const designSystem = generator.generateDesignSystem();
+    console.log('✅ Design system hazırlandı');
 
-    // 3. Komponentləri yarat
-    console.log('🧩 Komponentlər yaradılır...');
-    const components = generator.generateComponents();
-    console.log(`✅ ${Object.keys(components).length} komponent hazırlandı`);
-
-    // 4. Ekranları yarat
-    console.log('📱 Ekranlar yaradılır...');
-    const screens = generator.generateScreens();
-    console.log(`✅ ${screens.length} ekran hazırlandı`);
-
-    // 5. Metadata faylını yarat
+    // 3. Metadata faylını yarat
     const metadata = {
       timestamp: new Date().toISOString(),
-      tokens: tokens,
-      components: components,
-      screens: screens,
-      figmaFileKey: FIGMA_FILE_KEY
+      figmaFile: {
+        key: FIGMA_FILE_KEY,
+        name: fileData.name,
+        url: `https://figma.com/file/${FIGMA_FILE_KEY}`
+      },
+      designSystem: designSystem,
+      stats: {
+        colors: Object.keys(designSystem.colors).length,
+        typography: Object.keys(designSystem.typography).length,
+        components: Object.keys(designSystem.components).length,
+        screens: designSystem.screens.length
+      }
     };
 
-    fs.writeFileSync(
-      path.join(__dirname, '../figma-export.json'),
-      JSON.stringify(metadata, null, 2)
-    );
+    // 4. Export faylını yarat
+    const exportPath = path.join(__dirname, '../figma-export.json');
+    fs.writeFileSync(exportPath, JSON.stringify(metadata, null, 2));
 
+    console.log('');
     console.log('🎉 Sinxronlaşdırma tamamlandı!');
-    console.log(`📁 Metadata: figma-export.json`);
-    console.log(`🔗 Figma: https://figma.com/file/${FIGMA_FILE_KEY}`);
+    console.log('');
+    console.log('📊 Statistika:');
+    console.log(`   🎨 Rənglər: ${metadata.stats.colors}`);
+    console.log(`   📝 Typography: ${metadata.stats.typography}`);
+    console.log(`   🧩 Komponentlər: ${metadata.stats.components}`);
+    console.log(`   📱 Ekranlar: ${metadata.stats.screens}`);
+    console.log('');
+    console.log('📁 Fayllar:');
+    console.log(`   📄 Metadata: figma-export.json`);
+    console.log(`   🔗 Figma: ${metadata.figmaFile.url}`);
+    console.log('');
+    console.log('🔄 Növbəti addım: Figma plugin istifadə edin');
 
   } catch (error) {
     console.error('❌ Xəta:', error.message);
+    
+    if (error.message.includes('401')) {
+      console.log('💡 Həll: Figma token-ini yoxlayın');
+    } else if (error.message.includes('404')) {
+      console.log('💡 Həll: Figma file key-ini yoxlayın');
+    }
+    
     process.exit(1);
   }
 }
