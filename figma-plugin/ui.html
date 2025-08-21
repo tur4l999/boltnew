@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDA.az Design Export</title>
+  <title>DDA.az Design Export - Full Version</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,7 +18,7 @@
     }
     
     .container {
-      max-width: 360px;
+      max-width: 410px;
       margin: 0 auto;
     }
     
@@ -50,6 +50,33 @@
     .subtitle {
       color: #6b7280;
       font-size: 14px;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .stat {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-number {
+      font-size: 20px;
+      font-weight: 700;
+      color: #22c55e;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 2px;
     }
     
     .section {
@@ -96,6 +123,30 @@
       margin-right: 8px;
       width: 16px;
     }
+    
+    .screen-categories {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 11px;
+    }
+    
+    .category {
+      padding: 6px 8px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .category.auth { background: #f0fdf4; color: #166534; }
+    .category.main { background: #f9fafb; color: #374151; }
+    .category.purchase { background: #eff6ff; color: #1e40af; }
+    .category.premium { background: #ecfdf5; color: #065f46; }
+    .category.learning { background: #fef3c7; color: #92400e; }
+    .category.exam { background: #fef2f2; color: #991b1b; }
+    .category.support { background: #f3e8ff; color: #7c3aed; }
+    .category.profile { background: #ecfdf5; color: #065f46; }
     
     button {
       width: 100%;
@@ -167,6 +218,25 @@
       gap: 8px;
       margin-bottom: 16px;
     }
+    
+    .highlight {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .highlight h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    
+    .highlight p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -174,44 +244,83 @@
     <div class="header">
       <div class="logo">DDA</div>
       <h1>Design Export</h1>
-      <p class="subtitle">Tətbiq dizaynını Figmaya köçürün</p>
+      <p class="subtitle">Tam tətbiq dizaynını Figmaya köçürün</p>
+    </div>
+    
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">30</div>
+        <div class="stat-label">Ekranlar</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">25</div>
+        <div class="stat-label">Rənglər</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Typography</div>
+      </div>
+    </div>
+    
+    <div class="highlight">
+      <h2>🚀 Tam Versiya</h2>
+      <p>Bütün səhifələr və vəziyyətlər daxil olmaqla</p>
+    </div>
+    
+    <div class="section">
+      <h3>📱 Bütün Ekranlar</h3>
+      <p>Paket alınmadan əvvəl və sonrakı bütün vəziyyətlər</p>
+      
+      <div class="screen-categories">
+        <div class="category auth">🔐 Auth (1)</div>
+        <div class="category main">🏠 Main (4)</div>
+        <div class="category purchase">💳 Purchase (4)</div>
+        <div class="category premium">⭐ Premium (2)</div>
+        <div class="category learning">📚 Learning (4)</div>
+        <div class="category exam">🧪 Exam (5)</div>
+        <div class="category support">🤖 Support (2)</div>
+        <div class="category profile">👤 Profile (4)</div>
+      </div>
+      
+      <ul class="features">
+        <li>Login və Authentication</li>
+        <li>Paket yoxdur vəziyyəti (kilidli)</li>
+        <li>Paket satın alma prosesi</li>
+        <li>Premium funksiyalar (açıq)</li>
+        <li>Dərs və video player</li>
+        <li>İmtahan simulyatoru</li>
+        <li>AI Chat və dəstək</li>
+        <li>Dark mode variantları</li>
+      </ul>
+      
+      <button class="btn-secondary" onclick="createScreens()">📱 Ekranları Yarat</button>
     </div>
     
     <div class="section">
       <h3>🎨 Design System</h3>
-      <p>Rənglər və typography stilləri yaradılacaq</p>
+      <p>Tam rəng sistemi və komponentlər</p>
       <ul class="features">
-        <li>Primary & Gray rəng palitri</li>
+        <li>Primary, Gray, Emerald, Red, Blue rənglər</li>
         <li>Typography stilləri (H1-Caption)</li>
+        <li>Button, Card, Header komponentləri</li>
         <li>Spacing və border radius</li>
       </ul>
       <div class="grid">
-        <button class="btn-secondary" onclick="createColors()">Rənglər</button>
-        <button class="btn-secondary" onclick="createTypography()">Typography</button>
+        <button class="btn-secondary" onclick="createColors()">🎨 Rənglər</button>
+        <button class="btn-secondary" onclick="createTypography()">📝 Typography</button>
       </div>
+      <button class="btn-secondary" onclick="createComponents()">🧩 Komponentlər</button>
     </div>
     
     <div class="section">
-      <h3>📱 Ekranlar</h3>
-      <p>Bütün mobil ekranlar yaradılacaq</p>
-      <ul class="features">
-        <li>Login Screen (375×812)</li>
-        <li>Home Dashboard</li>
-        <li>Topics, Lesson, Exam</li>
-        <li>Store Layout</li>
-      </ul>
-      <button class="btn-secondary" onclick="createScreens()">Ekranları Yarat</button>
-    </div>
-    
-    <div class="section">
-      <h3>⚡ Avtomatik</h3>
-      <p>Hər şeyi bir kliklə yaradın</p>
+      <h3>⚡ Avtomatik Yaratma</h3>
+      <p>Hər şeyi bir kliklə yaradın - 30 ekran + design system</p>
       <div class="progress">
         <div class="progress-bar" id="progressBar"></div>
       </div>
       <div class="status" id="status">Hazır</div>
       <button class="btn-primary" onclick="createEverything()">
-        🚀 Hər Şeyi Yarat
+        🚀 Hər Şeyi Yarat (30 Ekran)
       </button>
       <button class="btn-danger" onclick="closePlugin()">
         Bağla
@@ -221,31 +330,38 @@
 
   <script>
     function createColors() {
-      updateStatus('🎨 Rənglər yaradılır...', 25);
+      updateStatus('🎨 Rənglər yaradılır...', 20);
       parent.postMessage({ pluginMessage: { type: 'create-colors' } }, '*');
-      setTimeout(() => updateStatus('✅ Rənglər hazır!', 100), 2000);
+      setTimeout(() => updateStatus('✅ 25 rəng stili hazır!', 100), 2000);
     }
     
     function createTypography() {
-      updateStatus('📝 Typography yaradılır...', 50);
+      updateStatus('📝 Typography yaradılır...', 30);
       parent.postMessage({ pluginMessage: { type: 'create-typography' } }, '*');
-      setTimeout(() => updateStatus('✅ Typography hazır!', 100), 2000);
+      setTimeout(() => updateStatus('✅ 6 text stili hazır!', 100), 2000);
+    }
+    
+    function createComponents() {
+      updateStatus('🧩 Komponentlər yaradılır...', 40);
+      parent.postMessage({ pluginMessage: { type: 'create-components' } }, '*');
+      setTimeout(() => updateStatus('✅ 5 komponent hazır!', 100), 2000);
     }
     
     function createScreens() {
-      updateStatus('📱 Ekranlar yaradılır...', 75);
+      updateStatus('📱 30 ekran yaradılır...', 70);
       parent.postMessage({ pluginMessage: { type: 'create-screens' } }, '*');
-      setTimeout(() => updateStatus('✅ Ekranlar hazır!', 100), 3000);
+      setTimeout(() => updateStatus('✅ 30 ekran hazır!', 100), 4000);
     }
     
     function createEverything() {
-      updateStatus('🚀 Başlanır...', 10);
+      updateStatus('🚀 Başlanır...', 5);
       parent.postMessage({ pluginMessage: { type: 'create-all' } }, '*');
       
-      setTimeout(() => updateStatus('🎨 Rənglər...', 30), 500);
-      setTimeout(() => updateStatus('📝 Typography...', 60), 2000);
-      setTimeout(() => updateStatus('📱 Ekranlar...', 90), 3500);
-      setTimeout(() => updateStatus('🎉 Tamamlandı!', 100), 5000);
+      setTimeout(() => updateStatus('🎨 Rənglər yaradılır...', 20), 500);
+      setTimeout(() => updateStatus('📝 Typography yaradılır...', 40), 2000);
+      setTimeout(() => updateStatus('🧩 Komponentlər yaradılır...', 60), 3500);
+      setTimeout(() => updateStatus('📱 30 ekran yaradılır...', 85), 4500);
+      setTimeout(() => updateStatus('🎉 Tamamlandı! 30 ekran hazır!', 100), 7000);
     }
     
     function updateStatus(message, progress) {
