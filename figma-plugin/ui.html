@@ -1,377 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>DDA.az Design Export - Full Version</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f8f9fa;
-      padding: 20px;
-      color: #1f2937;
-    }
-    
-    .container {
-      max-width: 410px;
-      margin: 0 auto;
-    }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    
-    .logo {
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      border-radius: 12px;
-      margin: 0 auto 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-      font-size: 20px;
-    }
-    
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    
-    .subtitle {
-      color: #6b7280;
-      font-size: 14px;
-    }
-    
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    
-    .stat {
-      background: white;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stat-number {
-      font-size: 20px;
-      font-weight: 700;
-      color: #22c55e;
-    }
-    
-    .stat-label {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-    
-    .section {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .section h3 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .section p {
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    
-    .features {
-      list-style: none;
-      margin-bottom: 16px;
-    }
-    
-    .features li {
-      display: flex;
-      align-items: center;
-      margin-bottom: 6px;
-      font-size: 13px;
-      color: #374151;
-    }
-    
-    .features li::before {
-      content: "✓";
-      color: #22c55e;
-      font-weight: 600;
-      margin-right: 8px;
-      width: 16px;
-    }
-    
-    .screen-categories {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 16px;
-      font-size: 11px;
-    }
-    
-    .category {
-      padding: 6px 8px;
-      border-radius: 6px;
-      text-align: center;
-      font-weight: 500;
-    }
-    
-    .category.auth { background: #f0fdf4; color: #166534; }
-    .category.main { background: #f9fafb; color: #374151; }
-    .category.purchase { background: #eff6ff; color: #1e40af; }
-    .category.premium { background: #ecfdf5; color: #065f46; }
-    .category.learning { background: #fef3c7; color: #92400e; }
-    .category.exam { background: #fef2f2; color: #991b1b; }
-    .category.support { background: #f3e8ff; color: #7c3aed; }
-    .category.profile { background: #ecfdf5; color: #065f46; }
-    
-    button {
-      width: 100%;
-      padding: 12px 16px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-bottom: 8px;
-    }
-    
-    .btn-primary {
-      background: #22c55e;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: #16a34a;
-      transform: translateY(-1px);
-    }
-    
-    .btn-secondary {
-      background: #f3f4f6;
-      color: #374151;
-    }
-    
-    .btn-secondary:hover {
-      background: #e5e7eb;
-    }
-    
-    .btn-danger {
-      background: #ef4444;
-      color: white;
-    }
-    
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    
-    .progress {
-      width: 100%;
-      height: 4px;
-      background: #e5e7eb;
-      border-radius: 2px;
-      margin: 12px 0;
-      overflow: hidden;
-    }
-    
-    .progress-bar {
-      height: 100%;
-      background: #22c55e;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-    
-    .status {
-      text-align: center;
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 8px;
-      min-height: 16px;
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    
-    .highlight {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-      padding: 16px;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-    
-    .highlight h2 {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-    
-    .highlight p {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <div class="logo">DDA</div>
-      <h1>Design Export</h1>
-      <p class="subtitle">Tam tətbiq dizaynını Figmaya köçürün</p>
-    </div>
-    
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-number">30</div>
-        <div class="stat-label">Ekranlar</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">25</div>
-        <div class="stat-label">Rənglər</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">6</div>
-        <div class="stat-label">Typography</div>
-      </div>
-    </div>
-    
-    <div class="highlight">
-      <h2>🚀 Tam Versiya</h2>
-      <p>Bütün səhifələr və vəziyyətlər daxil olmaqla</p>
-    </div>
-    
-    <div class="section">
-      <h3>📱 Bütün Ekranlar</h3>
-      <p>Paket alınmadan əvvəl və sonrakı bütün vəziyyətlər</p>
-      
-      <div class="screen-categories">
-        <div class="category auth">🔐 Auth (1)</div>
-        <div class="category main">🏠 Main (4)</div>
-        <div class="category purchase">💳 Purchase (4)</div>
-        <div class="category premium">⭐ Premium (2)</div>
-        <div class="category learning">📚 Learning (4)</div>
-        <div class="category exam">🧪 Exam (5)</div>
-        <div class="category support">🤖 Support (2)</div>
-        <div class="category profile">👤 Profile (4)</div>
-      </div>
-      
-      <ul class="features">
-        <li>Login və Authentication</li>
-        <li>Paket yoxdur vəziyyəti (kilidli)</li>
-        <li>Paket satın alma prosesi</li>
-        <li>Premium funksiyalar (açıq)</li>
-        <li>Dərs və video player</li>
-        <li>İmtahan simulyatoru</li>
-        <li>AI Chat və dəstək</li>
-        <li>Dark mode variantları</li>
-      </ul>
-      
-      <button class="btn-secondary" onclick="createScreens()">📱 Ekranları Yarat</button>
-    </div>
-    
-    <div class="section">
-      <h3>🎨 Design System</h3>
-      <p>Tam rəng sistemi və komponentlər</p>
-      <ul class="features">
-        <li>Primary, Gray, Emerald, Red, Blue rənglər</li>
-        <li>Typography stilləri (H1-Caption)</li>
-        <li>Button, Card, Header komponentləri</li>
-        <li>Spacing və border radius</li>
-      </ul>
-      <div class="grid">
-        <button class="btn-secondary" onclick="createColors()">🎨 Rənglər</button>
-        <button class="btn-secondary" onclick="createTypography()">📝 Typography</button>
-      </div>
-      <button class="btn-secondary" onclick="createComponents()">🧩 Komponentlər</button>
-    </div>
-    
-    <div class="section">
-      <h3>⚡ Avtomatik Yaratma</h3>
-      <p>Hər şeyi bir kliklə yaradın - 30 ekran + design system</p>
-      <div class="progress">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-      <div class="status" id="status">Hazır</div>
-      <button class="btn-primary" onclick="createEverything()">
-        🚀 Hər Şeyi Yarat (30 Ekran)
-      </button>
-      <button class="btn-danger" onclick="closePlugin()">
-        Bağla
-      </button>
-    </div>
-  </div>
+# DDA.az Figma Plugin
 
-  <script>
-    function createColors() {
-      updateStatus('🎨 Rənglər yaradılır...', 20);
-      parent.postMessage({ pluginMessage: { type: 'create-colors' } }, '*');
-      setTimeout(() => updateStatus('✅ 25 rəng stili hazır!', 100), 2000);
-    }
-    
-    function createTypography() {
-      updateStatus('📝 Typography yaradılır...', 30);
-      parent.postMessage({ pluginMessage: { type: 'create-typography' } }, '*');
-      setTimeout(() => updateStatus('✅ 6 text stili hazır!', 100), 2000);
-    }
-    
-    function createComponents() {
-      updateStatus('🧩 Komponentlər yaradılır...', 40);
-      parent.postMessage({ pluginMessage: { type: 'create-components' } }, '*');
-      setTimeout(() => updateStatus('✅ 5 komponent hazır!', 100), 2000);
-    }
-    
-    function createScreens() {
-      updateStatus('📱 30 ekran yaradılır...', 70);
-      parent.postMessage({ pluginMessage: { type: 'create-screens' } }, '*');
-      setTimeout(() => updateStatus('✅ 30 ekran hazır!', 100), 4000);
-    }
-    
-    function createEverything() {
-      updateStatus('🚀 Başlanır...', 5);
-      parent.postMessage({ pluginMessage: { type: 'create-all' } }, '*');
-      
-      setTimeout(() => updateStatus('🎨 Rənglər yaradılır...', 20), 500);
-      setTimeout(() => updateStatus('📝 Typography yaradılır...', 40), 2000);
-      setTimeout(() => updateStatus('🧩 Komponentlər yaradılır...', 60), 3500);
-      setTimeout(() => updateStatus('📱 30 ekran yaradılır...', 85), 4500);
-      setTimeout(() => updateStatus('🎉 Tamamlandı! 30 ekran hazır!', 100), 7000);
-    }
-    
-    function updateStatus(message, progress) {
-      document.getElementById('status').textContent = message;
-      document.getElementById('progressBar').style.width = progress + '%';
-    }
-    
-    function closePlugin() {
-      parent.postMessage({ pluginMessage: { type: 'close' } }, '*');
-    }
-  </script>
-</body>
-</html>
+Bu plugin DDA.az tətbiqinin dizaynını avtomatik olaraq Figmaya köçürür.
+
+## 🚀 Quraşdırma
+
+1. **Figma Desktop** tətbiqini açın
+2. **Plugins** → **Development** → **Import plugin from manifest**
+3. `manifest.json` faylını seçin
+4. Plugin hazırdır!
+
+## 📋 İstifadə
+
+### 1. Design System Yaratmaq
+- Plugin açın
+- "Design System Yarat" düyməsini basın
+- Avtomatik olaraq yaradılacaq:
+  - ✅ Rəng palitri (Primary, Gray, Emerald)
+  - ✅ Typography stilleri
+  - ✅ Spacing dəyərləri
+  - ✅ Border radius dəyərləri
+
+### 2. Ekranları Yaratmaq
+- "Ekranları Yarat" düyməsini basın
+- Yaradılacaq ekranlar:
+  - 📱 Login Screen
+  - 🏠 Home Dashboard  
+  - 📚 Topics List
+  - 🎓 Lesson View
+  - 🧪 Exam Interface
+  - 🛍️ Store Layout
+
+### 3. Hər Şeyi Avtomatik Yaratmaq
+- "🚀 Hər Şeyi Yarat" düyməsini basın
+- Bütün design system və ekranlar avtomatik yaradılacaq
+
+## 🎨 Nə Yaradılır?
+
+### Color Styles
+```
+Colors/
+├── primary/50 → #f0fdf4
+├── primary/500 → #22c55e
+├── primary/900 → #14532d
+├── gray/50 → #f9fafb
+├── gray/500 → #6b7280
+└── gray/900 → #111827
+```
+
+### Text Styles
+```
+Typography/
+├── Heading/H1 (24px, Bold)
+├── Heading/H2 (20px, Semibold)
+├── Body/Large (16px, Regular)
+├── Body/Medium (14px, Regular)
+└── Caption (11px, Regular)
+```
+
+### Components
+```
+Screens/
+├── Login (375×812)
+├── Home (375×812)
+├── Topics (375×812)
+├── Lesson (375×812)
+├── Exam (375×812)
+└── Store (375×812)
+```
+
+## ⚡ Üstünlükləri
+
+- **Sürətli**: 30 saniyədə tam design system
+- **Dəqiq**: Koddan birbaşa götürülən dəyərlər
+- **Təmiz**: Strukturlaşdırılmış və təşkil edilmiş
+- **Yeniləmə**: Kod dəyişdikdə asanlıqla yenilənir
+
+## 🔧 Fərdiləşdirmə
+
+Plugin kodunu redaktə edərək:
+- Yeni rənglər əlavə edin
+- Komponent strukturunu dəyişin  
+- Ekran ölçülərini tənzimləyin
+- Yeni komponentlər yaradın
+
+## 📞 Dəstək
+
+Plugin ilə bağlı suallar üçün:
+- GitHub Issues açın
+- Kodu yeniləyin və yenidən yükləyin
