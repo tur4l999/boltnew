@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>DDA.az Design Exporter</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f8f9fa;
+    }
+    
+    .container {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-radius: 12px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: #111827;
+    }
+    
+    p {
+      margin: 8px 0 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+    }
+    
+    .section p {
+      margin: 0 0 16px;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .primary {
+      background: #22c55e;
+      color: white;
+    }
+    
+    .primary:hover {
+      background: #16a34a;
+    }
+    
+    .secondary {
+      background: #f3f4f6;
+      color: #374151;
+      margin-top: 8px;
+    }
+    
+    .secondary:hover {
+      background: #e5e7eb;
+    }
+    
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    
+    .features li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #374151;
+    }
+    
+    .features li::before {
+      content: "✓";
+      color: #22c55e;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    .progress {
+      width: 100%;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 2px;
+      margin: 16px 0;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: #22c55e;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .status {
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">DDA</div>
+      <h1>Design Exporter</h1>
+      <p>Tətbiq dizaynını Figmaya köçürün</p>
+    </div>
+    
+    <div class="section">
+      <h3>🎨 Design System</h3>
+      <p>Rənglər, şriftlər və komponentlər yaradılacaq</p>
+      <ul class="features">
+        <li>Color Palette (Primary, Gray, Emerald)</li>
+        <li>Typography Styles</li>
+        <li>Spacing System</li>
+        <li>Border Radius Values</li>
+      </ul>
+      <button class="primary" onclick="createDesignSystem()">
+        Design System Yarat
+      </button>
+    </div>
+    
+    <div class="section">
+      <h3>📱 Screen Layouts</h3>
+      <p>Bütün ekranlar və komponentlər yaradılacaq</p>
+      <ul class="features">
+        <li>Login Screen</li>
+        <li>Home Dashboard</li>
+        <li>Topics List</li>
+        <li>Lesson View</li>
+        <li>Exam Interface</li>
+        <li>Store Layout</li>
+      </ul>
+      <button class="primary" onclick="createScreens()">
+        Ekranları Yarat
+      </button>
+    </div>
+    
+    <div class="section">
+      <h3>⚡ Avtomatik Export</h3>
+      <p>Hər şeyi bir kliklə yaradın</p>
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="status" id="status">Hazır</div>
+      <button class="primary" onclick="createEverything()">
+        🚀 Hər Şeyi Yarat
+      </button>
+      <button class="secondary" onclick="cancel()">
+        Ləğv et
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function createDesignSystem() {
+      updateProgress(25, 'Design system yaradılır...');
+      parent.postMessage({ pluginMessage: { type: 'create-design-system' } }, '*');
+      setTimeout(() => {
+        updateProgress(100, 'Design system hazır!');
+      }, 2000);
+    }
+    
+    function createScreens() {
+      updateProgress(50, 'Ekranlar yaradılır...');
+      parent.postMessage({ pluginMessage: { type: 'create-screens' } }, '*');
+      setTimeout(() => {
+        updateProgress(100, 'Ekranlar hazır!');
+      }, 3000);
+    }
+    
+    function createEverything() {
+      updateProgress(10, 'Başlanır...');
+      
+      setTimeout(() => {
+        updateProgress(30, 'Design system yaradılır...');
+        parent.postMessage({ pluginMessage: { type: 'create-design-system' } }, '*');
+      }, 500);
+      
+      setTimeout(() => {
+        updateProgress(70, 'Ekranlar yaradılır...');
+        parent.postMessage({ pluginMessage: { type: 'create-screens' } }, '*');
+      }, 2500);
+      
+      setTimeout(() => {
+        updateProgress(100, 'Tamamlandı! 🎉');
+      }, 5000);
+    }
+    
+    function updateProgress(percent, status) {
+      document.getElementById('progressBar').style.width = percent + '%';
+      document.getElementById('status').textContent = status;
+    }
+    
+    function cancel() {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    }
+  </script>
+</body>
+</html>

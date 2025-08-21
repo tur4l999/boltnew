@@ -11,7 +11,11 @@
     "tokens": "node scripts/generate-tokens.mjs",
     "validate": "node scripts/validate.mjs",
     "handoff": "npm run tokens && node scripts/make-handoff.mjs",
-    "dev:inspect": "vite"
+    "dev:inspect": "vite",
+    "figma:sync": "node scripts/sync-to-figma.js",
+    "figma:setup": "bash scripts/figma-setup.sh",
+    "figma:plugin": "cd figma-plugin && npm run build",
+    "figma:dev": "cd figma-plugin && npm run dev"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
