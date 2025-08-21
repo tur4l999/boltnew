@@ -54,7 +54,7 @@ export function PackagesScreen() {
       basePrice: 25,
       color: 'emerald',
       features: [
-        'Sadə paketdəki hər şey əlavə olaraq:',
+        'Sadə paketdəki hər şey',
         'İmtahan simulyatoru - 5 bilet (əlavə)',
         'İmtahanlara hazirliq vəsaiti 2025 Ə.Talıbov (kitab)',
         'Test-imtahan çalışmaları kitabı 2025 (kitab)',
@@ -63,17 +63,13 @@ export function PackagesScreen() {
     },
     {
       id: 'pro',
-      name: 'Pro Paket',
+      name: 'Premium Paket',
       basePrice: 40,
       color: 'blue',
       features: [
-        'Bütün funksiyalar',
-        'Limitsiz test',
-        'Şəxsi məsləhətçi',
-        'Praktiki təcrübə',
-        'Apellyasiya dəstəyi',
-        'Offline məzmun',
-        'VIP dəstək',
+        'Standart paketdəki hər şey',
+        'Əziz Talıbovla (kitabların müəllifi) əyani və onlayn dərslər',
+        '"A", "B" və ya "C" kateqoriyası üzrə şəhadətnamə*',
         'Ekskluziv materiallar'
       ]
     }
