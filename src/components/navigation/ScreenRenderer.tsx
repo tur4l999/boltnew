@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { PageTransition } from './PageTransition';
 import { HomeScreen } from '../screens/HomeScreen';
 import { TopicsScreen } from '../screens/TopicsScreen';
 import { LessonScreen } from '../screens/LessonScreen';
@@ -19,48 +20,36 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
   
+  // Keçid açarı yaradırıq
+  const transitionKey = `${currentScreen.screen}-${JSON.stringify(currentScreen.params)}`;
+  
   // AI Chat screen - no header or navigation
   if (currentScreen.screen === 'AIChat') {
     return <AIChatScreen />;
   }
   
-  // Tab screens
-  if (currentScreen.screen === 'Home' || (currentTab === 'Home' && currentScreen.screen === 'Home')) {
-    return <HomeScreen />;
-  }
-  if (currentScreen.screen === 'Topics' || (currentTab === 'Topics' && currentScreen.screen === 'Topics')) {
-    return <TopicsScreen />;
-  }
-  if (currentScreen.screen === 'Store' || (currentTab === 'Store' && currentScreen.screen === 'Store')) {
-    return <StoreScreen />;
-  }
-  if (currentScreen.screen === 'More' || (currentTab === 'More' && currentScreen.screen === 'More')) {
-    return <MoreScreen />;
-  }
-  
-  // Stack screens
-  switch (currentScreen.screen) {
-    case 'Lesson':
-      return <LessonScreen />;
-    case 'Practice':
-      return <PracticeScreen />;
-    case 'ExamConfig':
-      return <ExamConfigScreen />;
-    case 'ExamRun':
-      return <ExamRunScreen />;
-    case 'Results':
-      return <ResultsScreen />;
-    case 'Mistakes':
-      return <MistakesScreen />;
-    case 'TeacherContact':
-      return <TeacherContactScreen />;
-    case 'Packages':
-      return <PackagesScreen />;
-    case 'Transactions':
-      return <TransactionsScreen />;
-    case 'Settings':
-      return <SettingsScreen />;
-    default:
-      return <HomeScreen />;
-  }
+  return (
+    <PageTransition transitionKey={transitionKey}>
+      {/* Tab screens */}
+      {(currentScreen.screen === 'Home' || (currentTab === 'Home' && currentScreen.screen === 'Home')) && <HomeScreen />}
+      {(currentScreen.screen === 'Topics' || (currentTab === 'Topics' && currentScreen.screen === 'Topics')) && <TopicsScreen />}
+      {(currentScreen.screen === 'Store' || (currentTab === 'Store' && currentScreen.screen === 'Store')) && <StoreScreen />}
+      {(currentScreen.screen === 'More' || (currentTab === 'More' && currentScreen.screen === 'More')) && <MoreScreen />}
+      
+      {/* Stack screens */}
+      {currentScreen.screen === 'Lesson' && <LessonScreen />}
+      {currentScreen.screen === 'Practice' && <PracticeScreen />}
+      {currentScreen.screen === 'ExamConfig' && <ExamConfigScreen />}
+      {currentScreen.screen === 'ExamRun' && <ExamRunScreen />}
+      {currentScreen.screen === 'Results' && <ResultsScreen />}
+      {currentScreen.screen === 'Mistakes' && <MistakesScreen />}
+      {currentScreen.screen === 'TeacherContact' && <TeacherContactScreen />}
+      {currentScreen.screen === 'Packages' && <PackagesScreen />}
+      {currentScreen.screen === 'Transactions' && <TransactionsScreen />}
+      {currentScreen.screen === 'Settings' && <SettingsScreen />}
+      
+      {/* Default */}
+      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'ExamConfig', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
+    </PageTransition>
+  );
 }

@@ -2,6 +2,9 @@ import React, { useMemo } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Progress } from '../ui/Progress';
+import { FadeInUp } from '../ui/FadeInUp';
+import { SlideTransition } from '../ui/SlideTransition';
+import { ScaleIn } from '../ui/ScaleIn';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode } = useApp();
@@ -29,70 +32,77 @@ export function HomeScreen() {
     }`}>
       {/* Package Status */}
       {!hasActivePackage() && (
-        <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
-          isDarkMode 
-            ? 'bg-blue-900/20 border-blue-700' 
-            : 'bg-blue-50 border-blue-200'
-        }`}>
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
-            isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
+        <SlideTransition direction="down" delay={100}>
+          <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
+            isDarkMode 
+              ? 'bg-blue-900/20 border-blue-700' 
+              : 'bg-blue-50 border-blue-200'
           }`}>
-            <span className={`text-xs transition-colors duration-200 ${
-              isDarkMode ? 'text-blue-300' : 'text-blue-600'
-            }`}>📦</span>
-          </div>
-          <div className="flex-1">
-            <div className={`text-xs font-medium transition-colors duration-200 ${
-              isDarkMode ? 'text-blue-300' : 'text-blue-900'
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
+              isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
             }`}>
-              Aktiv paketiniz yoxdur
+              <span className={`text-xs transition-colors duration-200 ${
+                isDarkMode ? 'text-blue-300' : 'text-blue-600'
+              }`}>📦</span>
             </div>
+            <div className="flex-1">
+              <div className={`text-xs font-medium transition-colors duration-200 ${
+                isDarkMode ? 'text-blue-300' : 'text-blue-900'
+              }`}>
+                Aktiv paketiniz yoxdur
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('Packages')}
+              className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
+                isDarkMode 
+                  ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              Paket al
+            </button>
           </div>
-          <button
-            onClick={() => navigate('Packages')}
-            className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
-              isDarkMode 
-                ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            Paket al
-          </button>
-        </div>
+        </SlideTransition>
       )}
 
       {hasActivePackage() && (
-        <div className="mb-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg flex items-center gap-3">
-          <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-            <span className="text-emerald-600 text-xs">👑</span>
-          </div>
-          <div className="flex-1">
-            <div className="text-emerald-900 text-xs font-medium">
-              Premium üzv - Bütün funksiyalar aktiv
+        <ScaleIn delay={100}>
+          <div className="mb-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg flex items-center gap-3">
+            <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-emerald-600 text-xs">👑</span>
             </div>
-            <div className="text-emerald-700 text-xs">
-              {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
+            <div className="flex-1">
+              <div className="text-emerald-900 text-xs font-medium">
+                Premium üzv - Bütün funksiyalar aktiv
+              </div>
+              <div className="text-emerald-700 text-xs">
+                {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
+              </div>
+            </div>
+            <div className="text-emerald-600 text-lg">
+              ⭐
             </div>
           </div>
-          <div className="text-emerald-600 text-lg">
-            ⭐
-          </div>
-        </div>
+        </ScaleIn>
       )}
 
       {/* Progress Card */}
-      <Card className="mb-3">
-        <div className="text-xs text-gray-500 mb-2">{t.progress}</div>
-        <Progress value={42} />
-        <div className="text-xs mt-2 text-gray-700">
-          {t.continue} → <span className="font-bold">M8: Yol nişanları</span>
-        </div>
-      </Card>
+      <FadeInUp delay={200}>
+        <Card className="mb-3">
+          <div className="text-xs text-gray-500 mb-2">{t.progress}</div>
+          <Progress value={42} />
+          <div className="text-xs mt-2 text-gray-700">
+            {t.continue} → <span className="font-bold">M8: Yol nişanları</span>
+          </div>
+        </Card>
+      </FadeInUp>
 
       {/* Grid Layout */}
       <div className="space-y-2">
         {rows.map((row, idx) => (
-          <div key={idx} className="grid grid-cols-2 gap-2">
+          <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
+            <div className="grid grid-cols-2 gap-2">
             {row.map((item) => (
               <button
                 key={item.key}
@@ -115,20 +125,23 @@ export function HomeScreen() {
                 </div>
               </button>
             ))}
-          </div>
+            </div>
+          </SlideTransition>
         ))}
       </div>
 
       {/* Tutorial Card */}
-      <button
-        onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}
-        className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden"
-      >
-        <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
-          <span className="text-white text-base">▶</span>
-        </div>
-        <span className="text-base">Tətbiqdən Necə İstifadə Edilir</span>
-      </button>
+      <ScaleIn delay={600}>
+        <button
+          onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}
+          className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden transform hover:scale-105 transition-transform duration-200"
+        >
+          <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
+            <span className="text-white text-base">▶</span>
+          </div>
+          <span className="text-base">Tətbiqdən Necə İstifadə Edilir</span>
+        </button>
+      </ScaleIn>
     </div>
   );
 }

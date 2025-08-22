@@ -4,6 +4,8 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
+import { FadeInUp } from '../ui/FadeInUp';
+import { SlideTransition } from '../ui/SlideTransition';
 
 export function TopicsScreen() {
   const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
@@ -92,21 +94,46 @@ export function TopicsScreen() {
       />
       <div className="space-y-2">
         {filteredModules.map((module) => (
-          <Card key={module.id} className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                {!isModuleUnlocked(module.id) && (
-                  <span className="text-gray-400 text-lg">🔒</span>
-                )}
-                <div>
-                <div className={`font-bold text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>{module.title}</div>
-                <div className={`text-xs transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  {t.progress}: {module.progress}%
+          <FadeInUp key={module.id} delay={filteredModules.indexOf(module) * 50}>
+            <Card className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  {!isModuleUnlocked(module.id) && (
+                    <span className="text-gray-400 text-lg animate-pulse">🔒</span>
+                  )}
+                  <div>
+                  <div className={`font-bold text-sm transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                  }`}>{module.title}</div>
+                  <div className={`text-xs transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {t.progress}: {module.progress}%
+                  </div>
+                  </div>
                 </div>
+                <Button 
+                  onClick={() => handleModuleClick(module)}
+                  disabled={!isModuleUnlocked(module.id)}
+                  size="sm"
+                >
+                  {isModuleUnlocked(module.id) ? t.startLesson : 'Kilidli'}
+                </Button>
+              </div>
+              <div className="relative overflow-hidden rounded-lg">
+                <Progress value={isModuleUnlocked(module.id) ? module.progress : 0} />
+                {isModuleUnlocked(module.id) && module.progress > 0 && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+                )}
+              </div>
+            </Card>
+          </FadeInUp>
+        ))}
+      </div>
+    </div>
+    </>
+  );
+}
                 </div>
               </div>
               <Button 
