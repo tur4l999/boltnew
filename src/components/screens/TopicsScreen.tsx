@@ -134,21 +134,3 @@ export function TopicsScreen() {
     </>
   );
 }
-                </div>
-              </div>
-              <Button 
-                onClick={() => handleModuleClick(module)}
-                disabled={!isModuleUnlocked(module.id)}
-                size="sm"
-              >
-                {isModuleUnlocked(module.id) ? t.startLesson : 'Kilidli'}
-              </Button>
-            </div>
-            <Progress value={isModuleUnlocked(module.id) ? module.progress : 0} />
-          </Card>
-        ))}
-      </div>
-    </div>
-    </>
-  );
-}
