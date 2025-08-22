@@ -14,7 +14,8 @@
     "dev:inspect": "vite",
     "figma:generate": "node scripts/generate-figma-data.mjs",
     "figma:export": "npm run tokens && npm run figma:generate",
-    "figma:simple": "node scripts/export-to-figma.js"
+    "figma:simple": "node scripts/export-to-figma.js",
+    "design:publish": "tsx scripts/toDesign.ts"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
@@ -39,9 +40,5 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2"
-  },
-  }
-  "scripts": {
-    "design:publish": "tsx scripts/toDesign.ts"
   }
 }
