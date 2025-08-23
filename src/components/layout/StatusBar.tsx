@@ -113,7 +113,7 @@ function StatusBar15Pro({
   return (
     <div className={`relative w-full h-11 ${bgClass} ${textClass} flex items-center justify-between px-6 text-sm font-medium`}>
       {/* Notch */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[118px] h-7 bg-black rounded-b-[18px]" />
       
       {/* Left side - Time */}
       <div className="flex items-center">
