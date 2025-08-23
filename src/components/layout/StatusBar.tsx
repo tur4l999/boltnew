@@ -1,7 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-);
-}
-
 
 function BatteryIcon({ level = 76, charging = false, theme = "dark" as Theme }) {
 const stroke = theme === "dark" ? "stroke-white" : "stroke-black";
