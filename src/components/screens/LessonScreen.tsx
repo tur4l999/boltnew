@@ -89,9 +89,8 @@ export function LessonScreen() {
     }
   }
 
-  // Yalnız açıq olan modulların siyahısı (paket yoxdursa M8 və M11)
+  // Bütün modullar, kilid statusu ilə
   const moduleItems = Array.from({ length: 27 }, (_, i) => `M${i + 1}`);
-  const unlockedModules = moduleItems.filter((mid) => isModuleUnlocked(mid));
 
   return (
     <div className="p-3 pb-32">
@@ -109,24 +108,29 @@ export function LessonScreen() {
         
         {moduleDropdownOpen && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
-            {unlockedModules.map((mid) => (
-              <button
-                key={mid}
-                onClick={() => {
-                  if (!isModuleUnlocked(mid)) return; // əlavə qoruma
-                  navigate('Lesson', { moduleId: mid });
-                  setModuleDropdownOpen(false);
-                }}
-                className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 min-h-[44px] ${
-                  moduleId === mid ? 'bg-emerald-50 text-emerald-700 font-medium' : 'text-gray-700'
-                }`}
-              >
-                {mid}: Module {mid.replace('M','')} — Traffic Rules & Safety
-              </button>
-            ))}
-            {unlockedModules.length === 0 && (
-              <div className="px-4 py-3 text-sm text-gray-500">Heç bir modul açıq deyil</div>
-            )}
+            {moduleItems.map((mid) => {
+              const unlocked = isModuleUnlocked(mid);
+              return (
+                <button
+                  key={mid}
+                  onClick={() => {
+                    if (!unlocked) return; // blokla
+                    navigate('Lesson', { moduleId: mid });
+                    setModuleDropdownOpen(false);
+                  }}
+                  disabled={!unlocked}
+                  className={`w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 min-h-[44px] ${
+                    mid === moduleId ? 'bg-emerald-50 text-emerald-700 font-medium' : ''
+                  } ${
+                    unlocked 
+                      ? 'hover:bg-gray-50 text-gray-700 cursor-pointer' 
+                      : 'opacity-60 text-gray-400 cursor-not-allowed'
+                  }`}
+                >
+                  {mid}: Module {mid.replace('M','')} — Traffic Rules & Safety {unlocked ? '' : ' (Kilidli)'}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
