@@ -111,7 +111,7 @@ function StatusBar15Pro({
   const textClass = theme === "dark" ? "text-white" : "text-black";
 
   return (
-    <div className={`relative w-full h-11 ${bgClass} ${textClass} flex items-center justify-between px-6 text-sm font-medium`}>
+    <div className={`relative w-full h-14 ${bgClass} ${textClass} flex items-center justify-between px-6 text-sm font-medium`}>
       {/* Notch */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl" />
       
