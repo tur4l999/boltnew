@@ -29,18 +29,17 @@ function ScheduleActivationModal({
   onConfirm: (mode: 'now' | 'schedule', when?: Date) => void;
 }) {
   const today = new Date();
+  const [step, setStep] = useState<1 | 2>(1);
   const [mode, setMode] = useState<'now' | 'schedule'>('now');
   const [year, setYear] = useState<number>(today.getFullYear());
   const [month, setMonth] = useState<number>(today.getMonth()); // 0-based
   const [day, setDay] = useState<number>(today.getDate());
-  const [hour, setHour] = useState<string>('10');
-  const [minute, setMinute] = useState<string>('00');
+  const [timeStr, setTimeStr] = useState<string>('10:00');
 
   const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
   const weekdays = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'];
 
   const getDaysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
-
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayWeekIdx = new Date(year, month, 1).getDay(); // 0=Sun
   const offset = (firstDayWeekIdx + 6) % 7; // convert to Mon=0
@@ -49,78 +48,111 @@ function ScheduleActivationModal({
   for (let i = 0; i < offset; i++) grid.push(null);
   for (let d = 1; d <= daysInMonth; d++) grid.push(d);
 
-  const handleConfirm = () => {
-    if (mode === 'now') {
-      onConfirm('now');
-      return;
-    }
-    const when = new Date(year, month, day, parseInt(hour, 10), parseInt(minute, 10), 0, 0);
-    onConfirm('schedule', when);
+  const parsedWhen = () => {
+    const [h, m] = timeStr.split(':').map(v => parseInt(v, 10));
+    return new Date(year, month, day, isNaN(h) ? 0 : h, isNaN(m) ? 0 : m, 0, 0);
   };
 
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title="Aktivləşdirmə vaxtını seç"
-      message="Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz."
-      primaryAction={{ label: 'Təsdiqlə', onClick: handleConfirm }}
-      secondaryAction={{ label: 'Bağla', onClick: onClose }}
-    >
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-sm">
-          <label className="flex items-center gap-1">
-            <input type="radio" checked={mode === 'now'} onChange={() => setMode('now')} /> İndi aktivləşdir
-          </label>
-          <label className="flex items-center gap-1">
-            <input type="radio" checked={mode === 'schedule'} onChange={() => setMode('schedule')} /> Tarix/saat seç
-          </label>
-        </div>
+  const handleNext = () => {
+    if (mode === 'now') {
+      setStep(2);
+      return;
+    }
+    setStep(2);
+  };
 
-        {mode === 'schedule' && (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <select className="border rounded px-2 py-1 text-sm" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
-                {months.map((m, idx) => (
-                  <option key={idx} value={idx}>{m}</option>
-                ))}
-              </select>
-              <select className="border rounded px-2 py-1 text-sm" value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
-                {Array.from({ length: 3 }).map((_, i) => {
-                  const y = today.getFullYear() + i;
-                  return <option key={y} value={y}>{y}</option>;
-                })}
-              </select>
-            </div>
-            <div>
-              <div className="grid grid-cols-7 gap-1 text-xs text-gray-500 mb-1">
-                {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
+  const handlePay = () => {
+    if (mode === 'now') {
+      onConfirm('now');
+    } else {
+      onConfirm('schedule', parsedWhen());
+    }
+  };
+
+  const handleBack = () => setStep(1);
+
+  return (
+    <Modal open={open} onClose={onClose}>
+      <div className="overflow-hidden">
+        <div className={`transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="min-w-full">
+            <div className="text-base font-bold mb-1">Aktivləşdirmə vaxtını seç</div>
+            <div className="text-sm text-gray-600 mb-3">Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz.</div>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-sm">
+                <label className="flex items-center gap-1">
+                  <input type="radio" checked={mode === 'now'} onChange={() => setMode('now')} /> İndi aktivləşdir
+                </label>
+                <label className="flex items-center gap-1">
+                  <input type="radio" checked={mode === 'schedule'} onChange={() => setMode('schedule')} /> Tarix/saat seç
+                </label>
               </div>
-              <div className="grid grid-cols-7 gap-1">
-                {grid.map((d, idx) => (
-                  <button
-                    key={idx}
-                    disabled={d === null}
-                    onClick={() => d && setDay(d)}
-                    className={`text-sm px-2 py-1 rounded ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
-                  >
-                    {d}
-                  </button>
-                ))}
+
+              {mode === 'schedule' && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <select className="border rounded-xl px-3 py-2 text-sm" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
+                      {months.map((m, idx) => (
+                        <option key={idx} value={idx}>{m}</option>
+                      ))}
+                    </select>
+                    <select className="border rounded-xl px-3 py-2 text-sm" value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
+                      {Array.from({ length: 3 }).map((_, i) => {
+                        const y = today.getFullYear() + i;
+                        return <option key={y} value={y}>{y}</option>;
+                      })}
+                    </select>
+                  </div>
+                  <div>
+                    <div className="grid grid-cols-7 gap-1 text-xs text-gray-500 mb-1">
+                      {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
+                    </div>
+                    <div className="grid grid-cols-7 gap-1">
+                      {grid.map((d, idx) => (
+                        <button
+                          key={idx}
+                          disabled={d === null}
+                          onClick={() => d && setDay(d)}
+                          className={`text-sm px-2 py-2 rounded-xl ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
+                        >
+                          {d}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input className="border rounded-xl px-3 py-2 w-24 text-sm" value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="SS:dd" />
+                    <select className="border rounded-xl px-3 py-2 text-sm" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
+                      {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-end">
+                <button onClick={handleNext} className="px-3 py-2 text-sm rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Davam et</button>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <input className="border rounded px-2 py-1 w-16 text-sm" value={hour} onChange={e => setHour(e.target.value)} placeholder="SS" />
-              :
-              <input className="border rounded px-2 py-1 w-16 text-sm" value={minute} onChange={e => setMinute(e.target.value)} placeholder="dd" />
-              <select className="border rounded px-2 py-1 text-sm" onChange={e => { const [h, m] = e.target.value.split(':'); setHour(h); setMinute(m); }}>
-                {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
             </div>
           </div>
-        )}
+        </div>
+
+        <div className={`transition-transform duration-300 ease-out ${step === 2 ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="min-w-full">
+            <div className="flex items-center gap-2 mb-2">
+              <button onClick={handleBack} className="px-2 py-1 text-sm rounded-lg border">Geri</button>
+              <div className="text-base font-bold">Təsdiq</div>
+            </div>
+            <div className="text-sm mb-3">
+              Seçilən vaxt: {mode === 'now' ? 'İndi' : `${day}.${month + 1}.${year} ${timeStr}`}
+            </div>
+            <div className="flex items-center justify-end gap-2">
+              <button onClick={onClose} className="px-3 py-2 text-sm rounded-xl border">Ləğv et</button>
+              <button onClick={handlePay} className="px-3 py-2 text-sm rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Ödəniş et</button>
+            </div>
+          </div>
+        </div>
       </div>
     </Modal>
   );

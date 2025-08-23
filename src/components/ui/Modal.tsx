@@ -1,4 +1,5 @@
 import React from 'react';
+import { useApp } from '../../contexts/AppContext';
 
 interface ModalProps {
   open: boolean;
@@ -11,23 +12,26 @@ interface ModalProps {
 }
 
 export function Modal({ open, title, message, onClose, primaryAction, secondaryAction, children }: ModalProps) {
+  const { isDarkMode } = useApp();
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
       {/* Sheet/Modal */}
-      <div className="relative w-full sm:max-w-sm sm:rounded-2xl bg-white text-gray-900 shadow-xl sm:mx-auto sm:my-8 rounded-t-2xl p-4">
+      <div className={`relative w-full sm:max-w-sm sm:rounded-2xl ${
+        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'
+      } shadow-2xl sm:mx-auto sm:my-8 rounded-t-2xl p-4 border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
         {title && <div className="text-base font-bold mb-1">{title}</div>}
-        {message && <div className="text-sm text-gray-700 mb-3">{message}</div>}
+        {message && <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{message}</div>}
         {children}
         {(primaryAction || secondaryAction) && (
-          <div className="flex gap-2 justify-end mt-3">
+          <div className="flex gap-2 justify-end mt-4">
             {secondaryAction && (
               <button
                 onClick={secondaryAction.onClick}
-                className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50"
+                className={`px-3 py-2 text-sm rounded-xl border ${isDarkMode ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-300 hover:bg-gray-50'}`}
               >
                 {secondaryAction.label}
               </button>
@@ -35,7 +39,7 @@ export function Modal({ open, title, message, onClose, primaryAction, secondaryA
             {primaryAction && (
               <button
                 onClick={primaryAction.onClick}
-                className="px-3 py-2 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
+                className="px-3 py-2 text-sm rounded-xl bg-emerald-600 text-white hover:bg-emerald-700"
               >
                 {primaryAction.label}
               </button>
