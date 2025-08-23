@@ -9,11 +9,11 @@ export function Header() {
   
   return (
     <div className="sticky top-0 z-30 mt-0">
-      <div className={`max-w-md mx-auto backdrop-blur-sm border-b transition-colors duration-200 ${
+      <div className={`mx-auto backdrop-blur-sm border-b transition-colors duration-200 ${
         isDarkMode 
           ? 'bg-gray-800/80 border-gray-700' 
           : 'bg-white/80 border-gray-200'
-      }`}>
+      }`} style={{ maxWidth: 393 }}>
         <div className="px-4 py-2 flex items-center gap-3">
           <button
             onClick={() => navigate('Settings')}

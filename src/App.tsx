@@ -54,11 +54,14 @@ function AppContent() {
         : 'bg-gray-50 text-gray-900'
     }`}>
       <StatusBar />
-      <div className={`max-w-md mx-auto min-h-screen relative transition-colors duration-200 ${
+      <div className={`mx-auto min-h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } pt-4`}>
+      }`} style={{ maxWidth: 393 }}>
         <Header />
-        <ScreenRenderer />
+        {/* Content viewport simulating iPhone 15 Pro height under header and above tab bar */}
+        <div className="px-4 pt-2 pb-20" style={{ minHeight: 'calc(100vh - 44px - 56px)' }}>
+          <ScreenRenderer />
+        </div>
         <TabBar />
       </div>
     </div>
