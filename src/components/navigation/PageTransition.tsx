@@ -7,34 +7,29 @@ interface PageTransitionProps {
 }
 
 export function PageTransition({ children, transitionKey }: PageTransitionProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const [currentKey, setCurrentKey] = useState(transitionKey);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [shouldShow, setShouldShow] = useState(true);
+  const [fadeIn, setFadeIn] = useState(true);
 
   useEffect(() => {
     if (transitionKey !== currentKey) {
-      setIsAnimating(true);
-      setIsVisible(false);
-      
-      setTimeout(() => {
-        setCurrentKey(transitionKey);
-        setIsVisible(true);
-        setTimeout(() => setIsAnimating(false), 200);
-      }, 100);
-    } else {
-      setIsVisible(true);
+      // Switch content immediately, then fade it in once
+      setCurrentKey(transitionKey);
+      setShouldShow(false);
+      // next tick to trigger CSS transition
+      const id = requestAnimationFrame(() => {
+        setShouldShow(true);
+        setFadeIn(true);
+      });
+      return () => cancelAnimationFrame(id);
     }
   }, [transitionKey, currentKey]);
 
   return (
     <div className="relative overflow-hidden">
-      {/* Əsas məzmun */}
       <div
-        className={`transition-opacity duration-200 ease-out ${
-          isVisible 
-            ? 'opacity-100' 
-            : 'opacity-0'
-        }`}
+        key={currentKey}
+        className={`transition-opacity duration-200 ease-out ${shouldShow && fadeIn ? 'opacity-100' : 'opacity-0'}`}
       >
         {children}
       </div>
