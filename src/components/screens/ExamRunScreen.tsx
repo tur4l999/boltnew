@@ -66,7 +66,7 @@ export function ExamRunScreen() {
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-900'
-    }`}>
+    } pt-11`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 text-white">
         <button className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">

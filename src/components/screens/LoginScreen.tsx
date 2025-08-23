@@ -34,7 +34,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       isDarkMode 
         ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
         : 'bg-gradient-to-br from-emerald-50 to-green-100'
-    }`}>
+    } pt-11`}>
       {/* Background Elements - Lower opacity and behind content */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Traffic Signs */}

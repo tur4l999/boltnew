@@ -8,7 +8,7 @@ export function TransactionsScreen() {
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-    }`}>
+    } pt-11`}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
