@@ -9,13 +9,13 @@ interface ModalProps {
   primaryAction?: { label: string; onClick: () => void };
   secondaryAction?: { label: string; onClick: () => void };
   children?: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 export function Modal({ open, title, message, onClose, primaryAction, secondaryAction, children, size = 'md' }: ModalProps) {
   const { isDarkMode } = useApp();
   if (!open) return null;
-  const sizeClass = size === 'sm' ? 'sm:max-w-[320px]' : size === 'lg' ? 'sm:max-w-md' : 'sm:max-w-sm';
+  const sizeClass = size === 'xs' ? 'sm:max-w-[280px]' : size === 'sm' ? 'sm:max-w-[320px]' : size === 'lg' ? 'sm:max-w-md' : 'sm:max-w-sm';
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       {/* Backdrop */}

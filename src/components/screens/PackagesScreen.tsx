@@ -23,10 +23,14 @@ function ScheduleActivationModal({
   open,
   onClose,
   onConfirm,
+  pkgName,
+  days
 }: {
   open: boolean;
   onClose: () => void;
   onConfirm: (mode: 'now' | 'schedule', when?: Date) => void;
+  pkgName: string;
+  days: number;
 }) {
   const today = new Date();
   const [step, setStep] = useState<1 | 2>(1);
@@ -35,6 +39,7 @@ function ScheduleActivationModal({
   const [month, setMonth] = useState<number>(today.getMonth()); // 0-based
   const [day, setDay] = useState<number>(today.getDate());
   const [timeStr, setTimeStr] = useState<string>('10:00');
+  const [timePickerOpen, setTimePickerOpen] = useState(false);
 
   const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
   const weekdays = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'];
@@ -53,27 +58,18 @@ function ScheduleActivationModal({
     return new Date(year, month, day, isNaN(h) ? 0 : h, isNaN(m) ? 0 : m, 0, 0);
   };
 
-  const handleNext = () => {
-    if (mode === 'now') {
-      setStep(2);
-      return;
-    }
-    setStep(2);
-  };
-
+  const handleNext = () => setStep(2);
   const handlePay = () => {
-    if (mode === 'now') {
-      onConfirm('now');
-    } else {
-      onConfirm('schedule', parsedWhen());
-    }
+    if (mode === 'now') onConfirm('now');
+    else onConfirm('schedule', parsedWhen());
   };
 
   const handleBack = () => setStep(1);
 
   return (
-    <Modal open={open} onClose={onClose} size="sm">
-      <div className="overflow-hidden">
+    <Modal open={open} onClose={onClose} size={mode === 'now' ? 'xs' : 'sm'}>
+      <div className="overflow-hidden relative">
+        {/* Step 1 */}
         <div className={`transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="min-w-full">
             <div className="text-base font-bold mb-1">Aktivləşdirmə vaxtını seç</div>
@@ -120,13 +116,24 @@ function ScheduleActivationModal({
                       ))}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input className="border rounded-xl px-3 py-2 w-24 text-sm bg-transparent" value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="SS:dd" />
-                    <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
-                      {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </select>
+                  <div className="relative">
+                    <button onClick={() => setTimePickerOpen(v => !v)} className="border rounded-xl px-3 py-2 text-sm w-full text-left">
+                      Saat: {timeStr}
+                    </button>
+                    {timePickerOpen && (
+                      <div className="absolute z-10 mt-1 w-full border rounded-xl p-2 bg-white dark:bg-gray-900">
+                        <div className="flex items-center gap-2">
+                          <input className="border rounded-xl px-3 py-2 w-20 text-sm bg-transparent" value={timeStr.split(':')[0]} onChange={e => setTimeStr(`${e.target.value}:${timeStr.split(':')[1] || '00'}`)} placeholder="SS" />
+                          :
+                          <input className="border rounded-xl px-3 py-2 w-20 text-sm bg-transparent" value={timeStr.split(':')[1] || ''} onChange={e => setTimeStr(`${timeStr.split(':')[0] || '00'}:${e.target.value}`)} placeholder="dd" />
+                          <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
+                            {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
+                              <option key={opt} value={opt}>{opt}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -138,13 +145,20 @@ function ScheduleActivationModal({
           </div>
         </div>
 
+        {/* Step 2 */}
         <div className={`transition-transform duration-300 ease-out ${step === 2 ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="min-w-full">
             <div className="flex items-center gap-2 mb-2">
               <button onClick={handleBack} className="px-2 py-1 text-sm rounded-lg border">Geri</button>
               <div className="text-base font-bold">Təsdiq</div>
             </div>
-            <div className="text-sm mb-3">
+            <div className="text-sm mb-2">
+              Paket: <span className="font-semibold">{pkgName}</span>
+            </div>
+            <div className="text-sm mb-2">
+              Müddət: <span className="font-semibold">{days} gün</span>
+            </div>
+            <div className="text-sm mb-4">
               Seçilən vaxt: {mode === 'now' ? 'İndi' : `${day}.${month + 1}.${year} ${timeStr}`}
             </div>
             <div className="flex items-center justify-end gap-2">
@@ -247,15 +261,14 @@ export function PackagesScreen() {
     const pkg = packages.find(p => p.id === modalOpenFor);
     if (!pkg) return;
     const price = calculatePrice(pkg.id);
-    const days = selectedDays[pkg.id];
+    const d = selectedDays[pkg.id];
     if (mode === 'now') {
-      const success = purchasePackage(pkg.id, pkg.name, price, days);
+      const success = purchasePackage(pkg.id, pkg.name, price, d);
       if (success) goBack();
     } else if (when) {
-      // Charge now, activate later
-      const success = purchasePackage(pkg.id, pkg.name, price, days);
+      const success = purchasePackage(pkg.id, pkg.name, price, d);
       if (success) {
-        schedulePackageActivation(pkg.id, pkg.name, 0, days, when);
+        schedulePackageActivation(pkg.id, pkg.name, 0, d, when);
         goBack();
       }
     }
@@ -458,6 +471,8 @@ export function PackagesScreen() {
         open={!!modalOpenFor}
         onClose={() => setModalOpenFor(null)}
         onConfirm={onConfirmSchedule}
+        pkgName={modalOpenFor ? (packages.find(p => p.id === modalOpenFor)?.name || '') : ''}
+        days={modalOpenFor ? (selectedDays[modalOpenFor] || 0) : 0}
       />
     </div>
   );
