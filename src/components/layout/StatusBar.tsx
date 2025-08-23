@@ -2,14 +2,24 @@ import React, { useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
-function BatteryIcon({ level = 76, charging = false, theme = "dark" }: { level?: number; charging?: boolean; theme?: Theme }) {
+/* ----------------------- Icons ----------------------- */
+
+function BatteryIcon({
+  level = 76,
+  charging = false,
+  theme = "light",
+}: {
+  level?: number;
+  charging?: boolean;
+  theme?: Theme;
+}) {
   const stroke = theme === "dark" ? "stroke-white" : "stroke-black";
   const strokeDim = theme === "dark" ? "stroke-white/30" : "stroke-black/30";
   const fill = theme === "dark" ? "bg-white" : "bg-black";
-  const bodyW = 25; // inner fill width cap
+  const bodyW = 24; // inner fill width cap
   const pct = Math.round(Math.max(0, Math.min(100, level)));
   const inner = Math.round((pct / 100) * bodyW);
-  
+
   return (
     <div className="relative ml-1" aria-label={`Battery ${pct}%${charging ? ", charging" : ""}`}>
       <div className="relative w-[30px] h-[14px] flex items-center">
@@ -18,7 +28,10 @@ function BatteryIcon({ level = 76, charging = false, theme = "dark" }: { level?:
         {/* Nub */}
         <div className={`absolute right-0.5 w-[3px] h-[6px] rounded-[1px] border ${strokeDim}`} />
         {/* Level fill */}
-        <div className={`absolute left-[2px] top-[3px] h-[6px] rounded-[2px] ${fill}`} style={{ width: `${inner}px` }} />
+        <div
+          className={`absolute left-[2px] top-[3px] h-[6px] rounded-[2px] ${fill}`}
+          style={{ width: `${inner}px` }}
+        />
         {/* Lightning if charging */}
         {charging && (
           <svg className="absolute left-1/2 -translate-x-1/2" width="10" height="10" viewBox="0 0 24 24">
@@ -30,57 +43,47 @@ function BatteryIcon({ level = 76, charging = false, theme = "dark" }: { level?:
   );
 }
 
-function SignalIcon({ strength = 4, theme = "dark" }: { strength?: 0 | 1 | 2 | 3 | 4; theme?: Theme }) {
-  const fill = theme === "dark" ? "bg-white" : "bg-black";
-  const fillDim = theme === "dark" ? "bg-white/30" : "bg-black/30";
-  
+function SignalIcon({ strength = 4, theme = "light" }: { strength?: 0 | 1 | 2 | 3 | 4; theme?: Theme }) {
+  // iOS-vari dar “pill” barlar
+  const on = theme === "dark" ? "bg-white" : "bg-black";
+  const off = theme === "dark" ? "bg-white/30" : "bg-black/30";
+  const heights = [6, 8, 10, 12]; // sol→sağ artan hündürlüklər
   return (
-    <div className="flex items-end gap-[1px] w-4 h-3">
-      {[1, 2, 3, 4].map((bar) => (
+    <div className="flex items-end gap-[2px]">
+      {heights.map((h, i) => (
         <div
-          key={bar}
-          className={`w-[2px] rounded-[0.5px] ${strength >= bar ? fill : fillDim}`}
-          style={{ height: `${bar * 2 + 2}px` }}
+          key={i}
+          className={`w-[3px] rounded-[1px] ${i < strength ? on : off}`}
+          style={{ height: `${h}px` }}
         />
       ))}
     </div>
   );
 }
 
-function WifiIcon({ strength = 3, theme = "dark" }: { strength?: 0 | 1 | 2 | 3; theme?: Theme }) {
+function WifiIcon({ strength = 3, theme = "light" }: { strength?: 0 | 1 | 2 | 3; theme?: Theme }) {
   const stroke = theme === "dark" ? "stroke-white" : "stroke-black";
-  
+  const dim = theme === "dark" ? "stroke-white/30" : "stroke-black/30";
   return (
-    <svg width="15" height="11" viewBox="0 0 15 11" className={stroke}>
-      <path
-        d="M7.5 10.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5z"
-        fill="currentColor"
-        className={strength >= 1 ? "opacity-100" : "opacity-30"}
-      />
-      <path
-        d="M7.5 7.5c1.1 0 2 .9 2 2"
-        fill="none"
-        strokeWidth="1"
-        className={strength >= 2 ? "opacity-100" : "opacity-30"}
-      />
-      <path
-        d="M7.5 4.5c2.2 0 4 1.8 4 4"
-        fill="none"
-        strokeWidth="1"
-        className={strength >= 3 ? "opacity-100" : "opacity-30"}
-      />
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-label={`Wi-Fi ${strength}/3`}>
+      <g fill="none" strokeLinecap="round" strokeWidth="1.6">
+        <path className={strength >= 1 ? stroke : dim} d="M12 18.5c.8 0 1.5.7 1.5 1.5S12.8 21.5 12 21.5 10.5 20.8 10.5 20s.7-1.5 1.5-1.5Z" />
+        <path className={strength >= 2 ? stroke : dim} d="M7.5 16c2.8-2.7 6.2-2.7 9 0" />
+        <path className={strength >= 3 ? stroke : dim} d="M4 12.5c4.6-4.4 11.4-4.4 16 0" />
+      </g>
     </svg>
   );
 }
 
+/* ----------------------- Status Bar ----------------------- */
+
 function StatusBar15Pro({
-  theme = "dark",
+  theme = "light",
   battery = 83,
   charging = false,
   signal = 4,
   wifi = 3,
   network = "5G",
-  demo = false
 }: {
   theme?: Theme;
   battery?: number;
@@ -88,42 +91,41 @@ function StatusBar15Pro({
   signal?: 0 | 1 | 2 | 3 | 4;
   wifi?: 0 | 1 | 2 | 3;
   network?: string;
-  demo?: boolean;
 }) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    const updateTime = () => {
+    const update = () => {
       const now = new Date();
-      setTime(now.toLocaleTimeString("en-US", { 
-        hour: "2-digit", 
-        minute: "2-digit",
-        hour12: false 
-      }));
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true, // şəkilə uyğun 9:41 formatı
+        }).replace(" AM", "").replace(" PM", "")
+      );
     };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    update();
+    const t = setInterval(update, 1000);
+    return () => clearInterval(t);
   }, []);
 
-  const bgClass = theme === "dark" ? "bg-black" : "bg-white";
-  const textClass = theme === "dark" ? "text-white" : "text-black";
+  const bg = theme === "dark" ? "bg-black text-white" : "bg-white text-black";
 
   return (
-    <div className={`relative w-full h-14 ${bgClass} ${textClass} flex items-center justify-between px-6 text-sm font-medium`}>
-      {/* Notch */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[118px] h-7 bg-black rounded-b-[18px]" />
-      
-      {/* Left side - Time */}
-      <div className="flex items-center">
-        <span className="font-semibold">{time}</span>
+    <div className={`relative w-full h-[44px] ${bg} flex items-center justify-between px-4 text-[15px]`}>
+      {/* Dynamic Island (mərkəzdə pill) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-[126px] h-[34px] bg-black rounded-[18px]" />
       </div>
 
-      {/* Right side - Status icons */}
-      <div className="flex items-center gap-1">
+      {/* Sol: Saat */}
+      <div className="font-semibold select-none tabular-nums">{time}</div>
+
+      {/* Sağ: Siqnal · 5G · Wi-Fi · Batareya */}
+      <div className="flex items-center gap-2 select-none">
         <SignalIcon strength={signal} theme={theme} />
-        <span className="text-xs font-semibold ml-1">{network}</span>
+        <span className="text-[12px] font-medium -ml-0.5">{network}</span>
         <WifiIcon strength={wifi} theme={theme} />
         <BatteryIcon level={battery} charging={charging} theme={theme} />
       </div>
@@ -134,7 +136,7 @@ function StatusBar15Pro({
 export function StatusBar() {
   return (
     <StatusBar15Pro
-      theme="dark"
+      theme="light"   // şəkil açıq temadır
       battery={83}
       charging={false}
       signal={4}
