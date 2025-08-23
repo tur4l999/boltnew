@@ -48,19 +48,21 @@ function AppContent() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${
+    <div className={`min-h-screen flex items-start justify-center transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      <StatusBar />
-      <div className={`mx-auto min-h-screen relative transition-colors duration-200 ${
-        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } pt-[59px]`} style={{ maxWidth: 393 }}>
-        <Header />
-        {/* Content viewport under fixed status bar and above tab bar */}
-        <div className="px-4 pt-2 pb-20" style={{ minHeight: 'calc(100vh - 59px - 56px)' }}>
-          <ScreenRenderer />
+      <div className="relative" style={{ width: 393, height: 852 }}>
+        <StatusBar />
+        {/* Scrollable content area between 59px top and 56px bottom */}
+        <div className={`absolute left-0 right-0 overflow-auto transition-colors duration-200 ${
+          isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+        }`} style={{ top: 59, bottom: 56 }}>
+          <Header />
+          <div className="px-4 pt-2 pb-20">
+            <ScreenRenderer />
+          </div>
         </div>
         <TabBar />
       </div>
