@@ -6,7 +6,7 @@ import { VideoPlayer } from '../media/VideoPlayer';
 import { PracticeInline } from '../practice/PracticeInline';
 
 export function LessonScreen() {
-  const { t, navigate, currentScreen } = useApp();
+  const { t, navigate, currentScreen, isModuleUnlocked, hasActivePackage } = useApp();
   const [activeTab, setActiveTab] = useState('video');
   const [offlineDownload, setOfflineDownload] = useState(false);
   const [contactMessage, setContactMessage] = useState('');
@@ -89,6 +89,10 @@ export function LessonScreen() {
     }
   }
 
+  // Yalnız açıq olan modulların siyahısı (paket yoxdursa M8 və M11)
+  const moduleItems = Array.from({ length: 27 }, (_, i) => `M${i + 1}`);
+  const unlockedModules = moduleItems.filter((mid) => isModuleUnlocked(mid));
+
   return (
     <div className="p-3 pb-32">
       {/* Module Dropdown */}
@@ -105,20 +109,24 @@ export function LessonScreen() {
         
         {moduleDropdownOpen && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
-            {Array.from({ length: 27 }, (_, i) => (
+            {unlockedModules.map((mid) => (
               <button
-                key={i}
+                key={mid}
                 onClick={() => {
-                  navigate('Lesson', { moduleId: `M${i + 1}` });
+                  if (!isModuleUnlocked(mid)) return; // əlavə qoruma
+                  navigate('Lesson', { moduleId: mid });
                   setModuleDropdownOpen(false);
                 }}
                 className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 min-h-[44px] ${
-                  moduleId === `M${i + 1}` ? 'bg-emerald-50 text-emerald-700 font-medium' : 'text-gray-700'
+                  moduleId === mid ? 'bg-emerald-50 text-emerald-700 font-medium' : 'text-gray-700'
                 }`}
               >
-                M{i + 1}: Module {i + 1} — Traffic Rules & Safety
+                {mid}: Module {mid.replace('M','')} — Traffic Rules & Safety
               </button>
             ))}
+            {unlockedModules.length === 0 && (
+              <div className="px-4 py-3 text-sm text-gray-500">Heç bir modul açıq deyil</div>
+            )}
           </div>
         )}
       </div>
