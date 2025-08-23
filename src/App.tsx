@@ -56,9 +56,9 @@ function AppContent() {
       <StatusBar />
       <div className={`mx-auto min-h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      }`} style={{ maxWidth: 393 }}>
+      } pt-[59px]`} style={{ maxWidth: 393 }}>
         <Header />
-        {/* Content viewport simulating iPhone 15 Pro height under header and above tab bar */}
+        {/* Content viewport under fixed status bar and above tab bar */}
         <div className="px-4 pt-2 pb-20" style={{ minHeight: 'calc(100vh - 59px - 56px)' }}>
           <ScreenRenderer />
         </div>
