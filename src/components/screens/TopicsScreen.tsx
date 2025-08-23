@@ -4,10 +4,12 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
+import { Modal } from '../ui/Modal';
 
 export function TopicsScreen() {
   const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
+  const [lockedModalOpen, setLockedModalOpen] = useState(false);
   
   const filteredModules = useMemo(
     () => MODULES.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase())),
@@ -18,7 +20,7 @@ export function TopicsScreen() {
     if (isModuleUnlocked(module.id)) {
       navigate('Lesson', { moduleId: module.id });
     } else {
-      alert('Bu mövzu üçün aktiv paket lazımdır. Paket almaq üçün mağazaya keçin.');
+      setLockedModalOpen(true);
     }
   };
 
@@ -111,10 +113,9 @@ export function TopicsScreen() {
               </div>
               <Button 
                 onClick={() => handleModuleClick(module)}
-                disabled={!isModuleUnlocked(module.id)}
                 size="sm"
               >
-                {isModuleUnlocked(module.id) ? t.startLesson : 'Kilidli'}
+                {isModuleUnlocked(module.id) ? t.startLesson : 'Paket tələb olunur'}
               </Button>
             </div>
             <div className="relative overflow-hidden rounded-lg">
@@ -127,6 +128,15 @@ export function TopicsScreen() {
         ))}
       </div>
     </div>
+
+    <Modal
+      open={lockedModalOpen}
+      onClose={() => setLockedModalOpen(false)}
+      title="Paket tələb olunur"
+      message="Dərslərə baxmaq üçün paket seçməlisiniz. Paketlər səhifəsinə keçmək istəyirsiniz?"
+      secondaryAction={{ label: 'Bağla', onClick: () => setLockedModalOpen(false) }}
+      primaryAction={{ label: 'Paketlərə keç', onClick: () => { setLockedModalOpen(false); navigate('Packages'); } }}
+    />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
 import { PracticeInline } from '../practice/PracticeInline';
+import { Modal } from '../ui/Modal';
 
 export function LessonScreen() {
   const { t, navigate, currentScreen, isModuleUnlocked, hasActivePackage } = useApp();
@@ -11,6 +12,7 @@ export function LessonScreen() {
   const [offlineDownload, setOfflineDownload] = useState(false);
   const [contactMessage, setContactMessage] = useState('');
   const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);
+  const [lockedModalOpen, setLockedModalOpen] = useState(false);
   
   const { moduleId } = currentScreen.params;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
@@ -114,17 +116,16 @@ export function LessonScreen() {
                 <button
                   key={mid}
                   onClick={() => {
-                    if (!unlocked) return; // blokla
+                    if (!unlocked) { setLockedModalOpen(true); return; }
                     navigate('Lesson', { moduleId: mid });
                     setModuleDropdownOpen(false);
                   }}
-                  disabled={!unlocked}
                   className={`w-full px-4 py-3 text-left border-b border-gray-100 last:border-b-0 min-h-[44px] ${
                     mid === moduleId ? 'bg-emerald-50 text-emerald-700 font-medium' : ''
                   } ${
                     unlocked 
                       ? 'hover:bg-gray-50 text-gray-700 cursor-pointer' 
-                      : 'opacity-60 text-gray-400 cursor-not-allowed'
+                      : 'opacity-60 text-gray-400'
                   }`}
                 >
                   {mid}: Module {mid.replace('M','')} — Traffic Rules & Safety {unlocked ? '' : ' (Kilidli)'}
@@ -170,6 +171,16 @@ export function LessonScreen() {
           🧪 İmtahana başla
         </Button>
       </div>
+
+      {/* Locked Modal */}
+      <Modal
+        open={lockedModalOpen}
+        onClose={() => setLockedModalOpen(false)}
+        title="Paket tələb olunur"
+        message="Dərslərə baxmaq üçün paket seçməlisiniz. Paketlər səhifəsinə keçmək istəyirsiniz?"
+        secondaryAction={{ label: 'Bağla', onClick: () => setLockedModalOpen(false) }}
+        primaryAction={{ label: 'Paketlərə keç', onClick: () => { setLockedModalOpen(false); navigate('Packages'); } }}
+      />
     </div>
   );
 }
