@@ -117,7 +117,7 @@ function StatusBar15Pro({
 
 	return (
 		<div className={`${isDark ? 'bg-black' : 'bg-white'} w-full`}> 
-			<div className={`relative mx-auto max-w-[393px] h-[44px] ${textColor} flex items-center justify-between px-4 text-[15px]`}>
+			<div className={`relative mx-auto max-w-[393px] h-[59px] ${textColor} flex items-center justify-between px-4 text-[15px]`}>
 				{/* Dynamic Island (center pill) */}
 				<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 					<div className={`w-[126px] h-[34px] ${islandBg} rounded-[18px]`} />

@@ -59,7 +59,7 @@ function AppContent() {
       }`} style={{ maxWidth: 393 }}>
         <Header />
         {/* Content viewport simulating iPhone 15 Pro height under header and above tab bar */}
-        <div className="px-4 pt-2 pb-20" style={{ minHeight: 'calc(100vh - 44px - 56px)' }}>
+        <div className="px-4 pt-2 pb-20" style={{ minHeight: 'calc(100vh - 59px - 56px)' }}>
           <ScreenRenderer />
         </div>
         <TabBar />

@@ -18,6 +18,10 @@ export function TabBar() {
         : 'bg-white/90 border-gray-200'
     }`}>
       <div className="mx-auto" style={{ maxWidth: 393 }}>
+        {/* Home indicator */}
+        <div className="relative h-[6px] mt-1 mb-1">
+          <div className={`absolute left-1/2 -translate-x-1/2 rounded-full ${isDarkMode ? 'bg-white/60' : 'bg-black/20'}`} style={{ width: 134, height: 5 }} />
+        </div>
         <div className="grid grid-cols-5">
           {tabs.map((tab) => (
             <button
