@@ -19,8 +19,8 @@ export function PageTransition({ children, transitionKey }: PageTransitionProps)
       setTimeout(() => {
         setCurrentKey(transitionKey);
         setIsVisible(true);
-        setTimeout(() => setIsAnimating(false), 300);
-      }, 150);
+        setTimeout(() => setIsAnimating(false), 200);
+      }, 100);
     } else {
       setIsVisible(true);
     }
@@ -28,17 +28,12 @@ export function PageTransition({ children, transitionKey }: PageTransitionProps)
 
   return (
     <div className="relative overflow-hidden">
-      {/* Keçid animasiyası üçün arxa fon */}
-      {isAnimating && (
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-10 animate-pulse z-10" />
-      )}
-      
       {/* Əsas məzmun */}
       <div
-        className={`transition-all duration-300 ease-out transform ${
+        className={`transition-opacity duration-200 ease-out ${
           isVisible 
-            ? 'translate-x-0 opacity-100 scale-100' 
-            : 'translate-x-4 opacity-0 scale-95'
+            ? 'opacity-100' 
+            : 'opacity-0'
         }`}
       >
         {children}
