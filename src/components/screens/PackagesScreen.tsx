@@ -103,16 +103,20 @@ export function PackagesScreen() {
 
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
-      return 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg transform scale-105';
+      // Popular (Standart) — emphasize differently in dark/light
+      return isDarkMode
+        ? 'relative ring-2 ring-emerald-600 bg-gradient-to-br from-emerald-900/30 to-green-900/20 border border-emerald-800 shadow-lg transform scale-105'
+        : 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg transform scale-105';
     }
-    return 'relative bg-white';
+    // Non-popular base
+    return isDarkMode ? 'relative bg-gray-800 border border-gray-700' : 'relative bg-white';
   }
 
   function getButtonClass(pkg: Package): string {
     if (pkg.popular) {
       return 'w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold shadow-lg';
     }
-    return 'w-full';
+    return isDarkMode ? 'w-full bg-gray-700 text-gray-100 hover:bg-gray-600' : 'w-full';
   }
 
   return (
@@ -138,24 +142,22 @@ export function PackagesScreen() {
 
       <div className="mb-6 text-center">
         <p className={`text-sm transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          isDarkMode ? 'text-gray-300' : 'text-gray-600'
         }`}>
           Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
         </p>
-        <div className="mt-2 text-lg font-bold text-emerald-600">
+        <div className="mt-2 text-lg font-bold text-emerald-500">
           Balans: {balance} AZN
         </div>
       </div>
 
       <div className="space-y-4">
         {packages.map((pkg) => (
-          <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
-            isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
-          }`}>
+          <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200`}>
             {pkg.popular && (
               <>
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                  ⭐ Ən Populyar
+                  ⭐ Ən çox seçilən
                 </div>
                 <div className="absolute top-2 right-2 text-2xl">
                   🔥
@@ -167,23 +169,28 @@ export function PackagesScreen() {
               <div className="text-center">
                 <h3 className={`text-xl font-bold transition-colors duration-200 ${
                   pkg.popular 
-                    ? 'text-emerald-700' 
+                    ? (isDarkMode ? 'text-emerald-300' : 'text-emerald-700') 
                     : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>
                   {pkg.name}
                 </h3>
                 <div className={`text-3xl font-black mt-2 transition-colors duration-200 ${
                   pkg.popular 
-                    ? 'text-emerald-600' 
+                    ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-600') 
                     : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>
                   {calculatePrice(pkg.id)} AZN
                 </div>
                 <p className={`text-sm mt-1 transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}>
                   {selectedDays[pkg.id]} gün müddətinə
                 </p>
+                {pkg.popular && (
+                  <p className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                    Ən yaxşı qiymət/performans
+                  </p>
+                )}
               </div>
 
               {/* Day Selection */}
@@ -200,7 +207,7 @@ export function PackagesScreen() {
                         selectedDays[pkg.id] === option.days
                           ? pkg.popular
                             ? 'bg-emerald-600 text-white shadow-md'
-                            : 'bg-gray-800 text-white'
+                            : (isDarkMode ? 'bg-gray-200 text-gray-900' : 'bg-gray-800 text-white')
                           : isDarkMode
                             ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -220,7 +227,7 @@ export function PackagesScreen() {
                 <div className="grid grid-cols-1 gap-1">
                   {pkg.features.map((feature, index) => (
                     <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
                     }`}>
                       <span className={pkg.popular ? 'text-emerald-500' : 'text-emerald-500'}>✓</span>
                       {feature}
@@ -236,6 +243,12 @@ export function PackagesScreen() {
               >
                 {pkg.popular ? '🚀 ' : ''}Paketi Al - {calculatePrice(pkg.id)} AZN
               </Button>
+
+              {!pkg.popular && (
+                <p className={`text-[11px] text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  Daha çox xüsusiyyət üçün Standart paketi yoxlayın
+                </p>
+              )}
             </div>
           </Card>
         ))}
@@ -281,23 +294,6 @@ export function PackagesScreen() {
           </div>
         </div>
       </Card>
-
-      {/* Trust Indicators */}
-      <div className="mt-4 text-center">
-        <div className={`flex items-center justify-center gap-4 text-xs transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-500' : 'text-gray-500'
-        }`}>
-          <span className="flex items-center gap-1">
-            🔒 Təhlükəsiz ödəniş
-          </span>
-          <span className="flex items-center gap-1">
-            ⚡ Ani aktivləşmə
-          </span>
-          <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
-          </span>
-        </div>
-      </div>
     </div>
   );
 }
