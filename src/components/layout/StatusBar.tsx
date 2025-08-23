@@ -14,7 +14,7 @@ function BatteryIcon({ level = 76, charging = false, theme = "dark" }: { level?:
     <div className="relative ml-1" aria-label={`Battery ${pct}%${charging ? ", charging" : ""}`}>
       <div className="relative w-[30px] h-[14px] flex items-center">
         {/* Outline */}
-        <div className={`w-[2px] h-[12px] rounded-[3px] border ${stroke}`} />
+        <div className={`w-[26px] h-[12px] rounded-[3px] border ${stroke}`} />
         {/* Nub */}
         <div className={`absolute right-0.5 w-[3px] h-[6px] rounded-[1px] border ${strokeDim}`} />
         {/* Level fill */}
