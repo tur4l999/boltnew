@@ -6,7 +6,7 @@ function BatteryIcon({ level = 76, charging = false, theme = "dark" }: { level?:
   const stroke = theme === "dark" ? "stroke-white" : "stroke-black";
   const strokeDim = theme === "dark" ? "stroke-white/30" : "stroke-black/30";
   const fill = theme === "dark" ? "bg-white" : "bg-black";
-  const bodyW = 2; // inner fill width cap
+  const bodyW = 25; // inner fill width cap
   const pct = Math.round(Math.max(0, Math.min(100, level)));
   const inner = Math.round((pct / 100) * bodyW);
   
