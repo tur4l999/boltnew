@@ -7,13 +7,21 @@ import { TabBar } from './components/layout/TabBar';
 import { ScreenRenderer } from './components/navigation/ScreenRenderer';
 import { InspectPage } from './pages/inspect';
 import { LoginScreen } from './components/screens/LoginScreen';
+import { PageTransition } from './components/navigation/PageTransition';
 
 export default function App() {
   return (
     <AppProvider>
       <Router>
         <Routes>
-          <Route path="/inspect" element={<InspectPage />} />
+          <Route
+            path="/inspect"
+            element={
+              <PageTransition transitionKey="inspect">
+                <InspectPage />
+              </PageTransition>
+            }
+          />
           <Route path="/*" element={<AppContent />} />
         </Routes>
       </Router>
@@ -26,7 +34,11 @@ function AppContent() {
   const { currentScreen, isDarkMode } = useApp();
 
   if (!isLoggedIn) {
-    return <LoginScreen onLogin={() => setIsLoggedIn(true)} />;
+    return (
+      <PageTransition transitionKey="login">
+        <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+      </PageTransition>
+    );
   }
 
   const isAIChat = currentScreen.screen === 'AIChat';

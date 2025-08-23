@@ -25,7 +25,11 @@ export function ScreenRenderer() {
   
   // AI Chat screen - no header or navigation
   if (currentScreen.screen === 'AIChat') {
-    return <AIChatScreen />;
+    return (
+      <PageTransition transitionKey={transitionKey}>
+        <AIChatScreen />
+      </PageTransition>
+    );
   }
   
   return (
