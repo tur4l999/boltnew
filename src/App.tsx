@@ -44,7 +44,7 @@ function AppContent() {
       <StatusBar />
       <div className={`max-w-md mx-auto min-h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } pt-11`}>
+      } pt-6`}>
         <Header />
         <ScreenRenderer />
         <TabBar />
