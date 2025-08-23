@@ -72,12 +72,12 @@ function ScheduleActivationModal({
   const handleBack = () => setStep(1);
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} size="sm">
       <div className="overflow-hidden">
         <div className={`transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="min-w-full">
             <div className="text-base font-bold mb-1">Aktivləşdirmə vaxtını seç</div>
-            <div className="text-sm text-gray-600 mb-3">Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz.</div>
+            <div className="text-sm mb-3">Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz.</div>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
                 <label className="flex items-center gap-1">
@@ -91,12 +91,12 @@ function ScheduleActivationModal({
               {mode === 'schedule' && (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <select className="border rounded-xl px-3 py-2 text-sm" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
+                    <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
                       {months.map((m, idx) => (
                         <option key={idx} value={idx}>{m}</option>
                       ))}
                     </select>
-                    <select className="border rounded-xl px-3 py-2 text-sm" value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
+                    <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
                       {Array.from({ length: 3 }).map((_, i) => {
                         const y = today.getFullYear() + i;
                         return <option key={y} value={y}>{y}</option>;
@@ -104,7 +104,7 @@ function ScheduleActivationModal({
                     </select>
                   </div>
                   <div>
-                    <div className="grid grid-cols-7 gap-1 text-xs text-gray-500 mb-1">
+                    <div className="grid grid-cols-7 gap-1 text-xs opacity-80 mb-1">
                       {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
                     </div>
                     <div className="grid grid-cols-7 gap-1">
@@ -113,7 +113,7 @@ function ScheduleActivationModal({
                           key={idx}
                           disabled={d === null}
                           onClick={() => d && setDay(d)}
-                          className={`text-sm px-2 py-2 rounded-xl ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
+                          className={`text-sm px-2 py-2 rounded-xl ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-800'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
                         >
                           {d}
                         </button>
@@ -121,8 +121,8 @@ function ScheduleActivationModal({
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <input className="border rounded-xl px-3 py-2 w-24 text-sm" value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="SS:dd" />
-                    <select className="border rounded-xl px-3 py-2 text-sm" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
+                    <input className="border rounded-xl px-3 py-2 w-24 text-sm bg-transparent" value={timeStr} onChange={e => setTimeStr(e.target.value)} placeholder="SS:dd" />
+                    <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
                       {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
                         <option key={opt} value={opt}>{opt}</option>
                       ))}
@@ -252,7 +252,12 @@ export function PackagesScreen() {
       const success = purchasePackage(pkg.id, pkg.name, price, days);
       if (success) goBack();
     } else if (when) {
-      schedulePackageActivation(pkg.id, pkg.name, price, days, when);
+      // Charge now, activate later
+      const success = purchasePackage(pkg.id, pkg.name, price, days);
+      if (success) {
+        schedulePackageActivation(pkg.id, pkg.name, 0, days, when);
+        goBack();
+      }
     }
     setModalOpenFor(null);
   }
