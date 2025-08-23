@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
 import type { Language, NavigationScreen } from '../lib/types';
+import { showToast } from '../lib/utils';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -21,6 +22,15 @@ interface Transaction {
   date: Date;
 }
 
+interface ScheduledActivation {
+  id: string;
+  packageId: string;
+  packageName: string;
+  price: number;
+  days: number;
+  when: Date;
+}
+
 interface AppContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
@@ -39,6 +49,7 @@ interface AppContextType {
   activePackage: UserPackage | null;
   transactions: Transaction[];
   purchasePackage: (packageId: string, packageName: string, price: number, days: number) => boolean;
+  schedulePackageActivation: (packageId: string, packageName: string, price: number, days: number, when: Date) => void;
   hasActivePackage: () => boolean;
   isModuleUnlocked: (moduleId: string) => boolean;
 }
@@ -56,6 +67,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [balance, setBalance] = useState(100); // Demo account starts with 100 AZN
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [scheduledActivations, setScheduledActivations] = useState<ScheduledActivation[]>([]);
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -107,6 +119,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     
     return true;
   };
+
+  const schedulePackageActivation = (packageId: string, packageName: string, price: number, days: number, when: Date) => {
+    const id = `${packageId}-${when.getTime()}`;
+    const item: ScheduledActivation = { id, packageId, packageName, price, days, when };
+    setScheduledActivations(prev => [...prev, item]);
+    const delay = Math.max(0, when.getTime() - Date.now());
+    window.setTimeout(() => {
+      // attempt charge at scheduled time
+      const ok = purchasePackage(packageId, packageName, price, days);
+      if (ok) {
+        showToast('Paket aktivləşdirildi ✅');
+      } else {
+        showToast('Balans kifayət etmir ❗');
+      }
+      setScheduledActivations(prev => prev.filter(s => s.id !== id));
+    }, delay);
+    showToast('Aktivləşdirmə planlaşdırıldı');
+  };
   
   const hasActivePackage = (): boolean => {
     if (!activePackage) return false;
@@ -144,6 +174,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       activePackage,
       transactions,
       purchasePackage,
+      schedulePackageActivation,
       hasActivePackage,
       isModuleUnlocked
     }}>

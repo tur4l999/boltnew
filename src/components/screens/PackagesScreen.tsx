@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { Modal } from '../ui/Modal';
 
 interface Package {
   id: string;
@@ -18,13 +19,121 @@ interface DayOption {
   multiplier: number;
 }
 
+function ScheduleActivationModal({
+  open,
+  onClose,
+  onConfirm,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onConfirm: (mode: 'now' | 'schedule', when?: Date) => void;
+}) {
+  const today = new Date();
+  const [mode, setMode] = useState<'now' | 'schedule'>('now');
+  const [year, setYear] = useState<number>(today.getFullYear());
+  const [month, setMonth] = useState<number>(today.getMonth()); // 0-based
+  const [day, setDay] = useState<number>(today.getDate());
+  const [hour, setHour] = useState<string>('10');
+  const [minute, setMinute] = useState<string>('00');
+
+  const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
+  const weekdays = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'];
+
+  const getDaysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
+
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDayWeekIdx = new Date(year, month, 1).getDay(); // 0=Sun
+  const offset = (firstDayWeekIdx + 6) % 7; // convert to Mon=0
+
+  const grid: Array<number | null> = [];
+  for (let i = 0; i < offset; i++) grid.push(null);
+  for (let d = 1; d <= daysInMonth; d++) grid.push(d);
+
+  const handleConfirm = () => {
+    if (mode === 'now') {
+      onConfirm('now');
+      return;
+    }
+    const when = new Date(year, month, day, parseInt(hour, 10), parseInt(minute, 10), 0, 0);
+    onConfirm('schedule', when);
+  };
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Aktivləşdirmə vaxtını seç"
+      message="Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz."
+      primaryAction={{ label: 'Təsdiqlə', onClick: handleConfirm }}
+      secondaryAction={{ label: 'Bağla', onClick: onClose }}
+    >
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 text-sm">
+          <label className="flex items-center gap-1">
+            <input type="radio" checked={mode === 'now'} onChange={() => setMode('now')} /> İndi aktivləşdir
+          </label>
+          <label className="flex items-center gap-1">
+            <input type="radio" checked={mode === 'schedule'} onChange={() => setMode('schedule')} /> Tarix/saat seç
+          </label>
+        </div>
+
+        {mode === 'schedule' && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <select className="border rounded px-2 py-1 text-sm" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
+                {months.map((m, idx) => (
+                  <option key={idx} value={idx}>{m}</option>
+                ))}
+              </select>
+              <select className="border rounded px-2 py-1 text-sm" value={year} onChange={e => setYear(parseInt(e.target.value, 10))}>
+                {Array.from({ length: 3 }).map((_, i) => {
+                  const y = today.getFullYear() + i;
+                  return <option key={y} value={y}>{y}</option>;
+                })}
+              </select>
+            </div>
+            <div>
+              <div className="grid grid-cols-7 gap-1 text-xs text-gray-500 mb-1">
+                {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">
+                {grid.map((d, idx) => (
+                  <button
+                    key={idx}
+                    disabled={d === null}
+                    onClick={() => d && setDay(d)}
+                    className={`text-sm px-2 py-1 rounded ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <input className="border rounded px-2 py-1 w-16 text-sm" value={hour} onChange={e => setHour(e.target.value)} placeholder="SS" />
+              :
+              <input className="border rounded px-2 py-1 w-16 text-sm" value={minute} onChange={e => setMinute(e.target.value)} placeholder="dd" />
+              <select className="border rounded px-2 py-1 text-sm" onChange={e => { const [h, m] = e.target.value.split(':'); setHour(h); setMinute(m); }}>
+                {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+      </div>
+    </Modal>
+  );
+}
+
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, isDarkMode } = useApp();
+  const { t, goBack, balance, purchasePackage, schedulePackageActivation, isDarkMode } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 45,
     pro: 60
   });
+  const [modalOpenFor, setModalOpenFor] = useState<string | null>(null);
   
   const dayOptions: DayOption[] = [
     { days: 30, label: '30 gün', multiplier: 1 },
@@ -99,6 +208,21 @@ export function PackagesScreen() {
         alert('Balansınız kifayət etmir. Balansınızı artırın.');
       }
     }
+  }
+
+  function onConfirmSchedule(mode: 'now' | 'schedule', when?: Date) {
+    if (!modalOpenFor) return;
+    const pkg = packages.find(p => p.id === modalOpenFor);
+    if (!pkg) return;
+    const price = calculatePrice(pkg.id);
+    const days = selectedDays[pkg.id];
+    if (mode === 'now') {
+      const success = purchasePackage(pkg.id, pkg.name, price, days);
+      if (success) goBack();
+    } else if (when) {
+      schedulePackageActivation(pkg.id, pkg.name, price, days, when);
+    }
+    setModalOpenFor(null);
   }
 
   function getPackageCardClass(pkg: Package): string {
@@ -235,7 +359,7 @@ export function PackagesScreen() {
               </div>
 
               <Button
-                onClick={() => handlePurchasePackage(pkg.id)}
+                onClick={() => setModalOpenFor(pkg.id)}
                 className={getButtonClass(pkg)}
                 variant={pkg.popular ? 'primary' : 'secondary'}
               >
@@ -292,6 +416,12 @@ export function PackagesScreen() {
           </div>
         </div>
       </Card>
+
+      <ScheduleActivationModal
+        open={!!modalOpenFor}
+        onClose={() => setModalOpenFor(null)}
+        onConfirm={onConfirmSchedule}
+      />
     </div>
   );
 }
