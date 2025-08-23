@@ -53,7 +53,7 @@ export function Button({
     <button
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} transform hover:scale-105 active:scale-95 transition-transform duration-150`}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
     >
       {children}
     </button>

@@ -134,7 +134,7 @@ export function HomeScreen() {
       <ScaleIn delay={600}>
         <button
           onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}
-          className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden transform hover:scale-105 transition-transform duration-200"
+          className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden"
         >
           <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
             <span className="text-white text-base">▶</span>

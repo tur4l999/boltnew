@@ -30,39 +30,39 @@ export function TabBar() {
                   switchTab(tab.key);
                 }
               }}
-              className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-all duration-300 transform hover:scale-110 ${
+              className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-colors ${
                 (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig')) 
                   ? 'text-emerald-600' : 'text-gray-500'
               }`}
             >
-              <div className={`p-1.5 rounded-lg transition-all duration-300 transform ${
+              <div className={`p-1.5 rounded-lg transition-colors ${
                 (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
-                  ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
+                  ? isDarkMode ? 'bg-gray-700' : 'bg-gray-50' 
                   : 'bg-transparent'
               }`}>
                 <span className="text-base">{tab.emoji}</span>
               </div>
-              <div className={`text-xs font-semibold transition-all duration-200 ${
+              <div className={`text-xs font-semibold ${
                 (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
-                  ? 'transform scale-105' : ''
+                  ? '' : ''
               }`}>{tab.label}</div>
             </button>
           ))}
           <button
             onClick={() => switchTab('More')}
-            className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-all duration-300 transform hover:scale-110 ${
+            className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-colors ${
               currentTab === 'More' ? 'text-emerald-600' : 'text-gray-500'
             }`}
           >
-            <div className={`p-1.5 rounded-lg transition-all duration-300 transform ${
+            <div className={`p-1.5 rounded-lg transition-colors ${
               currentTab === 'More' 
-                ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
+                ? isDarkMode ? 'bg-gray-700' : 'bg-gray-50' 
                 : 'bg-transparent'
             }`}>
               <span className="text-base">➕</span>
             </div>
-            <div className={`text-xs font-semibold transition-all duration-200 ${
-              currentTab === 'More' ? 'transform scale-105' : ''
+            <div className={`text-xs font-semibold ${
+              currentTab === 'More' ? '' : ''
             }`}>{t.more}</div>
           </button>
         </div>

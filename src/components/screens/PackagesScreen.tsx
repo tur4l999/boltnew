@@ -103,12 +103,10 @@ export function PackagesScreen() {
 
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
-      // Popular (Standart) — emphasize differently in dark/light
       return isDarkMode
-        ? 'relative ring-2 ring-emerald-600 bg-gradient-to-br from-emerald-900/30 to-green-900/20 border border-emerald-800 shadow-lg transform scale-105'
-        : 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg transform scale-105';
+        ? 'relative ring-2 ring-emerald-600 bg-gradient-to-br from-emerald-900/30 to-green-900/20 border border-emerald-800 shadow-lg'
+        : 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg';
     }
-    // Non-popular base
     return isDarkMode ? 'relative bg-gray-800 border border-gray-700' : 'relative bg-white';
   }
 
