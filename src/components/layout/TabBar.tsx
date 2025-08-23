@@ -19,51 +19,50 @@ export function TabBar() {
     }`}>
       <div className="mx-auto relative pb-5" style={{ maxWidth: 393 }}>
         <div className="grid grid-cols-5">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => {
-                if (tab.key === 'ExamConfig') {
-                  switchTab('Home');
-                  navigate('ExamConfig');
-                } else {
-                  switchTab(tab.key);
-                }
-              }}
-              className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-colors ${
-                (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig')) 
-                  ? 'text-emerald-600' : 'text-gray-500'
-              }`}
-            >
-              <div className={`p-1.5 rounded-lg transition-colors ${
-                (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
-                  ? isDarkMode ? 'bg-gray-700' : 'bg-gray-50' 
-                  : 'bg-transparent'
-              }`}>
-                <span className="text-base">{tab.emoji}</span>
-              </div>
-              <div className={`text-xs font-semibold ${
-                (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
-                  ? '' : ''
-              }`}>{tab.label}</div>
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const isExam = tab.key === 'ExamConfig';
+            const isActive = isExam
+              ? currentScreen.screen === 'ExamConfig'
+              : currentScreen.screen === tab.key;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => {
+                  if (isExam) {
+                    navigate('ExamConfig');
+                  } else {
+                    switchTab(tab.key);
+                  }
+                }}
+                className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-colors ${
+                  isActive ? 'text-emerald-600' : 'text-gray-500'
+                }`}
+              >
+                <div className={`p-1.5 rounded-lg transition-colors ${
+                  isActive
+                    ? isDarkMode ? 'bg-gray-700' : 'bg-gray-50' 
+                    : 'bg-transparent'
+                }`}>
+                  <span className="text-base">{tab.emoji}</span>
+                </div>
+                <div className="text-xs font-semibold">{tab.label}</div>
+              </button>
+            );
+          })}
           <button
             onClick={() => switchTab('More')}
             className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-colors ${
-              currentTab === 'More' ? 'text-emerald-600' : 'text-gray-500'
+              currentScreen.screen === 'More' ? 'text-emerald-600' : 'text-gray-500'
             }`}
           >
             <div className={`p-1.5 rounded-lg transition-colors ${
-              currentTab === 'More' 
+              currentScreen.screen === 'More' 
                 ? isDarkMode ? 'bg-gray-700' : 'bg-gray-50' 
                 : 'bg-transparent'
             }`}>
               <span className="text-base">➕</span>
             </div>
-            <div className={`text-xs font-semibold ${
-              currentTab === 'More' ? '' : ''
-            }`}>{t.more}</div>
+            <div className="text-xs font-semibold">{t.more}</div>
           </button>
         </div>
         {/* Home indicator absolute at bottom */}
