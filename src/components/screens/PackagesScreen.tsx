@@ -187,25 +187,9 @@ export function PackagesScreen() {
                   {selectedDays[pkg.id]} gün müddətinə
                 </p>
                 {pkg.popular && (
-                  <>
-                    <p className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
-                      Ən yaxşı qiymət/performans
-                    </p>
-                    <div className="mt-3 grid grid-cols-3 gap-2 text-left">
-                      <div className={`px-2 py-2 rounded-lg ${isDarkMode ? 'bg-emerald-900/30 text-emerald-200' : 'bg-emerald-50 text-emerald-700'}`}>
-                        ✅ Tam hazırlıq materialları
-                      </div>
-                      <div className={`px-2 py-2 rounded-lg ${isDarkMode ? 'bg-emerald-900/30 text-emerald-200' : 'bg-emerald-50 text-emerald-700'}`}>
-                        ✅ Əlavə imtahan biletləri
-                      </div>
-                      <div className={`px-2 py-2 rounded-lg ${isDarkMode ? 'bg-emerald-900/30 text-emerald-200' : 'bg-emerald-50 text-emerald-700'}`}>
-                        ✅ 2025 yenilənmiş məzmun
-                      </div>
-                    </div>
-                    <div className={`mt-3 text-xs ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
-                      1,240+ istifadəçi bu ay bu paketi seçdi
-                    </div>
-                  </>
+                  <p className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                    Ən yaxşı qiymət/performans
+                  </p>
                 )}
               </div>
 
