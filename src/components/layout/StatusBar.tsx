@@ -31,7 +31,7 @@ return (
 /* ======================== Demo Preview ======================== */
 
 
-export default function Demo() {
+export function StatusBar() {
 const [theme, setTheme] = useState<Theme>("dark");
 const [battery, setBattery] = useState(83);
 const [charging, setCharging] = useState(false);
