@@ -31,6 +31,8 @@ export const dictionaries = {
     video: 'Video dərs',
     materials: 'Dərs materialları',
     questions: 'Suallar',
+    byTickets: 'Biletlər üzrə',
+    byTopics: 'Mövzular üzrə',
     video3d: '3D Video',
     contactTeacher: 'Müəllimlə əlaqə',
     
@@ -97,6 +99,8 @@ export const dictionaries = {
     video: 'Видео урок',
     materials: 'Материалы',
     questions: 'Вопросы',
+    byTickets: 'По билетам',
+    byTopics: 'По темам',
     video3d: '3D Видео',
     contactTeacher: 'Связь с преподавателем',
     
