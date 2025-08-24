@@ -6,6 +6,7 @@ import { TopicsScreen } from '../screens/TopicsScreen';
 import { LessonScreen } from '../screens/LessonScreen';
 import { PracticeScreen } from '../screens/PracticeScreen';
 import { ExamConfigScreen } from '../screens/ExamConfigScreen';
+import { ExamScreen } from '../screens/ExamScreen';
 import { ExamRunScreen } from '../screens/ExamRunScreen';
 import { ResultsScreen } from '../screens/ResultsScreen';
 import { MistakesScreen } from '../screens/MistakesScreen';
@@ -43,6 +44,7 @@ export function ScreenRenderer() {
       {/* Stack screens */}
       {currentScreen.screen === 'Lesson' && <LessonScreen />}
       {currentScreen.screen === 'Practice' && <PracticeScreen />}
+      {currentScreen.screen === 'Exam' && <ExamScreen />}
       {currentScreen.screen === 'ExamConfig' && <ExamConfigScreen />}
       {currentScreen.screen === 'ExamRun' && <ExamRunScreen />}
       {currentScreen.screen === 'Results' && <ResultsScreen />}
@@ -53,7 +55,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Settings' && <SettingsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'ExamConfig', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'Exam', 'ExamConfig', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

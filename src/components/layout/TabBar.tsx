@@ -7,7 +7,7 @@ export function TabBar() {
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠' },
     { key: 'Topics', label: 'Təlimlər', emoji: '📚' },
-    { key: 'ExamConfig', label: t.exam, emoji: '🧪' },
+    { key: 'Exam', label: t.exam, emoji: '🧪' },
     { key: 'Store', label: t.store, emoji: '🛍️' },
   ];
 
@@ -22,27 +22,27 @@ export function TabBar() {
           <button
             key={tab.key}
             onClick={() => {
-              if (tab.key === 'ExamConfig') {
+              if (tab.key === 'Exam') {
                 switchTab('Home');
-                navigate('ExamConfig');
-              } else {
+                navigate('Exam');
+              } else if (tab.key === 'Topics' || tab.key === 'Home' || tab.key === 'Store') {
                 switchTab(tab.key);
               }
             }}
             className={`p-2 flex flex-col items-center gap-1 min-h-[56px] transition-all duration-300 transform hover:scale-110 ${
-              (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig')) 
+              (currentTab === tab.key || (tab.key === 'Exam' && currentScreen.screen === 'Exam')) 
                 ? 'text-emerald-600' : 'text-gray-500'
             }`}
           >
             <div className={`p-1.5 rounded-lg transition-all duration-300 transform ${
-              (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
+              (currentTab === tab.key || (tab.key === 'Exam' && currentScreen.screen === 'Exam'))
                 ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
                 : 'bg-transparent'
             }`}>
               <span className="text-base">{tab.emoji}</span>
             </div>
             <div className={`text-xs font-semibold transition-all duration-200 ${
-              (currentTab === tab.key || (tab.key === 'ExamConfig' && currentScreen.screen === 'ExamConfig'))
+              (currentTab === tab.key || (tab.key === 'Exam' && currentScreen.screen === 'Exam'))
                 ? 'transform scale-105' : ''
             }`}>{tab.label}</div>
           </button>
