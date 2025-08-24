@@ -175,11 +175,6 @@ function ScheduleActivationModal({
                           <input className="border rounded-xl px-3 py-2 w-20 text-sm bg-transparent" value={timeStr.split(':')[0]} onChange={e => setTimeStr(`${e.target.value}:${timeStr.split(':')[1] || '00'}`)} placeholder="SS" />
                           :
                           <input className="border rounded-xl px-3 py-2 w-20 text-sm bg-transparent" value={timeStr.split(':')[1] || ''} onChange={e => setTimeStr(`${timeStr.split(':')[0] || '00'}:${e.target.value}`)} placeholder="dd" />
-                          <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" onChange={e => setTimeStr(e.target.value)} value={timeStr}>
-                            {['08:00','09:00','10:00','11:00','12:00','14:00','16:00','18:00','20:00'].map(opt => (
-                              <option key={opt} value={opt}>{opt}</option>
-                            ))}
-                          </select>
                         </div>
                       </div>
                     )}
