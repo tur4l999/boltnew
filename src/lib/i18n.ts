@@ -21,10 +21,6 @@ export const dictionaries = {
     next: 'Sonrakı',
     prev: 'Geri',
     finish: 'Bitir',
-    examSimulator: 'İmtahan simulyatoru',
-    tests: 'Testlər',
-    fines: 'Cərimələr',
-    articles: 'Maddələr',
     
     // Lesson tabs
     article: 'Maddə',
@@ -87,10 +83,6 @@ export const dictionaries = {
     next: 'Далее',
     prev: 'Назад',
     finish: 'Завершить',
-    examSimulator: 'Симулятор экзамена',
-    tests: 'Тесты',
-    fines: 'Штрафы',
-    articles: 'Статьи',
     
     // Lesson tabs
     article: 'Статья',
