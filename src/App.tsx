@@ -42,17 +42,15 @@ function AppContent() {
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      {/* Fixed iPhone-like status bar rendered at document.body to avoid transform stacking issues */}
-      {typeof document !== 'undefined' && createPortal(
-        <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-none">
-          <StatusBar />
-        </div>,
-        document.body
-      )}
-
-      <div className={`max-w-md mx-auto min-h-screen relative transition-colors duration-200 ${
+      <div className={`max-w-md mx-auto h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } pt-[44px]`}>
+      } overflow-y-auto`}
+      >
+        {/* Sticky iPhone-like status bar inside the scroll container */}
+        <div className="sticky top-0 z-40">
+          <StatusBar />
+        </div>
+
         {isLoggedIn ? (
           isAIChat ? (
             <ScreenRenderer />
