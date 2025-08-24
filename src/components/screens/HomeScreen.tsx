@@ -11,11 +11,11 @@ export function HomeScreen() {
   
   const gridItems = [
     { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
+    { key: 'examSimulator', label: t.examSimulator, action: () => navigate('ExamConfig'), emoji: '🧪' },
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
-    { key: 'topics', label: t.topics, action: () => navigate('Topics'), emoji: '📚' },
-    { key: 'exam', label: t.exam, action: () => navigate('ExamConfig'), emoji: '🧪' },
-    { key: 'mistakes', label: t.mistakes, action: () => navigate('Mistakes'), emoji: '⚠️' },
-    { key: 'practical', label: 'Praktiki təcrübə', action: () => alert('Demo feature'), emoji: '💬' },
+    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
+    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
+    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
   ];
   
   const rows = useMemo(() => {
