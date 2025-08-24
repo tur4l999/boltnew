@@ -24,7 +24,7 @@ export function Modal({ open, title, message, onClose, primaryAction, secondaryA
       {/* Sheet/Modal */}
       <div className={`relative w-full ${sizeClass} sm:rounded-2xl ${
         isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-900'
-      } shadow-2xl sm:mx-auto sm:my-8 rounded-2xl p-4 border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+      } shadow-2xl sm:mx-auto sm:my-8 rounded-2xl p-4 border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} max-h-[85vh] overflow-auto`}>
         {title && <div className="text-base font-bold mb-1">{title}</div>}
         {message && <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>{message}</div>}
         {children}

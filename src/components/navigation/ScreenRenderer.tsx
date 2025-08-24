@@ -16,12 +16,19 @@ import { PackagesScreen } from '../screens/PackagesScreen';
 import { AIChatScreen } from '../screens/AIChatScreen';
 import { TransactionsScreen } from '../screens/TransactionsScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { useEffect } from 'react';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
   
   // Keçid açarı yaradırıq
   const transitionKey = `${currentScreen.screen}-${JSON.stringify(currentScreen.params)}`;
+  useEffect(() => {
+    // Scroll to top on screen change
+    const viewport = document.querySelector('.app-viewport');
+    if (viewport) (viewport as HTMLElement).scrollTo({ top: 0, behavior: 'auto' });
+    else window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [transitionKey]);
   
   // AI Chat screen - no header or navigation
   if (currentScreen.screen === 'AIChat') {

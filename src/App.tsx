@@ -56,7 +56,7 @@ function AppContent() {
       <div className="relative" style={{ width: 393, height: 852 }}>
         <StatusBar />
         {/* Scrollable content area between 59px top and 56px bottom */}
-        <div className={`absolute left-0 right-0 overflow-auto transition-colors duration-200 ${
+        <div className={`absolute left-0 right-0 overflow-auto transition-colors duration-200 app-viewport ${
           isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
         }`} style={{ top: 59, bottom: 56 }}>
           <Header />
