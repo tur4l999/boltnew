@@ -41,6 +41,16 @@ function ScheduleActivationModal({
   const [timeStr, setTimeStr] = useState<string>('10:00');
   const [timePickerOpen, setTimePickerOpen] = useState(false);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [containerHeight, setContainerHeight] = useState<number>(260);
+  const step1Ref = React.useRef<HTMLDivElement>(null);
+  const step2Ref = React.useRef<HTMLDivElement>(null);
+  React.useLayoutEffect(() => {
+    const el = step === 1 ? step1Ref.current : step2Ref.current;
+    if (el) {
+      const h = el.scrollHeight;
+      setContainerHeight(Math.min(h, Math.floor(window.innerHeight * 0.85)));
+    }
+  }, [step, mode, year, month, day, timeStr, timePickerOpen]);
 
   const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
   const weekdays = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'];
@@ -105,10 +115,10 @@ function ScheduleActivationModal({
 
   return (
     <Modal open={open} onClose={onClose} size={mode === 'now' ? 'xs' : 'sm'}>
-      <div className="relative overflow-hidden min-h-[260px]">
+      <div className="relative overflow-hidden" style={{ height: containerHeight, transition: 'height 200ms ease' }}>
         {/* Step 1 */}
         <div className={`absolute inset-0 transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="w-full h-full">
+          <div ref={step1Ref} className="w-full">
             <div className="text-base font-bold mb-1">Aktivləşdirmə vaxtını seç</div>
             <div className="text-sm mb-3">Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz.</div>
             <div className="space-y-3">
@@ -191,7 +201,7 @@ function ScheduleActivationModal({
 
         {/* Step 2 */}
         <div className={`absolute inset-0 transition-transform duration-300 ease-out ${step === 2 ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="w-full h-full">
+          <div ref={step2Ref} className="w-full">
             <div className="flex items-center gap-2 mb-2">
               <button onClick={handleBack} className="px-2 py-1 text-sm rounded-lg border">Geri</button>
               <div className="text-base font-bold">Təsdiq</div>
