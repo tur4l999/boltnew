@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { StatusBar } from './components/layout/StatusBar';
@@ -41,10 +42,13 @@ function AppContent() {
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      {/* Fixed iPhone-like status bar */}
-      <div className="fixed top-0 left-0 right-0 z-50">
-        <StatusBar />
-      </div>
+      {/* Fixed iPhone-like status bar rendered at document.body to avoid transform stacking issues */}
+      {typeof document !== 'undefined' && createPortal(
+        <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-none">
+          <StatusBar />
+        </div>,
+        document.body
+      )}
 
       <div className={`max-w-md mx-auto min-h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
