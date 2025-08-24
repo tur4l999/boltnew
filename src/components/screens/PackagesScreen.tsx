@@ -105,10 +105,10 @@ function ScheduleActivationModal({
 
   return (
     <Modal open={open} onClose={onClose} size={mode === 'now' ? 'xs' : 'sm'}>
-      <div className="overflow-hidden relative">
+      <div className="relative overflow-hidden min-h-[260px]">
         {/* Step 1 */}
-        <div className={`transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="min-w-full">
+        <div className={`absolute inset-0 transition-transform duration-300 ease-out ${step === 1 ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="w-full h-full">
             <div className="text-base font-bold mb-1">Aktivləşdirmə vaxtını seç</div>
             <div className="text-sm mb-3">Paketi indi aktivləşdirə və ya tarix/saat seçib planlaşdıra bilərsiniz.</div>
             <div className="space-y-3">
@@ -142,7 +142,7 @@ function ScheduleActivationModal({
                       })}
                     </select>
                   </div>
-                  <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+                  <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="rounded-xl p-2 border bg-white dark:bg-gray-900">
                     <div className="grid grid-cols-7 gap-1 text-xs opacity-80 mb-1">
                       {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
                     </div>
@@ -182,7 +182,7 @@ function ScheduleActivationModal({
                 </div>
               )}
 
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-2">
                 <button onClick={handleNext} className="px-3 py-2 text-sm rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Davam et</button>
               </div>
             </div>
@@ -190,8 +190,8 @@ function ScheduleActivationModal({
         </div>
 
         {/* Step 2 */}
-        <div className={`transition-transform duration-300 ease-out ${step === 2 ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="min-w-full">
+        <div className={`absolute inset-0 transition-transform duration-300 ease-out ${step === 2 ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="w-full h-full">
             <div className="flex items-center gap-2 mb-2">
               <button onClick={handleBack} className="px-2 py-1 text-sm rounded-lg border">Geri</button>
               <div className="text-base font-bold">Təsdiq</div>
