@@ -8,6 +8,7 @@ import { ScreenRenderer } from './components/navigation/ScreenRenderer';
 import { InspectPage } from './pages/inspect';
 import { LoginScreen } from './components/screens/LoginScreen';
 import { PageTransition } from './components/navigation/PageTransition';
+import { HomeIndicator } from './components/layout/HomeIndicator';
 
 export default function App() {
   return (
@@ -35,9 +36,25 @@ function AppContent() {
 
   if (!isLoggedIn) {
     return (
-      <PageTransition transitionKey="login">
-        <LoginScreen onLogin={() => setIsLoggedIn(true)} />
-      </PageTransition>
+      <div className={`min-h-screen flex items-start justify-center transition-colors duration-200 ${
+        isDarkMode 
+          ? 'bg-gray-900 text-gray-100' 
+          : 'bg-gray-50 text-gray-900'
+      }`}>
+        <div className="relative" style={{ width: 393, height: 852 }}>
+          <StatusBar />
+          <div className={`absolute left-0 right-0 overflow-auto transition-colors duration-200 app-viewport ${
+            isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+          }`} style={{ top: 59, bottom: 56 }}>
+            <div className="px-4 pt-2 pb-20">
+              <PageTransition transitionKey="login">
+                <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+              </PageTransition>
+            </div>
+          </div>
+          <HomeIndicator />
+        </div>
+      </div>
     );
   }
 
