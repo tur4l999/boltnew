@@ -40,6 +40,7 @@ function ScheduleActivationModal({
   const [day, setDay] = useState<number>(today.getDate());
   const [timeStr, setTimeStr] = useState<string>('10:00');
   const [timePickerOpen, setTimePickerOpen] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
   const weekdays = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'B'];
@@ -66,6 +67,42 @@ function ScheduleActivationModal({
 
   const handleBack = () => setStep(1);
 
+  const goPrevMonth = () => {
+    const newMonth = month - 1;
+    if (newMonth < 0) {
+      setMonth(11);
+      setYear(year - 1);
+    } else {
+      setMonth(newMonth);
+    }
+  };
+
+  const goNextMonth = () => {
+    const newMonth = month + 1;
+    if (newMonth > 11) {
+      setMonth(0);
+      setYear(year + 1);
+    } else {
+      setMonth(newMonth);
+    }
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => setTouchStartX(e.changedTouches[0].clientX);
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) goNextMonth();
+      else goPrevMonth();
+    }
+    setTouchStartX(null);
+  };
+
+  const isToday = (d: number) => {
+    const t = new Date();
+    return d === t.getDate() && month === t.getMonth() && year === t.getFullYear();
+  };
+
   return (
     <Modal open={open} onClose={onClose} size={mode === 'now' ? 'xs' : 'sm'}>
       <div className="overflow-hidden relative">
@@ -86,6 +123,12 @@ function ScheduleActivationModal({
 
               {mode === 'schedule' && (
                 <div className="space-y-3">
+                  {/* Month header with arrows */}
+                  <div className="flex items-center justify-between">
+                    <button onClick={goPrevMonth} className="px-2 py-1 text-sm rounded-lg border">←</button>
+                    <div className="text-sm font-semibold">{months[month]} {year}</div>
+                    <button onClick={goNextMonth} className="px-2 py-1 text-sm rounded-lg border">→</button>
+                  </div>
                   <div className="flex items-center gap-2">
                     <select className="border rounded-xl px-3 py-2 text-sm bg-transparent" value={month} onChange={e => setMonth(parseInt(e.target.value, 10))}>
                       {months.map((m, idx) => (
@@ -99,21 +142,27 @@ function ScheduleActivationModal({
                       })}
                     </select>
                   </div>
-                  <div>
+                  <div onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                     <div className="grid grid-cols-7 gap-1 text-xs opacity-80 mb-1">
                       {weekdays.map((w) => (<div key={w} className="text-center">{w}</div>))}
                     </div>
                     <div className="grid grid-cols-7 gap-1">
-                      {grid.map((d, idx) => (
-                        <button
-                          key={idx}
-                          disabled={d === null}
-                          onClick={() => d && setDay(d)}
-                          className={`text-sm px-2 py-2 rounded-xl ${d === day ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-800'} ${d === null ? 'opacity-0 pointer-events-none' : ''}`}
-                        >
-                          {d}
-                        </button>
-                      ))}
+                      {grid.map((d, idx) => {
+                        const selected = d === day;
+                        const todayMark = d !== null && isToday(d);
+                        return (
+                          <button
+                            key={idx}
+                            disabled={d === null}
+                            onClick={() => d && setDay(d)}
+                            className={`text-sm px-2 py-2 rounded-xl ${
+                              selected ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-gray-800'
+                            } ${d === null ? 'opacity-0 pointer-events-none' : ''} ${todayMark ? 'ring-2 ring-emerald-500' : ''}`}
+                          >
+                            {d}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                   <div className="relative">
