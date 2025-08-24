@@ -8,7 +8,7 @@ export function Header() {
   const userName = "Tural Qarayev";
   
   return (
-    <div className="sticky top-0 z-30 mt-0">
+    <div>
       <div className={`mx-auto backdrop-blur-sm border-b transition-colors duration-200 ${
         isDarkMode 
           ? 'bg-gray-800/80 border-gray-700' 
