@@ -130,6 +130,16 @@ export function HomeScreen() {
         ))}
       </div>
 
+      {/* Exam Simulator CTA */}
+      <ScaleIn delay={500}>
+        <button
+          onClick={() => navigate('ExamConfig')}
+          className="w-full h-14 rounded-2xl mt-3 bg-emerald-600 text-white font-black flex items-center justify-center shadow hover:bg-emerald-700 transition-colors"
+        >
+          🧪 {t.examSimulator}
+        </button>
+      </ScaleIn>
+
       {/* Tutorial Card */}
       <ScaleIn delay={600}>
         <button
