@@ -6,11 +6,13 @@ import { VideoPlayer } from '../media/VideoPlayer';
 import { PracticeInline } from '../practice/PracticeInline';
 
 export function LessonScreen() {
-  const { t, navigate, currentScreen } = useApp();
+  const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
   const [activeTab, setActiveTab] = useState('video');
   const [offlineDownload, setOfflineDownload] = useState(false);
   const [contactMessage, setContactMessage] = useState('');
   const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);
+  const [showPurchasePopup, setShowPurchasePopup] = useState(false);
+  const [requestedModuleId, setRequestedModuleId] = useState<string | null>(null);
   
   const { moduleId } = currentScreen.params;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
@@ -90,6 +92,7 @@ export function LessonScreen() {
   }
 
   return (
+    <>
     <div className="p-3 pb-32">
       {/* Module Dropdown */}
       <div className="relative mb-3">
@@ -104,21 +107,48 @@ export function LessonScreen() {
         </button>
         
         {moduleDropdownOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10">
-            {Array.from({ length: 27 }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  navigate('Lesson', { moduleId: `M${i + 1}` });
-                  setModuleDropdownOpen(false);
-                }}
-                className={`w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-b-0 min-h-[44px] ${
-                  moduleId === `M${i + 1}` ? 'bg-emerald-50 text-emerald-700 font-medium' : 'text-gray-700'
-                }`}
-              >
-                M{i + 1}: Module {i + 1} — Traffic Rules & Safety
-              </button>
-            ))}
+          <div className={`absolute top-full left-0 right-0 mt-1 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10 border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
+          }`}>
+            {Array.from({ length: 27 }, (_, i) => {
+              const id = `M${i + 1}`;
+              const unlocked = isModuleUnlocked(id);
+              const isActive = moduleId === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => {
+                    if (unlocked) {
+                      navigate('Lesson', { moduleId: id });
+                      setModuleDropdownOpen(false);
+                    } else {
+                      setRequestedModuleId(id);
+                      setShowPurchasePopup(true);
+                    }
+                  }}
+                  className={`w-full px-4 py-3 text-left border-b last:border-b-0 min-h-[44px] transition-colors ${
+                    isDarkMode ? 'border-gray-700' : 'border-gray-100'
+                  } ${
+                    unlocked
+                      ? isActive
+                        ? isDarkMode
+                          ? 'bg-emerald-900/20 text-emerald-300 font-medium'
+                          : 'bg-emerald-50 text-emerald-700 font-medium'
+                        : isDarkMode
+                          ? 'text-gray-100 hover:bg-gray-700'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      : isDarkMode
+                        ? 'text-gray-500 hover:bg-gray-800'
+                        : 'text-gray-400 hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span>{id}: Module {i + 1} — Traffic Rules & Safety</span>
+                    {!unlocked && <span className="text-sm">🔒</span>}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
@@ -159,5 +189,40 @@ export function LessonScreen() {
         </Button>
       </div>
     </div>
+    {showPurchasePopup && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/50" onClick={() => setShowPurchasePopup(false)} />
+        <div className={`relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            Mövzu kilidlidir
+          </div>
+          <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-sm mb-4`}>
+            Bu mövzunu açmaq üçün paket tələb olunur. Paket almaq istəyirsiniz?
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setShowPurchasePopup(false)}
+              className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Bağla
+            </button>
+            <button
+              onClick={() => {
+                setShowPurchasePopup(false);
+                navigate('Packages');
+              }}
+              className="px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              Paket al
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
