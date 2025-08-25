@@ -35,6 +35,7 @@ function AppContent() {
   const { currentScreen, isDarkMode } = useApp();
 
   const isAIChat = currentScreen.screen === 'AIChat';
+  const hideHeader = currentScreen.screen === 'Packages';
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${
@@ -56,7 +57,7 @@ function AppContent() {
             <ScreenRenderer />
           ) : (
             <>
-              <Header />
+              {!hideHeader && <Header />}
               <ScreenRenderer />
               <TabBar />
             </>
