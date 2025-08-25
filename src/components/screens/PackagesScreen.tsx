@@ -103,9 +103,9 @@ export function PackagesScreen() {
 
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
-      return 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg transform scale-105';
+      return `relative ring-2 ring-emerald-500 ${isDarkMode ? 'bg-emerald-900/10' : 'bg-gradient-to-br from-emerald-50 to-green-50'} shadow-lg transform scale-105`;
     }
-    return 'relative bg-white';
+    return `relative ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'}`;
   }
 
   function getButtonClass(pkg: Package): string {
@@ -167,14 +167,14 @@ export function PackagesScreen() {
               <div className="text-center">
                 <h3 className={`text-xl font-bold transition-colors duration-200 ${
                   pkg.popular 
-                    ? 'text-emerald-700' 
+                    ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-700') 
                     : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>
                   {pkg.name}
                 </h3>
                 <div className={`text-3xl font-black mt-2 transition-colors duration-200 ${
                   pkg.popular 
-                    ? 'text-emerald-600' 
+                    ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-600')
                     : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>
                   {calculatePrice(pkg.id)} AZN
@@ -222,7 +222,7 @@ export function PackagesScreen() {
                     <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      <span className={pkg.popular ? 'text-emerald-500' : 'text-emerald-500'}>✓</span>
+                      <span className={'text-emerald-500'}>✓</span>
                       {feature}
                     </div>
                   ))}
@@ -301,3 +301,4 @@ export function PackagesScreen() {
     </div>
   );
 }
+

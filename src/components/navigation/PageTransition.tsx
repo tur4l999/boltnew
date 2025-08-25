@@ -14,14 +14,10 @@ export function PageTransition({ children, transitionKey }: PageTransitionProps)
 
   useEffect(() => {
     if (transitionKey !== currentKey) {
-      setIsAnimating(true);
-      setIsVisible(false);
-      
-      setTimeout(() => {
-        setCurrentKey(transitionKey);
-        setIsVisible(true);
-        setTimeout(() => setIsAnimating(false), 300);
-      }, 150);
+      // Show immediately on tap
+      setIsAnimating(false);
+      setIsVisible(true);
+      setCurrentKey(transitionKey);
     } else {
       setIsVisible(true);
     }
@@ -43,7 +39,7 @@ export function PageTransition({ children, transitionKey }: PageTransitionProps)
             ? `transition-all duration-300 ease-out transform ${
                 isVisible ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-4 opacity-0 scale-95'
               }`
-            : `transition-opacity duration-200 ${isVisible ? 'opacity-100' : 'opacity-0'}`
+            : `transition-opacity duration-75 ${isVisible ? 'opacity-100' : 'opacity-0'}`
         }
       >
         {children}

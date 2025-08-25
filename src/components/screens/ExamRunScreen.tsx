@@ -204,7 +204,11 @@ export function ExamRunScreen() {
           {currentQuestion.options.map((option) => (
             <label
               key={option.id}
-              className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] ${answers[currentQuestion.id] === option.id ? 'border-emerald-600 bg-gray-50' : 'border-gray-300 bg-white'}`}
+              className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] ${
+                answers[currentQuestion.id] === option.id
+                  ? (isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50')
+                  : (isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white')
+              }`}
             >
               <input
                 type="radio"
@@ -213,7 +217,7 @@ export function ExamRunScreen() {
                 onChange={() => setAnswer(option.id)}
                 className="w-4 h-4 text-emerald-600"
               />
-              <span className="text-sm text-gray-700">{option.text}</span>
+              <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
             </label>
           ))}
         </div>
