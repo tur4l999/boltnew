@@ -4,8 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
-import { FadeInUp } from '../ui/FadeInUp';
-import { SlideTransition } from '../ui/SlideTransition';
+import { FadeIn } from '../ui/FadeIn';
 
 export function TopicsScreen() {
   const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
@@ -94,7 +93,7 @@ export function TopicsScreen() {
       />
       <div className="space-y-2">
         {filteredModules.map((module) => (
-          <FadeInUp key={module.id} delay={filteredModules.indexOf(module) * 50}>
+          <FadeIn key={module.id} delay={filteredModules.indexOf(module) * 30}>
             <Card className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -127,7 +126,7 @@ export function TopicsScreen() {
                 )}
               </div>
             </Card>
-          </FadeInUp>
+          </FadeIn>
         ))}
       </div>
     </div>
