@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -22,9 +22,29 @@ export function PackagesScreen() {
   const { t, goBack, balance, purchasePackage, isDarkMode } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
-    standart: 45,
-    pro: 60
+    standart: 30,
+    pro: 45
   });
+  const [nowTs, setNowTs] = useState<number>(Date.now());
+  const [promoEndsAt] = useState<number>(() => Date.now() + 10 * 24 * 60 * 60 * 1000);
+
+  useEffect(() => {
+    const id = setInterval(() => setNowTs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  function formatRemaining(ms: number): string {
+    const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+    const days = Math.floor(totalSeconds / (24 * 3600));
+    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const dd = String(days).padStart(2, '0');
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+    return `${dd} gün ${hh}:${mm}:${ss}`;
+  }
   
   const dayOptions: DayOption[] = [
     { days: 30, label: '30 gün', multiplier: 1 },
@@ -85,6 +105,13 @@ export function PackagesScreen() {
     return Math.round(pkg.basePrice * dayOption.multiplier);
   }
 
+  function getPricePair(packageId: string): { oldPrice: number; newPrice: number; discountPercent: number } {
+    const newPrice = calculatePrice(packageId);
+    const oldPrice = Math.max(newPrice + 10, Math.round(newPrice * 1.25));
+    const discountPercent = Math.max(1, Math.round((1 - newPrice / oldPrice) * 100));
+    return { oldPrice, newPrice, discountPercent };
+  }
+
   function handlePurchasePackage(packageId: string) {
     const pkg = packages.find(p => p.id === packageId);
     const price = calculatePrice(packageId);
@@ -103,9 +130,9 @@ export function PackagesScreen() {
 
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
-      return 'relative ring-2 ring-emerald-500 bg-gradient-to-br from-emerald-50 to-green-50 shadow-lg transform scale-105';
+      return `relative ring-2 ring-emerald-500 ${isDarkMode ? 'bg-emerald-900/10' : 'bg-gradient-to-br from-emerald-50 to-green-50'} shadow-lg transform scale-105`;
     }
-    return 'relative bg-white';
+    return `relative ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'}`;
   }
 
   function getButtonClass(pkg: Package): string {
@@ -152,6 +179,13 @@ export function PackagesScreen() {
           <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
             isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
           }`}>
+            {pkg.id === 'basic' && (
+              <div className="mb-2 -mt-1">
+                <div className="w-full rounded-xl p-2 text-center font-bold border bg-gradient-to-r from-red-600 to-amber-500 text-white shadow-sm">
+                  ⏳ 10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}
+                </div>
+              </div>
+            )}
             {pkg.popular && (
               <>
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
@@ -167,18 +201,21 @@ export function PackagesScreen() {
               <div className="text-center">
                 <h3 className={`text-xl font-bold transition-colors duration-200 ${
                   pkg.popular 
-                    ? 'text-emerald-700' 
+                    ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-700') 
                     : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>
                   {pkg.name}
                 </h3>
-                <div className={`text-3xl font-black mt-2 transition-colors duration-200 ${
-                  pkg.popular 
-                    ? 'text-emerald-600' 
-                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>
-                  {calculatePrice(pkg.id)} AZN
-                </div>
+                {(() => {
+                  const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
+                  return (
+                    <div className="mt-2 flex items-baseline justify-center gap-2">
+                      <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
+                      <span className={`text-4xl font-black ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>{newPrice} AZN</span>
+                      <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
+                    </div>
+                  );
+                })()}
                 <p className={`text-sm mt-1 transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
@@ -191,25 +228,28 @@ export function PackagesScreen() {
                 <h4 className={`font-medium text-sm text-center transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-200' : 'text-gray-900'
                 }`}>Müddət seçin:</h4>
-                <div className="grid grid-cols-3 gap-2">
-                  {dayOptions.map((option) => (
-                    <button
-                      key={option.days}
-                      onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
-                      className={`p-2 rounded-lg text-xs font-medium transition-all ${
-                        selectedDays[pkg.id] === option.days
-                          ? pkg.popular
-                            ? 'bg-emerald-600 text-white shadow-md'
-                            : 'bg-gray-800 text-white'
-                          : isDarkMode
-                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
+                {(() => {
+                  const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
+                  return (
+                    <div className={`grid ${options.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-3'} gap-2`}>
+                      {options.map((option) => (
+                        <button
+                          key={option.days}
+                          onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
+                          className={`p-2 rounded-lg text-xs font-medium transition-all ${
+                            selectedDays[pkg.id] === option.days
+                              ? 'bg-emerald-600 text-white shadow-md'
+                              : isDarkMode
+                                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Features */}
@@ -222,7 +262,7 @@ export function PackagesScreen() {
                     <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      <span className={pkg.popular ? 'text-emerald-500' : 'text-emerald-500'}>✓</span>
+                      <span className={'text-emerald-500'}>✓</span>
                       {feature}
                     </div>
                   ))}
@@ -301,3 +341,4 @@ export function PackagesScreen() {
     </div>
   );
 }
+

@@ -130,29 +130,20 @@ export function HomeScreen() {
         ))}
       </div>
 
-      {/* Exam Simulator CTA (tall, standard width) */}
+      {/* Exam Simulator CTA (full-width green) */}
       <ScaleIn delay={500}>
-        <div className="grid grid-cols-2 gap-2 mt-2">
+        <div className="mt-2">
           <button
             onClick={() => navigate('Exam')}
-            className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[92px] ${
-              isDarkMode 
-                ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
-                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
-            }`}
+            className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
           >
-            <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
-              isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-            }`}>
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
               🧪
             </div>
-            <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-200' : 'text-gray-700'
-            }`}>
+            <div className="text-left font-black text-base leading-tight">
               {t.examSimulator}
             </div>
           </button>
-          <div />
         </div>
       </ScaleIn>
 

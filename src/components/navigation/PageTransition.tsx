@@ -7,39 +7,40 @@ interface PageTransitionProps {
 }
 
 export function PageTransition({ children, transitionKey }: PageTransitionProps) {
+  const { currentScreen } = useApp();
   const [isVisible, setIsVisible] = useState(false);
   const [currentKey, setCurrentKey] = useState(transitionKey);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (transitionKey !== currentKey) {
-      setIsAnimating(true);
-      setIsVisible(false);
-      
-      setTimeout(() => {
-        setCurrentKey(transitionKey);
-        setIsVisible(true);
-        setTimeout(() => setIsAnimating(false), 300);
-      }, 150);
+      // Show immediately on tap
+      setIsAnimating(false);
+      setIsVisible(true);
+      setCurrentKey(transitionKey);
     } else {
       setIsVisible(true);
     }
   }, [transitionKey, currentKey]);
 
+  const isHome = currentScreen.screen === 'Home';
+
   return (
     <div className="relative overflow-hidden">
-      {/* Keçid animasiyası üçün arxa fon */}
-      {isAnimating && (
+      {/* Yalnız ana səhifədə xüsusi keçid effekti */}
+      {isHome && isAnimating && (
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-10 animate-pulse z-10" />
       )}
-      
+
       {/* Əsas məzmun */}
       <div
-        className={`transition-all duration-300 ease-out transform ${
-          isVisible 
-            ? 'translate-x-0 opacity-100 scale-100' 
-            : 'translate-x-4 opacity-0 scale-95'
-        }`}
+        className={
+          isHome
+            ? `transition-all duration-300 ease-out transform ${
+                isVisible ? 'translate-x-0 opacity-100 scale-100' : 'translate-x-4 opacity-0 scale-95'
+              }`
+            : `transition-opacity duration-75 ${isVisible ? 'opacity-100' : 'opacity-0'}`
+        }
       >
         {children}
       </div>

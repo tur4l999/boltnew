@@ -6,7 +6,7 @@ import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 
 export function PracticeInline() {
-  const { t } = useApp();
+  const { t, isDarkMode } = useApp();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(false);
@@ -57,8 +57,8 @@ export function PracticeInline() {
               isLocked ? 'cursor-default' : 'cursor-pointer'
             } ${
               selectedAnswer === option.id
-                ? 'border-emerald-600 bg-gray-50'
-                : 'border-gray-300 bg-white'
+                ? (isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50')
+                : (isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white')
             }`}
           >
             <input
@@ -69,7 +69,7 @@ export function PracticeInline() {
               onChange={() => setSelectedAnswer(option.id)}
               className="w-4 h-4 text-emerald-600"
             />
-            <span className="text-sm text-gray-700">{option.text}</span>
+            <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
           </label>
         ))}
       </div>
@@ -96,10 +96,10 @@ export function PracticeInline() {
               {isCorrect ? '✅ Doğru' : '❌ Səhv'}
             </div>
             <details className="ml-auto">
-              <summary className="cursor-pointer select-none text-sm text-gray-700">
+              <summary className={`cursor-pointer select-none text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
                 {t.explanation}
               </summary>
-              <div className="text-sm mt-2 text-gray-700 p-2 bg-gray-50 rounded-lg">
+              <div className={`text-sm mt-2 p-2 rounded-lg ${isDarkMode ? 'text-gray-200 bg-gray-700' : 'text-gray-700 bg-gray-50'}`}>
                 {question.explanation}
               </div>
             </details>
