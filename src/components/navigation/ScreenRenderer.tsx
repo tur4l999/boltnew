@@ -21,8 +21,8 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
   
-  // Keçid açarı yaradırıq
-  const transitionKey = `${currentScreen.screen}-${JSON.stringify(currentScreen.params)}`;
+  // Keçid açarı (yalnız ekran adı ilə) – parametrlər dəyişəndə təkrar animasiya olmasın
+  const transitionKey = currentScreen.screen;
   
   // AI Chat screen - no header or navigation
   if (currentScreen.screen === 'AIChat') {

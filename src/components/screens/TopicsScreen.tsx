@@ -93,8 +93,7 @@ export function TopicsScreen() {
       />
       <div className="space-y-2">
         {filteredModules.map((module) => (
-          <FadeIn key={module.id} delay={filteredModules.indexOf(module) * 30}>
-            <Card className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
+            <Card key={module.id} className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   {!isModuleUnlocked(module.id) && (
@@ -126,7 +125,6 @@ export function TopicsScreen() {
                 )}
               </div>
             </Card>
-          </FadeIn>
         ))}
       </div>
     </div>
