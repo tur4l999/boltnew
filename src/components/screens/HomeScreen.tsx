@@ -135,9 +135,9 @@ export function HomeScreen() {
         <div className="mt-2">
           <button
             onClick={() => navigate('Exam')}
-            className="w-full rounded-2xl p-4 flex items-center gap-3 min-h-[120px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
+            className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
           >
-            <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center text-lg">
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
               🧪
             </div>
             <div className="text-left font-black text-base leading-tight">
