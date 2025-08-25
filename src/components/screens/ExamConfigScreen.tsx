@@ -14,9 +14,10 @@ export function ExamConfigScreen() {
         <div className="space-y-3">
           <Button 
             onClick={() => navigate('ExamRun', { config: { mode: 'simulator', questionsCount: 10 } })}
-            className="w-full"
+            className="w-full rounded-full"
+            size="lg"
           >
-            🧪 İmtahan Simulyatoru
+            ✏️ imtahan simulyatoru
           </Button>
           <Button 
             onClick={() => navigate('ExamRun', { config: { mode: 'final', questionsCount: 20 } })}
