@@ -9,6 +9,7 @@ import { FadeIn } from '../ui/FadeIn';
 export function TopicsScreen() {
   const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showPurchasePopup, setShowPurchasePopup] = useState(false);
   
   const filteredModules = useMemo(
     () => MODULES.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase())),
@@ -19,7 +20,7 @@ export function TopicsScreen() {
     if (isModuleUnlocked(module.id)) {
       navigate('Lesson', { moduleId: module.id });
     } else {
-      alert('Bu mövzu üçün aktiv paket lazımdır. Paket almaq üçün mağazaya keçin.');
+      setShowPurchasePopup(true);
     }
   };
 
@@ -92,11 +93,20 @@ export function TopicsScreen() {
         }`}
       />
       <div className="space-y-2">
-        {filteredModules.map((module) => (
-            <Card key={module.id} className={!isModuleUnlocked(module.id) ? 'opacity-60' : ''}>
+        {filteredModules.map((module) => {
+          const unlocked = isModuleUnlocked(module.id);
+          return (
+            <div
+              key={module.id}
+              onClick={() => {
+                if (!unlocked) setShowPurchasePopup(true);
+              }}
+              className={!unlocked ? 'cursor-pointer' : ''}
+            >
+            <Card className={!unlocked ? 'opacity-60' : ''}>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  {!isModuleUnlocked(module.id) && (
+                  {!unlocked && (
                     <span className="text-gray-400 text-lg animate-pulse">🔒</span>
                   )}
                   <div>
@@ -112,22 +122,57 @@ export function TopicsScreen() {
                 </div>
                 <Button 
                   onClick={() => handleModuleClick(module)}
-                  disabled={!isModuleUnlocked(module.id)}
                   size="sm"
                 >
-                  {isModuleUnlocked(module.id) ? t.startLesson : 'Kilidli'}
+                  {unlocked ? t.startLesson : 'Kilidli'}
                 </Button>
               </div>
               <div className="relative overflow-hidden rounded-lg">
-                <Progress value={isModuleUnlocked(module.id) ? module.progress : 0} />
-                {isModuleUnlocked(module.id) && module.progress > 0 && (
+                <Progress value={unlocked ? module.progress : 0} />
+                {unlocked && module.progress > 0 && (
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
                 )}
               </div>
             </Card>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </div>
+    {showPurchasePopup && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/50" onClick={() => setShowPurchasePopup(false)} />
+        <div className={`relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            Mövzu kilidlidir
+          </div>
+          <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-sm mb-4`}>
+            Bu mövzunu açmaq üçün paket tələb olunur. Paket almaq istəyirsiniz?
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setShowPurchasePopup(false)}
+              className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Bağla
+            </button>
+            <button
+              onClick={() => {
+                setShowPurchasePopup(false);
+                navigate('Packages');
+              }}
+              className="px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              Paket al
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
     </>
   );
 }
