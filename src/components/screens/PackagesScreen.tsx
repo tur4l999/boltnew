@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -25,6 +25,26 @@ export function PackagesScreen() {
     standart: 30,
     pro: 45
   });
+  const [nowTs, setNowTs] = useState<number>(Date.now());
+  const [promoEndsAt] = useState<number>(() => Date.now() + 10 * 24 * 60 * 60 * 1000);
+
+  useEffect(() => {
+    const id = setInterval(() => setNowTs(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  function formatRemaining(ms: number): string {
+    const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+    const days = Math.floor(totalSeconds / (24 * 3600));
+    const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const dd = String(days).padStart(2, '0');
+    const hh = String(hours).padStart(2, '0');
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+    return `${dd} gün ${hh}:${mm}:${ss}`;
+  }
   
   const dayOptions: DayOption[] = [
     { days: 30, label: '30 gün', multiplier: 1 },
@@ -159,6 +179,13 @@ export function PackagesScreen() {
           <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
             isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
           }`}>
+            {pkg.id === 'basic' && (
+              <div className="mb-2 -mt-1">
+                <div className="w-full rounded-xl p-2 text-center font-bold border bg-gradient-to-r from-red-600 to-amber-500 text-white shadow-sm">
+                  ⏳ 10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}
+                </div>
+              </div>
+            )}
             {pkg.popular && (
               <>
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
@@ -184,7 +211,7 @@ export function PackagesScreen() {
                   return (
                     <div className="mt-2 flex items-baseline justify-center gap-2">
                       <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
-                      <span className={`text-3xl font-black ${pkg.popular ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-600') : (isDarkMode ? 'text-gray-100' : 'text-gray-900')}`}>{newPrice} AZN</span>
+                      <span className={`text-4xl font-black ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>{newPrice} AZN</span>
                       <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                     </div>
                   );
@@ -211,9 +238,7 @@ export function PackagesScreen() {
                           onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
                           className={`p-2 rounded-lg text-xs font-medium transition-all ${
                             selectedDays[pkg.id] === option.days
-                              ? pkg.popular
-                                ? 'bg-emerald-600 text-white shadow-md'
-                                : 'bg-gray-800 text-white'
+                              ? 'bg-emerald-600 text-white shadow-md'
                               : isDarkMode
                                 ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
