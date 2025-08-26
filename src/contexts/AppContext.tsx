@@ -39,6 +39,8 @@ interface AppContextType {
   activePackage: UserPackage | null;
   transactions: Transaction[];
   purchasePackage: (packageId: string, packageName: string, price: number, days: number) => boolean;
+  tickets: number;
+  purchaseTickets: (count: number, price: number, title?: string) => boolean;
   hasActivePackage: () => boolean;
   isModuleUnlocked: (moduleId: string) => boolean;
 }
@@ -54,6 +56,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   ]);
   const [moreSheetVisible, setMoreSheetVisible] = useState(false);
   const [balance, setBalance] = useState(100); // Demo account starts with 100 AZN
+  const [tickets, setTickets] = useState(3); // Demo starts with 3 tickets
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   
@@ -107,6 +110,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     
     return true;
   };
+
+  const purchaseTickets = (count: number, price: number, title: string = 'İmtahan bileti'): boolean => {
+    if (balance < price) {
+      return false;
+    }
+    const purchaseDate = new Date();
+    const transaction: Transaction = {
+      id: Date.now().toString(),
+      type: 'purchase',
+      amount: price,
+      description: `${title} (${count} ədəd)`,
+      date: purchaseDate
+    };
+    setBalance(prev => prev - price);
+    setTickets(prev => prev + count);
+    setTransactions(prev => [transaction, ...prev]);
+    return true;
+  };
   
   const hasActivePackage = (): boolean => {
     if (!activePackage) return false;
@@ -141,9 +162,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       moreSheetVisible,
       setMoreSheetVisible,
       balance,
+      tickets,
       activePackage,
       transactions,
       purchasePackage,
+      purchaseTickets,
       hasActivePackage,
       isModuleUnlocked
     }}>

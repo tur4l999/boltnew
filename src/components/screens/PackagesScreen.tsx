@@ -19,7 +19,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, isDarkMode } = useApp();
+  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 30,
@@ -96,10 +96,10 @@ export function PackagesScreen() {
     }
   ];
 
-  const otherItems: { id: string; title: string; oldPrice: number; newPrice: number; description?: string }[] = [
-    { id: 'tickets-5', title: '5 bilet', oldPrice: 10, newPrice: 8, description: 'İmtahan bileti' },
-    { id: 'tickets-10', title: '10 bilet', oldPrice: 20, newPrice: 14, description: 'İmtahan bileti' },
-    { id: 'tickets-20', title: '20 bilet', oldPrice: 40, newPrice: 25, description: 'İmtahan bileti' }
+  const otherItems: { id: string; title: string; count: number; oldPrice: number; newPrice: number; description?: string }[] = [
+    { id: 'tickets-5', title: '5 bilet', count: 5, oldPrice: 10, newPrice: 8, description: 'İmtahan bileti' },
+    { id: 'tickets-10', title: '10 bilet', count: 10, oldPrice: 20, newPrice: 14, description: 'İmtahan bileti' },
+    { id: 'tickets-20', title: '20 bilet', count: 20, oldPrice: 40, newPrice: 25, description: 'İmtahan bileti' }
   ];
 
   function calculatePrice(packageId: string): number {
@@ -135,6 +135,15 @@ export function PackagesScreen() {
     }
   }
 
+  function handlePurchaseOther(item: { id: string; title: string; count: number; newPrice: number }) {
+    const success = purchaseTickets(item.count, item.newPrice, item.title);
+    if (success) {
+      alert(`${item.title} (${item.count} ədəd) uğurla satın alındı!`);
+    } else {
+      alert('Balansınız kifayət etmir. Balansınızı artırın.');
+    }
+  }
+
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
       return `relative ring-2 ring-emerald-500 ${isDarkMode ? 'bg-emerald-900/10' : 'bg-gradient-to-br from-emerald-50 to-green-50'} shadow-lg transform scale-105`;
@@ -158,13 +167,9 @@ export function PackagesScreen() {
       </div>
       {/* Header */}
       <div className="grid grid-cols-3 items-center mb-4">
-        <div />
-        <h1 className={`justify-self-center text-lg font-bold transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Təlim Paketləri</h1>
         <button
           onClick={goBack}
-          className={`justify-self-end w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
+          className={`justify-self-start w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
             isDarkMode 
               ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
               : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
@@ -172,6 +177,10 @@ export function PackagesScreen() {
         >
           ←
         </button>
+        <h1 className={`justify-self-center text-lg font-bold transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Təlim Paketləri</h1>
+        <div />
       </div>
       {/* Tabs */}
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -322,25 +331,26 @@ export function PackagesScreen() {
       {activeTab === 'other' && (
         <div className="space-y-4">
           <Card className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} transition-colors`}>
-            <h3 className={`text-center font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <h3 className={`text-center font-bold mb-3 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Digər Paketlər
             </h3>
-            <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-2">
               {otherItems.map(item => {
                 const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
                 return (
-                  <div key={item.id} className={`flex items-center justify-between p-3 rounded-lg border ${isDarkMode ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50'}`}>
-                    <div>
-                      <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-semibold`}>{item.title}</div>
-                      {item.description && (
-                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.description}</div>
-                      )}
+                  <div key={item.id} className={`p-3 rounded-lg border flex flex-col items-center text-center ${isDarkMode ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50'}`}>
+                    <div className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{item.title}</div>
+                    {item.description && (
+                      <div className={`text-[11px] mt-0.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.description}</div>
+                    )}
+                    <div className="mt-2 flex items-baseline gap-1">
+                      <span className={`line-through text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{item.oldPrice} AZN</span>
+                      <span className={`text-xl font-extrabold ${isDarkMode ? 'text-red-500' : 'text-red-600'} tracking-tight`}>{item.newPrice} AZN</span>
+                      <span className="ml-1 -mt-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                     </div>
-                    <div className="flex items-baseline gap-2">
-                      <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{item.oldPrice} AZN</span>
-                      <span className={`text-2xl font-extrabold ${isDarkMode ? 'text-red-500' : 'text-red-600'} tracking-tight`}>{item.newPrice} AZN</span>
-                      <span className="ml-1 -mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
-                    </div>
+                    <Button onClick={() => handlePurchaseOther(item)} className="w-full mt-2" variant="primary">
+                      Paketi əldə et
+                    </Button>
                   </div>
                 );
               })}
