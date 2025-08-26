@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 
 export function MoreScreen() {
-  const { navigate, balance, activePackage, hasActivePackage, isDarkMode } = useApp();
+  const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
   
   const moreItems = [
     { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
@@ -43,7 +43,7 @@ export function MoreScreen() {
             }`}>Bilet:</span>
             <span className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-black'
-            }`}>3</span>
+            }`}>{tickets}</span>
           </div>
         </div>
       </div>
