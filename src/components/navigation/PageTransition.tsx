@@ -23,6 +23,16 @@ export function PageTransition({ children, transitionKey }: PageTransitionProps)
     }
   }, [transitionKey, currentKey]);
 
+  // Always reset scroll to top on page/screen change
+  useEffect(() => {
+    const container = document.getElementById('app-scroll-container');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'auto' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [transitionKey]);
+
   const isHome = currentScreen.screen === 'Home';
 
   return (

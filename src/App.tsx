@@ -46,6 +46,7 @@ function AppContent() {
       <div className={`max-w-md mx-auto h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
       } overflow-y-auto`}
+      id="app-scroll-container"
       >
         {/* Sticky iPhone-like status bar inside the scroll container */}
         <div className="sticky top-0 z-40">
