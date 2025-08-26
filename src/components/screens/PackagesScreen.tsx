@@ -27,6 +27,7 @@ export function PackagesScreen() {
   });
   const [nowTs, setNowTs] = useState<number>(Date.now());
   const [promoEndsAt] = useState<number>(() => Date.now() + 10 * 24 * 60 * 60 * 1000);
+  const [activeTab, setActiveTab] = useState<'training' | 'other'>('training');
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -95,6 +96,12 @@ export function PackagesScreen() {
     }
   ];
 
+  const otherItems: { id: string; title: string; oldPrice: number; newPrice: number; description?: string }[] = [
+    { id: 'tickets-5', title: '5 bilet', oldPrice: 10, newPrice: 8, description: 'İmtahan bileti' },
+    { id: 'tickets-10', title: '10 bilet', oldPrice: 20, newPrice: 14, description: 'İmtahan bileti' },
+    { id: 'tickets-20', title: '20 bilet', oldPrice: 40, newPrice: 25, description: 'İmtahan bileti' }
+  ];
+
   function calculatePrice(packageId: string): number {
     const pkg = packages.find(p => p.id === packageId);
     const days = selectedDays[packageId];
@@ -143,14 +150,21 @@ export function PackagesScreen() {
   }
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`relative p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     } pt-11`}>
+      <div className="absolute top-2 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-600 text-white shadow">
+        Balans: {balance} AZN
+      </div>
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className="grid grid-cols-3 items-center mb-4">
+        <div />
+        <h1 className={`justify-self-center text-lg font-bold transition-colors duration-200 ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>Təlim Paketləri</h1>
         <button
           onClick={goBack}
-          className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
+          className={`justify-self-end w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
             isDarkMode 
               ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
               : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
@@ -158,128 +172,182 @@ export function PackagesScreen() {
         >
           ←
         </button>
-        <h1 className={`text-lg font-bold transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Təlim Paketləri</h1>
+      </div>
+      {/* Tabs */}
+      <div className="mb-4 grid grid-cols-2 gap-2">
+        <button
+          onClick={() => setActiveTab('training')}
+          className={`py-2 rounded-lg text-sm font-semibold transition-colors ${
+            activeTab === 'training'
+              ? 'bg-emerald-600 text-white shadow'
+              : isDarkMode
+                ? 'bg-gray-800 text-gray-200 border border-gray-700'
+                : 'bg-white text-gray-800 border border-gray-200'
+          }`}
+        >
+          Təlim paketləri
+        </button>
+        <button
+          onClick={() => setActiveTab('other')}
+          className={`py-2 rounded-lg text-sm font-semibold transition-colors ${
+            activeTab === 'other'
+              ? 'bg-emerald-600 text-white shadow'
+              : isDarkMode
+                ? 'bg-gray-800 text-gray-200 border border-gray-700'
+                : 'bg-white text-gray-800 border border-gray-200'
+          }`}
+        >
+          Digər Paketlər
+        </button>
       </div>
 
-      <div className="mb-6 text-center">
-        <p className={`text-sm transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-600'
-        }`}>
-          Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
-        </p>
-        <div className="mt-2 text-lg font-bold text-emerald-600">
-          Balans: {balance} AZN
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        {packages.map((pkg) => (
-          <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
-            isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
+      {activeTab === 'training' && (
+        <div className="mb-6 text-center">
+          <p className={`text-sm transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
           }`}>
-            {pkg.id === 'basic' && (
-              <div className="mb-2 -mt-1">
-                <div className="w-full rounded-xl p-2 text-center font-bold border bg-gradient-to-r from-red-600 to-amber-500 text-white shadow-sm">
-                  ⏳ 10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}
+            Bütün funksiyalardan istifadə etmək üçün uyğun paketi seçin
+          </p>
+        </div>
+      )}
+      {activeTab === 'training' && (
+        <div className="space-y-4">
+          {packages.map((pkg) => (
+            <Card key={pkg.id} className={`${getPackageCardClass(pkg)} transition-colors duration-200 ${
+              isDarkMode && !pkg.popular ? 'bg-gray-800 border-gray-700' : ''
+            }`}>
+              {pkg.id === 'basic' && (
+                <div className="mb-2 -mt-1">
+                  <div className="w-full rounded-xl p-2 text-center font-bold border bg-gradient-to-r from-red-600 to-amber-500 text-white shadow-sm">
+                    ⏳ 10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}
+                  </div>
                 </div>
+              )}
+              {pkg.popular && (
+                <>
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                    ⭐ Ən Populyar
+                  </div>
+                  <div className="absolute top-2 right-2 text-2xl">
+                    🔥
+                  </div>
+                </>
+              )}
+              
+              <div className="space-y-4 pt-2">
+                <div className="text-center">
+                  <h3 className={`text-xl font-bold transition-colors duration-200 ${
+                    pkg.popular 
+                      ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-700') 
+                      : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                  }`}>
+                    {pkg.name}
+                  </h3>
+                  {(() => {
+                    const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
+                    return (
+                      <div className="mt-2 flex items-baseline justify-center gap-2">
+                        <span className={`line-through text-base ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
+                        <span className={`text-4xl font-black ${isDarkMode ? 'text-red-500' : 'text-red-600'} drop-shadow-sm tracking-tight`}>{newPrice} AZN</span>
+                        <span className="ml-1 -mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
+                      </div>
+                    );
+                  })()}
+                  <p className={`text-sm mt-1 transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>
+                    {selectedDays[pkg.id]} gün müddətinə
+                  </p>
+                </div>
+
+                {/* Day Selection */}
+                <div className="space-y-2">
+                  <h4 className={`font-medium text-sm text-center transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                  }`}>Müddət seçin:</h4>
+                  {(() => {
+                    const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
+                    return (
+                      <div className={`grid ${options.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-3'} gap-2`}>
+                        {options.map((option) => (
+                          <button
+                            key={option.days}
+                            onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
+                            className={`p-2 rounded-lg text-xs font-medium transition-all ${
+                              selectedDays[pkg.id] === option.days
+                                ? 'bg-emerald-600 text-white shadow-md'
+                                : isDarkMode
+                                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Features */}
+                <div className="space-y-2">
+                  <h4 className={`font-medium text-sm transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                  }`}>Daxil olan xidmətlər:</h4>
+                  <div className="grid grid-cols-1 gap-1">
+                    {pkg.features.map((feature, index) => (
+                      <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] leading-none">✓</span>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => handlePurchasePackage(pkg.id)}
+                  className={getButtonClass(pkg)}
+                  variant={pkg.popular ? 'primary' : 'secondary'}
+                >
+                  {pkg.popular ? '🚀 ' : ''}Paketi Al - {calculatePrice(pkg.id)} AZN
+                </Button>
               </div>
-            )}
-            {pkg.popular && (
-              <>
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                  ⭐ Ən Populyar
-                </div>
-                <div className="absolute top-2 right-2 text-2xl">
-                  🔥
-                </div>
-              </>
-            )}
-            
-            <div className="space-y-4 pt-2">
-              <div className="text-center">
-                <h3 className={`text-xl font-bold transition-colors duration-200 ${
-                  pkg.popular 
-                    ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-700') 
-                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>
-                  {pkg.name}
-                </h3>
-                {(() => {
-                  const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
-                  return (
-                    <div className="mt-2 flex items-baseline justify-center gap-2">
-                      <span className={`line-through text-base ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
-                      <span className={`text-4xl font-black ${isDarkMode ? 'text-red-500' : 'text-red-600'} drop-shadow-sm tracking-tight`}>{newPrice} AZN</span>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {activeTab === 'other' && (
+        <div className="space-y-4">
+          <Card className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} transition-colors`}>
+            <h3 className={`text-center font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Digər Paketlər
+            </h3>
+            <div className="space-y-3">
+              {otherItems.map(item => {
+                const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
+                return (
+                  <div key={item.id} className={`flex items-center justify-between p-3 rounded-lg border ${isDarkMode ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50'}`}>
+                    <div>
+                      <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-semibold`}>{item.title}</div>
+                      {item.description && (
+                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.description}</div>
+                      )}
+                    </div>
+                    <div className="flex items-baseline gap-2">
+                      <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{item.oldPrice} AZN</span>
+                      <span className={`text-2xl font-extrabold ${isDarkMode ? 'text-red-500' : 'text-red-600'} tracking-tight`}>{item.newPrice} AZN</span>
                       <span className="ml-1 -mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                     </div>
-                  );
-                })()}
-                <p className={`text-sm mt-1 transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {selectedDays[pkg.id]} gün müddətinə
-                </p>
-              </div>
-
-              {/* Day Selection */}
-              <div className="space-y-2">
-                <h4 className={`font-medium text-sm text-center transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                }`}>Müddət seçin:</h4>
-                {(() => {
-                  const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
-                  return (
-                    <div className={`grid ${options.length === 1 ? 'grid-cols-1 place-items-center' : 'grid-cols-3'} gap-2`}>
-                      {options.map((option) => (
-                        <button
-                          key={option.days}
-                          onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
-                          className={`p-2 rounded-lg text-xs font-medium transition-all ${
-                            selectedDays[pkg.id] === option.days
-                              ? 'bg-emerald-600 text-white shadow-md'
-                              : isDarkMode
-                                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  );
-                })()}
-              </div>
-
-              {/* Features */}
-              <div className="space-y-2">
-                <h4 className={`font-medium text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                }`}>Daxil olan xidmətlər:</h4>
-                <div className="grid grid-cols-1 gap-1">
-                  {pkg.features.map((feature, index) => (
-                    <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] leading-none">✓</span>
-                      {feature}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <Button
-                onClick={() => handlePurchasePackage(pkg.id)}
-                className={getButtonClass(pkg)}
-                variant={pkg.popular ? 'primary' : 'secondary'}
-              >
-                {pkg.popular ? '🚀 ' : ''}Paketi Al - {calculatePrice(pkg.id)} AZN
-              </Button>
+                  </div>
+                );
+              })}
             </div>
           </Card>
-        ))}
-      </div>
+        </div>
+      )}
 
       {/* Payment Methods */}
       <Card className={`mt-6 transition-colors duration-200 ${
