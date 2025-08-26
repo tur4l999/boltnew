@@ -11,7 +11,10 @@ export function ExamRunScreen() {
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  // Selected option per question (not yet confirmed)
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>({});
+  // Outcome per question after confirmation: 'correct' | 'wrong'
+  const [outcomes, setOutcomes] = useState<Record<string, 'correct' | 'wrong' | undefined>>({});
   const [view, setView] = useState<'grid' | 'question'>('grid');
   
   // Create 10 questions by repeating sample questions
@@ -36,7 +39,7 @@ export function ExamRunScreen() {
   }, []);
 
   function setAnswer(optionId: string) {
-    setAnswers(prev => ({ ...prev, [currentQuestion.id]: optionId }));
+    setSelectedOptions(prev => ({ ...prev, [currentQuestion.id]: optionId }));
   }
 
   function openQuestion(index: number) {
@@ -45,9 +48,9 @@ export function ExamRunScreen() {
   }
 
   function finishExam() {
-    const score = questions.reduce((acc, q) => acc + (answers[q.id] === q.correctOptionId ? 1 : 0), 0);
+    const score = questions.reduce((acc, q) => acc + (outcomes[q.id] === 'correct' ? 1 : 0), 0);
     questions.forEach(q => {
-      if (answers[q.id] !== q.correctOptionId) {
+      if (outcomes[q.id] !== 'correct') {
         mistakesStore.add(q.id);
       }
     });
@@ -56,13 +59,23 @@ export function ExamRunScreen() {
     });
   }
 
-  function confirmAndProceed() {
+  function confirmAnswer() {
+    const selected = selectedOptions[currentQuestion.id];
+    if (!selected) return;
+    const isCorrect = selected === currentQuestion.correctOptionId;
+    setOutcomes(prev => ({ ...prev, [currentQuestion.id]: isCorrect ? 'correct' : 'wrong' }));
+  }
+
+  function goNext() {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
       finishExam();
     }
   }
+
+  const currentOutcome = outcomes[currentQuestion?.id];
+  const isConfirmed = !!currentOutcome;
 
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
@@ -91,32 +104,45 @@ export function ExamRunScreen() {
       {/* Questions Grid (opens question on tap) */}
       {view === 'grid' && (
         <div className="grid grid-cols-2 gap-3">
-          {questions.map((question, index) => (
-            <button
-              key={question.id}
-              onClick={() => openQuestion(index)}
-              className={`relative rounded-xl overflow-hidden min-h-[200px] ${
-                answers[question.id] ? 'opacity-60' : ''
-              }`}
-            >
-              <img
-                src={question.imageUrl}
-                alt={`Sual ${index + 1}`}
-                className="w-full h-32 object-cover"
-              />
-              <div className="absolute inset-0 bg-black/40"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-3">
-                <div className="text-white text-xs leading-tight">
-                  {question.text.length > 80 ? question.text.substring(0, 80) + '...' : question.text}
+          {questions.map((question, index) => {
+            const status = outcomes[question.id];
+            const isCorrect = status === 'correct';
+            const isWrong = status === 'wrong';
+            return (
+              <button
+                key={question.id}
+                onClick={() => openQuestion(index)}
+                className={`relative rounded-xl overflow-hidden min-h-[200px] border ${
+                  isCorrect
+                    ? 'border-emerald-500'
+                    : isWrong
+                      ? 'border-red-500'
+                      : 'border-transparent'
+                }`}
+              >
+                <img
+                  src={question.imageUrl}
+                  alt={`Sual ${index + 1}`}
+                  className="w-full h-32 object-cover"
+                />
+                <div className={`absolute inset-0 ${
+                  isCorrect ? 'bg-emerald-500/30' : isWrong ? 'bg-red-500/30' : 'bg-black/40'
+                }`}></div>
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <div className="text-white text-xs leading-tight">
+                    {question.text.length > 80 ? question.text.substring(0, 80) + '...' : question.text}
+                  </div>
                 </div>
-              </div>
-              {answers[question.id] && (
-                <div className="absolute top-2 right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-              )}
-            </button>
-          ))}
+                {status && (
+                  <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center ${
+                    status === 'correct' ? 'bg-emerald-500' : 'bg-red-500'
+                  }`}>
+                    <span className="text-white text-xs">{status === 'correct' ? '✓' : '✕'}</span>
+                  </div>
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -136,43 +162,59 @@ export function ExamRunScreen() {
               {currentIndex + 1}. {currentQuestion.text}
             </div>
             <div className="space-y-2">
-              {currentQuestion.options.map((option) => (
-                <label
-                  key={option.id}
-                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] transition-colors duration-200 ${
-                    answers[currentQuestion.id] === option.id
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/20'
-                        : 'border-emerald-600 bg-gray-50'
-                      : isDarkMode
-                        ? 'border-gray-600 bg-gray-700'
-                        : 'border-gray-300 bg-white'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="examAnswer"
-                    checked={answers[currentQuestion.id] === option.id}
-                    onChange={() => setAnswer(option.id)}
-                    className="w-4 h-4 text-emerald-600"
-                  />
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
-                </label>
-              ))}
+              {currentQuestion.options.map((option) => {
+                const isSelected = selectedOptions[currentQuestion.id] === option.id;
+                const isRightAnswer = option.id === currentQuestion.correctOptionId;
+                // Determine color after confirmation
+                let optionClasses = isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white';
+                if (isConfirmed) {
+                  if (isSelected && currentOutcome === 'correct') {
+                    optionClasses = isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-emerald-50';
+                  } else if (isSelected && currentOutcome === 'wrong') {
+                    optionClasses = isDarkMode ? 'border-red-500 bg-red-900/20' : 'border-red-600 bg-red-50';
+                  }
+                } else if (isSelected) {
+                  optionClasses = isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50';
+                }
+
+                return (
+                  <label
+                    key={option.id}
+                    className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] transition-colors duration-200 ${optionClasses}`}
+                  >
+                    <input
+                      type="radio"
+                      name="examAnswer"
+                      checked={isSelected}
+                      disabled={isConfirmed}
+                      onChange={() => setAnswer(option.id)}
+                      className="w-4 h-4 text-emerald-600"
+                    />
+                    <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
+                  </label>
+                );
+              })}
             </div>
 
-            {/* Confirm button appears after selecting an answer */}
-            {answers[currentQuestion.id] && (
-              <div className="mt-4 flex justify-end">
-                <Button onClick={confirmAndProceed}>Təsdiq et</Button>
-              </div>
-            )}
+            {/* Confirm / Next */}
+            <div className="mt-4 flex items-center gap-2 justify-end">
+              {!isConfirmed ? (
+                <Button onClick={confirmAnswer} disabled={!selectedOptions[currentQuestion.id]}>Təsdiq et</Button>
+              ) : (
+                <>
+                  <div className={`font-bold text-sm ${currentOutcome === 'correct' ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {currentOutcome === 'correct' ? '✅ Doğru' : '❌ Səhv'}
+                  </div>
+                  <Button onClick={goNext}>{currentIndex < questions.length - 1 ? 'Növbəti' : 'Bitir'}</Button>
+                </>
+              )}
+            </div>
           </Card>
 
           {/* Numeric navigation (only in question view) */}
           <div className="mt-4 grid grid-cols-5 gap-2">
             {questions.map((q, idx) => {
-              const isAnswered = !!answers[q.id];
+              const status = outcomes[q.id];
               const isActive = idx === currentIndex;
               return (
                 <button
@@ -181,11 +223,13 @@ export function ExamRunScreen() {
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
                       ? 'bg-emerald-600 text-white'
-                      : isAnswered
+                      : status === 'correct'
                         ? 'bg-emerald-100 text-emerald-700'
-                        : isDarkMode
-                          ? 'bg-gray-800 text-gray-200'
-                          : 'bg-white border border-gray-200 text-gray-700'
+                        : status === 'wrong'
+                          ? 'bg-red-100 text-red-700'
+                          : isDarkMode
+                            ? 'bg-gray-800 text-gray-200'
+                            : 'bg-white border border-gray-200 text-gray-700'
                   }`}
                 >
                   {idx + 1}
