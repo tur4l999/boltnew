@@ -210,9 +210,9 @@ export function PackagesScreen() {
                   const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
                   return (
                     <div className="mt-2 flex items-baseline justify-center gap-2">
-                      <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
-                      <span className={`text-4xl font-black ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>{newPrice} AZN</span>
-                      <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
+                      <span className={`line-through text-base ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
+                      <span className={`text-4xl font-black ${isDarkMode ? 'text-red-500' : 'text-red-600'} drop-shadow-sm tracking-tight`}>{newPrice} AZN</span>
+                      <span className="ml-1 -mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                     </div>
                   );
                 })()}
@@ -262,7 +262,7 @@ export function PackagesScreen() {
                     <div key={index} className={`flex items-center gap-2 text-sm transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      <span className={'text-emerald-500'}>✓</span>
+                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] leading-none">✓</span>
                       {feature}
                     </div>
                   ))}
