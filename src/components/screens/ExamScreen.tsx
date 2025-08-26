@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { Button } from '../ui/Button';
 
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
 
 export function ExamScreen() {
-  const { isDarkMode, t } = useApp();
+  const { isDarkMode, t, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<ExamTabKey>('byTickets');
 
   return (
@@ -84,11 +85,22 @@ export function ExamScreen() {
         <div className={`rounded-xl border p-4 text-sm transition-colors duration-200 ${
           isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
         }`}>
-          <div className="text-xs text-gray-500 mb-2">{t.examSimulator}</div>
-          <div className="font-bold mb-2">Standart rejim • 20 sual • 20 dəq</div>
-          <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg py-2 text-sm font-bold">
-            {t.startExam}
-          </button>
+          <div className="text-xs text-gray-500 mb-3">{t.examSimulator}</div>
+          <div className="space-y-3">
+            <Button 
+              onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
+              className="w-full"
+            >
+              🧪 İmtahan simulyatoru
+            </Button>
+            <Button 
+              onClick={() => navigate('ExamConfig', { mode: 'final' })}
+              className="w-full"
+              variant="secondary"
+            >
+              📋 Yekun imtahan
+            </Button>
+          </div>
         </div>
       )}
     </div>

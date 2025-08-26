@@ -11,7 +11,7 @@ export function HomeScreen() {
   
   const gridItems = [
     { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
-    { key: 'examSimulator', label: t.examSimulator, action: () => navigate('Exam'), emoji: '🧪' },
+    { key: 'examSimulator', label: t.examSimulator, action: () => navigate('ExamConfig', { mode: 'simulator' }), emoji: '🧪' },
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
@@ -134,7 +134,7 @@ export function HomeScreen() {
       <ScaleIn delay={500}>
         <div className="mt-2">
           <button
-            onClick={() => navigate('Exam')}
+            onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
             className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
           >
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
