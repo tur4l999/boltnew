@@ -162,14 +162,11 @@ export function PackagesScreen() {
     <div className={`relative p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     } pt-11`}>
-      <div className="absolute top-2 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-600 text-white shadow">
-        Balans: {balance} AZN
-      </div>
       {/* Header */}
-      <div className="grid grid-cols-3 items-center mb-4">
+      <div className="flex items-center gap-3 mb-4">
         <button
           onClick={goBack}
-          className={`justify-self-start w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
+          className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
             isDarkMode 
               ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
               : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
@@ -177,10 +174,12 @@ export function PackagesScreen() {
         >
           ←
         </button>
-        <h1 className={`justify-self-center text-lg font-bold transition-colors duration-200 ${
+        <h1 className={`text-lg font-bold transition-colors duration-200 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'
         }`}>Təlim Paketləri</h1>
-        <div />
+        <div className="ml-auto px-3 py-1 rounded-full text-xs font-semibold bg-emerald-600 text-white shadow">
+          Balans: {balance} AZN
+        </div>
       </div>
       {/* Tabs */}
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -255,10 +254,12 @@ export function PackagesScreen() {
                   {(() => {
                     const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
                     return (
-                      <div className="mt-2 flex items-baseline justify-center gap-2">
-                        <span className={`line-through text-base ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
-                        <span className={`text-4xl font-black ${isDarkMode ? 'text-red-500' : 'text-red-600'} drop-shadow-sm tracking-tight`}>{newPrice} AZN</span>
-                        <span className="ml-1 -mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
+                      <div className="mt-2 flex flex-col items-center gap-1">
+                        <div className="flex items-baseline justify-center gap-2">
+                          <span className={`line-through text-base ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{oldPrice} AZN</span>
+                          <span className={`text-4xl font-black ${isDarkMode ? 'text-red-500' : 'text-red-600'} drop-shadow-sm tracking-tight`}>{newPrice} AZN</span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                       </div>
                     );
                   })()}
@@ -343,13 +344,15 @@ export function PackagesScreen() {
                     {item.description && (
                       <div className={`text-[11px] mt-0.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.description}</div>
                     )}
-                    <div className="mt-2 flex items-baseline gap-1">
-                      <span className={`line-through text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{item.oldPrice} AZN</span>
-                      <span className={`text-xl font-extrabold ${isDarkMode ? 'text-red-500' : 'text-red-600'} tracking-tight`}>{item.newPrice} AZN</span>
-                      <span className="ml-1 -mt-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
+                    <div className="mt-2 flex flex-col items-center gap-1">
+                      <div className="flex items-baseline gap-1">
+                        <span className={`line-through text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>{item.oldPrice} AZN</span>
+                        <span className={`text-xl font-extrabold ${isDarkMode ? 'text-red-500' : 'text-red-600'} tracking-tight`}>{item.newPrice} AZN</span>
+                      </div>
+                      <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white">-{discountPercent}%</span>
                     </div>
-                    <Button onClick={() => handlePurchaseOther(item)} className="w-full mt-2" variant="primary">
-                      Paketi əldə et
+                    <Button onClick={() => handlePurchaseOther(item)} size="sm" variant="ghost" className="mt-2">
+                      Əldə et
                     </Button>
                   </div>
                 );
