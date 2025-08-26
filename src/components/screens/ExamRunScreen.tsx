@@ -16,6 +16,9 @@ export function ExamRunScreen() {
   // Outcome per question after confirmation: 'correct' | 'wrong'
   const [outcomes, setOutcomes] = useState<Record<string, 'correct' | 'wrong' | undefined>>({});
   const [view, setView] = useState<'grid' | 'question'>('grid');
+  // Center overlay state
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayText, setOverlayText] = useState<'DOĞRU' | 'SƏHV' | ''>('');
   
   // Create 10 questions by repeating sample questions
   const questions = Array.from({ length: 10 }, (_, i) => ({
@@ -63,15 +66,16 @@ export function ExamRunScreen() {
     const selected = selectedOptions[currentQuestion.id];
     if (!selected) return;
     const isCorrect = selected === currentQuestion.correctOptionId;
-    setOutcomes(prev => ({ ...prev, [currentQuestion.id]: isCorrect ? 'correct' : 'wrong' }));
-  }
+    const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
+    setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
 
-  function goNext() {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    } else {
-      finishExam();
-    }
+    // Show overlay result in center for 0.5s then go back to grid
+    setOverlayText(isCorrect ? 'DOĞRU' : 'SƏHV');
+    setShowOverlay(true);
+    setTimeout(() => {
+      setShowOverlay(false);
+      setView('grid');
+    }, 500);
   }
 
   const currentOutcome = outcomes[currentQuestion?.id];
@@ -96,7 +100,6 @@ export function ExamRunScreen() {
         )}
         <div className="text-center">
           <div className="text-sm">İmtahan simulyatoru</div>
-          <div className="text-lg font-bold">{formatTime(timeLeft)}</div>
         </div>
         <div className="w-8 h-8"></div>
       </div>
@@ -164,7 +167,6 @@ export function ExamRunScreen() {
             <div className="space-y-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedOptions[currentQuestion.id] === option.id;
-                const isRightAnswer = option.id === currentQuestion.correctOptionId;
                 // Determine color after confirmation
                 let optionClasses = isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white';
                 if (isConfirmed) {
@@ -196,17 +198,10 @@ export function ExamRunScreen() {
               })}
             </div>
 
-            {/* Confirm / Next */}
+            {/* Confirm only; result is shown via overlay */}
             <div className="mt-4 flex items-center gap-2 justify-end">
-              {!isConfirmed ? (
+              {!isConfirmed && (
                 <Button onClick={confirmAnswer} disabled={!selectedOptions[currentQuestion.id]}>Təsdiq et</Button>
-              ) : (
-                <>
-                  <div className={`font-bold text-sm ${currentOutcome === 'correct' ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {currentOutcome === 'correct' ? '✅ Doğru' : '❌ Səhv'}
-                  </div>
-                  <Button onClick={goNext}>{currentIndex < questions.length - 1 ? 'Növbəti' : 'Bitir'}</Button>
-                </>
               )}
             </div>
           </Card>
@@ -239,6 +234,24 @@ export function ExamRunScreen() {
           </div>
         </>
       )}
+
+      {/* Center result overlay */}
+      <div className={`fixed inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-150 ${showOverlay ? 'opacity-100' : 'opacity-0'}`}>
+        {showOverlay && (
+          <div className={`px-6 py-3 rounded-2xl text-2xl font-black ${
+            overlayText === 'DOĞRU'
+              ? 'bg-emerald-600 text-white'
+              : 'bg-red-600 text-white'
+          }`}>{overlayText}</div>
+        )}
+      </div>
+
+      {/* Persistent timer bubble */}
+      <div className="fixed bottom-4 right-4 select-none">
+        <div className="px-4 py-2 rounded-xl bg-black text-white text-2xl font-bold tracking-widest shadow-lg/50 shadow-black">
+          {formatTime(timeLeft)}
+        </div>
+      </div>
     </div>
   );
 }
