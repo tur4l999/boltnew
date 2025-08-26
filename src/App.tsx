@@ -35,7 +35,7 @@ function AppContent() {
   const { currentScreen, isDarkMode } = useApp();
 
   const isAIChat = currentScreen.screen === 'AIChat';
-  const hideHeader = currentScreen.screen === 'Packages';
+  const hideHeader = currentScreen.screen !== 'Home';
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${

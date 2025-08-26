@@ -94,7 +94,7 @@ export function ExamConfigScreen() {
                 )}
               </div>
 
-              <Button onClick={start} className="w-full">
+              <Button onClick={() => navigate('ExamIntro')} className="w-full">
                 Davam et
               </Button>
             </div>

@@ -17,6 +17,7 @@ import { PackagesScreen } from '../screens/PackagesScreen';
 import { AIChatScreen } from '../screens/AIChatScreen';
 import { TransactionsScreen } from '../screens/TransactionsScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { ExamIntroScreen } from '../screens/ExamIntroScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -46,6 +47,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Practice' && <PracticeScreen />}
       {currentScreen.screen === 'Exam' && <ExamScreen />}
       {currentScreen.screen === 'ExamConfig' && <ExamConfigScreen />}
+      {currentScreen.screen === 'ExamIntro' && <ExamIntroScreen />}
       {currentScreen.screen === 'ExamRun' && <ExamRunScreen />}
       {currentScreen.screen === 'Results' && <ResultsScreen />}
       {currentScreen.screen === 'Mistakes' && <MistakesScreen />}
@@ -55,7 +57,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Settings' && <SettingsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'Exam', 'ExamConfig', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
