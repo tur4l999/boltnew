@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -11,6 +11,18 @@ export function ExamConfigScreen() {
     if (mode === 'final') return '📋 Yekun imtahan';
     return '🧪 İmtahan simulyatoru';
   }, [mode]);
+
+  const [showPromo, setShowPromo] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoStatus, setPromoStatus] = useState<'idle' | 'ok' | 'err'>('idle');
+
+  const applyPromo = () => {
+    if (promoCode.trim().length >= 4) {
+      setPromoStatus('ok');
+    } else {
+      setPromoStatus('err');
+    }
+  };
 
   const start = () => {
     const config = mode === 'final'
@@ -53,6 +65,35 @@ export function ExamConfigScreen() {
                   "İMTAHAN BAŞLA" düyməsinə klik etdikdə “Simulyator bileti” hesabından 1 bilet, bu hesab boş olduqda isə “BALANSDAN” 2 azn silinəcəkdir.
                 </div>
               </div>
+
+              {/* Promo link */}
+              <button
+                type="button"
+                onClick={() => setShowPromo(!showPromo)}
+                className={`text-xs underline self-start ${isDarkMode ? 'text-emerald-300 hover:text-emerald-200' : 'text-emerald-700 hover:text-emerald-800'}`}
+              >
+                Promokodu əlavə edin
+              </button>
+
+              {/* Collapsible promo area */}
+              <div className={`overflow-hidden transition-all duration-300 ${showPromo ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`mt-1 p-2 rounded-lg border flex items-center gap-2 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                  <input
+                    type="text"
+                    value={promoCode}
+                    onChange={(e) => { setPromoCode(e.target.value); setPromoStatus('idle'); }}
+                    placeholder="Promokod"
+                    className={`flex-1 px-3 py-2 rounded-md border outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'}`}
+                  />
+                  <Button size="sm" onClick={applyPromo}>Tətbiq et</Button>
+                </div>
+                {promoStatus !== 'idle' && (
+                  <div className={`text-xs mt-1 ${promoStatus === 'ok' ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {promoStatus === 'ok' ? 'Promokod tətbiq olundu.' : 'Promokod düzgün deyil.'}
+                  </div>
+                )}
+              </div>
+
               <Button onClick={start} className="w-full">
                 Davam et
               </Button>
