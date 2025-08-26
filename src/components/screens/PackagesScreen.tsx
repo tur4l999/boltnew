@@ -99,6 +99,7 @@ export function PackagesScreen() {
   const otherItems: { id: string; title: string; count: number; oldPrice: number; newPrice: number; description?: string }[] = [
     { id: 'tickets-5', title: '5 bilet', count: 5, oldPrice: 10, newPrice: 8, description: 'İmtahan bileti' },
     { id: 'tickets-10', title: '10 bilet', count: 10, oldPrice: 20, newPrice: 14, description: 'İmtahan bileti' },
+    { id: 'tickets-15', title: '15 bilet', count: 15, oldPrice: 30, newPrice: 20, description: 'İmtahan bileti' },
     { id: 'tickets-20', title: '20 bilet', count: 20, oldPrice: 40, newPrice: 25, description: 'İmtahan bileti' }
   ];
 
@@ -161,7 +162,7 @@ export function PackagesScreen() {
   return (
     <div className={`relative p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-    } pt-11`}>
+    } pt-6`}>
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <button
@@ -335,7 +336,7 @@ export function PackagesScreen() {
             <h3 className={`text-center font-bold mb-3 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Digər Paketlər
             </h3>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-3">
               {otherItems.map(item => {
                 const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
                 return (
