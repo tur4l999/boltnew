@@ -99,7 +99,7 @@ export function ExamRunScreen() {
           <div className="w-8 h-8"></div>
         )}
         <div className="text-center">
-          <div className="text-sm">İmtahan simulyatoru</div>
+          {/* no title in grid as requested */}
         </div>
         <div className="w-8 h-8"></div>
       </div>
@@ -109,33 +109,28 @@ export function ExamRunScreen() {
         <div className="grid grid-cols-2 gap-3">
           {questions.map((question, index) => {
             const status = outcomes[question.id];
-            const isCorrect = status === 'correct';
-            const isWrong = status === 'wrong';
             const answered = !!status;
             return (
               <button
                 key={question.id}
                 onClick={() => !answered && openQuestion(index)}
                 disabled={answered}
-                className={`relative rounded-xl overflow-hidden min-h-[200px] border text-left ${
-                  isCorrect
-                    ? 'border-emerald-600'
-                    : isWrong
-                      ? 'border-red-600'
-                      : 'border-gray-200'
-                } ${answered ? 'cursor-default opacity-90' : ''}`}
+                className={`relative rounded-xl overflow-hidden border text-left bg-white ${
+                  'border-gray-300'
+                } ${answered ? 'cursor-default' : ''}`}
               >
-                <div className="w-full h-28 overflow-hidden">
+                {/* colored overlay only after answered */}
+                {answered && (
+                  <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
+                )}
+                <div className="w-full h-28 bg-white">
                   <img
                     src={question.imageUrl}
                     alt={`Sual ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className={`${
-                  isCorrect ? 'bg-emerald-600 text-white' : isWrong ? 'bg-red-600 text-white' : (isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900')
-                } px-3 py-2 text-xs leading-tight`}
-                >
+                <div className={`px-3 py-2 bg-white text-gray-900 text-xs leading-tight`}>
                   {question.text.length > 110 ? question.text.substring(0, 110) + '...' : question.text}
                 </div>
               </button>
