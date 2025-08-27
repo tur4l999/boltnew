@@ -99,7 +99,7 @@ export function ExamRunScreen() {
           <div className="w-8 h-8"></div>
         )}
         <div className="text-center">
-          {/* no title in grid as requested */}
+          {/* title removed */}
         </div>
         <div className="w-8 h-8"></div>
       </div>
@@ -119,7 +119,7 @@ export function ExamRunScreen() {
                   'border-gray-300'
                 } ${answered ? 'cursor-default' : ''}`}
               >
-                {/* colored overlay only after answered */}
+                {/* colored background when answered */}
                 {answered && (
                   <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
                 )}
@@ -144,7 +144,8 @@ export function ExamRunScreen() {
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          <Card className="mt-2">
+          {/* Force white card background regardless of theme to match mock */}
+          <Card className="mt-2 bg-white text-gray-900 border-gray-200">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
@@ -153,22 +154,22 @@ export function ExamRunScreen() {
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             )}
-            <div className={`font-bold mb-3 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <div className={`font-bold mb-3 text-gray-900`}>
               {currentIndex + 1}. {currentQuestion.text}
             </div>
             <div className="space-y-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedOptions[currentQuestion.id] === option.id;
-                // Determine color after confirmation
-                let optionClasses = isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white';
+                // Base: white option regardless of theme
+                let optionClasses = 'border-gray-300 bg-white';
                 if (isConfirmed) {
                   if (isSelected && currentOutcome === 'correct') {
-                    optionClasses = isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-emerald-50';
+                    optionClasses = 'border-emerald-600 bg-emerald-50';
                   } else if (isSelected && currentOutcome === 'wrong') {
-                    optionClasses = isDarkMode ? 'border-red-500 bg-red-900/20' : 'border-red-600 bg-red-50';
+                    optionClasses = 'border-red-600 bg-red-50';
                   }
                 } else if (isSelected) {
-                  optionClasses = isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50';
+                  optionClasses = 'border-sky-600 bg-sky-50';
                 }
 
                 return (
@@ -184,7 +185,7 @@ export function ExamRunScreen() {
                       onChange={() => setAnswer(option.id)}
                       className="w-4 h-4 text-emerald-600"
                     />
-                    <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
+                    <span className={`text-sm text-gray-800`}>{option.text}</span>
                   </label>
                 );
               })}
@@ -211,14 +212,12 @@ export function ExamRunScreen() {
                   disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-sky-600 text-white' /* distinct active color */
                       : status === 'correct'
                         ? 'bg-emerald-600 text-white'
                         : status === 'wrong'
                           ? 'bg-red-600 text-white'
-                          : isDarkMode
-                            ? 'bg-gray-800 text-gray-200'
-                            : 'bg-white border border-gray-200 text-gray-700'
+                          : 'bg-white border border-gray-200 text-gray-700'
                   } ${answered ? 'cursor-default' : ''}`}
                 >
                   {idx + 1}
@@ -240,9 +239,9 @@ export function ExamRunScreen() {
         )}
       </div>
 
-      {/* Persistent timer bubble (visible in both views) */}
-      <div className="fixed bottom-4 right-4 select-none">
-        <div className="px-4 py-2 rounded-xl bg-black text-white text-2xl font-bold tracking-widest shadow-lg/50 shadow-black">
+      {/* Persistent timer bubble at top-center */}
+      <div className="fixed top-2 left-1/2 -translate-x-1/2 select-none z-50">
+        <div className="px-4 py-1.5 rounded-xl bg-black text-white text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>
