@@ -18,7 +18,7 @@ export function ExamRunScreen() {
   const [view, setView] = useState<'grid' | 'question'>('grid');
   // Center overlay state
   const [showOverlay, setShowOverlay] = useState(false);
-  const [overlayText, setOverlayText] = useState<'DOĞRU' | 'SƏHV' | ''>('');
+  const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   
   // Create 10 questions by repeating sample questions
   const questions = Array.from({ length: 10 }, (_, i) => ({
@@ -70,7 +70,7 @@ export function ExamRunScreen() {
     setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
 
     // Show overlay result in center for 0.5s then go back to grid
-    setOverlayText(isCorrect ? 'DOĞRU' : 'SƏHV');
+    setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
     setShowOverlay(true);
     setTimeout(() => {
       setShowOverlay(false);
@@ -111,38 +111,33 @@ export function ExamRunScreen() {
             const status = outcomes[question.id];
             const isCorrect = status === 'correct';
             const isWrong = status === 'wrong';
+            const answered = !!status;
             return (
               <button
                 key={question.id}
-                onClick={() => openQuestion(index)}
-                className={`relative rounded-xl overflow-hidden min-h-[200px] border ${
+                onClick={() => !answered && openQuestion(index)}
+                disabled={answered}
+                className={`relative rounded-xl overflow-hidden min-h-[200px] border text-left ${
                   isCorrect
-                    ? 'border-emerald-500'
+                    ? 'border-emerald-600'
                     : isWrong
-                      ? 'border-red-500'
-                      : 'border-transparent'
-                }`}
+                      ? 'border-red-600'
+                      : 'border-gray-200'
+                } ${answered ? 'cursor-default opacity-90' : ''}`}
               >
-                <img
-                  src={question.imageUrl}
-                  alt={`Sual ${index + 1}`}
-                  className="w-full h-32 object-cover"
-                />
-                <div className={`absolute inset-0 ${
-                  isCorrect ? 'bg-emerald-500/30' : isWrong ? 'bg-red-500/30' : 'bg-black/40'
-                }`}></div>
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <div className="text-white text-xs leading-tight">
-                    {question.text.length > 80 ? question.text.substring(0, 80) + '...' : question.text}
-                  </div>
+                <div className="w-full h-28 overflow-hidden">
+                  <img
+                    src={question.imageUrl}
+                    alt={`Sual ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                {status && (
-                  <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center ${
-                    status === 'correct' ? 'bg-emerald-500' : 'bg-red-500'
-                  }`}>
-                    <span className="text-white text-xs">{status === 'correct' ? '✓' : '✕'}</span>
-                  </div>
-                )}
+                <div className={`${
+                  isCorrect ? 'bg-emerald-600 text-white' : isWrong ? 'bg-red-600 text-white' : (isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900')
+                } px-3 py-2 text-xs leading-tight`}
+                >
+                  {question.text.length > 110 ? question.text.substring(0, 110) + '...' : question.text}
+                </div>
               </button>
             );
           })}
@@ -182,7 +177,7 @@ export function ExamRunScreen() {
                 return (
                   <label
                     key={option.id}
-                    className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] transition-colors duration-200 ${optionClasses}`}
+                    className={`flex items-center gap-3 p-3 rounded-xl border ${isConfirmed ? 'cursor-default' : 'cursor-pointer'} min-h-[44px] transition-colors duration-200 ${optionClasses}`}
                   >
                     <input
                       type="radio"
@@ -198,10 +193,10 @@ export function ExamRunScreen() {
               })}
             </div>
 
-            {/* Confirm only; result is shown via overlay */}
+            {/* Confirm only after a selection; hidden otherwise */}
             <div className="mt-4 flex items-center gap-2 justify-end">
-              {!isConfirmed && (
-                <Button onClick={confirmAnswer} disabled={!selectedOptions[currentQuestion.id]}>Təsdiq et</Button>
+              {!isConfirmed && selectedOptions[currentQuestion.id] && (
+                <Button onClick={confirmAnswer}>Təsdiq et</Button>
               )}
             </div>
           </Card>
@@ -211,21 +206,23 @@ export function ExamRunScreen() {
             {questions.map((q, idx) => {
               const status = outcomes[q.id];
               const isActive = idx === currentIndex;
+              const answered = !!status;
               return (
                 <button
                   key={q.id}
-                  onClick={() => setCurrentIndex(idx)}
+                  onClick={() => !answered && setCurrentIndex(idx)}
+                  disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
                       ? 'bg-emerald-600 text-white'
                       : status === 'correct'
-                        ? 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-emerald-600 text-white'
                         : status === 'wrong'
-                          ? 'bg-red-100 text-red-700'
+                          ? 'bg-red-600 text-white'
                           : isDarkMode
                             ? 'bg-gray-800 text-gray-200'
                             : 'bg-white border border-gray-200 text-gray-700'
-                  }`}
+                  } ${answered ? 'cursor-default' : ''}`}
                 >
                   {idx + 1}
                 </button>
@@ -239,14 +236,14 @@ export function ExamRunScreen() {
       <div className={`fixed inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-150 ${showOverlay ? 'opacity-100' : 'opacity-0'}`}>
         {showOverlay && (
           <div className={`px-6 py-3 rounded-2xl text-2xl font-black ${
-            overlayText === 'DOĞRU'
+            overlayText === 'Cavab doğrudur'
               ? 'bg-emerald-600 text-white'
               : 'bg-red-600 text-white'
           }`}>{overlayText}</div>
         )}
       </div>
 
-      {/* Persistent timer bubble */}
+      {/* Persistent timer bubble (visible in both views) */}
       <div className="fixed bottom-4 right-4 select-none">
         <div className="px-4 py-2 rounded-xl bg-black text-white text-2xl font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
