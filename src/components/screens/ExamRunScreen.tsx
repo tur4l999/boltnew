@@ -90,8 +90,8 @@ export function ExamRunScreen() {
         {view === 'question' ? (
           <button
             onClick={() => setView('grid')}
-            className="px-2.5 py-1.5 rounded-lg bg-black text-white flex items-center justify-center"
-            aria-label="Geri"
+            className="px-3 py-1.5 rounded-lg bg-black text-white flex items-center gap-2"
+            aria-label="Geriyə"
           >
             <svg
               width="18"
@@ -104,6 +104,7 @@ export function ExamRunScreen() {
               <path d="M9 15l-3-3 3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M6 12h7a4 4 0 000-8H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
+            <span className="text-xs font-bold">Geriyə</span>
           </button>
         ) : (
           <div className="w-8 h-8"></div>
