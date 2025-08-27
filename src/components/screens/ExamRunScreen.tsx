@@ -90,12 +90,12 @@ export function ExamRunScreen() {
         {view === 'question' ? (
           <button
             onClick={() => setView('grid')}
-            className="px-3 py-1.5 rounded-lg bg-black text-white flex items-center gap-2"
+            className="px-4 py-2 rounded-xl bg-black text-white flex items-center gap-2"
             aria-label="Geriyə"
           >
             <svg
-              width="18"
-              height="18"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +104,7 @@ export function ExamRunScreen() {
               <path d="M9 15l-3-3 3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M6 12h7a4 4 0 000-8H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="text-xs font-bold">Geriyə</span>
+            <span className="text-sm font-bold">Geriyə</span>
           </button>
         ) : (
           <div className="w-8 h-8"></div>
@@ -124,9 +124,10 @@ export function ExamRunScreen() {
                 key={question.id}
                 onClick={() => !answered && openQuestion(index)}
                 disabled={answered}
-                className={`relative rounded-xl overflow-hidden border text-left bg-white ${
+                className={`relative rounded-xl overflow-hidden border text-left bg-white shadow-sm ${
                   'border-gray-300'
                 } ${answered ? 'cursor-default' : ''}`}
+                style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
               >
                 {/* colored background when answered */}
                 {answered && (
