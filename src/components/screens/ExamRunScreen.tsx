@@ -131,7 +131,9 @@ export function ExamRunScreen() {
                   />
                 </div>
                 <div className={`px-3 py-2 bg-white text-gray-900 text-xs leading-tight`}>
-                  {question.text.length > 110 ? question.text.substring(0, 110) + '...' : question.text}
+                  <div className="truncate-fade">
+                    {question.text}
+                  </div>
                 </div>
               </button>
             );

@@ -65,3 +65,20 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Truncation with bottom fade on white background */
+.truncate-fade {
+  position: relative;
+  overflow: hidden;
+  max-height: 3.2rem; /* ~2-3 lines depending on font-size */
+}
+.truncate-fade::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.2rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+}
