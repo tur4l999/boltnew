@@ -90,11 +90,20 @@ export function ExamRunScreen() {
         {view === 'question' ? (
           <button
             onClick={() => setView('grid')}
-            className="px-3 py-1.5 rounded-lg bg-black text-white flex items-center gap-2"
+            className="px-2.5 py-1.5 rounded-lg bg-black text-white flex items-center justify-center"
             aria-label="Geri"
           >
-            <span className="text-lg leading-none">↩</span>
-            <span className="text-xs font-bold">GERİYƏ</span>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="block"
+            >
+              <path d="M9 15l-3-3 3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 12h7a4 4 0 000-8H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
         ) : (
           <div className="w-8 h-8"></div>
@@ -240,7 +249,7 @@ export function ExamRunScreen() {
 
       {/* Persistent timer bubble below notch, centered */}
       <div className="fixed top-12 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-black text-white text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>
