@@ -85,22 +85,10 @@ export function ExamRunScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-900'
     } pt-11`}>
-      {/* Header */}
+      {/* Header (no back icon now) */}
       <div className="flex items-center justify-between mb-4 text-white">
-        {view === 'question' ? (
-          <button
-            onClick={() => setView('grid')}
-            className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"
-            aria-label="Geri"
-          >
-            ←
-          </button>
-        ) : (
-          <div className="w-8 h-8"></div>
-        )}
-        <div className="text-center">
-          {/* title removed */}
-        </div>
+        <div className="w-8 h-8"></div>
+        <div className="text-center"></div>
         <div className="w-8 h-8"></div>
       </div>
 
@@ -191,8 +179,9 @@ export function ExamRunScreen() {
               })}
             </div>
 
-            {/* Confirm only after a selection; hidden otherwise */}
-            <div className="mt-4 flex items-center gap-2 justify-end">
+            {/* Actions row with GERİYƏ on the left; Confirm on right when selectable */}
+            <div className="mt-4 flex items-center gap-2 justify-between">
+              <Button variant="ghost" onClick={() => setView('grid')}>GERİYƏ</Button>
               {!isConfirmed && selectedOptions[currentQuestion.id] && (
                 <Button onClick={confirmAnswer}>Təsdiq et</Button>
               )}
@@ -239,8 +228,8 @@ export function ExamRunScreen() {
         )}
       </div>
 
-      {/* Persistent timer bubble at top-center */}
-      <div className="fixed top-2 left-1/2 -translate-x-1/2 select-none z-50">
+      {/* Persistent timer bubble below notch, centered */}
+      <div className="fixed top-12 left-1/2 -translate-x-1/2 select-none z-50">
         <div className="px-4 py-1.5 rounded-xl bg-black text-white text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
