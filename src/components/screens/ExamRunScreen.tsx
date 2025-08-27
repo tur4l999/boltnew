@@ -11,8 +11,14 @@ export function ExamRunScreen() {
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  // Selected option per question (not yet confirmed)
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>({});
+  // Outcome per question after confirmation: 'correct' | 'wrong'
+  const [outcomes, setOutcomes] = useState<Record<string, 'correct' | 'wrong' | undefined>>({});
   const [view, setView] = useState<'grid' | 'question'>('grid');
+  // Center overlay state
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   
   // Create 10 questions by repeating sample questions
   const questions = Array.from({ length: 10 }, (_, i) => ({
@@ -36,7 +42,7 @@ export function ExamRunScreen() {
   }, []);
 
   function setAnswer(optionId: string) {
-    setAnswers(prev => ({ ...prev, [currentQuestion.id]: optionId }));
+    setSelectedOptions(prev => ({ ...prev, [currentQuestion.id]: optionId }));
   }
 
   function openQuestion(index: number) {
@@ -45,9 +51,9 @@ export function ExamRunScreen() {
   }
 
   function finishExam() {
-    const score = questions.reduce((acc, q) => acc + (answers[q.id] === q.correctOptionId ? 1 : 0), 0);
+    const score = questions.reduce((acc, q) => acc + (outcomes[q.id] === 'correct' ? 1 : 0), 0);
     questions.forEach(q => {
-      if (answers[q.id] !== q.correctOptionId) {
+      if (outcomes[q.id] !== 'correct') {
         mistakesStore.add(q.id);
       }
     });
@@ -56,74 +62,99 @@ export function ExamRunScreen() {
     });
   }
 
-  function confirmAndProceed() {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    } else {
-      finishExam();
-    }
+  function confirmAnswer() {
+    const selected = selectedOptions[currentQuestion.id];
+    if (!selected) return;
+    const isCorrect = selected === currentQuestion.correctOptionId;
+    const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
+    setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+
+    // Show overlay result in center for 0.5s then go back to grid
+    setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
+    setShowOverlay(true);
+    setTimeout(() => {
+      setShowOverlay(false);
+      setView('grid');
+    }, 500);
   }
+
+  const currentOutcome = outcomes[currentQuestion?.id];
+  const isConfirmed = !!currentOutcome;
 
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-900'
     } pt-11`}>
-      {/* Header */}
+      {/* Header with back button */}
       <div className="flex items-center justify-between mb-4 text-white">
         {view === 'question' ? (
           <button
             onClick={() => setView('grid')}
-            className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"
-            aria-label="Geri"
+            className="px-3 py-1.5 rounded-lg bg-black text-white flex items-center gap-2"
+            aria-label="Geriyə"
           >
-            ←
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="block"
+            >
+              <path d="M9 15l-3-3 3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 12h7a4 4 0 000-8H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="text-xs font-bold">Geriyə</span>
           </button>
         ) : (
           <div className="w-8 h-8"></div>
         )}
-        <div className="text-center">
-          <div className="text-sm">İmtahan simulyatoru</div>
-          <div className="text-lg font-bold">{formatTime(timeLeft)}</div>
-        </div>
+        <div className="text-center"></div>
         <div className="w-8 h-8"></div>
       </div>
 
       {/* Questions Grid (opens question on tap) */}
       {view === 'grid' && (
         <div className="grid grid-cols-2 gap-3">
-          {questions.map((question, index) => (
-            <button
-              key={question.id}
-              onClick={() => openQuestion(index)}
-              className={`relative rounded-xl overflow-hidden min-h-[200px] ${
-                answers[question.id] ? 'opacity-60' : ''
-              }`}
-            >
-              <img
-                src={question.imageUrl}
-                alt={`Sual ${index + 1}`}
-                className="w-full h-32 object-cover"
-              />
-              <div className="absolute inset-0 bg-black/40"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-3">
-                <div className="text-white text-xs leading-tight">
-                  {question.text.length > 80 ? question.text.substring(0, 80) + '...' : question.text}
+          {questions.map((question, index) => {
+            const status = outcomes[question.id];
+            const answered = !!status;
+            return (
+              <button
+                key={question.id}
+                onClick={() => !answered && openQuestion(index)}
+                disabled={answered}
+                className={`relative rounded-xl overflow-hidden border text-left bg-white ${
+                  'border-gray-300'
+                } ${answered ? 'cursor-default' : ''}`}
+              >
+                {/* colored background when answered */}
+                {answered && (
+                  <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
+                )}
+                <div className="w-full h-28 bg-white">
+                  <img
+                    src={question.imageUrl}
+                    alt={`Sual ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </div>
-              {answers[question.id] && (
-                <div className="absolute top-2 right-2 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
+                <div className={`px-3 py-2 bg-white text-gray-900 text-xs leading-tight`}>
+                  <div className="truncate-fade">
+                    {question.text}
+                  </div>
                 </div>
-              )}
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
       )}
 
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          <Card className="mt-2">
+          {/* Force white card background regardless of theme to match mock */}
+          <Card className="mt-2 bg-white text-gray-900 border-gray-200">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
@@ -132,61 +163,71 @@ export function ExamRunScreen() {
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             )}
-            <div className={`font-bold mb-3 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <div className={`font-bold mb-3 text-gray-900`}>
               {currentIndex + 1}. {currentQuestion.text}
             </div>
             <div className="space-y-2">
-              {currentQuestion.options.map((option) => (
-                <label
-                  key={option.id}
-                  className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer min-h-[44px] transition-colors duration-200 ${
-                    answers[currentQuestion.id] === option.id
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/20'
-                        : 'border-emerald-600 bg-gray-50'
-                      : isDarkMode
-                        ? 'border-gray-600 bg-gray-700'
-                        : 'border-gray-300 bg-white'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="examAnswer"
-                    checked={answers[currentQuestion.id] === option.id}
-                    onChange={() => setAnswer(option.id)}
-                    className="w-4 h-4 text-emerald-600"
-                  />
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
-                </label>
-              ))}
+              {currentQuestion.options.map((option) => {
+                const isSelected = selectedOptions[currentQuestion.id] === option.id;
+                // Base: white option regardless of theme
+                let optionClasses = 'border-gray-300 bg-white';
+                if (isConfirmed) {
+                  if (isSelected && currentOutcome === 'correct') {
+                    optionClasses = 'border-emerald-600 bg-emerald-50';
+                  } else if (isSelected && currentOutcome === 'wrong') {
+                    optionClasses = 'border-red-600 bg-red-50';
+                  }
+                } else if (isSelected) {
+                  optionClasses = 'border-sky-600 bg-sky-50';
+                }
+
+                return (
+                  <label
+                    key={option.id}
+                    className={`flex items-center gap-3 p-3 rounded-xl border ${isConfirmed ? 'cursor-default' : 'cursor-pointer'} min-h-[44px] transition-colors duration-200 ${optionClasses}`}
+                  >
+                    <input
+                      type="radio"
+                      name="examAnswer"
+                      checked={isSelected}
+                      disabled={isConfirmed}
+                      onChange={() => setAnswer(option.id)}
+                      className="w-4 h-4 text-emerald-600"
+                    />
+                    <span className={`text-sm text-gray-800`}>{option.text}</span>
+                  </label>
+                );
+              })}
             </div>
 
-            {/* Confirm button appears after selecting an answer */}
-            {answers[currentQuestion.id] && (
-              <div className="mt-4 flex justify-end">
-                <Button onClick={confirmAndProceed}>Təsdiq et</Button>
-              </div>
-            )}
+            {/* Actions row: only Confirm on the right */}
+            <div className="mt-4 flex items-center gap-2 justify-end">
+              {!isConfirmed && selectedOptions[currentQuestion.id] && (
+                <Button onClick={confirmAnswer}>Təsdiq et</Button>
+              )}
+            </div>
           </Card>
 
           {/* Numeric navigation (only in question view) */}
           <div className="mt-4 grid grid-cols-5 gap-2">
             {questions.map((q, idx) => {
-              const isAnswered = !!answers[q.id];
+              const status = outcomes[q.id];
               const isActive = idx === currentIndex;
+              const answered = !!status;
               return (
                 <button
                   key={q.id}
-                  onClick={() => setCurrentIndex(idx)}
+                  onClick={() => !answered && setCurrentIndex(idx)}
+                  disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
-                      ? 'bg-emerald-600 text-white'
-                      : isAnswered
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : isDarkMode
-                          ? 'bg-gray-800 text-gray-200'
+                      ? 'bg-sky-600 text-white' /* distinct active color */
+                      : status === 'correct'
+                        ? 'bg-emerald-600 text-white'
+                        : status === 'wrong'
+                          ? 'bg-red-600 text-white'
                           : 'bg-white border border-gray-200 text-gray-700'
-                  }`}
+                  } ${answered ? 'cursor-default' : ''}`}
                 >
                   {idx + 1}
                 </button>
@@ -195,6 +236,24 @@ export function ExamRunScreen() {
           </div>
         </>
       )}
+
+      {/* Center result overlay */}
+      <div className={`fixed inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-150 ${showOverlay ? 'opacity-100' : 'opacity-0'}`}>
+        {showOverlay && (
+          <div className={`px-6 py-3 rounded-2xl text-2xl font-black ${
+            overlayText === 'Cavab doğrudur'
+              ? 'bg-emerald-600 text-white'
+              : 'bg-red-600 text-white'
+          }`}>{overlayText}</div>
+        )}
+      </div>
+
+      {/* Persistent timer bubble below notch, centered */}
+      <div className="fixed top-12 left-1/2 -translate-x-1/2 select-none z-50">
+        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+          {formatTime(timeLeft)}
+        </div>
+      </div>
     </div>
   );
 }
