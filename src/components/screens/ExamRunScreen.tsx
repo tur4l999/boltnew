@@ -278,7 +278,7 @@ export function ExamRunScreen() {
 
       {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
       <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+        <div className="px-4 py-1.5 rounded-lg bg-gray-900 text-white text-xl font-bold tracking-widest border border-gray-700 shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>
