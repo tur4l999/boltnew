@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
-import { Card } from '../ui/Card';
+// import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
@@ -181,8 +181,8 @@ export function ExamRunScreen() {
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          {/* Make question area blend with dark background (keep timer white as-is) */}
-          <Card className="mt-2 bg-transparent border-transparent text-white">
+          {/* Question container without white background */}
+          <div className="mt-2 rounded-xl p-4 text-white">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
@@ -197,7 +197,7 @@ export function ExamRunScreen() {
             <div className="space-y-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedOptions[currentQuestion.id] === option.id;
-                // Base: white option regardless of theme
+                // Transparent option styles for dark background
                 let optionClasses = 'border-gray-700 bg-transparent';
                 if (isConfirmed) {
                   if (isSelected && currentOutcome === 'correct') {
@@ -234,7 +234,7 @@ export function ExamRunScreen() {
                 <Button onClick={confirmAnswer}>Təsdiq et</Button>
               )}
             </div>
-          </Card>
+          </div>
 
           {/* Numeric navigation (only in question view) */}
           <div className="mt-4 grid grid-cols-5 gap-2">
