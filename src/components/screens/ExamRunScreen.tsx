@@ -181,8 +181,8 @@ export function ExamRunScreen() {
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          {/* Force white card background regardless of theme to match mock */}
-          <Card className="mt-2 bg-white text-gray-900 border-gray-200">
+          {/* Use consistent dark card background in both themes */}
+          <Card className="mt-2 bg-gray-800 text-gray-100 border-gray-700">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
@@ -191,22 +191,22 @@ export function ExamRunScreen() {
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             )}
-            <div className={`font-bold mb-3 text-gray-900`}>
+            <div className={`font-bold mb-3 text-gray-100`}>
               {currentIndex + 1}. {currentQuestion.text}
             </div>
             <div className="space-y-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedOptions[currentQuestion.id] === option.id;
-                // Base: white option regardless of theme
-                let optionClasses = 'border-gray-300 bg-white';
+                // Base: consistent dark option background
+                let optionClasses = 'border-gray-700 bg-gray-800 text-gray-100';
                 if (isConfirmed) {
                   if (isSelected && currentOutcome === 'correct') {
-                    optionClasses = 'border-emerald-600 bg-emerald-50';
+                    optionClasses = 'border-emerald-600 bg-emerald-900/20';
                   } else if (isSelected && currentOutcome === 'wrong') {
-                    optionClasses = 'border-red-600 bg-red-50';
+                    optionClasses = 'border-red-600 bg-red-900/20';
                   }
                 } else if (isSelected) {
-                  optionClasses = 'border-sky-600 bg-sky-50';
+                  optionClasses = 'border-sky-600 bg-sky-900/20';
                 }
 
                 return (
@@ -222,7 +222,7 @@ export function ExamRunScreen() {
                       onChange={() => setAnswer(option.id)}
                       className="w-4 h-4 text-emerald-600"
                     />
-                    <span className={`text-sm text-gray-800`}>{option.text}</span>
+                    <span className={`text-sm text-gray-100`}>{option.text}</span>
                   </label>
                 );
               })}
@@ -249,12 +249,12 @@ export function ExamRunScreen() {
                   disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
-                      ? 'bg-sky-600 text-white' /* distinct active color */
+                      ? 'bg-sky-600 text-white'
                       : status === 'correct'
                         ? 'bg-emerald-600 text-white'
                         : status === 'wrong'
                           ? 'bg-red-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-700'
+                          : 'bg-gray-800 border border-gray-700 text-gray-100'
                   } ${answered ? 'cursor-default' : ''}`}
                 >
                   {idx + 1}
@@ -278,7 +278,7 @@ export function ExamRunScreen() {
 
       {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
       <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+        <div className="px-4 py-1.5 rounded-lg bg-gray-900 text-white text-xl font-bold tracking-widest border border-gray-700 shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>
