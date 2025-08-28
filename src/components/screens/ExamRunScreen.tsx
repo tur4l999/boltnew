@@ -170,7 +170,7 @@ export function ExamRunScreen() {
                   />
                 </div>
                 <div className={`px-3 py-2 mt-2 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
-                  <div>{truncateText(question.text, 100)}</div>
+                  <div>{truncateText(question.text, 80)}</div>
                 </div>
               </button>
             );
