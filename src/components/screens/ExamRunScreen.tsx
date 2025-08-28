@@ -155,7 +155,7 @@ export function ExamRunScreen() {
                 key={question.id}
                 onClick={() => !answered && openQuestion(index)}
                 disabled={answered}
-                className={`relative rounded-xl overflow-hidden border text-left p-0 ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-white'} shadow-sm ${
+                className={`relative rounded-xl overflow-hidden border text-left p-0 flex flex-col items-stretch justify-start ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-white'} shadow-sm ${
                   'border-gray-300'
                 } ${answered ? 'cursor-default' : ''}`}
                 style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
