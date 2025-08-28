@@ -1,10 +1,106 @@
 import type { Module, Question } from './types';
 
-export const MODULES: Module[] = Array.from({ length: 27 }, (_, i) => ({
-  id: `M${i + 1}`,
-  title: `Module ${i + 1} — Traffic Rules & Safety`,
+const MODULE_TITLES: string[] = [
+  'M1. Ümumi müddəalar',
+  'M2. Yol hərəkəti iştirakçılarının vəzifələri, NV-nin idarəetmə hüququ, sürücülük vəsiqəsi',
+  'M3. Yol nişanları',
+  'M4. Yolun nişanlanma xətləri',
+  'M5. Nizamlayıcının və svetoforların siqnalları',
+  'M6. Xüsusi siqnalların tətbiqi',
+  'M7. Qəza dayanma siqnalının və qəza dayanma nişanının tətbiqi',
+  'M8. Hərəkətə başlama və manevretmə',
+  'M9. NV-nin yolun hərəkət hissəsində yerləşdiyilməsi',
+  'M10. Hərəkət sürəti',
+  'M11. Ötmə və qarşılıqlı keçmə',
+  'M12. Dayanma, durma və parklanma',
+  'M13. Yolayrıcıların keçilməsi',
+  'M14. Piyada keçidləri və ümumi istifadədə olan NV-nin dayanması',
+  'M15. Avtomagistrallarda hərəkət',
+  'M16. Dəmiryol keçidlərində hərəkət',
+  'M17. NV-nin üstün hərəkət rejimi ilə hərəkəti və bununla əlaqədar digər sürücülərin vəzifələri',
+  'M18. Yaşayış zonalarında hərəkət. Sürmə təlimi',
+  'M19. NV-də səs siqnalları və xarici işıq cihazlarının istifadə edilməsi',
+  'M20. Nasaz NV və onların yedəyə alınması',
+  'M21. Adamların və yüklərin daşınması',
+  'M22. NV-nin nasazlıqları və istismarı qadağan edən səbəblər',
+  'M23. Yol hərəkəti təhlükəsizliyinin əsasları',
+  'M24. İlk tibbi yardımın göstərilməsi',
+  'M25. Velosiped, kiçik elektik nəqliyyat vasitələri, moped və at arabalarının sürülməsinə dair tələblər',
+  'M26. Sürücülərin cavabdehliyi',
+  'M27. Avtomobilin quruluşu',
+];
+
+export const MODULES: Module[] = MODULE_TITLES.map((title, idx) => ({
+  id: `M${idx + 1}`,
+  title,
   progress: Math.floor(Math.random() * 100),
 }));
+
+export type ExamTopic = {
+  id: number;
+  title: string;
+  subtopics?: string[];
+};
+
+export const EXAM_TOPICS: ExamTopic[] = [
+  { id: 1, title: 'M1. Ümumi müddəalar' },
+  {
+    id: 2,
+    title: 'M2. Yol hərəkəti iştirakçılarının vəzifələri, NV-nin idarəetmə hüququ, sürücülük vəsiqəsi',
+    subtopics: [
+      '2.1. NV-nin idarəetmə hüququ. Sürücülük vəsiqəsi.',
+      '2.2. Yol hərəkəti iştirakçılarının vəzifələri.',
+    ],
+  },
+  {
+    id: 3,
+    title: 'M3. Yol nişanları',
+    subtopics: [
+      '3.1. Yol nişanlarının tətbiqi. Xəbərdarlıq nişanları.',
+      '3.2. Üstünlük nişanları.',
+      '3.3. Qadağan nişanları.',
+      '3.4. Məcburi hərəkət istiqaməti nişanları.',
+      '3.5. Məlumatverici-göstərici nişanlar.',
+      '3.6. Servis nişanları.',
+      '3.7. Əlavə məlumat nişanları (lövhəcikləri).',
+      '3.8. Nəqliyyat vasitələrinin tanınma nişanları.',
+    ],
+  },
+  { id: 4, title: 'M4. Yolun nişanlanma xətləri' },
+  { id: 5, title: 'M5. Nizamlayıcının və svetoforların siqnalları' },
+  { id: 6, title: 'M6. Xüsusi siqnalların tətbiqi' },
+  { id: 7, title: 'M7. Qəza dayanma siqnalının və qəza dayanma nişanının tətbiqi' },
+  { id: 8, title: 'M8. Hərəkətə başlama və manevretmə' },
+  { id: 9, title: 'M9. NV-nin yolun hərəkət hissəsində yerləşdiyilməsi' },
+  { id: 10, title: 'M10. Hərəkət sürəti' },
+  { id: 11, title: 'M11. Ötmə və qarşılıqlı keçmə' },
+  { id: 12, title: 'M12. Dayanma, durma və parklanma' },
+  { id: 13, title: 'M13. Yolayrıcıların keçilməsi' },
+  { id: 14, title: 'M14. Piyada keçidləri və ümumi istifadədə olan NV-nin dayanması' },
+  { id: 15, title: 'M15. Avtomagistrallarda hərəkət' },
+  { id: 16, title: 'M16. Dəmiryol keçidlərində hərəkət' },
+  { id: 17, title: 'M17. NV-nin üstün hərəkət rejimi ilə hərəkəti və bununla əlaqədar digər sürücülərin vəzifələri' },
+  { id: 18, title: 'M18. Yaşayış zonalarında hərəkət. Sürmə təlimi' },
+  { id: 19, title: 'M19. NV-də səs siqnalları və xarici işıq cihazlarının istifadə edilməsi' },
+  { id: 20, title: 'M20. Nasaz NV və onların yedəyə alınması' },
+  { id: 21, title: 'M21. Adamların və yüklərin daşınması' },
+  { id: 22, title: 'M22. NV-nin nasazlıqları və istismarı qadağan edən səbəblər' },
+  { id: 23, title: 'M23. Yol hərəkəti təhlükəsizliyinin əsasları' },
+  { id: 24, title: 'M24. İlk tibbi yardımın göstərilməsi' },
+  { id: 25, title: 'M25. Velosiped, kiçik elektik nəqliyyat vasitələri, moped və at arabalarının sürülməsinə dair tələblər' },
+  { id: 26, title: 'M26. Sürücülərin cavabdehliyi' },
+  {
+    id: 27,
+    title: 'M27. Avtomobilin quruluşu',
+    subtopics: [
+      '27.1 Avtomobilin ümumi quruluşu',
+      '27.2 Benzin DYM',
+      '27.3 Dizel DYM',
+      '27.4 Çarxqolu-sürgüqolu mexanizmi',
+      '27.5 Qaz paylama mexanizmi',
+    ],
+  },
+];
 
 export const SAMPLE_QUESTIONS: Question[] = [
   {

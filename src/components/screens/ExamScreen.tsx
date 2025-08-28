@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Button } from '../ui/Button';
+import { EXAM_TOPICS } from '../../lib/data';
 
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
 
@@ -15,23 +16,18 @@ export function ExamScreen() {
   type Topic = { id: number; title: string; questionCount: number; subtopics?: Subtopic[] };
 
   const topics: Topic[] = useMemo(() => {
-    const items: Topic[] = [];
-    for (let i = 1; i <= 27; i++) {
-      const hasSubtopics = i === 2 || i === 3 || i === 27;
-      if (hasSubtopics) {
-        const subCount = i === 2 ? 2 : i === 3 ? 8 : 5;
-        const subtopics: Subtopic[] = Array.from({ length: subCount }, (_, idx) => ({
-          id: `${i}-${idx + 1}`,
-          title: `Alt mövzu ${idx + 1}`,
+    return EXAM_TOPICS.map((t) => {
+      if (t.subtopics && t.subtopics.length > 0) {
+        const subtopics: Subtopic[] = t.subtopics.map((st, idx) => ({
+          id: `${t.id}-${idx + 1}`,
+          title: st,
           questionCount: randomInt(5, 20),
         }));
         const total = subtopics.reduce((sum, s) => sum + s.questionCount, 0);
-        items.push({ id: i, title: `Mövzu ${i}`, questionCount: total, subtopics });
-      } else {
-        items.push({ id: i, title: `Mövzu ${i}`, questionCount: randomInt(8, 35) });
+        return { id: t.id, title: t.title, questionCount: total, subtopics };
       }
-    }
-    return items;
+      return { id: t.id, title: t.title, questionCount: randomInt(8, 35) };
+    });
   }, []);
 
   const toggleTopic = (id: number) => {
