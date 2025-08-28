@@ -155,14 +155,12 @@ export function ExamRunScreen() {
                 key={question.id}
                 onClick={() => !answered && openQuestion(index)}
                 disabled={answered}
-                className={`relative rounded-xl overflow-hidden border text-left ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-white'} shadow-sm ${
+                className={`relative rounded-xl overflow-hidden border text-left p-0 ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-white'} shadow-sm ${
                   'border-gray-300'
                 } ${answered ? 'cursor-default' : ''}`}
                 style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
               >
-                {/* ensure overlay above content */}
-                <div className="relative z-0">
-                </div>
+                {/* removed placeholder layer to ensure image sits at very top */}
                 {/* no overlay on answered; keep content as-is */}
                 <div className="w-full h-36">
                   <img
@@ -171,7 +169,7 @@ export function ExamRunScreen() {
                     className="w-full h-full object-cover object-top block"
                   />
                 </div>
-                <div className={`px-3 py-2 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
+                <div className={`px-3 py-2 mt-2 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
                   <div>{truncateText(question.text, 100)}</div>
                 </div>
               </button>
