@@ -155,8 +155,8 @@ export function ExamRunScreen() {
                 key={question.id}
                 onClick={() => !answered && openQuestion(index)}
                 disabled={answered}
-                className={`relative rounded-xl overflow-hidden border text-left p-0 flex flex-col items-stretch justify-start ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-white'} shadow-sm ${
-                  'border-gray-300'
+                className={`relative rounded-xl overflow-hidden border text-left p-0 flex flex-col items-stretch justify-start ${answered ? (status === 'correct' ? 'bg-emerald-600' : 'bg-red-600') : 'bg-gray-800'} shadow-sm ${
+                  'border-gray-700'
                 } ${answered ? 'cursor-default' : ''}`}
                 style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
               >
@@ -169,7 +169,7 @@ export function ExamRunScreen() {
                     className="w-full h-full object-cover object-top block"
                   />
                 </div>
-                <div className={`px-3 py-2 mt-1 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
+                <div className={`px-3 py-2 mt-1 ${answered ? 'text-white' : 'text-gray-200'} text-xs leading-tight`}>
                   <div>{truncateText(question.text, 80)}</div>
                 </div>
               </button>
@@ -278,7 +278,7 @@ export function ExamRunScreen() {
 
       {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
       <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+        <div className="px-4 py-1.5 rounded-lg bg-gray-900 text-white text-xl font-bold tracking-widest shadow-lg/50 shadow-black border border-gray-700">
           {formatTime(timeLeft)}
         </div>
       </div>
