@@ -20,6 +20,11 @@ export function ExamRunScreen() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
+
+  function truncateText(text: string, maxChars: number): string {
+    if (!text) return '';
+    return text.length > maxChars ? text.slice(0, maxChars - 1) + '…' : text;
+  }
   
   // Create 10 questions by repeating sample questions
   const questions = Array.from({ length: 10 }, (_, i) => ({
@@ -163,13 +168,11 @@ export function ExamRunScreen() {
                   <img
                     src={question.imageUrl}
                     alt={`Sual ${index + 1}`}
-                    className="w-full h-full object-cover block"
+                    className="w-full h-full object-cover object-top block"
                   />
                 </div>
                 <div className={`px-3 py-2 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
-                  <div>
-                    {question.text}
-                  </div>
+                  <div>{truncateText(question.text, 100)}</div>
                 </div>
               </button>
             );
