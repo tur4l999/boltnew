@@ -82,3 +82,11 @@ html {
   pointer-events: none;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
 }
+
+/* Variants to tint the fade based on state */
+.truncate-fade.fade-emerald::after {
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(16,185,129,0.15));
+}
+.truncate-fade.fade-red::after {
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(239,68,68,0.15));
+}

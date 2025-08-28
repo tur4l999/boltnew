@@ -70,7 +70,7 @@ export function ExamConfigScreen() {
               <button
                 type="button"
                 onClick={() => setShowPromo(!showPromo)}
-                className={`text-xs underline self-start ${isDarkMode ? 'text-emerald-300 hover:text-emerald-200' : 'text-emerald-700 hover:text-emerald-800'}`}
+                className={`text-sm underline self-start ${isDarkMode ? 'text-emerald-300 hover:text-emerald-200' : 'text-emerald-700 hover:text-emerald-800'}`}
               >
                 Promokodu əlavə edin
               </button>

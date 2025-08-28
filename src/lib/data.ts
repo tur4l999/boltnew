@@ -18,7 +18,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       { id: 'o3', text: 'Yalnız 2 №-li tramvaya və B avtomobilinə.' },
       { id: 'o4', text: 'Tramvaylara, B və D avtomobillərinə.' },
     ],
-    correctOptionId: 'o3',
+    correctOptionId: 'o2',
     explanation: 'Yan göstəricilərə əsasən C avtomobili sol tərəfdən gələn 2 №-li tramvaya və sağdan gələn B avtomobilinə yol verməlidir.',
   },
   {
@@ -57,7 +57,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       { id: 'o3', text: 'Düz hərəkət edən avtomobil' },
       { id: 'o4', text: 'Heç biri' },
     ],
-    correctOptionId: 'o3',
+    correctOptionId: 'o2',
     explanation: 'Düz istiqamətə hərəkət edən nəqliyyat vasitəsi yolayrıcıda üstünlüyə malikdir.',
   },
   {
@@ -70,7 +70,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       { id: 'o3', text: 'Düz gedə və sağa dönə bilərsiniz' },
       { id: 'o4', text: 'Düz gedə və sola dönə bilərsiniz' },
     ],
-    correctOptionId: 'o3',
+    correctOptionId: 'o2',
     explanation: 'Yol nişanları düz və sağa hərəkətə icazə verir.',
   },
   {
@@ -109,7 +109,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
       { id: 'o3', text: 'Bərk və ya elastik yedəklə, şərtlə ki, çəkən avtomobilin kütləsi daha çox olsun' },
       { id: 'o4', text: 'Ümumiyyətlə qadağandır' },
     ],
-    correctOptionId: 'o3',
+    correctOptionId: 'o2',
     explanation: 'Çəkmə qaydalarına əsasən faktiki kütlə tələbləri ödənilməlidir.',
   },
   {

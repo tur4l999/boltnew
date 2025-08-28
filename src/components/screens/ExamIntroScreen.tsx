@@ -44,10 +44,7 @@ export function ExamIntroScreen() {
               Sizə uğurlar arzulayırıq!
             </div>
 
-            {/* Masked ID area mimic */}
-            <div className={`mx-auto w-64 h-8 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-emerald-100'} flex items-center justify-center text-xs text-gray-400`}>
-              ________
-            </div>
+            {/* Removed placeholder above start button */}
 
             <div className="pt-2">
               <Button onClick={startExam} className="w-full">
