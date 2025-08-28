@@ -19,6 +19,7 @@ export function ExamRunScreen() {
   // Center overlay state
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
+  const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
   
   // Create 10 questions by repeating sample questions
   const questions = Array.from({ length: 10 }, (_, i) => ({
@@ -74,8 +75,20 @@ export function ExamRunScreen() {
     setShowOverlay(true);
     setTimeout(() => {
       setShowOverlay(false);
+      // If exam not finished, go back to grid; full-screen state may take over
       setView('grid');
     }, 500);
+
+    // After setting outcome, compute totals and check pass/fail conditions
+    setTimeout(() => {
+      const totalCorrect = Object.values({ ...outcomes, [currentQuestion.id]: outcome }).filter(v => v === 'correct').length;
+      const totalWrong = Object.values({ ...outcomes, [currentQuestion.id]: outcome }).filter(v => v === 'wrong').length;
+      if (totalWrong >= 2) {
+        setFinalState('fail');
+      } else if (totalCorrect >= 9) {
+        setFinalState('pass');
+      }
+    }, 0);
   }
 
   const currentOutcome = outcomes[currentQuestion?.id];
@@ -85,6 +98,19 @@ export function ExamRunScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-900'
     } pt-11`}>
+      {/* Full-screen pass/fail overlay */}
+      {finalState && (
+        <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center text-white ${finalState === 'pass' ? 'bg-emerald-600' : 'bg-red-600'}`}>
+          <div className="text-2xl font-black mb-6">
+            {finalState === 'pass' ? 'İmtahandan keçdiniz' : 'İmtahandan kəsildiniz'}
+          </div>
+          <div className="w-full max-w-xs space-y-2 px-4">
+            <Button onClick={() => window.location.reload()} className="w-full" variant="secondary">Yenidən Başla</Button>
+            <Button onClick={() => navigate('Results', { result: { score: Object.values(outcomes).filter(v => v === 'correct').length, total: questions.length, timeSpent: (15 * 60) - timeLeft } })} className="w-full">Nəticələr</Button>
+            <Button onClick={() => navigate('Lesson', { moduleId: 'M1' })} className="w-full" variant="ghost">Dərsə Başla</Button>
+          </div>
+        </div>
+      )}
       {/* Header with back button */}
       <div className="flex items-center justify-between mb-4 text-white">
         {view === 'question' ? (
@@ -129,9 +155,18 @@ export function ExamRunScreen() {
                 } ${answered ? 'cursor-default' : ''}`}
                 style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
               >
-                {/* colored background when answered */}
+                {/* colored background when answered (also adds subtle top glow overlay via gradient) */}
                 {answered && (
-                  <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
+                  <>
+                    <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
+                    <div className="absolute inset-x-0 top-0 h-6"
+                      style={{
+                        background: status === 'correct'
+                          ? 'linear-gradient(to bottom, rgba(16,185,129,0.35), rgba(16,185,129,0))'
+                          : 'linear-gradient(to bottom, rgba(239,68,68,0.35), rgba(239,68,68,0))'
+                      }}
+                    />
+                  </>
                 )}
                 <div className="w-full h-28 bg-white">
                   <img
@@ -140,8 +175,8 @@ export function ExamRunScreen() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className={`px-3 py-2 bg-white text-gray-900 text-xs leading-tight`}>
-                  <div className="truncate-fade">
+                <div className={`px-3 py-2 bg-white ${answered ? (status === 'correct' ? 'text-emerald-900' : 'text-red-900') : 'text-gray-900'} text-xs leading-tight`}>
+                  <div className={`truncate-fade ${answered ? (status === 'correct' ? 'fade-emerald' : 'fade-red') : ''}`}>
                     {question.text}
                   </div>
                 </div>
@@ -249,8 +284,8 @@ export function ExamRunScreen() {
         )}
       </div>
 
-      {/* Persistent timer bubble below notch, centered */}
-      <div className="fixed top-12 left-1/2 -translate-x-1/2 select-none z-50">
+      {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
+      <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
         <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
