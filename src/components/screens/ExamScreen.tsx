@@ -1,12 +1,38 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Button } from '../ui/Button';
+import { EXAM_TOPICS } from '../../lib/data';
 
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
 
 export function ExamScreen() {
   const { isDarkMode, t, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<ExamTabKey>('byTickets');
+  const [expandedTopics, setExpandedTopics] = useState<Record<number, boolean>>({});
+
+  const randomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+  type Subtopic = { id: string; title: string; questionCount: number };
+  type Topic = { id: number; title: string; questionCount: number; subtopics?: Subtopic[] };
+
+  const topics: Topic[] = useMemo(() => {
+    return EXAM_TOPICS.map((t) => {
+      if (t.subtopics && t.subtopics.length > 0) {
+        const subtopics: Subtopic[] = t.subtopics.map((st, idx) => ({
+          id: `${t.id}-${idx + 1}`,
+          title: st,
+          questionCount: randomInt(5, 20),
+        }));
+        const total = subtopics.reduce((sum, s) => sum + s.questionCount, 0);
+        return { id: t.id, title: t.title, questionCount: total, subtopics };
+      }
+      return { id: t.id, title: t.title, questionCount: randomInt(8, 35) };
+    });
+  }, []);
+
+  const toggleTopic = (id: number) => {
+    setExpandedTopics((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
     <div className={`p-3 pb-20 min-h-screen transition-colors duration-200 ${
@@ -67,17 +93,55 @@ export function ExamScreen() {
 
       {activeTab === 'byTopics' && (
         <div className="space-y-2">
-          {Array.from({ length: 10 }, (_, idx) => (
-            <div
-              key={idx}
-              className={`rounded-lg border p-3 text-sm flex items-center justify-between transition-colors duration-200 ${
-                isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-              }`}
-            >
-              <div className="font-bold">Mövzu {idx + 1}</div>
-              <div className="text-gray-500">0/20</div>
-            </div>
-          ))}
+          {topics.map((topic) => {
+            const hasSub = !!topic.subtopics && topic.subtopics.length > 0;
+            const expanded = !!expandedTopics[topic.id];
+            return (
+              <div
+                key={topic.id}
+                className={`rounded-lg border transition-colors duration-200 ${
+                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => hasSub ? toggleTopic(topic.id) : undefined}
+                  className="w-full p-3 text-sm flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    {hasSub && (
+                      <span
+                        className={`text-xs transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`}
+                      >
+                        ▸
+                      </span>
+                    )}
+                    <div className="font-bold truncate">{topic.title}</div>
+                  </div>
+                  <div className="text-gray-500">0/{topic.questionCount}</div>
+                </button>
+                {hasSub && (
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                  >
+                    <div className="px-3 pb-3 pt-0 space-y-1">
+                      {topic.subtopics!.map((st, idx) => (
+                        <div
+                          key={st.id}
+                          className={`rounded-md border px-2 py-2 text-xs flex items-center justify-between ${
+                            isDarkMode ? 'bg-gray-900/50 border-gray-700' : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <div className="text-gray-700 dark:text-gray-200 truncate">{st.title}</div>
+                          <div className="text-gray-500">0/{st.questionCount}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 

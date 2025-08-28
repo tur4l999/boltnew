@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
 import { PracticeInline } from '../practice/PracticeInline';
+import { MODULES } from '../../lib/data';
 
 export function LessonScreen() {
   const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
@@ -15,6 +16,9 @@ export function LessonScreen() {
   const [requestedModuleId, setRequestedModuleId] = useState<string | null>(null);
   
   const { moduleId } = currentScreen.params;
+  const modules = MODULES;
+  const currentModule = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
+  const displayTitle = currentModule ? currentModule.title : moduleId;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
 
   const lessonTabs = [
@@ -100,18 +104,21 @@ export function LessonScreen() {
           onClick={() => setModuleDropdownOpen(!moduleDropdownOpen)}
           className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-left flex items-center justify-between min-h-[44px] focus:outline-none focus:ring-2 focus:ring-emerald-500"
         >
-          <span className="font-medium text-gray-900">{moduleId}: Yol nişanları</span>
+          <span className="font-medium text-gray-900 flex-1 min-w-0 truncate">{displayTitle}</span>
           <span className={`transform transition-transform ${moduleDropdownOpen ? 'rotate-180' : ''}`}>
             ▼
           </span>
         </button>
+        <div className={`mt-2 px-1 text-base md:text-lg font-bold leading-snug ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+          {currentModule ? currentModule.title : ''}
+        </div>
         
         {moduleDropdownOpen && (
           <div className={`absolute top-full left-0 right-0 mt-1 rounded-xl shadow-lg max-h-60 overflow-y-auto z-10 border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'
           }`}>
-            {Array.from({ length: 27 }, (_, i) => {
-              const id = `M${i + 1}`;
+            {modules.map((m) => {
+              const id = m.id;
               const unlocked = isModuleUnlocked(id);
               const isActive = moduleId === id;
               return (
@@ -142,9 +149,9 @@ export function LessonScreen() {
                         : 'text-gray-400 hover:bg-white'
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span>{id}: Module {i + 1} — Traffic Rules & Safety</span>
-                    {!unlocked && <span className="text-sm">🔒</span>}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="flex-1 min-w-0 truncate">{m.title}</span>
+                    {!unlocked && <span className="text-sm flex-shrink-0">🔒</span>}
                   </div>
                 </button>
               );

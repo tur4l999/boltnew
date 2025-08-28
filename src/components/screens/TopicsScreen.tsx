@@ -112,7 +112,9 @@ export function TopicsScreen() {
                   <div>
                   <div className={`font-bold text-sm transition-colors duration-200 ${
                     isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                  }`}>{module.title}</div>
+                  }`}>
+                    <span className="block max-w-[240px] truncate">{module.title}</span>
+                  </div>
                   <div className={`text-xs transition-colors duration-200 ${
                     isDarkMode ? 'text-gray-400' : 'text-gray-500'
                   }`}>
