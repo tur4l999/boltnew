@@ -48,12 +48,23 @@ export function ExamRunScreen() {
   }, []);
 
   function setAnswer(optionId: string) {
-    setSelectedOptions(prev => ({ ...prev, [currentQuestion.id]: optionId }));
+    setSelectedOptions(prev => {
+      const currentlySelected = prev[currentQuestion.id];
+      // Toggle off if the same option is clicked again
+      if (currentlySelected === optionId) {
+        const updated = { ...prev };
+        delete updated[currentQuestion.id];
+        return updated;
+      }
+      return { ...prev, [currentQuestion.id]: optionId };
+    });
   }
 
   function openQuestion(index: number) {
     setCurrentIndex(index);
     setView('question');
+    // Do not keep previous temporary selections when opening a question
+    setSelectedOptions({});
   }
 
   function finishExam() {
@@ -245,7 +256,13 @@ export function ExamRunScreen() {
               return (
                 <button
                   key={q.id}
-                  onClick={() => !answered && setCurrentIndex(idx)}
+                  onClick={() => {
+                    if (!answered) {
+                      setCurrentIndex(idx);
+                      // Clear temporary selection when switching to a different question
+                      setSelectedOptions({});
+                    }
+                  }}
                   disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
