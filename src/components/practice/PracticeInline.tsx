@@ -36,11 +36,11 @@ export function PracticeInline() {
   }
 
   return (
-    <Card>
+    <Card className="bg-gray-800 text-gray-100 border-gray-700">
       <div className="text-xs text-gray-500 mb-2">
         {currentIndex + 1}/{SAMPLE_QUESTIONS.length}
       </div>
-      <div className="font-bold mb-3 text-gray-900">{question.text}</div>
+      <div className="font-bold mb-3 text-gray-100">{question.text}</div>
       {question.imageUrl && (
         <img
           src={question.imageUrl}
@@ -57,8 +57,8 @@ export function PracticeInline() {
               isLocked ? 'cursor-default' : 'cursor-pointer'
             } ${
               selectedAnswer === option.id
-                ? (isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50')
-                : (isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white')
+                ? 'border-sky-600 bg-sky-900/20'
+                : 'border-gray-700 bg-gray-800'
             }`}
           >
             <input
@@ -69,7 +69,7 @@ export function PracticeInline() {
               onChange={() => setSelectedAnswer(option.id)}
               className="w-4 h-4 text-emerald-600"
             />
-            <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
+            <span className={`text-sm text-gray-100`}>{option.text}</span>
           </label>
         ))}
       </div>
@@ -91,15 +91,15 @@ export function PracticeInline() {
         ) : (
           <>
             <div className={`flex items-center gap-2 font-bold text-sm ${
-              isCorrect ? 'text-emerald-600' : 'text-red-600'
+              isCorrect ? 'text-emerald-400' : 'text-red-400'
             }`}>
               {isCorrect ? '✅ Doğru' : '❌ Səhv'}
             </div>
             <details className="ml-auto">
-              <summary className={`cursor-pointer select-none text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
+              <summary className={`cursor-pointer select-none text-sm text-gray-200`}>
                 {t.explanation}
               </summary>
-              <div className={`text-sm mt-2 p-2 rounded-lg ${isDarkMode ? 'text-gray-200 bg-gray-700' : 'text-gray-700 bg-gray-50'}`}>
+              <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
                 {question.explanation}
               </div>
             </details>
