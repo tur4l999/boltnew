@@ -109,7 +109,7 @@ export function LessonScreen() {
             ▼
           </span>
         </button>
-        <div className="mt-1 px-1 text-xs text-gray-600">
+        <div className={`mt-1 px-1 text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
           {currentModule ? currentModule.title : ''}
         </div>
         
