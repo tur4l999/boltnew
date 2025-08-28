@@ -36,7 +36,7 @@ export function PracticeInline() {
   }
 
   return (
-    <Card>
+    <Card className="bg-gray-800 text-gray-100 border-gray-700">
       <div className="text-xs text-gray-500 mb-2">
         {currentIndex + 1}/{SAMPLE_QUESTIONS.length}
       </div>
@@ -57,8 +57,8 @@ export function PracticeInline() {
               isLocked ? 'cursor-default' : 'cursor-pointer'
             } ${
               selectedAnswer === option.id
-                ? (isDarkMode ? 'border-emerald-500 bg-emerald-900/20' : 'border-emerald-600 bg-gray-50')
-                : (isDarkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white')
+                ? 'border-emerald-500 bg-emerald-900/20'
+                : 'border-gray-600 bg-gray-700'
             }`}
           >
             <input
@@ -69,7 +69,7 @@ export function PracticeInline() {
               onChange={() => setSelectedAnswer(option.id)}
               className="w-4 h-4 text-emerald-600"
             />
-            <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
+            <span className={`text-sm text-gray-200`}>{option.text}</span>
           </label>
         ))}
       </div>
