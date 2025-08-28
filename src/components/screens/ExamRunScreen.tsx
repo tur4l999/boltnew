@@ -155,18 +155,9 @@ export function ExamRunScreen() {
                 } ${answered ? 'cursor-default' : ''}`}
                 style={answered ? { boxShadow: status === 'correct' ? '0 6px 18px rgba(16, 185, 129, 0.35)' : '0 6px 18px rgba(239, 68, 68, 0.35)' } : undefined}
               >
-                {/* colored background when answered (also adds subtle top glow overlay via gradient) */}
+                {/* colored background when answered */}
                 {answered && (
-                  <>
-                    <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
-                    <div className="absolute inset-x-0 top-0 h-6"
-                      style={{
-                        background: status === 'correct'
-                          ? 'linear-gradient(to bottom, rgba(16,185,129,0.35), rgba(16,185,129,0))'
-                          : 'linear-gradient(to bottom, rgba(239,68,68,0.35), rgba(239,68,68,0))'
-                      }}
-                    />
-                  </>
+                  <div className={`absolute inset-0 ${status === 'correct' ? 'bg-emerald-500/30' : 'bg-red-500/30'}`}></div>
                 )}
                 <div className="w-full h-28 bg-white">
                   <img
@@ -176,7 +167,7 @@ export function ExamRunScreen() {
                   />
                 </div>
                 <div className={`px-3 py-2 bg-white ${answered ? (status === 'correct' ? 'text-emerald-900' : 'text-red-900') : 'text-gray-900'} text-xs leading-tight`}>
-                  <div className={`truncate-fade ${answered ? (status === 'correct' ? 'fade-emerald' : 'fade-red') : ''}`}>
+                  <div>
                     {question.text}
                   </div>
                 </div>
