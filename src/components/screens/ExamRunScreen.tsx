@@ -181,8 +181,8 @@ export function ExamRunScreen() {
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          {/* Force white card background regardless of theme to match mock */}
-          <Card className="mt-2 bg-white text-gray-900 border-gray-200">
+          {/* Make question area blend with dark background (keep timer white as-is) */}
+          <Card className="mt-2 bg-transparent border-transparent text-white">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
@@ -191,22 +191,22 @@ export function ExamRunScreen() {
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
             )}
-            <div className={`font-bold mb-3 text-gray-900`}>
+            <div className={`font-bold mb-3 text-white`}>
               {currentIndex + 1}. {currentQuestion.text}
             </div>
             <div className="space-y-2">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedOptions[currentQuestion.id] === option.id;
                 // Base: white option regardless of theme
-                let optionClasses = 'border-gray-300 bg-white';
+                let optionClasses = 'border-gray-700 bg-transparent';
                 if (isConfirmed) {
                   if (isSelected && currentOutcome === 'correct') {
-                    optionClasses = 'border-emerald-600 bg-emerald-50';
+                    optionClasses = 'border-emerald-500 bg-emerald-900/30';
                   } else if (isSelected && currentOutcome === 'wrong') {
-                    optionClasses = 'border-red-600 bg-red-50';
+                    optionClasses = 'border-red-500 bg-red-900/30';
                   }
                 } else if (isSelected) {
-                  optionClasses = 'border-sky-600 bg-sky-50';
+                  optionClasses = 'border-sky-500 bg-sky-900/30';
                 }
 
                 return (
@@ -222,7 +222,7 @@ export function ExamRunScreen() {
                       onChange={() => setAnswer(option.id)}
                       className="w-4 h-4 text-emerald-600"
                     />
-                    <span className={`text-sm text-gray-800`}>{option.text}</span>
+                    <span className={`text-sm text-white`}>{option.text}</span>
                   </label>
                 );
               })}
@@ -254,7 +254,7 @@ export function ExamRunScreen() {
                         ? 'bg-emerald-600 text-white'
                         : status === 'wrong'
                           ? 'bg-red-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-700'
+                          : 'bg-transparent border border-gray-700 text-white'
                   } ${answered ? 'cursor-default' : ''}`}
                 >
                   {idx + 1}
