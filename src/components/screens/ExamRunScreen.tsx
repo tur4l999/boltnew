@@ -181,8 +181,8 @@ export function ExamRunScreen() {
       {/* Question View */}
       {view === 'question' && currentQuestion && (
         <>
-          {/* Transparent container so question sits on page background */}
-          <Card className="mt-2 bg-transparent text-gray-100 border-transparent shadow-none p-0 hover:shadow-none hover:scale-100">
+          {/* Solid dark container behind image, question and options */}
+          <Card className="mt-2 bg-gray-900 text-gray-100 border-gray-800">
             {currentQuestion.imageUrl && (
               <img
                 src={currentQuestion.imageUrl}
