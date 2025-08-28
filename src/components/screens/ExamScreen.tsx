@@ -108,7 +108,7 @@ export function ExamScreen() {
                   onClick={() => hasSub ? toggleTopic(topic.id) : undefined}
                   className="w-full p-3 text-sm flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     {hasSub && (
                       <span
                         className={`text-xs transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`}
@@ -116,7 +116,7 @@ export function ExamScreen() {
                         ▸
                       </span>
                     )}
-                    <div className="font-bold">{topic.title}</div>
+                    <div className="font-bold truncate">{topic.title}</div>
                   </div>
                   <div className="text-gray-500">0/{topic.questionCount}</div>
                 </button>
@@ -132,7 +132,7 @@ export function ExamScreen() {
                             isDarkMode ? 'bg-gray-900/50 border-gray-700' : 'bg-gray-50 border-gray-200'
                           }`}
                         >
-                          <div className="text-gray-700 dark:text-gray-200">{st.title}</div>
+                          <div className="text-gray-700 dark:text-gray-200 truncate">{st.title}</div>
                           <div className="text-gray-500">0/{st.questionCount}</div>
                         </div>
                       ))}
