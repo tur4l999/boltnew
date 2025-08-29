@@ -9,6 +9,7 @@ interface UserPackage {
   name: string;
   price: number;
   days: number;
+  activationDate: Date;
   purchaseDate: Date;
   expiryDate: Date;
 }
@@ -38,7 +39,7 @@ interface AppContextType {
   balance: number;
   activePackage: UserPackage | null;
   transactions: Transaction[];
-  purchasePackage: (packageId: string, packageName: string, price: number, days: number) => boolean;
+  purchasePackage: (packageId: string, packageName: string, price: number, days: number, activationDate?: Date) => boolean;
   tickets: number;
   purchaseTickets: (count: number, price: number, title?: string) => boolean;
   hasActivePackage: () => boolean;
@@ -78,20 +79,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setNavigationStack([{ screen: tab, params: {} }]);
   };
   
-  const purchasePackage = (packageId: string, packageName: string, price: number, days: number): boolean => {
+  const purchasePackage = (packageId: string, packageName: string, price: number, days: number, activationDate?: Date): boolean => {
     if (balance < price) {
       return false; // Insufficient balance
     }
     
     const purchaseDate = new Date();
-    const expiryDate = new Date();
-    expiryDate.setDate(purchaseDate.getDate() + days);
+    const activation = activationDate ? new Date(activationDate) : new Date();
+    const expiryDate = new Date(activation);
+    expiryDate.setDate(activation.getDate() + days);
     
     const newPackage: UserPackage = {
       id: packageId,
       name: packageName,
       price,
       days,
+      activationDate: activation,
       purchaseDate,
       expiryDate
     };
@@ -131,7 +134,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   
   const hasActivePackage = (): boolean => {
     if (!activePackage) return false;
-    return new Date() < activePackage.expiryDate;
+    const now = new Date();
+    return now >= activePackage.activationDate && now < activePackage.expiryDate;
   };
   
   const isModuleUnlocked = (moduleId: string): boolean => {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { Calendar } from '../ui/Calendar';
 
 interface Package {
   id: string;
@@ -28,6 +29,9 @@ export function PackagesScreen() {
   const [nowTs, setNowTs] = useState<number>(Date.now());
   const [promoEndsAt] = useState<number>(() => Date.now() + 10 * 24 * 60 * 60 * 1000);
   const [activeTab, setActiveTab] = useState<'training' | 'other'>('training');
+  const [activationModalOpen, setActivationModalOpen] = useState<null | { packageId: string }>(null);
+  const [activationMode, setActivationMode] = useState<'now' | 'date'>('now');
+  const [activationDate, setActivationDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -121,14 +125,21 @@ export function PackagesScreen() {
   }
 
   function handlePurchasePackage(packageId: string) {
+    setActivationModalOpen({ packageId });
+    setActivationMode('now');
+    setActivationDate(null);
+  }
+
+  function confirmPurchase(packageId: string) {
     const pkg = packages.find(p => p.id === packageId);
     const price = calculatePrice(packageId);
     const days = selectedDays[packageId];
     
     if (pkg) {
-      const success = purchasePackage(packageId, pkg.name, price, days);
+      const success = purchasePackage(packageId, pkg.name, price, days, activationMode === 'date' && activationDate ? activationDate : undefined);
       if (success) {
         alert(`${pkg.name} (${price} AZN - ${days} gün) uğurla satın alındı!`);
+        setActivationModalOpen(null);
         goBack();
       } else {
         alert('Balansınız kifayət etmir. Balansınızı artırın.');
@@ -418,6 +429,82 @@ export function PackagesScreen() {
           </span>
         </div>
       </div>
+
+      {activationModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setActivationModalOpen(null)} />
+          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-4 shadow-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Aktivləşdirmə seçimi</div>
+            <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-sm mb-3`}>
+              İndi aktivləşdirin və ya aktivləşdirmə tarixini seçin.
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <button
+                onClick={() => setActivationMode('now')}
+                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] border text-sm ${
+                  activationMode === 'now'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                      : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                İndi aktivləşdir
+              </button>
+              <button
+                onClick={() => setActivationMode('date')}
+                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] border text-sm ${
+                  activationMode === 'date'
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
+                      : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Aktivləşdirmə Tarixi
+              </button>
+            </div>
+
+            {activationMode === 'date' && (
+              <div className={`p-2 rounded-xl border mb-3 ${isDarkMode ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50'}`}>
+                <Calendar
+                  initialDate={new Date()}
+                  minDate={new Date()}
+                  onChange={(d) => setActivationDate(d)}
+                />
+                <div className={`mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Seçilən tarix: {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setActivationModalOpen(null)}
+                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                  isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Bağla
+              </button>
+              <button
+                onClick={() => activationModalOpen && confirmPurchase(activationModalOpen.packageId)}
+                disabled={activationMode === 'date' && !activationDate}
+                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] ${
+                  activationMode === 'date' && !activationDate
+                    ? 'bg-emerald-600/50 text-white cursor-not-allowed'
+                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                }`}
+              >
+                Təsdiq et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
