@@ -20,7 +20,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode } = useApp();
+  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode, navigate } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 30,
@@ -32,6 +32,8 @@ export function PackagesScreen() {
   const [activationModalOpen, setActivationModalOpen] = useState<null | { packageId: string }>(null);
   const [activationMode, setActivationMode] = useState<'now' | 'date'>('now');
   const [activationDate, setActivationDate] = useState<Date | null>(null);
+  const [activationHour, setActivationHour] = useState<string>('09');
+  const [activationMinute, setActivationMinute] = useState<string>('00');
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -136,11 +138,22 @@ export function PackagesScreen() {
     const days = selectedDays[packageId];
     
     if (pkg) {
-      const success = purchasePackage(packageId, pkg.name, price, days, activationMode === 'date' && activationDate ? activationDate : undefined);
+      let scheduled: Date | undefined = undefined;
+      if (activationMode === 'date' && activationDate) {
+        const d = new Date(activationDate);
+        d.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
+        scheduled = d;
+      }
+      const success = purchasePackage(packageId, pkg.name, price, days, scheduled);
       if (success) {
-        alert(`${pkg.name} (${price} AZN - ${days} gün) uğurla satın alındı!`);
         setActivationModalOpen(null);
-        goBack();
+        if (activationMode === 'date' && scheduled) {
+          // navigate to scheduled confirmation screen
+          navigate('ActivationScheduled', { at: scheduled.toISOString(), name: pkg.name });
+        } else {
+          alert(`${pkg.name} (${price} AZN - ${days} gün) uğurla satın alındı!`);
+          goBack();
+        }
       } else {
         alert('Balansınız kifayət etmir. Balansınızı artırın.');
       }
@@ -477,13 +490,35 @@ export function PackagesScreen() {
                   minDate={new Date()}
                   onChange={(d) => setActivationDate(d)}
                 />
+                <div className="mt-2 flex items-center gap-2">
+                  <select
+                    value={activationHour}
+                    onChange={(e) => setActivationHour(e.target.value)}
+                    className={`px-2 py-1 rounded border text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+                  >
+                    {Array.from({ length: 24 }).map((_, i) => {
+                      const v = String(i).padStart(2, '0');
+                      return <option key={v} value={v}>{v}</option>;
+                    })}
+                  </select>
+                  <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>:</span>
+                  <select
+                    value={activationMinute}
+                    onChange={(e) => setActivationMinute(e.target.value)}
+                    className={`px-2 py-1 rounded border text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+                  >
+                    {['00','15','30','45'].map((v) => (
+                      <option key={v} value={v}>{v}</option>
+                    ))}
+                  </select>
+                </div>
                 <div className="mt-3">
                   <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Seçilən tarix</div>
                   <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-lg font-extrabold`}>
-                    {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                    {activationDate ? `${activationDate.toLocaleDateString('az-AZ')} ${activationHour}:${activationMinute}` : '—'}
                   </div>
                   <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>
-                    Paketin aktivləşdiriləcəyi tarix: {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                    Paketin aktivləşdiriləcəyi tarix: {activationDate ? `${activationDate.toLocaleDateString('az-AZ')} ${activationHour}:${activationMinute}` : '—'}
                   </div>
                 </div>
               </div>

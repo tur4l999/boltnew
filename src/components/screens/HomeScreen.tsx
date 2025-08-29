@@ -7,7 +7,7 @@ import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
 
 export function HomeScreen() {
-  const { t, navigate, hasActivePackage, isDarkMode } = useApp();
+  const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow } = useApp();
   
   const gridItems = [
     { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
@@ -61,6 +61,42 @@ export function HomeScreen() {
               }`}
             >
               Paket al
+            </button>
+          </div>
+        </SlideTransition>
+      )}
+
+      {/* Scheduled package info */}
+      {!hasActivePackage() && useApp().activePackage && new Date() < useApp().activePackage.activationDate && (
+        <SlideTransition direction="down" delay={100}>
+          <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
+            isDarkMode 
+              ? 'bg-amber-900/20 border-amber-700' 
+              : 'bg-amber-50 border-amber-200'
+          }`}>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
+              isDarkMode ? 'bg-amber-800' : 'bg-amber-100'
+            }`}>
+              <span className={`text-xs transition-colors duration-200 ${
+                isDarkMode ? 'text-amber-300' : 'text-amber-600'
+              }`}>⏰</span>
+            </div>
+            <div className="flex-1">
+              <div className={`text-xs font-medium transition-colors duration-200 ${
+                isDarkMode ? 'text-amber-300' : 'text-amber-900'
+              }`}>
+                Paket {useApp().activePackage?.activationDate.toLocaleString('az-AZ')} tarixində aktivləşəcək
+              </div>
+            </div>
+            <button
+              onClick={() => activatePackageNow()}
+              className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
+                isDarkMode 
+                  ? 'bg-amber-700 text-amber-100 hover:bg-amber-600' 
+                  : 'bg-amber-600 text-white hover:bg-amber-700'
+              }`}
+            >
+              İndi aktivləşdir
             </button>
           </div>
         </SlideTransition>

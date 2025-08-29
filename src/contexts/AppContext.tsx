@@ -44,6 +44,7 @@ interface AppContextType {
   purchaseTickets: (count: number, price: number, title?: string) => boolean;
   hasActivePackage: () => boolean;
   isModuleUnlocked: (moduleId: string) => boolean;
+  activatePackageNow: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -148,6 +149,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return hasActivePackage();
   };
   
+  const activatePackageNow = (): void => {
+    if (!activePackage) return;
+    const now = new Date();
+    const newExpiry = new Date(now);
+    newExpiry.setDate(now.getDate() + activePackage.days);
+    setActivePackage({ ...activePackage, activationDate: now, expiryDate: newExpiry });
+  };
+  
   const currentScreen = navigationStack[navigationStack.length - 1];
   
   return (
@@ -172,7 +181,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       purchasePackage,
       purchaseTickets,
       hasActivePackage,
-      isModuleUnlocked
+      isModuleUnlocked,
+      activatePackageNow
     }}>
       {children}
     </AppContext.Provider>
