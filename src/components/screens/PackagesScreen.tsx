@@ -529,6 +529,24 @@ export function PackagesScreen() {
               </div>
             )}
 
+            {/* Summary (package and chosen time) */}
+            {(() => {
+              const modalPkg = activationModalOpen ? packages.find(p => p.id === activationModalOpen.packageId) : null;
+              const dt = new Date(activationMode === 'date' && activationDate ? activationDate : new Date());
+              if (activationMode === 'date' && activationDate) {
+                dt.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
+              }
+              const whenStr = dt.toLocaleString('az-AZ');
+              return (
+                <div className={`mt-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-900/30 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Seçilən paket</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>{modalPkg?.name || '—'}</div>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Aktivləşdirmə</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-xl font-extrabold`}>{whenStr}</div>
+                </div>
+              );
+            })()}
+
             <div className={`grid grid-cols-2 gap-3 mt-4 pt-3 ${isDarkMode ? 'border-t border-gray-700' : 'border-t border-gray-200'}` }>
               <button
                 onClick={() => setActivationModalOpen(null)}
