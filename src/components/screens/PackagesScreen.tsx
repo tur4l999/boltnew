@@ -20,7 +20,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
+  const { t, goBack, balance, purchasePackage, purchasePackageByCard, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 30,
@@ -42,6 +42,8 @@ export function PackagesScreen() {
   const [insufficientTrainingOpen, setInsufficientTrainingOpen] = useState<boolean>(false);
   const [insufficientTrainingName, setInsufficientTrainingName] = useState<string>('');
   const [insufficientTrainingPrice, setInsufficientTrainingPrice] = useState<number>(0);
+  const [paymentModalOpen, setPaymentModalOpen] = useState<null | { packageId: string; scheduledAt: Date }>(null);
+  const [paymentMethod, setPaymentMethod] = useState<'balance' | 'card'>('balance');
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -169,6 +171,44 @@ export function PackagesScreen() {
         setInsufficientTrainingPrice(price);
         setInsufficientTrainingOpen(true);
       }
+    }
+  }
+
+  function openPaymentFor(packageId: string) {
+    const pkg = packages.find(p => p.id === packageId);
+    if (!pkg) return;
+    let scheduled = new Date();
+    if (activationMode === 'date' && activationDate) {
+      const d = new Date(activationDate);
+      d.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
+      scheduled = d;
+    }
+    setPaymentMethod('balance');
+    setPaymentModalOpen({ packageId, scheduledAt: scheduled });
+    setActivationModalOpen(null);
+  }
+
+  function handleConfirmPayment() {
+    if (!paymentModalOpen) return;
+    const { packageId, scheduledAt: scheduled } = paymentModalOpen;
+    const pkg = packages.find(p => p.id === packageId);
+    if (!pkg) return;
+    const price = calculatePrice(packageId);
+    const days = selectedDays[packageId];
+    const success = paymentMethod === 'balance'
+      ? purchasePackage(packageId, pkg.name, price, days, scheduled)
+      : purchasePackageByCard(packageId, pkg.name, price, days, scheduled);
+    if (success) {
+      setPaymentModalOpen(null);
+      setScheduledName(pkg.name);
+      setScheduledAt(scheduled);
+      setScheduledPopupOpen(true);
+    } else {
+      // balance insufficient case
+      setPaymentModalOpen(null);
+      setInsufficientTrainingName(pkg.name);
+      setInsufficientTrainingPrice(price);
+      setInsufficientTrainingOpen(true);
     }
   }
 
@@ -563,7 +603,7 @@ export function PackagesScreen() {
                 Bağla
               </button>
               <button
-                onClick={() => activationModalOpen && confirmPurchase(activationModalOpen.packageId)}
+                onClick={() => activationModalOpen && openPaymentFor(activationModalOpen.packageId)}
                 disabled={activationMode === 'date' && !activationDate}
                 className={`px-4 py-2 rounded-xl font-bold min-h-[40px] ${
                   activationMode === 'date' && !activationDate
@@ -571,7 +611,7 @@ export function PackagesScreen() {
                     : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                 }`}
               >
-                Təsdiq et
+                Davam et
               </button>
             </div>
           </div>
@@ -612,6 +652,74 @@ export function PackagesScreen() {
             >
               Bağla
             </button>
+          </div>
+        </div>
+      )}
+
+      {paymentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setPaymentModalOpen(null)} />
+          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <button
+              onClick={() => setPaymentModalOpen(null)}
+              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm border ${
+                isDarkMode ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-600'
+              }`}
+              aria-label="Bağla"
+            >
+              ✕
+            </button>
+            {(() => {
+              const pkg = packages.find(p => p.id === paymentModalOpen.packageId);
+              const price = pkg ? calculatePrice(pkg.id) : 0;
+              const days = pkg ? selectedDays[pkg.id] : 0;
+              return (
+                <>
+                  <div className="text-2xl mb-2">💳</div>
+                  <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Ödəniş üsulu</div>
+                  <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
+                    Alacağınız paket: <span className="font-semibold">{pkg?.name}</span> • <span className="font-semibold">{days} gün</span> • <span className="font-semibold">{price} AZN</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <button
+                      onClick={() => setPaymentMethod('card')}
+                      className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm ${paymentMethod === 'card' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800')}`}
+                    >
+                      Kartla ödə
+                    </button>
+                    <button
+                      onClick={() => setPaymentMethod('balance')}
+                      className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm ${paymentMethod === 'balance' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800')}`}
+                    >
+                      Balansla ödə
+                    </button>
+                  </div>
+                  {paymentMethod === 'balance' && (
+                    <div className={`mb-3 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Cari balans: <span className="font-semibold text-emerald-600">{balance} AZN</span>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setPaymentModalOpen(null)}
+                      className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                        isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Bağla
+                    </button>
+                    <button
+                      onClick={handleConfirmPayment}
+                      className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
+                    >
+                      Təsdiq et
+                    </button>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
       )}

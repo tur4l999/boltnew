@@ -40,6 +40,7 @@ interface AppContextType {
   activePackage: UserPackage | null;
   transactions: Transaction[];
   purchasePackage: (packageId: string, packageName: string, price: number, days: number, activationDate?: Date) => boolean;
+  purchasePackageByCard: (packageId: string, packageName: string, price: number, days: number, activationDate?: Date) => boolean;
   tickets: number;
   purchaseTickets: (count: number, price: number, title?: string) => boolean;
   hasActivePackage: () => boolean;
@@ -132,6 +133,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setTransactions(prev => [transaction, ...prev]);
     return true;
   };
+
+  // Card payment simulation: does not deduct balance, but activates package and records a transaction
+  const purchasePackageByCard = (packageId: string, packageName: string, price: number, days: number, activationDate?: Date): boolean => {
+    const purchaseDate = new Date();
+    const activation = activationDate ? new Date(activationDate) : new Date();
+    const expiryDate = new Date(activation);
+    expiryDate.setDate(activation.getDate() + days);
+    const newPackage: UserPackage = {
+      id: packageId,
+      name: packageName,
+      price,
+      days,
+      activationDate: activation,
+      purchaseDate,
+      expiryDate
+    };
+    const transaction: Transaction = {
+      id: Date.now().toString(),
+      type: 'purchase',
+      amount: price,
+      description: `${packageName} paketi (${days} gün) • Kart`,
+      date: purchaseDate
+    };
+    setActivePackage(newPackage);
+    setTransactions(prev => [transaction, ...prev]);
+    return true;
+  };
   
   const hasActivePackage = (): boolean => {
     if (!activePackage) return false;
@@ -179,6 +207,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       activePackage,
       transactions,
       purchasePackage,
+      purchasePackageByCard,
       purchaseTickets,
       hasActivePackage,
       isModuleUnlocked,
