@@ -23,7 +23,7 @@ export function Header() {
               {userName.charAt(0).toUpperCase()}
             </button>
             {useApp().hasActivePackage() && (
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] flex items-center justify-center border-2 border-white">★</div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white">★</div>
             )}
           </div>
           <div className="flex-1 leading-tight">

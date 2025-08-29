@@ -104,20 +104,14 @@ export function HomeScreen() {
 
       {hasActivePackage() && (
         <ScaleIn delay={100}>
-          <div className="mb-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg flex items-center gap-3">
+          <div className="-mx-3 mb-3 px-3 py-3 bg-gradient-to-r from-emerald-50 to-green-50 border-y border-emerald-200 rounded-none flex items-center gap-3">
             <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
               <span className="text-emerald-600 text-xs">👑</span>
             </div>
             <div className="flex-1">
               <div className="text-emerald-900 text-xs font-medium">
-                Premium üzv - Bütün funksiyalar aktiv
-              </div>
-              <div className="text-emerald-700 text-xs">
                 {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
               </div>
-            </div>
-            <div className="text-emerald-600 text-lg">
-              ⭐
             </div>
           </div>
         </ScaleIn>
