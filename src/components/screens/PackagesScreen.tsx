@@ -37,6 +37,11 @@ export function PackagesScreen() {
   const [scheduledPopupOpen, setScheduledPopupOpen] = useState<boolean>(false);
   const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
   const [scheduledName, setScheduledName] = useState<string>('');
+  const [otherModalOpen, setOtherModalOpen] = useState<null | { id: string; title: string; count: number; newPrice: number }>(null);
+  const [otherModalStage, setOtherModalStage] = useState<'confirm' | 'success' | 'insufficient'>('confirm');
+  const [insufficientTrainingOpen, setInsufficientTrainingOpen] = useState<boolean>(false);
+  const [insufficientTrainingName, setInsufficientTrainingName] = useState<string>('');
+  const [insufficientTrainingPrice, setInsufficientTrainingPrice] = useState<number>(0);
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -160,18 +165,16 @@ export function PackagesScreen() {
           goBack();
         }
       } else {
-        alert('Balansınız kifayət etmir. Balansınızı artırın.');
+        setInsufficientTrainingName(pkg.name);
+        setInsufficientTrainingPrice(price);
+        setInsufficientTrainingOpen(true);
       }
     }
   }
 
   function handlePurchaseOther(item: { id: string; title: string; count: number; newPrice: number }) {
-    const success = purchaseTickets(item.count, item.newPrice, item.title);
-    if (success) {
-      alert(`${item.title} (${item.count} ədəd) uğurla satın alındı!`);
-    } else {
-      alert('Balansınız kifayət etmir. Balansınızı artırın.');
-    }
+    setOtherModalOpen(item);
+    setOtherModalStage('confirm');
   }
 
   function getPackageCardClass(pkg: Package): string {
@@ -609,6 +612,135 @@ export function PackagesScreen() {
             >
               Bağla
             </button>
+          </div>
+        </div>
+      )}
+
+      {otherModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setOtherModalOpen(null)} />
+          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <button
+              onClick={() => setOtherModalOpen(null)}
+              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm border ${
+                isDarkMode ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-600'
+              }`}
+              aria-label="Bağla"
+            >
+              ✕
+            </button>
+
+            {otherModalStage === 'confirm' && (
+              <>
+                <div className="text-2xl mb-2">🛍️</div>
+                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Alışı təsdiqlə</div>
+                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
+                  Aşağıdakı məhsulu almaq istəyirsiniz?
+                </div>
+                <div className={`p-3 rounded-lg mb-4 ${isDarkMode ? 'bg-gray-900/30 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Məhsul</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>{otherModalOpen.title}</div>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Miqdar</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-xl font-extrabold`}>{otherModalOpen.count} ədəd</div>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Qiymət</div>
+                  <div className={`text-emerald-600 text-lg font-black`}>{otherModalOpen.newPrice} AZN</div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setOtherModalOpen(null)}
+                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                      isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={() => {
+                      const success = purchaseTickets(otherModalOpen.count, otherModalOpen.newPrice, otherModalOpen.title);
+                      setOtherModalStage(success ? 'success' : 'insufficient');
+                    }}
+                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
+                  >
+                    Təsdiq et
+                  </button>
+                </div>
+              </>
+            )}
+
+            {otherModalStage === 'success' && (
+              <>
+                <div className="text-4xl mb-2">✅</div>
+                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Uğurlu əməliyyat</div>
+                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
+                  {otherModalOpen?.title} ({otherModalOpen?.count} ədəd) alındı.
+                </div>
+                <button
+                  onClick={() => setOtherModalOpen(null)}
+                  className={`w-full px-4 py-2 rounded-xl font-bold min-h-[44px] ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-100' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}
+                >
+                  Bağla
+                </button>
+              </>
+            )}
+
+            {otherModalStage === 'insufficient' && (
+              <>
+                <div className="text-4xl mb-2">⚠️</div>
+                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Balans kifayət etmir</div>
+                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
+                  Balansınızı artırmağınız tövsiyə olunur.
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setOtherModalOpen(null)}
+                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                      isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={() => { setOtherModalOpen(null); navigate('Transactions'); }}
+                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
+                  >
+                    Balans artır
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {insufficientTrainingOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setInsufficientTrainingOpen(false)} />
+          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <div className="text-4xl mb-2">⚠️</div>
+            <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Balans kifayət etmir</div>
+            <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
+              {insufficientTrainingName} ({insufficientTrainingPrice} AZN) üçün balansınız yetərli deyil.
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setInsufficientTrainingOpen(false)}
+                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                  isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Bağla
+              </button>
+              <button
+                onClick={() => { setInsufficientTrainingOpen(false); navigate('Transactions'); }}
+                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
+              >
+                Balans artır
+              </button>
+            </div>
           </div>
         </div>
       )}
