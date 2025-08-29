@@ -104,12 +104,12 @@ export function HomeScreen() {
 
       {hasActivePackage() && (
         <ScaleIn delay={100}>
-          <div className="-mx-3 mb-3 px-3 py-3 bg-gradient-to-r from-emerald-50 to-green-50 border-y border-emerald-200 rounded-none flex items-center gap-3">
-            <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-emerald-600 text-xs">👑</span>
+          <div className="-mx-3 -mt-2 mb-3 px-3 py-2 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-emerald-200 rounded-t-none flex items-center gap-2">
+            <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <span className="text-emerald-600 text-[10px]">👑</span>
             </div>
             <div className="flex-1">
-              <div className="text-emerald-900 text-xs font-medium">
+              <div className="text-emerald-900 text-[11px] font-medium">
                 {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
               </div>
             </div>
