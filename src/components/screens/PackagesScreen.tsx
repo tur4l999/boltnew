@@ -20,7 +20,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode, navigate } = useApp();
+  const { t, goBack, balance, purchasePackage, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 30,
     standart: 30,
@@ -34,6 +34,9 @@ export function PackagesScreen() {
   const [activationDate, setActivationDate] = useState<Date | null>(null);
   const [activationHour, setActivationHour] = useState<string>('09');
   const [activationMinute, setActivationMinute] = useState<string>('00');
+  const [scheduledPopupOpen, setScheduledPopupOpen] = useState<boolean>(false);
+  const [scheduledAt, setScheduledAt] = useState<Date | null>(null);
+  const [scheduledName, setScheduledName] = useState<string>('');
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
@@ -148,8 +151,10 @@ export function PackagesScreen() {
       if (success) {
         setActivationModalOpen(null);
         if (activationMode === 'date' && scheduled) {
-          // navigate to scheduled confirmation screen
-          navigate('ActivationScheduled', { at: scheduled.toISOString(), name: pkg.name });
+          // show scheduled confirmation popup in-place
+          setScheduledName(pkg.name);
+          setScheduledAt(scheduled);
+          setScheduledPopupOpen(true);
         } else {
           alert(`${pkg.name} (${price} AZN - ${days} gün) uğurla satın alındı!`);
           goBack();
@@ -545,6 +550,44 @@ export function PackagesScreen() {
                 Təsdiq et
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {scheduledPopupOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }} />
+          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <button
+              onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }}
+              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm border ${
+                isDarkMode ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-600'
+              }`}
+              aria-label="Bağla"
+            >
+              ✕
+            </button>
+            <div className="text-4xl mb-2">⏰</div>
+            <div className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Aktivləşdirmə planlaşdırıldı
+            </div>
+            <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
+              Seçdiyiniz tarixdə paket aktivləşəcəkdir.
+            </div>
+            <div className="space-y-1 mb-4">
+              <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Seçilən paket</div>
+              <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-sm font-semibold`}>{scheduledName || '—'}</div>
+              <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Aktivləşdirmə tarixi</div>
+              <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-extrabold`}>{scheduledAt ? scheduledAt.toLocaleString('az-AZ') : '—'}</div>
+            </div>
+            <button
+              onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }}
+              className={`w-full px-4 py-2 rounded-xl font-bold min-h-[44px] ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-100' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}
+            >
+              Bağla
+            </button>
           </div>
         </div>
       )}
