@@ -441,30 +441,32 @@ export function PackagesScreen() {
               İndi aktivləşdirin və ya aktivləşdirmə tarixini seçin.
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mb-3">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <button
                 onClick={() => setActivationMode('now')}
-                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] border text-sm ${
+                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm flex items-center justify-center gap-2 ${
                   activationMode === 'now'
-                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    ? 'border-emerald-600 text-emerald-700 bg-emerald-50'
                     : isDarkMode
-                      ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
-                      : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      ? 'border border-gray-600 text-gray-200 hover:bg-gray-700'
+                      : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                İndi aktivləşdir
+                <span>🚀</span>
+                <span>İndi başla</span>
               </button>
               <button
                 onClick={() => setActivationMode('date')}
-                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] border text-sm ${
+                className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm flex items-center justify-center gap-2 ${
                   activationMode === 'date'
-                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    ? 'border-emerald-600 text-emerald-700 bg-emerald-50'
                     : isDarkMode
-                      ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600'
-                      : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      ? 'border border-gray-600 text-gray-200 hover:bg-gray-700'
+                      : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                Aktivləşdirmə Tarixi
+                <span>📅</span>
+                <span>Tarixi seç</span>
               </button>
             </div>
 
@@ -475,13 +477,19 @@ export function PackagesScreen() {
                   minDate={new Date()}
                   onChange={(d) => setActivationDate(d)}
                 />
-                <div className={`mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Seçilən tarix: {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                <div className="mt-3">
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Seçilən tarix</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-lg font-extrabold`}>
+                    {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                  </div>
+                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>
+                    Paketin aktivləşdiriləcəyi tarix: {activationDate ? activationDate.toLocaleDateString('az-AZ') : '—'}
+                  </div>
                 </div>
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className={`grid grid-cols-2 gap-3 mt-4 pt-3 ${isDarkMode ? 'border-t border-gray-700' : 'border-t border-gray-200'}` }>
               <button
                 onClick={() => setActivationModalOpen(null)}
                 className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
