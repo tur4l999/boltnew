@@ -30,8 +30,8 @@ export function HomeScreen() {
     <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      {/* Package Status */}
-      {!hasActivePackage() && (
+      {/* Package Status (hidden if scheduled activation exists) */}
+      {!hasActivePackage() && !(useApp().activePackage && new Date() < useApp().activePackage.activationDate) && (
         <SlideTransition direction="down" delay={100}>
           <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
             isDarkMode 

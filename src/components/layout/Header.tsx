@@ -15,12 +15,17 @@ export function Header() {
           : 'bg-white/80 border-gray-200'
       }`}>
         <div className="px-4 py-2 flex items-center gap-3">
-          <button
-            onClick={() => navigate('Settings')}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-500 text-white flex items-center justify-center font-bold text-sm hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200"
-          >
-            {userName.charAt(0).toUpperCase()}
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => navigate('Settings')}
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-500 text-white flex items-center justify-center font-bold text-sm hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200"
+            >
+              {userName.charAt(0).toUpperCase()}
+            </button>
+            {useApp().hasActivePackage() && (
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] flex items-center justify-center border-2 border-white">★</div>
+            )}
+          </div>
           <div className="flex-1 leading-tight">
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
