@@ -537,10 +537,13 @@ export function PackagesScreen() {
                 dt.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
               }
               const whenStr = dt.toLocaleString('az-AZ');
+              const pkgDays = modalPkg ? selectedDays[modalPkg.id] : undefined;
               return (
                 <div className={`mt-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-900/30 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
                   <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Seçilən paket</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>{modalPkg?.name || '—'}</div>
+                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>
+                    {modalPkg ? `${modalPkg.name}${pkgDays ? ` • ${pkgDays} gün` : ''}` : '—'}
+                  </div>
                   <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Aktivləşdirmə</div>
                   <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-xl font-extrabold`}>{whenStr}</div>
                 </div>
