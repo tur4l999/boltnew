@@ -135,7 +135,7 @@ export function OnlineLessonsScreen() {
                         isDarkMode ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      + Təqvim
+                      Planla
                     </button>
                   </div>
                 );
@@ -171,7 +171,7 @@ export function OnlineLessonsScreen() {
                   isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                + Təqvim
+                Planla
               </button>
               <button
                 onClick={() => setSelectedLesson(null)}
