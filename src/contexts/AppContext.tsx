@@ -3,6 +3,7 @@ import { dictionaries } from '../lib/i18n';
 import type { Language, NavigationScreen } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
+type DeliveryMethod = 'locker' | 'courier' | 'post';
 
 interface UserPackage {
   id: string;
@@ -51,7 +52,9 @@ interface AppContextType {
   removeFromCart: (productId: string) => void;
   updateCartQty: (productId: string, qty: number) => void;
   clearCart: () => void;
-  checkoutByBalance: (deliveryAddress: string) => boolean;
+  checkoutByBalance: (deliveryAddress: string, method: DeliveryMethod) => boolean;
+  deliveryMethod: DeliveryMethod;
+  setDeliveryMethod: (m: DeliveryMethod) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -69,6 +72,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('locker');
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -208,23 +212,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const removeFromCart = (productId: string) => setCart(prev => prev.filter(i => i.productId !== productId));
   const updateCartQty = (productId: string, qty: number) => setCart(prev => prev.map(i => i.productId === productId ? { ...i, qty: Math.max(1, qty) } : i));
   const clearCart = () => setCart([]);
-  const checkoutByBalance = (deliveryAddress: string): boolean => {
+  const checkoutByBalance = (deliveryAddress: string, method: DeliveryMethod): boolean => {
     // Simple balance deduction based on mock prices found in products module at runtime
     try {
       const { STORE_PRODUCTS } = require('../lib/products');
-      const total = cart.reduce((sum: number, item: CartItem) => {
+      const getDeliveryFee = (m: DeliveryMethod): number => {
+        switch (m) {
+          case 'locker': return 2.5; // Kargomat
+          case 'courier': return 5;  // Kuryerlə
+          case 'post': return 3;     // Poçtla
+          default: return 0;
+        }
+      };
+      const subtotal = cart.reduce((sum: number, item: CartItem) => {
         const p = STORE_PRODUCTS.find((x: any) => x.id === item.productId);
         if (!p) return sum;
         const price = p.discountPercent ? Math.round((p.price * (100 - p.discountPercent))) / 100 : p.price;
         return sum + price * item.qty;
       }, 0);
+      const fee = getDeliveryFee(method);
+      const total = subtotal + fee;
       if (total <= 0) return false;
       if (balance < total) return false;
       const trans: Transaction = {
         id: Date.now().toString(),
         type: 'purchase',
         amount: total,
-        description: `Mağaza sifarişi • ${cart.length} məhsul • Çatdırılma: ${deliveryAddress}`,
+        description: `Mağaza sifarişi • ${cart.length} məhsul • Çatdırılma: ${deliveryAddress} • Üsul: ${method}`,
         date: new Date(),
       };
       setBalance(prev => prev - total);
@@ -262,6 +276,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isModuleUnlocked,
       activatePackageNow
       , cart, addToCart, removeFromCart, updateCartQty, clearCart, checkoutByBalance
+      , deliveryMethod, setDeliveryMethod
     }}>
       {children}
     </AppContext.Provider>

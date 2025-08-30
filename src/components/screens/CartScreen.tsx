@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 import { QuantityStepper } from '../ui/QuantityStepper';
 
 export function CartScreen() {
-  const { cart, updateCartQty, removeFromCart, checkoutByBalance, isDarkMode, goBack } = useApp();
+  const { cart, updateCartQty, removeFromCart, checkoutByBalance, isDarkMode, goBack, deliveryMethod, setDeliveryMethod } = useApp();
   const [address, setAddress] = useState('Bakı, Nizami küç. 1');
 
   const items = cart.map(ci => {
@@ -14,7 +14,9 @@ export function CartScreen() {
     return { ...p, qty: ci.qty };
   });
 
-  const total = useMemo(() => items.reduce((sum, p) => sum + getDiscountedPrice(p) * p.qty, 0), [items]);
+  const subtotal = useMemo(() => items.reduce((sum, p) => sum + getDiscountedPrice(p) * p.qty, 0), [items]);
+  const fee = deliveryMethod === 'locker' ? 2.5 : deliveryMethod === 'courier' ? 5 : 3;
+  const total = subtotal + fee;
 
   return (
     <div className={`p-3 pb-24 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -54,10 +56,20 @@ export function CartScreen() {
             />
           </Card>
 
+          <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <h3 className="font-bold mb-2">Çatdırılma üsulu</h3>
+            <div className="grid grid-cols-3 gap-2 text-sm">
+              <DeliveryOption label="Kargomat" value="locker" selected={deliveryMethod==='locker'} onSelect={() => setDeliveryMethod('locker')} fee={2.5} />
+              <DeliveryOption label="Kuryerlə" value="courier" selected={deliveryMethod==='courier'} onSelect={() => setDeliveryMethod('courier')} fee={5} />
+              <DeliveryOption label="Poçtla" value="post" selected={deliveryMethod==='post'} onSelect={() => setDeliveryMethod('post')} fee={3} />
+            </div>
+          </Card>
+
           <div className="mt-4 flex items-center justify-between">
+            <div className="text-sm opacity-80">Məbləğ: {subtotal.toFixed(2)} ₼ • Çatdırılma: {fee.toFixed(2)} ₼</div>
             <div className="text-lg font-bold">Cəmi: {total.toFixed(2)} ₼</div>
             <Button onClick={() => {
-              const ok = checkoutByBalance(address);
+              const ok = checkoutByBalance(address, deliveryMethod as any);
               alert(ok ? 'Ödəniş uğurlu oldu (balansdan)' : 'Ödəniş mümkün olmadı (balans kifayət deyil?)');
             }}>
               Balansla al
@@ -66,6 +78,19 @@ export function CartScreen() {
         </>
       )}
     </div>
+  );
+}
+
+function DeliveryOption({ label, value, selected, onSelect, fee }: { label: string; value: string; selected: boolean; onSelect: () => void; fee: number; }) {
+  const { isDarkMode } = useApp();
+  return (
+    <button
+      onClick={onSelect}
+      className={`rounded-lg border px-3 py-2 text-center ${selected ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800 hover:bg-gray-700' : 'border-gray-200 bg-white hover:bg-gray-50'}`}
+    >
+      <div className="font-medium">{label}</div>
+      <div className="text-xs opacity-70">{fee.toFixed(2)} ₼</div>
+    </button>
   );
 }
 
