@@ -20,6 +20,8 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { ExamIntroScreen } from '../screens/ExamIntroScreen';
 import { ActivationScheduledScreen } from '../screens/ActivationScheduledScreen';
 import { OnlineLessonsScreen } from '../screens/OnlineLessonsScreen';
+import { ProductDetailScreen } from '../screens/ProductDetailScreen';
+import { CartScreen } from '../screens/CartScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -59,9 +61,11 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'ActivationScheduled' && <ActivationScheduledScreen />}
       {currentScreen.screen === 'Transactions' && <TransactionsScreen />}
       {currentScreen.screen === 'Settings' && <SettingsScreen />}
+      {currentScreen.screen === 'ProductDetail' && <ProductDetailScreen />}
+      {currentScreen.screen === 'Cart' && <CartScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

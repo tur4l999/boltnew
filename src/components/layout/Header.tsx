@@ -4,7 +4,7 @@ import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
 
 export function Header() {
-  const { t, language, setLanguage, navigate, isDarkMode } = useApp();
+  const { t, language, setLanguage, navigate, isDarkMode, cartItems } = useApp();
   const userName = "Tural Qarayev";
   
   return (
@@ -48,6 +48,19 @@ export function Header() {
           >
             🤖
           </IconButton>
+          <div className="relative">
+            <IconButton
+              onClick={() => navigate('Cart')}
+              label="Səbət"
+            >
+              🛒
+            </IconButton>
+            {cartItems.length > 0 && (
+              <div className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-emerald-600 text-white text-[10px] leading-4 text-center">
+                {cartItems.reduce((n, i) => n + i.quantity, 0)}
+              </div>
+            )}
+          </div>
           <IconButton 
             onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')} 
             label={t.language}
