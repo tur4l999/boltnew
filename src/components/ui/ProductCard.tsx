@@ -18,9 +18,10 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
 
   return (
     <Card
+      onClick={onClick}
       className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3`}
     >
-      <div className="relative" onClick={onClick}>
+      <div className="relative">
         {hasDiscount && (
           <span className="absolute -top-2 -left-2 bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
             -{product.discountPercent}%
@@ -33,14 +34,15 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
         />
       </div>
       <div className="space-y-2">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
-            {product.title}
-          </h3>
-          <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300">
-            {hasDiscount ? discounted : product.price} ₼
-          </span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
+          {hasDiscount && (
+            <span className="text-xs line-through opacity-60">{product.price} ₼</span>
+          )}
         </div>
+        <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
+          {product.title}
+        </h3>
         <div className="flex items-center gap-1 text-[10px] text-amber-500">
           {'★'.repeat(Math.round(product.rating ?? 4))}
           <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} ml-1`}>
@@ -48,11 +50,9 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           </span>
         </div>
         <div className="flex items-center justify-between">
-          {hasDiscount ? (
-            <span className="text-xs line-through opacity-60">{product.price} ₼</span>
-          ) : <span />}
+          <span />
           <Button size="sm" className="text-xs px-3 py-1" onClick={onAddToCart}>
-            Səbətə
+            Səbətə at
           </Button>
         </div>
       </div>
