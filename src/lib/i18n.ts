@@ -68,7 +68,7 @@ export const dictionaries = {
     notifications: 'Bildirişlər',
     assistant: 'AI köməkçi',
     language: 'Dil',
-    upcomingLessons: 'Ən son keçiriləcək dərslər',
+    upcomingLessons: 'Yaxın zamanda başlayacaq dərslər:',
     classSchedule: 'Dərs cədvəli',
   },
   
