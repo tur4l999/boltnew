@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Button } from '../ui/Button';
+import { AppIcon } from '../ui/AppIcon';
 import { EXAM_TOPICS } from '../../lib/data';
 
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
@@ -155,14 +156,14 @@ export function ExamScreen() {
               onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
               className="w-full"
             >
-              🧪 İmtahan simulyatoru
+              <span className="inline-flex items-center gap-2"><AppIcon name="exam" /> İmtahan simulyatoru</span>
             </Button>
             <Button 
               onClick={() => navigate('ExamConfig', { mode: 'final' })}
               className="w-full"
               variant="secondary"
             >
-              📋 Yekun imtahan
+              <span className="inline-flex items-center gap-2"><AppIcon name="clipboard" /> Yekun imtahan</span>
             </Button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
 import { PracticeInline } from '../practice/PracticeInline';
 import { MODULES } from '../../lib/data';
+import { AppIcon } from '../ui/AppIcon';
 
 export function LessonScreen() {
   const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
@@ -46,13 +47,13 @@ export function LessonScreen() {
                   offlineDownload ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-gray-600'
                 }`}
               >
-                📱 {t.download}
+                <span className="inline-flex items-center gap-1"><AppIcon name="mobile" /> {t.download}</span>
               </button>
               <button
                 onClick={() => navigate('TeacherContact')}
                 className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
               >
-                💬 Sualını qeyd et
+                <span className="inline-flex items-center gap-1"><AppIcon name="message" /> Sualını qeyd et</span>
               </button>
             </div>
           </div>
@@ -151,7 +152,7 @@ export function LessonScreen() {
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="flex-1 min-w-0 truncate">{m.title}</span>
-                    {!unlocked && <span className="text-sm flex-shrink-0">🔒</span>}
+                    {!unlocked && <span className="text-sm flex-shrink-0"><AppIcon name="lock" /></span>}
                   </div>
                 </button>
               );
@@ -186,13 +187,13 @@ export function LessonScreen() {
           onClick={() => navigate('Practice', { moduleId })}
           className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          📝 Suallar
+          <span className="inline-flex items-center gap-2"><AppIcon name="quick" /> Suallar</span>
         </Button>
         <Button 
           onClick={() => alert('Başqa imtahan növü (demo)')}
           className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          🧪 İmtahana başla
+          <span className="inline-flex items-center gap-2"><AppIcon name="exam" /> İmtahana başla</span>
         </Button>
       </div>
     </div>

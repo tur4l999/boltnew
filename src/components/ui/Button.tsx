@@ -19,7 +19,7 @@ export function Button({
   className = ''
 }: ButtonProps) {
   const { isDarkMode } = useApp();
-  const baseClasses = 'font-bold rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'font-bold rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-95';
   
   const sizeClasses = {
     sm: 'px-3 py-2 text-sm min-h-[36px]',
@@ -32,21 +32,21 @@ export function Button({
       ? isDarkMode
         ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      : 'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500',
+      : 'bg-gradient-to-t from-emerald-600 to-emerald-500 text-white hover:from-emerald-700 hover:to-emerald-600 shadow-md focus:ring-emerald-500',
     secondary: disabled
       ? isDarkMode
         ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
         : 'bg-gray-100 text-gray-500 cursor-not-allowed'
       : isDarkMode
         ? 'bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-gray-500'
-        : 'bg-gray-800 text-white hover:bg-gray-900 focus:ring-gray-600',
+        : 'bg-gray-900 text-white hover:bg-black focus:ring-gray-600',
     ghost: disabled
       ? isDarkMode
         ? 'bg-transparent border border-gray-700 text-gray-600 cursor-not-allowed'
         : 'bg-transparent border border-gray-300 text-gray-500 cursor-not-allowed'
       : isDarkMode
         ? 'bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 focus:ring-gray-500'
-        : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+        : 'bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-50 focus:ring-gray-500'
   };
   
   return (

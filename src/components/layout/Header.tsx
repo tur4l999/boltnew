@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
+import { AppIcon } from '../ui/AppIcon';
 
 export function Header() {
   const { t, language, setLanguage, navigate, isDarkMode } = useApp();
@@ -23,7 +24,11 @@ export function Header() {
               {userName.charAt(0).toUpperCase()}
             </button>
             {useApp().hasActivePackage() && (
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white">★</div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 grid place-items-center border-2 border-white">
+                <svg viewBox="0 0 24 24" className="w-3 h-3 fill-yellow-900">
+                  <path d="M12 2.5l2.98 6.04 6.67.97-4.82 4.7 1.14 6.65L12 17.77l-5.97 3.14 1.14-6.65L2.35 9.5l6.67-.97L12 2.5z"/>
+                </svg>
+              </div>
             )}
           </div>
           <div className="flex-1 leading-tight">
@@ -37,22 +42,22 @@ export function Header() {
             </div>
           </div>
           <IconButton
-            onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
+            onClick={() => showToast('Push (demo): Bu gün 15 dəq məşq et!')}
             label={t.notifications}
           >
-            🔔
+            <AppIcon name="bell" />
           </IconButton>
           <IconButton
             onClick={() => navigate('AIChat')}
             label={t.assistant}
           >
-            🤖
+            <AppIcon name="assistant" />
           </IconButton>
           <IconButton 
             onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')} 
             label={t.language}
           >
-            🌐
+            <AppIcon name="language" />
           </IconButton>
         </div>
       </div>

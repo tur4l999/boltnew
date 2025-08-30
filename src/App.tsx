@@ -42,7 +42,7 @@ function AppContent() {
     <div className={`min-h-screen transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gray-900 text-gray-100' 
-        : 'bg-gray-50 text-gray-900'
+        : 'bg-gradient-to-b from-gray-50 via-emerald-50/30 to-white text-gray-900'
     }`}>
       <div className={`max-w-md mx-auto h-screen relative transition-colors duration-200 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'

@@ -5,17 +5,18 @@ import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
+import { AppIcon } from '../ui/AppIcon';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow } = useApp();
   
   const gridItems = [
-    { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
-    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
-    { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
-    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
+    { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), icon: 'video' as const },
+    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), icon: 'onlineLesson' as const },
+    { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), icon: 'quick' as const },
+    { key: 'tests', label: t.tests, action: () => navigate('Practice'), icon: 'tests' as const },
+    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), icon: 'fines' as const },
+    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), icon: 'articles' as const },
   ];
   
   const rows = useMemo(() => {
@@ -43,7 +44,9 @@ export function HomeScreen() {
             }`}>
               <span className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-blue-300' : 'text-blue-600'
-              }`}>📦</span>
+              }`}>
+                <AppIcon name="package" size={14} />
+              </span>
             </div>
             <div className="flex-1">
               <div className={`text-xs font-medium transition-colors duration-200 ${
@@ -79,7 +82,9 @@ export function HomeScreen() {
             }`}>
               <span className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-amber-300' : 'text-amber-600'
-              }`}>⏰</span>
+              }`}>
+                <AppIcon name="clock" size={14} />
+              </span>
             </div>
             <div className="flex-1">
               <div className={`text-xs font-medium transition-colors duration-200 ${
@@ -106,7 +111,7 @@ export function HomeScreen() {
         <ScaleIn delay={100}>
           <div className="-mx-3 -mt-2 mb-3 px-3 py-2 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-emerald-200 rounded-t-none flex items-center gap-2">
             <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-emerald-600 text-[10px]">👑</span>
+              <AppIcon name="crown" size={12} className="text-emerald-600" />
             </div>
             <div className="flex-1">
               <div className="text-emerald-900 text-[11px] font-medium">
@@ -146,7 +151,7 @@ export function HomeScreen() {
                 <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
                   isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                 }`}>
-                  {item.emoji}
+                  <AppIcon name={item.icon} size={20} className="text-emerald-600" />
                 </div>
                 <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-200' : 'text-gray-700'
@@ -168,7 +173,7 @@ export function HomeScreen() {
             className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
           >
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-              🧪
+              <AppIcon name="exam" size={20} className="text-white" />
             </div>
             <div className="text-left font-black text-base leading-tight">
               {t.examSimulator}
@@ -184,7 +189,7 @@ export function HomeScreen() {
           className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden transform hover:scale-105 transition-transform duration-200"
         >
           <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
-            <span className="text-white text-base">▶</span>
+            <AppIcon name="play" size={20} className="text-white" />
           </div>
           <span className="text-base">Tətbiqdən Necə İstifadə Edilir</span>
         </button>

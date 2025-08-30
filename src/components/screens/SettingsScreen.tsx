@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { AppIcon } from '../ui/AppIcon';
 
 export function SettingsScreen() {
   const { goBack, language, setLanguage, theme, setTheme, balance, activePackage, isDarkMode } = useApp();
@@ -8,41 +9,41 @@ export function SettingsScreen() {
   const userEmail = "tural.qarayev@example.com";
 
   const themeOptions = [
-    { value: 'light', label: '☀️ Gündüz', description: 'Açıq tema' },
-    { value: 'dark', label: '🌙 Gecə', description: 'Qaranlıq tema' },
-    { value: 'system', label: '📱 Cihaza uyğun', description: 'Sistem ayarına görə' }
+    { value: 'light', label: 'Gündüz', description: 'Açıq tema' },
+    { value: 'dark', label: 'Gecə', description: 'Qaranlıq tema' },
+    { value: 'system', label: 'Cihaza uyğun', description: 'Sistem ayarına görə' }
   ];
 
   const languageOptions = [
-    { value: 'az', label: '🇦🇿 Azərbaycan dili' },
-    { value: 'ru', label: '🇷🇺 Русский язык' }
+    { value: 'az', label: 'Azərbaycan dili' },
+    { value: 'ru', label: 'Русский язык' }
   ];
 
   const settingsItems = [
     {
       section: 'Hesabım',
       items: [
-        { key: 'profile', label: 'Profil məlumatları', emoji: '👤', action: () => alert('Profil məlumatları (demo)') },
-        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔒', action: () => alert('Təhlükəsizlik (demo)') },
-        { key: 'privacy', label: 'Məxfilik', emoji: '🛡️', action: () => alert('Məxfilik (demo)') },
-        { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildiriş ayarları (demo)') }
+        { key: 'profile', label: 'Profil məlumatları', icon: 'user' as const, action: () => alert('Profil məlumatları (demo)') },
+        { key: 'security', label: 'Təhlükəsizlik', icon: 'lock' as const, action: () => alert('Təhlükəsizlik (demo)') },
+        { key: 'privacy', label: 'Məxfilik', icon: 'shield' as const, action: () => alert('Məxfilik (demo)') },
+        { key: 'notifications', label: 'Bildirişlər', icon: 'bell' as const, action: () => alert('Bildiriş ayarları (demo)') }
       ]
     },
     {
       section: 'Tətbiq',
       items: [
-        { key: 'offline', label: 'Offline məzmun', emoji: '📱', action: () => alert('Offline məzmun (demo)') },
-        { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', action: () => alert('Keş təmizləndi (demo)') },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') }
+        { key: 'offline', label: 'Offline məzmun', icon: 'mobile' as const, action: () => alert('Offline məzmun (demo)') },
+        { key: 'cache', label: 'Keş təmizlə', icon: 'trash' as const, action: () => alert('Keş təmizləndi (demo)') },
+        { key: 'updates', label: 'Yeniləmələr', icon: 'refresh' as const, action: () => alert('Yeniləmələr (demo)') }
       ]
     },
     {
       section: 'Dəstək',
       items: [
-        { key: 'help', label: 'Kömək mərkəzi', emoji: '❓', action: () => alert('Kömək mərkəzi (demo)') },
-        { key: 'contact', label: 'Bizimlə əlaqə', emoji: '📞', action: () => alert('Əlaqə (demo)') },
-        { key: 'feedback', label: 'Rəy bildirin', emoji: '💬', action: () => alert('Rəy bildirin (demo)') },
-        { key: 'about', label: 'Haqqında', emoji: 'ℹ️', action: () => alert('DDA.az v1.0.0 (demo)') }
+        { key: 'help', label: 'Kömək mərkəzi', icon: 'question' as const, action: () => alert('Kömək mərkəzi (demo)') },
+        { key: 'contact', label: 'Bizimlə əlaqə', icon: 'phone' as const, action: () => alert('Əlaqə (demo)') },
+        { key: 'feedback', label: 'Rəy bildirin', icon: 'message' as const, action: () => alert('Rəy bildirin (demo)') },
+        { key: 'about', label: 'Haqqında', icon: 'info' as any, action: () => alert('DDA.az v1.0.0 (demo)') }
       ]
     }
   ];
@@ -204,7 +205,7 @@ export function SettingsScreen() {
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
                       isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
                     }`}>
-                      {item.emoji}
+                      <AppIcon name={item.icon} />
                     </div>
                     <div className="flex-1">
                       <div className="font-medium">{item.label}</div>
@@ -231,7 +232,11 @@ export function SettingsScreen() {
             }}
             className="w-full p-4 flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 font-medium"
           >
-            <span className="text-lg">🚪</span>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
             Hesabdan çıx
           </button>
         </Card>
