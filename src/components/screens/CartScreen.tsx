@@ -53,7 +53,7 @@ export function CartScreen() {
 
           <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Çatdırılma üsulu</h3>
-            <div className="flex flex-col gap-2 text-sm">
+            <div className="grid grid-cols-2 gap-2 text-sm">
               <DeliveryOption label="Kargomat" value="locker" selected={deliveryMethod==='locker'} onSelect={() => setDeliveryMethod('locker')} fee={2.5} />
               <DeliveryOption label="Kuryerlə" value="courier" selected={deliveryMethod==='courier'} onSelect={() => setDeliveryMethod('courier')} fee={5} />
               <DeliveryOption label="Poçtla" value="post" selected={deliveryMethod==='post'} onSelect={() => setDeliveryMethod('post')} fee={3} />
@@ -150,8 +150,15 @@ function LockerList({ query, selected, onSelect }: { query: string; selected: st
     { id: 'l2', name: 'Kargomat • Gənclik Mall' },
     { id: 'l3', name: 'Kargomat • 28 May' },
     { id: 'l4', name: 'Kargomat • Yasamal ASAN' },
+    { id: 'l5', name: 'Kargomat • Xalqlar Dostluğu' },
+    { id: 'l6', name: 'Kargomat • Memar Əcəmi Mall' },
+    { id: 'l7', name: 'Kargomat • Neftçilər m/s' },
+    { id: 'l8', name: 'Kargomat • İçərişəhər' },
+    { id: 'l9', name: 'Kargomat • Nizami küç.' },
+    { id: 'l10', name: 'Kargomat • Elmlər Akademiyası' },
+    { id: 'l11', name: 'Kargomat • Həzi Aslanov' },
   ];
-  const list = lockers.filter(l => l.name.toLowerCase().includes(query.toLowerCase()));
+  const list = lockers.filter(l => l.name.toLowerCase().includes(query.toLowerCase())).slice(0, 10);
   return (
     <div className="max-h-40 overflow-auto divide-y divide-gray-200/20">
       {list.map(l => (
