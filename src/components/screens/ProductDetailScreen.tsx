@@ -3,9 +3,10 @@ import { useApp } from '../../contexts/AppContext';
 import { STORE_PRODUCTS, getDiscountedPrice, type StoreProduct } from '../../lib/products';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { QuantityStepper } from '../ui/QuantityStepper';
 
 export function ProductDetailScreen() {
-  const { currentScreen, goBack, isDarkMode } = useApp();
+  const { currentScreen, goBack, isDarkMode, addToCart, navigate } = useApp();
   const productId: string | undefined = currentScreen.params?.id;
   const product: StoreProduct | undefined = useMemo(
     () => STORE_PRODUCTS.find(p => p.id === productId) ?? STORE_PRODUCTS[0],
@@ -13,6 +14,7 @@ export function ProductDetailScreen() {
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [qty, setQty] = useState(1);
 
   if (!product) return null;
 
@@ -59,8 +61,8 @@ export function ProductDetailScreen() {
       </div>
 
       {/* Price and CTA */}
-      <div className="mt-4 flex items-center justify-between">
-        <div>
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <div className="min-w-0">
           {hasDiscount ? (
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-pink-600">{discounted} ₼</span>
@@ -71,7 +73,10 @@ export function ProductDetailScreen() {
           )}
           <div className="text-xs mt-1 text-amber-500">★ {product.rating ?? 4.5} ({product.reviewsCount ?? 0} rəy)</div>
         </div>
-        <Button onClick={() => alert('Demo: satın alma')}>Al</Button>
+        <div className="flex items-center gap-3">
+          <QuantityStepper value={qty} onChange={setQty} />
+          <Button onClick={() => { addToCart(product.id, qty); navigate('Cart'); }}>Səbətə at</Button>
+        </div>
       </div>
 
       {/* Details */}
