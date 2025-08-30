@@ -14,6 +14,7 @@ type LessonItem = {
 export function OnlineLessonsScreen() {
   const { t, isDarkMode, goBack } = useApp();
   const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
+  const [scheduledIds, setScheduledIds] = useState<Set<string>>(new Set());
 
   const truncate = (text: string, max: number): string => {
     if (!text) return '';
@@ -22,6 +23,15 @@ export function OnlineLessonsScreen() {
 
   const getTitleFor = (moduleId: string): string => {
     return MODULES.find(m => m.id === moduleId)?.title || moduleId;
+  };
+
+  const formatDateTime = (d: Date): string => {
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
   };
 
   // Use real module titles
@@ -84,18 +94,24 @@ export function OnlineLessonsScreen() {
               <div className="flex-1">
                 <div className={`text-base font-black leading-tight ${isDarkMode ? 'text-emerald-100' : 'text-emerald-900'}`}>{truncate(l.title, 64)}</div>
                 <div className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
-                  {d.toLocaleString('az-AZ', { weekday: 'long', hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}
-                  {' • '}{l.instructor}{' • '}{l.durationMin} dəq
+                  {formatDateTime(d)}{' • '}{l.instructor}{' • '}{l.durationMin} dəq
                 </div>
               </div>
-              <button
-                className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
-                  isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                }`}
-                onClick={() => alert('Dərs qoşulma linki (demo)')}
-              >
-                Canlı qoşul
-              </button>
+              {scheduledIds.has(l.id) ? (
+                <div className="relative w-10 h-10">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'}`}>🔔</div>
+                  <div className={`absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
+                </div>
+              ) : (
+                <button
+                  className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
+                    isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  }`}
+                  onClick={(e) => { e.stopPropagation(); setScheduledIds(prev => new Set([...prev, l.id])); }}
+                >
+                  Planla
+                </button>
+              )}
             </div>
           );
         })}
@@ -129,14 +145,21 @@ export function OnlineLessonsScreen() {
                         {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })} • {l.instructor} • {l.durationMin} dəq
                       </div>
                     </div>
-                    <button
-                      onClick={() => alert('Yadda saxlandı (demo)')}
-                      className={`px-2 py-1 rounded text-[11px] font-semibold shadow-sm ${
-                        isDarkMode ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      Planla
-                    </button>
+                    {scheduledIds.has(l.id) ? (
+                      <div className="relative w-9 h-9">
+                        <div className={`w-9 h-9 rounded-md flex items-center justify-center text-base ${isDarkMode ? 'bg-gray-700 text-emerald-300' : 'bg-gray-50 text-emerald-700 border border-emerald-200'}`}>🔔</div>
+                        <div className={`absolute -right-1 -bottom-1 w-4.5 h-4.5 rounded-full flex items-center justify-center text-[9px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setScheduledIds(prev => new Set([...prev, l.id])); }}
+                        className={`px-2 py-1 rounded text-[11px] font-semibold shadow-sm ${
+                          isDarkMode ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                      >
+                        Planla
+                      </button>
+                    )}
                   </div>
                 );
               })}
@@ -155,24 +178,32 @@ export function OnlineLessonsScreen() {
               {selectedLesson.title}
             </div>
             <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-xs mb-4`}>
-              {new Date(selectedLesson.date).toLocaleString('az-AZ', { weekday: 'long', day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' })}
-              {' • '}{selectedLesson.instructor}{' • '}{selectedLesson.durationMin} dəq
+              {formatDateTime(new Date(selectedLesson.date))}{' • '}{selectedLesson.instructor}{' • '}{selectedLesson.durationMin} dəq
             </div>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => alert('Qoşulma linki (demo)')}
                 className="px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white"
               >
-                Canlı qoşul
+                Qoşul
               </button>
-              <button
-                onClick={() => alert('Təqvimə əlavə edildi (demo)')}
-                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Planla
-              </button>
+              {scheduledIds.has(selectedLesson.id) ? (
+                <div className="flex items-center justify-center">
+                  <div className="relative w-10 h-10">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700 text-emerald-300' : 'bg-gray-50 text-emerald-700 border border-emerald-200'}`}>🔔</div>
+                    <div className={`absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setScheduledIds(prev => new Set([...prev, selectedLesson.id]))}
+                  className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                    isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Planla
+                </button>
+              )}
               <button
                 onClick={() => setSelectedLesson(null)}
                 className={`col-span-2 mt-1 px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
@@ -182,6 +213,11 @@ export function OnlineLessonsScreen() {
                 Bağla
               </button>
             </div>
+            {scheduledIds.has(selectedLesson.id) && (
+              <div className={`mt-3 text-[11px] ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Bildirişlər: dərsə 5 saat, 1 saat və 30 dəqiqə qalmış göndəriləcəkdir.
+              </div>
+            )}
           </div>
         </div>
       )}
