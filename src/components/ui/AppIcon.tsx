@@ -42,20 +42,22 @@ import {
   Unlock,
   ClipboardList,
   GraduationCap,
+  RadioTower,
+  TestTube,
   Square
 } from 'lucide-react';
 
 const ICONS = {
   home: Home,
   topics: BookOpen,
-  exam: Beaker,
+  exam: TestTube,
   store: ShoppingBag,
   more: Plus,
   bell: Bell,
   assistant: Bot,
   language: Globe,
   video: PlayCircle,
-  onlineLesson: Wifi,
+  onlineLesson: RadioTower,
   quick: PencilLine,
   tests: FileText,
   fines: Banknote,
