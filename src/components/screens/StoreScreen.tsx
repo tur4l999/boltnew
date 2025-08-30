@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { AppIcon } from '../ui/AppIcon';
 
 interface Book {
   id: string;
@@ -118,7 +119,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">💳</div>
+            <div className="text-2xl mb-1"><AppIcon name="creditCard" size={22} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Kart</div>
@@ -128,7 +129,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">📱</div>
+            <div className="text-2xl mb-1"><AppIcon name="mobile" size={22} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Mobil</div>
@@ -138,7 +139,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">🏦</div>
+            <div className="text-2xl mb-1"><AppIcon name="bank" size={22} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Bank</div>
@@ -152,13 +153,13 @@ export function StoreScreen() {
           isDarkMode ? 'text-gray-500' : 'text-gray-500'
         }`}>
           <span className="flex items-center gap-1">
-            🔒 Təhlükəsiz ödəniş
+            <AppIcon name="lock" /> Təhlükəsiz ödəniş
           </span>
           <span className="flex items-center gap-1">
-            ⚡ Ani çatdırılma
+            <AppIcon name="lightning" /> Ani çatdırılma
           </span>
           <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
+            <AppIcon name="target" /> 7/24 dəstək
           </span>
         </div>
       </div>

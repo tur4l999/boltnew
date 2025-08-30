@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { AppIcon } from '../ui/AppIcon';
 import { MODULES } from '../../lib/data';
 
 type LessonItem = {
@@ -107,7 +108,7 @@ export function OnlineLessonsScreen() {
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
                 isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'
-              }`}>📡</div>
+              }`}><AppIcon name="wifi" size={22} /></div>
               <div className="flex-1">
                 <div className={`text-base font-black leading-tight ${isDarkMode ? 'text-emerald-100' : 'text-emerald-900'}`}>{truncate(l.title, 64)}</div>
                 <div className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
@@ -150,7 +151,7 @@ export function OnlineLessonsScreen() {
                   >
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${
                       isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-700'
-                    }`}>🎓</div>
+                    }`}><AppIcon name="graduationCap" /></div>
                     <div className="flex-1 min-w-0">
                       <div className={`text-sm font-extrabold truncate ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{truncate(l.title, 48)}</div>
                       <div className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>

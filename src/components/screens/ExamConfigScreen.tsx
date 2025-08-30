@@ -2,14 +2,15 @@ import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { AppIcon } from '../ui/AppIcon';
 
 export function ExamConfigScreen() {
   const { t, navigate, isDarkMode, currentScreen } = useApp();
   const mode: 'simulator' | 'final' | undefined = currentScreen.params?.mode;
 
   const header = useMemo(() => {
-    if (mode === 'final') return '📋 Yekun imtahan';
-    return '🧪 İmtahan simulyatoru';
+    if (mode === 'final') return 'Yekun imtahan';
+    return 'İmtahan simulyatoru';
   }, [mode]);
 
   const [showPromo, setShowPromo] = useState(false);
@@ -40,10 +41,10 @@ export function ExamConfigScreen() {
           <Card>
             <div className="space-y-3">
               <Button onClick={() => navigate('ExamConfig', { mode: 'simulator' })} className="w-full">
-                🧪 İmtahan simulyatoru
+                <span className="inline-flex items-center gap-2"><AppIcon name="exam" /> İmtahan simulyatoru</span>
               </Button>
               <Button onClick={() => navigate('ExamConfig', { mode: 'final' })} className="w-full" variant="secondary">
-                📋 Yekun imtahan
+                <span className="inline-flex items-center gap-2"><AppIcon name="clipboard" /> Yekun imtahan</span>
               </Button>
             </div>
           </Card>

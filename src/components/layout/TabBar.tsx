@@ -1,14 +1,15 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { AppIcon } from '../ui/AppIcon';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
   
   const tabs = [
-    { key: 'Home', label: t.home, emoji: '🏠' },
-    { key: 'Topics', label: 'Təlimlər', emoji: '📚' },
-    { key: 'Exam', label: t.exam, emoji: '🧪' },
-    { key: 'Store', label: t.store, emoji: '🛍️' },
+    { key: 'Home', label: t.home, icon: 'home' as const },
+    { key: 'Topics', label: 'Təlimlər', icon: 'topics' as const },
+    { key: 'Exam', label: t.exam, icon: 'exam' as const },
+    { key: 'Store', label: t.store, icon: 'store' as const },
   ];
 
   return (
@@ -39,7 +40,7 @@ export function TabBar() {
                 ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110'
                 : 'bg-transparent'
             }`}>
-              <span className="text-base">{tab.emoji}</span>
+              <AppIcon name={tab.icon} size={18} className={(currentScreen.screen === tab.key) ? 'text-emerald-600' : ''} />
             </div>
             <div className={`text-xs font-semibold transition-all duration-200 ${
               (currentScreen.screen === tab.key)
@@ -58,7 +59,7 @@ export function TabBar() {
               ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
               : 'bg-transparent'
           }`}>
-            <span className="text-base">➕</span>
+            <AppIcon name="more" size={18} className={currentTab === 'More' ? 'text-emerald-600' : ''} />
           </div>
           <div className={`text-xs font-semibold transition-all duration-200 ${
             currentTab === 'More' ? 'transform scale-105' : ''

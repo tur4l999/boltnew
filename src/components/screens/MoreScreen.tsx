@@ -1,20 +1,21 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { AppIcon } from '../ui/AppIcon';
 
 export function MoreScreen() {
   const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
   
   const moreItems = [
-    { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
-    { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
-    { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
-    { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },
-    { key: 'mistakes', label: 'Səhvlərim', emoji: '⚠️', action: () => navigate('Mistakes') },
-    { key: 'qa', label: 'Sual-cavab', emoji: '❓', action: () => alert('Sual-cavab (demo)') },
-    { key: 'appeal', label: 'Apellyasiyalarım', emoji: '📝', action: () => alert('Apellyasiya (demo)') },
-    { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => navigate('Settings') },
-    { key: 'settings', label: 'Parametrlər', emoji: '⚙️', action: () => navigate('Settings') },
-    { key: 'help', label: 'Dəstək', emoji: '🆘', action: () => alert('Köməkçi (demo)') },
+    { key: 'packages', label: 'Təlim paketləri', icon: 'package' as const, action: () => navigate('Packages') },
+    { key: 'balance', label: 'Daxili balans', icon: 'cart' as const, action: () => navigate('Transactions') },
+    { key: 'certificate', label: 'Şəhadətnamə almaq', icon: 'trophy' as const, action: () => alert('Şəhadətnamə almaq (demo)') },
+    { key: 'practice', label: 'Praktiki təcrübə', icon: 'car' as const, action: () => alert('Praktiki təcrübə (demo)') },
+    { key: 'mistakes', label: 'Səhvlərim', icon: 'alert' as const, action: () => navigate('Mistakes') },
+    { key: 'qa', label: 'Sual-cavab', icon: 'question' as const, action: () => alert('Sual-cavab (demo)') },
+    { key: 'appeal', label: 'Apellyasiyalarım', icon: 'quick' as const, action: () => alert('Apellyasiya (demo)') },
+    { key: 'notifications', label: 'Bildirişlər', icon: 'bell' as const, action: () => navigate('Settings') },
+    { key: 'settings', label: 'Parametrlər', icon: 'settings' as const, action: () => navigate('Settings') },
+    { key: 'help', label: 'Dəstək', icon: 'message' as const, action: () => alert('Köməkçi (demo)') },
   ];
 
   return (
@@ -59,7 +60,7 @@ export function MoreScreen() {
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-colors duration-200 ${
               isDarkMode ? 'bg-green-800' : 'bg-green-100'
             }`}>
-              ✅
+              <AppIcon name="check" />
             </div>
             <div className="flex-1">
               <div className={`font-medium text-sm transition-colors duration-200 ${
@@ -92,7 +93,7 @@ export function MoreScreen() {
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
             }`}>
-              {item.emoji}
+              <AppIcon name={item.icon} />
             </div>
             <div className="flex-1">
               <div className="font-medium text-sm">{item.label}</div>

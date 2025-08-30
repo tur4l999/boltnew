@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { AppIcon } from '../ui/AppIcon';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { IconButton } from '../ui/IconButton';
@@ -197,11 +198,11 @@ export function AIChatScreen() {
                 onClick={() => setHistoryOpen(!historyOpen)}
                 className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
-                ☰
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
               </button>
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                  <span className="text-white text-sm">🤖</span>
+                  <AppIcon name="assistant" className="text-white" />
                 </div>
                 <div>
                   <div className="font-bold text-gray-900">DDA.az AI Köməkçi</div>
@@ -243,7 +244,7 @@ export function AIChatScreen() {
                   ? 'bg-emerald-600 text-white order-1 ml-2' 
                   : 'bg-gray-200 text-gray-600 order-2 mr-2'
               }`}>
-                {message.isUser ? '👤' : '🤖'}
+                {message.isUser ? <AppIcon name="user" className="text-white" /> : <AppIcon name="assistant" />}
               </div>
             </div>
           ))}
@@ -252,7 +253,7 @@ export function AIChatScreen() {
             <div className="flex justify-start">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm">
-                  🤖
+                  <AppIcon name="assistant" />
                 </div>
                 <div className="bg-gray-100 p-3 rounded-2xl rounded-bl-md">
                   <div className="flex gap-1">
