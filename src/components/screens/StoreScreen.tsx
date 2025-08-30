@@ -19,6 +19,14 @@ export function StoreScreen() {
           20 manatdan yuxarı çatdırılma pulsuzdur
         </div>
       </div>
+      {/* Floating Cart button */}
+      <button
+        onClick={() => navigate('Cart')}
+        className="fixed bottom-20 right-5 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+      >
+        <span>🛒</span>
+        <span>Səbətə bax</span>
+      </button>
 
       <div className="grid grid-cols-2 gap-3">
         {STORE_PRODUCTS.map((p) => (

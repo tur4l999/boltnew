@@ -96,22 +96,8 @@ export function ProductDetailScreen() {
         </div>
       </Card>
 
-      {/* Reviews (static demo) */}
-      <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-        <h3 className="font-bold mb-2">Rəylər</h3>
-        <div className="space-y-3 text-sm">
-          <div>
-            <div className="font-medium">Aysel</div>
-            <div className="text-amber-500 text-xs">★★★★★</div>
-            <p className="opacity-80">Məhsul çox keyfiyyətlidir, tövsiyə edirəm.</p>
-          </div>
-          <div>
-            <div className="font-medium">Kamran</div>
-            <div className="text-amber-500 text-xs">★★★★☆</div>
-            <p className="opacity-80">Qiymətinə görə yaxşı seçimdir.</p>
-          </div>
-        </div>
-      </Card>
+      {/* Reviews with add form */}
+      <ReviewsCard />
 
       {/* Recommended carousel (2 per view) */}
       <RecommendedCarousel currentId={product.id} />
@@ -138,7 +124,7 @@ function RecommendedCarousel({ currentId }: { currentId: string }) {
     <div className="mt-4">
       <h3 className="font-bold mb-2">Tövsiyyə olunanlar</h3>
       <div
-        className="flex gap-3 overflow-hidden"
+        className="flex gap-3 overflow-x-auto no-scrollbar"
         onTouchStart={(e) => (e.currentTarget as any)._x = e.touches[0].clientX}
         onTouchEnd={(e) => {
           const startX = (e.currentTarget as any)._x as number | undefined;
@@ -159,6 +145,52 @@ function RecommendedCarousel({ currentId }: { currentId: string }) {
         ))}
       </div>
     </div>
+  );
+}
+
+function ReviewsCard() {
+  const { isDarkMode } = useApp();
+  const [reviews, setReviews] = useState<{name: string; text: string; stars: number}[]>([
+    { name: 'Aysel', text: 'Məhsul çox keyfiyyətlidir, tövsiyə edirəm.', stars: 5},
+    { name: 'Kamran', text: 'Qiymətinə görə yaxşı seçimdir.', stars: 4},
+  ]);
+  const [name, setName] = useState('');
+  const [text, setText] = useState('');
+  const [stars, setStars] = useState(5);
+  const add = () => {
+    if (!name || !text) return;
+    setReviews([{ name, text, stars }, ...reviews]);
+    setName('');
+    setText('');
+    setStars(5);
+  };
+  return (
+    <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+      <h3 className="font-bold mb-2">Rəylər</h3>
+      <div className="space-y-3 text-sm">
+        <div className="flex items-center gap-2">
+          <input value={name} onChange={(e)=>setName(e.target.value)} placeholder="Adınız" className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`} />
+          <select value={stars} onChange={(e)=>setStars(Number(e.target.value))} className={`rounded-md border px-2 py-2 ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}>
+            {[5,4,3,2,1].map(s=>(<option key={s} value={s}>{s} ★</option>))}
+          </select>
+        </div>
+        <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="Rəyinizi yazın" rows={3} className={`w-full rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`} />
+        <div className="flex justify-end">
+          <Button onClick={add}>Rəyi əlavə et</Button>
+        </div>
+        <div className="divide-y divide-gray-200/20">
+          {reviews.map((r, idx) => (
+            <div key={idx} className="py-2">
+              <div className="font-medium flex items-center gap-2">
+                {r.name}
+                <span className="text-amber-500 text-xs">{'★'.repeat(r.stars)}</span>
+              </div>
+              <p className="opacity-80">{r.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
   );
 }
 
