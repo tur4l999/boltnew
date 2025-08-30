@@ -40,7 +40,7 @@ export function TabBar() {
                 ? 'bg-emerald-600 scale-110' 
                 : isDarkMode ? 'bg-transparent' : 'bg-transparent'
             }`}>
-              <AppIcon name={tab.icon} size={18} className={(currentScreen.screen === tab.key) ? 'text-white' : ''} />
+              <AppIcon name={tab.icon} size={18} strokeWidth={1.1} className={(currentScreen.screen === tab.key) ? 'text-white' : ''} />
             </div>
             <div className={`text-xs font-semibold transition-all duration-200 ${
               (currentScreen.screen === tab.key)
@@ -59,7 +59,7 @@ export function TabBar() {
               ? 'bg-emerald-600 scale-110' 
               : 'bg-transparent'
           }`}>
-            <AppIcon name="more" size={18} className={currentTab === 'More' ? 'text-white' : ''} />
+            <AppIcon name="more" size={18} strokeWidth={1.1} className={currentTab === 'More' ? 'text-white' : ''} />
           </div>
           <div className={`text-xs font-semibold transition-all duration-200 ${
             currentTab === 'More' ? 'transform scale-105' : ''

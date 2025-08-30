@@ -101,7 +101,7 @@ interface AppIconProps {
   className?: string;
 }
 
-export function AppIcon({ name, size = 18, strokeWidth = 1.7, className = '' }: AppIconProps) {
+export function AppIcon({ name, size = 18, strokeWidth = 1.25, className = '' }: AppIconProps) {
   const Icon = (ICONS as Record<string, React.ComponentType<any>>)[name] || Square;
   return (
     <Icon
