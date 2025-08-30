@@ -35,6 +35,12 @@ export function OnlineLessonsScreen() {
     return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
   };
 
+  const getAzWeekdayShort = (d: Date): string => {
+    // 0=Sun..6=Sat
+    const map = ['B.', 'B.e', 'Ç.a', 'Ç.', 'C.a', 'C.', 'Ş.'];
+    return map[d.getDay()] || '';
+  };
+
   // Use real module titles
   const lessons: LessonItem[] = useMemo(() => [
     { id: 'l1', moduleId: 'M3',  title: getTitleFor('M3'),  instructor: 'Ə.Talıbov',  date: new Date(Date.now() + 2  * 60 * 60 * 1000).toISOString(),  durationMin: 60 },
@@ -61,7 +67,9 @@ export function OnlineLessonsScreen() {
     const map = new Map<string, LessonItem[]>();
     for (const l of remaining) {
       const d = new Date(l.date);
-      const key = d.toLocaleDateString('az-AZ', { weekday: 'long', day: '2-digit', month: 'long' });
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const key = `${getAzWeekdayShort(d)} ${dd}.${mm}`;
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(l);
     }
