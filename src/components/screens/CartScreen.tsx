@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 import { QuantityStepper } from '../ui/QuantityStepper';
 
 export function CartScreen() {
-  const { cart, updateCartQty, removeFromCart, checkoutByBalance, checkoutByCard, isDarkMode, goBack, deliveryMethod, setDeliveryMethod } = useApp();
+  const { cart, updateCartQty, removeFromCart, checkoutByBalance, checkoutByCard, isDarkMode, goBack, deliveryMethod, setDeliveryMethod, addToCart } = useApp();
   const [address, setAddress] = useState('');
   const [postIndex, setPostIndex] = useState('');
   const [lockerQuery, setLockerQuery] = useState('');
@@ -23,8 +23,11 @@ export function CartScreen() {
   const originalSubtotal = useMemo(() => items.reduce((sum, p) => sum + p.price * p.qty, 0), [items]);
   const productDiscount = Math.max(0, originalSubtotal - discountedSubtotal);
   const pickupDiscount = deliveryMethod === 'pickup' ? items.reduce((sum, p) => sum + p.qty, 0) * 1 : 0; // 1 AZN per item
-  const fee = deliveryMethod === 'locker' ? 2.5 : deliveryMethod === 'courier' ? (discountedSubtotal >= 20 ? 0 : 3) : deliveryMethod === 'post' ? (discountedSubtotal >= 20 ? 0 : 2) : 0;
-  const total = Math.max(0, discountedSubtotal - pickupDiscount) + fee;
+  const baseFee = deliveryMethod === 'locker' ? 0 : deliveryMethod === 'courier' ? 3 : deliveryMethod === 'post' ? 2 : 0;
+  const feeFree = (deliveryMethod === 'courier' || deliveryMethod === 'post') && discountedSubtotal >= 20;
+  const fee = deliveryMethod === 'locker' ? 0 : feeFree ? 0 : baseFee;
+  const [promo, setPromo] = useState<{ code: string; amount: number; applied: boolean; error?: string }>({ code: '', amount: 0, applied: false });
+  const total = Math.max(0, discountedSubtotal - pickupDiscount - (promo.amount || 0)) + fee;
 
   return (
     <div className={`p-3 pb-24 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
@@ -56,6 +59,27 @@ export function CartScreen() {
               </Card>
             ))}
           </div>
+
+          <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <h3 className="font-bold mb-2">Tövsiyyə edilir</h3>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {STORE_PRODUCTS.filter(p => !items.find(i => i.id === p.id)).map(p => (
+                <div key={p.id} className="min-w-[45%]">
+                  <div className="relative">
+                    <img src={p.images[0]} alt={p.title} className="w-full h-28 object-cover rounded-md" />
+                    <button
+                      aria-label="Səbətə at"
+                      onClick={() => addToCart(p.id, 1)}
+                      className="absolute bottom-1 right-1 w-7 h-7 rounded-full bg-emerald-600 text-white text-lg leading-none flex items-center justify-center shadow"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="mt-1 text-xs line-clamp-2">{p.title}</div>
+                </div>
+              ))}
+            </div>
+          </Card>
 
           <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Çatdırılma üsulu</h3>
@@ -125,21 +149,24 @@ export function CartScreen() {
           <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Ödəniş üsulu</h3>
             <div className="flex gap-2 text-sm">
-              <button onClick={() => setPayment('balance')} className={`px-3 py-2 rounded-lg border ${payment==='balance' ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Balans</button>
-              <button onClick={() => setPayment('card')} className={`px-3 py-2 rounded-lg border ${payment==='card' ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Kart</button>
+              <button onClick={() => setPayment('balance')} className={`px-3 py-2 rounded-lg border ${payment==='balance' ? 'ring-2 ring-emerald-500 text-emerald-600' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Balans</button>
+              <button onClick={() => setPayment('card')} className={`px-3 py-2 rounded-lg border ${payment==='card' ? 'ring-2 ring-emerald-500 text-emerald-600' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Kart</button>
             </div>
-            <PromoCode />
+            <PromoCode onApply={(c)=>{ const normalized=c.trim().toUpperCase(); if(!normalized){ setPromo({code:c,amount:0,applied:false,error:'Kod boş ola bilməz'}); return;} if(normalized==='DDA10'){ const amount=Math.round(discountedSubtotal*0.10*100)/100; setPromo({code:normalized,amount,applied:true}); } else { setPromo({code:normalized,amount:0,applied:false,error:'BU hesabda tətbiq edilə bilməz'}); } }} applied={promo.applied} error={promo.error} />
           </Card>
 
           <Card className={`mt-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Qiymət xülasəsi</h3>
             <div className="text-sm space-y-2">
               <div className="flex items-center justify-between"><span>Məhsullar</span><span>{discountedSubtotal.toFixed(2)} ₼</span></div>
-              <div className="flex items-center justify-between"><span>Endirim</span><span className="text-emerald-600">-{productDiscount.toFixed(2)} ₼</span></div>
+              <div className="flex items-center justify-between"><span>Endirim</span><span className={`${productDiscount>0?'text-red-600':''}`}>{productDiscount>0?`-${productDiscount.toFixed(2)}`:productDiscount.toFixed(2)} ₼</span></div>
               {pickupDiscount > 0 && (
-                <div className="flex items-center justify-between"><span>Özün götür endirimi</span><span className="text-emerald-600">-{pickupDiscount.toFixed(2)} ₼</span></div>
+                <div className="flex items-center justify-between"><span>Özün götür endirimi</span><span className="text-red-600">-{pickupDiscount.toFixed(2)} ₼</span></div>
               )}
-              <div className="flex items-center justify-between"><span>Çatdırılma</span><span>{fee.toFixed(2)} ₼</span></div>
+              {promo.applied && promo.amount>0 && (
+                <div className="flex items-center justify-between"><span>Promo kod endirimi</span><span className="text-red-600">-{promo.amount.toFixed(2)} ₼</span></div>
+              )}
+              <div className="flex items-center justify-between"><span>Çatdırılma</span><span>{feeFree && baseFee>0 ? <><span className="line-through opacity-60 mr-2">{baseFee.toFixed(2)} ₼</span><span className="text-red-600">0.00 ₼</span></> : `${fee.toFixed(2)} ₼`}</span></div>
               <div className="flex items-center justify-between font-bold text-base"><span>Yekun</span><span>{total.toFixed(2)} ₼</span></div>
             </div>
             <Button className="w-full mt-3 py-3 text-base" onClick={() => {
@@ -161,7 +188,7 @@ function DeliveryOption({ label, value, selected, onSelect, fee }: { label: stri
   return (
     <button
       onClick={onSelect}
-      className={`rounded-lg border px-3 py-3 text-center text-[15px] font-medium ${selected ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800 hover:bg-gray-700' : 'border-gray-200 bg-white hover:bg-gray-50'}`}
+      className={`rounded-lg border px-3 py-3 text-center text-[15px] font-medium ${selected ? 'ring-2 ring-emerald-500 text-emerald-600' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800 hover:bg-gray-700' : 'border-gray-200 bg-white hover:bg-gray-50'}`}
     >
       <div>{label}</div>
     </button>
@@ -205,7 +232,7 @@ function PickOption({ label, selected, onSelect }: { label: string; selected: bo
   );
 }
 
-function PromoCode() {
+function PromoCode({ onApply, applied, error }: { onApply: (code: string)=>void; applied?: boolean; error?: string; }) {
   const { isDarkMode } = useApp();
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState('');
@@ -213,14 +240,18 @@ function PromoCode() {
     <div className="mt-3">
       <button onClick={() => setOpen(v => !v)} className={`text-sm underline ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{open ? 'Promo kodu gizlət' : 'Promo kod daxil et'}</button>
       {open && (
-        <div className="mt-2 flex items-center gap-2">
-          <input
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="PROMO10"
-            className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
-          />
-          <button className={`px-3 py-2 rounded-md border ${isDarkMode ? 'border-gray-700 bg-gray-800 text-gray-100' : 'border-gray-200 bg-white text-gray-900'}`}>Tətbiq et</button>
+        <div className={`mt-2 p-2 rounded-md ${isDarkMode ? 'ring-1 ring-emerald-700/50' : 'ring-1 ring-emerald-300/70'}`}>
+          <div className="flex items-center gap-2">
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="DDA10"
+              className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+            />
+            <button onClick={()=>onApply(code)} className={`px-3 py-2 rounded-md text-white bg-emerald-600 hover:bg-emerald-700`}>Tətbiq et</button>
+          </div>
+          {applied && !error && <div className={`mt-2 text-xs ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>Promo kod uğurla tətbiq olundu.</div>}
+          {!applied && error && <div className={`mt-2 text-xs ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>{error}</div>}
         </div>
       )}
     </div>
