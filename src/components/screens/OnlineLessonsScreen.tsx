@@ -14,7 +14,7 @@ type LessonItem = {
 export function OnlineLessonsScreen() {
   const { t, isDarkMode, goBack } = useApp();
   const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
-  const [scheduledIds, setScheduledIds] = useState<Set<string>>(new Set());
+  // Scheduling visuals removed per requirements
 
   const truncate = (text: string, max: number): string => {
     if (!text) return '';
@@ -67,14 +67,7 @@ export function OnlineLessonsScreen() {
     return Array.from(map.entries());
   }, [lessons, upcoming]);
 
-  const shouldShowPlanInsteadOfJoin = (lesson: LessonItem): boolean => {
-    if (scheduledIds.has(lesson.id)) return false;
-    const now = Date.now();
-    const start = new Date(lesson.date).getTime();
-    const sixHoursMs = 6 * 60 * 60 * 1000;
-    const timeUntil = start - now;
-    return timeUntil > 0 && timeUntil <= sixHoursMs;
-  };
+  const shouldShowPlanInsteadOfJoin = (_lesson: LessonItem): boolean => false;
 
   return (
     <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
@@ -112,21 +105,7 @@ export function OnlineLessonsScreen() {
                   {formatDateTime(d)}{' • '}{l.instructor}{' • '}{l.durationMin} dəq
                 </div>
               </div>
-              {scheduledIds.has(l.id) ? (
-                <div className="relative w-10 h-10">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'}`}>🔔</div>
-                  <div className={`absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
-                </div>
-              ) : shouldShowPlanInsteadOfJoin(l) ? (
-                <button
-                  className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
-                    isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  }`}
-                  onClick={(e) => { e.stopPropagation(); setScheduledIds(prev => new Set([...prev, l.id])); }}
-                >
-                  Planla
-                </button>
-              ) : (
+              {
                 <button
                   className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
                     isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
@@ -135,7 +114,7 @@ export function OnlineLessonsScreen() {
                 >
                   Qoşul
                 </button>
-              )}
+              }
             </div>
           );
         })}
@@ -169,21 +148,7 @@ export function OnlineLessonsScreen() {
                         {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })} • {l.instructor} • {l.durationMin} dəq
                       </div>
                     </div>
-                    {scheduledIds.has(l.id) ? (
-                      <div className="relative w-9 h-9">
-                        <div className={`w-9 h-9 rounded-md flex items-center justify-center text-base ${isDarkMode ? 'bg-gray-700 text-emerald-300' : 'bg-gray-50 text-emerald-700 border border-emerald-200'}`}>🔔</div>
-                        <div className={`absolute -right-1 -bottom-1 w-4.5 h-4.5 rounded-full flex items-center justify-center text-[9px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setScheduledIds(prev => new Set([...prev, l.id])); }}
-                        className={`px-2 py-1 rounded text-[11px] font-semibold shadow-sm ${
-                          isDarkMode ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        Planla
-                      </button>
-                    )}
+                    {/* No Planla button in schedule; informational only */}
                   </div>
                 );
               })}
@@ -211,23 +176,6 @@ export function OnlineLessonsScreen() {
               >
                 Qoşul
               </button>
-              {scheduledIds.has(selectedLesson.id) ? (
-                <div className="flex items-center justify-center">
-                  <div className="relative w-10 h-10">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700 text-emerald-300' : 'bg-gray-50 text-emerald-700 border border-emerald-200'}`}>🔔</div>
-                    <div className={`absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setScheduledIds(prev => new Set([...prev, selectedLesson.id]))}
-                  className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                    isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  Planla
-                </button>
-              )}
               <button
                 onClick={() => setSelectedLesson(null)}
                 className={`col-span-2 mt-1 px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
@@ -237,11 +185,6 @@ export function OnlineLessonsScreen() {
                 Bağla
               </button>
             </div>
-            {scheduledIds.has(selectedLesson.id) && (
-              <div className={`mt-3 text-[11px] ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Bildirişlər: dərsə 5 saat, 1 saat və 30 dəqiqə qalmış göndəriləcəkdir.
-              </div>
-            )}
           </div>
         </div>
       )}
