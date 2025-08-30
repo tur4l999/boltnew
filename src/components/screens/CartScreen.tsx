@@ -19,15 +19,20 @@ export function CartScreen() {
     return { ...p, qty: ci.qty };
   });
 
-  const subtotal = useMemo(() => items.reduce((sum, p) => sum + getDiscountedPrice(p) * p.qty, 0), [items]);
-  const fee = deliveryMethod === 'locker' ? 2.5 : deliveryMethod === 'courier' ? 5 : deliveryMethod === 'post' ? 3 : 0;
-  const total = subtotal + fee;
+  const discountedSubtotal = useMemo(() => items.reduce((sum, p) => sum + getDiscountedPrice(p) * p.qty, 0), [items]);
+  const originalSubtotal = useMemo(() => items.reduce((sum, p) => sum + p.price * p.qty, 0), [items]);
+  const discountAmount = Math.max(0, originalSubtotal - discountedSubtotal);
+  const fee = deliveryMethod === 'locker' ? 2.5 : deliveryMethod === 'courier' ? (discountedSubtotal >= 20 ? 0 : 3) : deliveryMethod === 'post' ? (discountedSubtotal >= 20 ? 0 : 2) : 0;
+  const total = discountedSubtotal + fee;
 
   return (
     <div className={`p-3 pb-24 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <div className="flex items-center gap-3 mb-3">
         <button onClick={goBack} className="text-sm opacity-75">← Geri</button>
         <h1 className="text-lg font-bold">Səbət</h1>
+      </div>
+      <div className={`mb-3 text-xs rounded-lg border p-2 ${isDarkMode ? 'bg-red-900/30 border-red-800 text-red-300' : 'bg-red-50 border-red-200 text-red-700'}`}>
+        20 AZN-dən yuxarı çatdırılmalar ödənişsizdir.
       </div>
       {items.length === 0 ? (
         <div className="opacity-70 text-sm">Səbət boşdur.</div>
@@ -59,6 +64,9 @@ export function CartScreen() {
               <DeliveryOption label="Poçtla" value="post" selected={deliveryMethod==='post'} onSelect={() => setDeliveryMethod('post')} fee={3} />
               <DeliveryOption label="Özün götür" value="pickup" selected={deliveryMethod==='pickup'} onSelect={() => setDeliveryMethod('pickup')} fee={0} />
             </div>
+            {deliveryMethod==='courier' && (
+              <div className="text-[11px] opacity-70 mt-2">Qeyd: Bakı şəhəri daxilində, təxmini 24 saat.</div>
+            )}
           </Card>
 
           {deliveryMethod === 'locker' && (
@@ -112,19 +120,22 @@ export function CartScreen() {
             </div>
           </Card>
 
-          <div className="mt-4 flex items-center justify-between">
-            <div className="text-sm opacity-80">Məbləğ: {subtotal.toFixed(2)} ₼ • Çatdırılma: {fee.toFixed(2)} ₼</div>
-            <div className="text-lg font-bold">Cəmi: {total.toFixed(2)} ₼</div>
-            <Button onClick={() => {
+          <Card className={`mt-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <h3 className="font-bold mb-2">Qiymət xülasəsi</h3>
+            <div className="text-sm space-y-2">
+              <div className="flex items-center justify-between"><span>Məhsullar</span><span>{discountedSubtotal.toFixed(2)} ₼</span></div>
+              <div className="flex items-center justify-between"><span>Endirim</span><span className="text-emerald-600">-{discountAmount.toFixed(2)} ₼</span></div>
+              <div className="flex items-center justify-between"><span>Çatdırılma</span><span>{fee.toFixed(2)} ₼</span></div>
+              <div className="flex items-center justify-between font-bold text-base"><span>Yekun</span><span>{total.toFixed(2)} ₼</span></div>
+            </div>
+            <Button className="w-full mt-3 py-3 text-base" onClick={() => {
               const addr = deliveryMethod==='locker' ? selectedLocker : deliveryMethod==='pickup' ? (pickupPoint || 'Özün götür') : address;
               const ok = payment==='balance'
                 ? checkoutByBalance(addr, deliveryMethod as any)
                 : checkoutByCard(addr, deliveryMethod as any);
               alert(ok ? 'Ödəniş uğurlu oldu' : 'Ödəniş mümkün olmadı');
-            }}>
-              Ödənişi tamamla
-            </Button>
-          </div>
+            }}>Ödənişi tamamla</Button>
+          </Card>
         </>
       )}
     </div>
