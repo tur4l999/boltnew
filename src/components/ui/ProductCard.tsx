@@ -33,9 +33,14 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
         />
       </div>
       <div className="space-y-2">
-        <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
-          {product.title}
-        </h3>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
+            {product.title}
+          </h3>
+          <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300">
+            {hasDiscount ? discounted : product.price} ₼
+          </span>
+        </div>
         <div className="flex items-center gap-1 text-[10px] text-amber-500">
           {'★'.repeat(Math.round(product.rating ?? 4))}
           <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} ml-1`}>
@@ -43,16 +48,9 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <div>
-            {hasDiscount ? (
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-bold text-pink-600">{discounted} ₼</span>
-                <span className="text-xs line-through opacity-60">{product.price} ₼</span>
-              </div>
-            ) : (
-              <span className="text-lg font-bold text-emerald-600">{product.price} ₼</span>
-            )}
-          </div>
+          {hasDiscount ? (
+            <span className="text-xs line-through opacity-60">{product.price} ₼</span>
+          ) : <span />}
           <Button size="sm" className="text-xs px-3 py-1" onClick={onAddToCart}>
             Səbətə
           </Button>

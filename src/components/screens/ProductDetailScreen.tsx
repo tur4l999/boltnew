@@ -77,7 +77,18 @@ export function ProductDetailScreen() {
       {/* Details */}
       <Card className={`mt-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
         <h3 className="font-bold mb-2">Ətraflı məlumat</h3>
-        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm`}>{product.description}</p>
+        <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} space-y-1`}>
+          <p>{product.description}</p>
+          {product.author && <p><span className="opacity-70">Müəllif:</span> {product.author}</p>}
+          {product.publisher && <p><span className="opacity-70">Nəşriyyat:</span> {product.publisher}</p>}
+          {product.language && <p><span className="opacity-70">Dil:</span> {product.language}</p>}
+          {product.year && <p><span className="opacity-70">İl:</span> {product.year}</p>}
+          {product.externalUrl && (
+            <p>
+              <a className="text-blue-500 underline" href={product.externalUrl} target="_blank" rel="noreferrer">Mənbə səhifə</a>
+            </p>
+          )}
+        </div>
       </Card>
 
       {/* Reviews (static demo) */}

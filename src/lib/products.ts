@@ -6,59 +6,84 @@ export type StoreProduct = Product & {
   rating?: number;
   reviewsCount?: number;
   stock?: number;
+  author?: string;
+  publisher?: string;
+  language?: string;
+  year?: number;
+  externalUrl?: string;
 };
 
 export const STORE_PRODUCTS: StoreProduct[] = [
   {
     id: 'p1',
-    title: 'Smartfon Honor X6c 6GB/256GB Moonlight White',
-    price: 319,
+    title: 'Talıbov: Qaydalar – Sürücülük vəsiqəsi üçün vəsait',
+    price: 18,
     images: [
-      'https://images.pexels.com/photos/507704/pexels-photo-507704.jpeg?auto=compress&cs=tinysrgb&w=640',
-      'https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=640',
+      'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=640',
+      'https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=640',
     ],
-    description: 'Güclü batareya, geniş yaddaş və zərif dizayn.',
-    rating: 4.6,
-    reviewsCount: 6,
-    stock: 8,
+    description: 'Yol hərəkəti qaydaları üzrə strukturlaşdırılmış izahlar və illüstrasiyalar.',
+    rating: 4.8,
+    reviewsCount: 24,
+    stock: 20,
+    author: 'Talıbov',
+    publisher: 'DDA',
+    language: 'AZ',
+    year: 2023,
+    externalUrl: 'https://dda.az/shop/talibov-qaydalar-suculuk-vesiqesi-kitabi-almaq',
   },
   {
     id: 'p2',
-    title: 'Smartfon Apple iPhone 16 Pro Max 8GB/256GB',
-    price: 3900,
+    title: 'İmtahan testləri: Yol hərəkəti qaydaları',
+    price: 22,
     images: [
-      'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=640',
-      'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=960',
+      'https://images.pexels.com/photos/1059334/pexels-photo-1059334.jpeg?auto=compress&cs=tinysrgb&w=640',
+      'https://images.pexels.com/photos/33283/stack-of-books-vintage-books-book-books.jpg?auto=compress&cs=tinysrgb&w=640',
     ],
-    description: 'Titan korpus, güclü kamera və Pro texnologiyalar.',
+    description: 'Qanunvericiliyə uyğunlaşdırılmış imtahan sualları və cavab açarları.',
     rating: 4.9,
     reviewsCount: 81,
-    stock: 3,
+    stock: 12,
     discountPercent: 27, // only this product has discount
+    author: 'Müəlliflər qrupu',
+    publisher: 'DDA',
+    language: 'AZ/RU',
+    year: 2024,
+    externalUrl: 'https://dda.az/shop/ekzamenacionnye-testy-po-pravilam-dorozhnogo-dvizh',
   },
   {
     id: 'p3',
-    title: 'Orqanayzer GW-268',
-    price: 39.9,
+    title: 'Yol hərəkətinin təşkili və təhlükəsizliyi',
+    price: 28.5,
     images: [
-      'https://images.pexels.com/photos/3735631/pexels-photo-3735631.jpeg?auto=compress&cs=tinysrgb&w=640',
+      'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=640',
     ],
-    description: 'Kosmetik və aksesuarlar üçün 360° fırlanan orqanayzer.',
+    description: 'Hərəkətin təşkili, təhlükəsizlik prinsipləri və praktiki nümunələr.',
     rating: 4.7,
     reviewsCount: 5,
     stock: 14,
+    author: 'Ekspert müəlliflər',
+    publisher: 'DDA',
+    language: 'AZ',
+    year: 2022,
+    externalUrl: 'https://dda.az/shop/yol-hereketinin-teskili-ve-hereket-tehlukesizliyin',
   },
   {
     id: 'p4',
-    title: 'Yapışdırmalar dəsti IKEA Vinter 2020 (50 ədəd)',
-    price: 16.4,
+    title: 'İllüstrasiyalı yol hərəkəti qaydaları',
+    price: 25,
     images: [
-      'https://images.pexels.com/photos/2734581/pexels-photo-2734581.jpeg?auto=compress&cs=tinysrgb&w=640',
+      'https://images.pexels.com/photos/409821/pexels-photo-409821.jpeg?auto=compress&cs=tinysrgb&w=640',
     ],
-    description: 'Dekorativ stikerlər dəsti. Yaradıcılıq üçün əladır.',
+    description: 'Qaydaların şəkilli izahı ilə öyrənməyi asanlaşdıran nəşr.',
     rating: 4.4,
     reviewsCount: 12,
     stock: 30,
+    author: 'Redaksiya heyəti',
+    publisher: 'DDA',
+    language: 'RU/AZ',
+    year: 2021,
+    externalUrl: 'https://dda.az/shop/pravila-dorozhnogo-dvizheniya-c-illyustraciyami',
   },
 ];
 
