@@ -101,8 +101,19 @@ interface AppIconProps {
   className?: string;
 }
 
-export function AppIcon({ name, size = 18, strokeWidth = 2, className = '' }: AppIconProps) {
+export function AppIcon({ name, size = 18, strokeWidth = 1.7, className = '' }: AppIconProps) {
   const Icon = (ICONS as Record<string, React.ComponentType<any>>)[name] || Square;
-  return <Icon size={size} strokeWidth={strokeWidth} className={`text-emerald-600 ${className}`} aria-hidden />;
+  return (
+    <Icon
+      size={size}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      absoluteStrokeWidth
+      shapeRendering="geometricPrecision"
+      className={`text-emerald-600 ${className}`}
+      aria-hidden
+    />
+  );
 }
 
