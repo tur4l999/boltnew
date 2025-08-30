@@ -8,8 +8,8 @@ interface CalendarProps {
   onChange: (date: Date) => void;
 }
 
-// Week starts on Monday: Mon..Sun
-const WEEKDAY_LABELS = ['B.e', 'Ç.a', 'Ç', 'C.a', 'C', 'Ş', 'Bazar'];
+// Week starts on Monday: Mon..Sun (Azerbaijani short forms)
+const WEEKDAY_LABELS = ['B.e', 'Ç.a', 'Ç.', 'C.a', 'C.', 'Ş.', 'B.'];
 
 export function Calendar({ initialDate, minDate, maxDate, onChange }: CalendarProps) {
   const { isDarkMode } = useApp();
