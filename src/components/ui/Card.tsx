@@ -10,10 +10,10 @@ export function Card({ children, className = '' }: CardProps) {
   const { isDarkMode } = useApp();
   
   return (
-    <div className={`rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] ${
+    <div className={`rounded-2-5xl p-4 border transition-all duration-200 soft-shadow hover:shadow-lg ${
       isDarkMode 
-        ? 'bg-gray-800 border-gray-700 text-gray-100' 
-        : 'bg-white border-gray-200 text-gray-900'
+        ? 'bg-gray-800/80 border-gray-700/70' 
+        : 'bg-white/80 border-white/60 backdrop-blur-xl'
     } ${className}`}>
       {children}
     </div>

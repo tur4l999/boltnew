@@ -6,6 +6,11 @@
 @layer base {
   html { font-family: theme('fontFamily.body'); }
   h1, h2, h3, h4, h5, h6 { font-family: theme('fontFamily.heading'); }
+  body { 
+    background: linear-gradient(180deg, #f8fafc 0%, #f0fdf4 100%);
+    -webkit-font-smoothing: antialiased; 
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
 /* Gənc istifadəçilər üçün əlavə animasiyalar */
@@ -65,6 +70,17 @@
 
 .hover-lift:hover {
   transform: translateY(-2px);
+}
+
+/* Glass utilities */
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-white/70 dark:bg-gray-800/60 border border-white/50 dark:border-gray-700/60 shadow-sm;
+  }
+  .soft-shadow {
+    box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+  }
+  .rounded-2-5xl { border-radius: 1.25rem; }
 }
 
 /* Smooth scroll */
