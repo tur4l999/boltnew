@@ -103,6 +103,6 @@ interface AppIconProps {
 
 export function AppIcon({ name, size = 18, strokeWidth = 2, className = '' }: AppIconProps) {
   const Icon = (ICONS as Record<string, React.ComponentType<any>>)[name] || Square;
-  return <Icon size={size} strokeWidth={strokeWidth} className={className} aria-hidden />;
+  return <Icon size={size} strokeWidth={strokeWidth} className={`text-emerald-600 ${className}`} aria-hidden />;
 }
 

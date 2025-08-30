@@ -37,10 +37,10 @@ export function TabBar() {
           >
             <div className={`p-1.5 rounded-lg transition-all duration-300 transform ${
               (currentScreen.screen === tab.key)
-                ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110'
-                : 'bg-transparent'
+                ? 'bg-emerald-600 scale-110' 
+                : isDarkMode ? 'bg-transparent' : 'bg-transparent'
             }`}>
-              <AppIcon name={tab.icon} size={18} className={(currentScreen.screen === tab.key) ? 'text-emerald-600' : ''} />
+              <AppIcon name={tab.icon} size={18} className={(currentScreen.screen === tab.key) ? 'text-white' : ''} />
             </div>
             <div className={`text-xs font-semibold transition-all duration-200 ${
               (currentScreen.screen === tab.key)
@@ -56,10 +56,10 @@ export function TabBar() {
         >
           <div className={`p-1.5 rounded-lg transition-all duration-300 transform ${
             currentTab === 'More' 
-              ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
+              ? 'bg-emerald-600 scale-110' 
               : 'bg-transparent'
           }`}>
-            <AppIcon name="more" size={18} className={currentTab === 'More' ? 'text-emerald-600' : ''} />
+            <AppIcon name="more" size={18} className={currentTab === 'More' ? 'text-white' : ''} />
           </div>
           <div className={`text-xs font-semibold transition-all duration-200 ${
             currentTab === 'More' ? 'transform scale-105' : ''
