@@ -3,7 +3,7 @@ import { dictionaries } from '../lib/i18n';
 import type { Language, NavigationScreen } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
-type DeliveryMethod = 'locker' | 'courier' | 'post';
+type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
 
 interface UserPackage {
   id: string;
@@ -55,6 +55,7 @@ interface AppContextType {
   checkoutByBalance: (deliveryAddress: string, method: DeliveryMethod) => boolean;
   deliveryMethod: DeliveryMethod;
   setDeliveryMethod: (m: DeliveryMethod) => void;
+  checkoutByCard: (deliveryAddress: string, method: DeliveryMethod) => boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -249,6 +250,42 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return false;
     }
   };
+
+  // Card checkout simulation (same as balance, but does not change balance)
+  const checkoutByCard = (deliveryAddress: string, method: DeliveryMethod): boolean => {
+    try {
+      const { STORE_PRODUCTS } = require('../lib/products');
+      const getDeliveryFee = (m: DeliveryMethod): number => {
+        switch (m) {
+          case 'locker': return 2.5;
+          case 'courier': return 5;
+          case 'post': return 3;
+          case 'pickup': return 0;
+          default: return 0;
+        }
+      };
+      const subtotal = cart.reduce((sum: number, item: any) => {
+        const p = STORE_PRODUCTS.find((x: any) => x.id === item.productId);
+        if (!p) return sum;
+        const price = p.discountPercent ? Math.round((p.price * (100 - p.discountPercent))) / 100 : p.price;
+        return sum + price * item.qty;
+      }, 0);
+      const total = subtotal + getDeliveryFee(method);
+      if (total <= 0) return false;
+      const transaction: Transaction = {
+        id: Date.now().toString(),
+        type: 'purchase',
+        amount: total,
+        description: `Kartla • ${cart.length} məhsul • Çatdırılma: ${deliveryAddress} • Üsul: ${method}`,
+        date: new Date()
+      };
+      setTransactions(prev => [transaction, ...prev]);
+      clearCart();
+      return true;
+    } catch {
+      return false;
+    }
+  };
   
   return (
     <AppContext.Provider value={{
@@ -276,6 +313,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isModuleUnlocked,
       activatePackageNow
       , cart, addToCart, removeFromCart, updateCartQty, clearCart, checkoutByBalance
+      , checkoutByCard
       , deliveryMethod, setDeliveryMethod
     }}>
       {children}
