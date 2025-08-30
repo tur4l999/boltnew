@@ -11,14 +11,13 @@ export function StoreScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      <div className="mb-3 rounded-lg p-3 text-center font-bold text-white bg-red-600">
-        20 manatdan yuxarı sifarişlərdə çatdırılma pulsuzdur
-      </div>
-      <div className="mb-6 text-center">
+      <div className="mb-3 text-center">
         <h1 className={`text-2xl font-bold mb-2 transition-colors duration-200 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Mağaza</h1>
-        
+        }`}>Onlayn mağaza</h1>
+        <div className="mt-1 rounded-md px-3 py-1 inline-block text-xs font-semibold text-white bg-red-600 whitespace-nowrap">
+          20 manatdan yuxarı çatdırılma pulsuzdur
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">

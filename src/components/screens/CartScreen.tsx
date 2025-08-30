@@ -32,8 +32,8 @@ export function CartScreen() {
         <button onClick={goBack} className="text-sm opacity-75">← Geri</button>
         <h1 className="text-lg font-bold">Səbət</h1>
       </div>
-      <div className={`mb-3 text-xs rounded-lg border p-2 ${isDarkMode ? 'bg-red-900/30 border-red-800 text-red-300' : 'bg-red-50 border-red-200 text-red-700'}`}>
-        20 AZN-dən yuxarı çatdırılmalar ödənişsizdir.
+      <div className={`mb-3 text-center`}>
+        <span className={`rounded-md px-3 py-1 inline-block text-[11px] font-semibold text-white bg-red-600`}>20 AZN-dən yuxarı çatdırılma pulsuzdur</span>
       </div>
       {items.length === 0 ? (
         <div className="opacity-70 text-sm">Səbət boşdur.</div>
@@ -128,6 +128,7 @@ export function CartScreen() {
               <button onClick={() => setPayment('balance')} className={`px-3 py-2 rounded-lg border ${payment==='balance' ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Balans</button>
               <button onClick={() => setPayment('card')} className={`px-3 py-2 rounded-lg border ${payment==='card' ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Kart</button>
             </div>
+            <PromoCode />
           </Card>
 
           <Card className={`mt-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
@@ -201,6 +202,28 @@ function PickOption({ label, selected, onSelect }: { label: string; selected: bo
     <button onClick={onSelect} className={`rounded-lg border px-3 py-2 text-left ${selected ? 'ring-2 ring-emerald-500' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800 hover:bg-gray-700' : 'border-gray-200 bg-white hover:bg-gray-50'}`}>
       {label}
     </button>
+  );
+}
+
+function PromoCode() {
+  const { isDarkMode } = useApp();
+  const [open, setOpen] = React.useState(false);
+  const [code, setCode] = React.useState('');
+  return (
+    <div className="mt-3">
+      <button onClick={() => setOpen(v => !v)} className={`text-sm underline ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{open ? 'Promo kodu gizlət' : 'Promo kod daxil et'}</button>
+      {open && (
+        <div className="mt-2 flex items-center gap-2">
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="PROMO10"
+            className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+          />
+          <button className={`px-3 py-2 rounded-md border ${isDarkMode ? 'border-gray-700 bg-gray-800 text-gray-100' : 'border-gray-200 bg-white text-gray-900'}`}>Tətbiq et</button>
+        </div>
+      )}
+    </div>
   );
 }
 
