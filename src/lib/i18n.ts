@@ -14,6 +14,7 @@ export const dictionaries = {
     // Actions
     quickTest: 'Sürətli test',
     videoLessons: '3D video dərs',
+    onlineLesson: 'Onlayn dərs',
     continue: 'Haradan davam edim?',
     startLesson: 'Dərsə başla',
     startTest: 'Testə başla',
@@ -67,6 +68,8 @@ export const dictionaries = {
     notifications: 'Bildirişlər',
     assistant: 'AI köməkçi',
     language: 'Dil',
+    upcomingLessons: 'Davam edən Onlayn dərslər',
+    classSchedule: 'Dərs cədvəli',
   },
   
   ru: {
@@ -82,6 +85,7 @@ export const dictionaries = {
     // Actions
     quickTest: 'Быстрый тест',
     videoLessons: '3D видео урок',
+    onlineLesson: 'Онлайн урок',
     continue: 'Где продолжить?',
     startLesson: 'Начать урок',
     startTest: 'Начать тест',
@@ -135,5 +139,7 @@ export const dictionaries = {
     notifications: 'Уведомления',
     assistant: 'AI помощник',
     language: 'Язык',
+    upcomingLessons: 'Ближайшие занятия',
+    classSchedule: 'Расписание занятий',
   },
 };

@@ -11,7 +11,7 @@ export function HomeScreen() {
   
   const gridItems = [
     { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
-    { key: 'examSimulator', label: t.examSimulator, action: () => navigate('ExamConfig', { mode: 'simulator' }), emoji: '🧪' },
+    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
