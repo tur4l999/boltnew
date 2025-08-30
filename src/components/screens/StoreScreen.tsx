@@ -23,7 +23,8 @@ export function StoreScreen() {
       {/* Floating Cart button */}
       <button
         onClick={() => navigate('Cart')}
-        className="fixed bottom-28 right-5 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        className="fixed bottom-28 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        style={{ right: 'calc(env(safe-area-inset-right, 0px) + 20px)' }}
       >
         <ShoppingCart size={18} />
         <span>Səbətə bax</span>
