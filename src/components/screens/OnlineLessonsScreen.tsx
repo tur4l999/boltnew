@@ -108,7 +108,7 @@ export function OnlineLessonsScreen() {
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
                 isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'
-              }`}><AppIcon name="wifi" size={22} /></div>
+              }`}><AppIcon name="onlineLesson" size={22} /></div>
               <div className="flex-1">
                 <div className={`text-base font-black leading-tight ${isDarkMode ? 'text-emerald-100' : 'text-emerald-900'}`}>{truncate(l.title, 64)}</div>
                 <div className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
