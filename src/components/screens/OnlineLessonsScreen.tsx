@@ -14,6 +14,7 @@ type LessonItem = {
 export function OnlineLessonsScreen() {
   const { t, isDarkMode, goBack } = useApp();
   const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
+  const [selectedSource, setSelectedSource] = useState<'upcoming' | 'schedule' | null>(null);
   // Scheduling visuals removed per requirements
 
   const truncate = (text: string, max: number): string => {
@@ -94,7 +95,7 @@ export function OnlineLessonsScreen() {
               className={`rounded-2xl border p-4 flex items-start gap-4 shadow-sm ${
                 isDarkMode ? 'bg-emerald-900/10 border-emerald-800' : 'bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-200'
               }`}
-              onClick={() => setSelectedLesson(l)}
+              onClick={() => { setSelectedLesson(l); setSelectedSource('upcoming'); }}
             >
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
                 isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'
@@ -137,7 +138,7 @@ export function OnlineLessonsScreen() {
                     className={`rounded-xl border p-3 flex items-center gap-3 shadow-sm ${
                       isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
                     }`}
-                    onClick={() => setSelectedLesson(l)}
+                    onClick={() => { setSelectedLesson(l); setSelectedSource('schedule'); }}
                   >
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${
                       isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-700'
@@ -159,7 +160,7 @@ export function OnlineLessonsScreen() {
 
       {selectedLesson && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedLesson(null)} />
+          <div className="absolute inset-0 bg-black/50" onClick={() => { setSelectedLesson(null); setSelectedSource(null); }} />
           <div className={`relative z-10 w-[92%] max-w-sm rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
@@ -169,22 +170,20 @@ export function OnlineLessonsScreen() {
             <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-xs mb-4`}>
               {formatDateTime(new Date(selectedLesson.date))}{' • '}{selectedLesson.instructor}{' • '}{selectedLesson.durationMin} dəq
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => alert('Qoşulma linki (demo)')}
-                className="px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white"
-              >
-                Qoşul
-              </button>
-              <button
-                onClick={() => setSelectedLesson(null)}
-                className={`col-span-2 mt-1 px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                Bağla
-              </button>
-            </div>
+            {selectedSource === 'upcoming' ? (
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={() => alert('Qoşulma linki (demo)')}
+                  className="px-5 py-3 rounded-xl font-bold min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  Qoşul
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center">
+                {/* No Qoşul for schedule; informational only */}
+              </div>
+            )}
           </div>
         </div>
       )}
