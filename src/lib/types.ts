@@ -47,3 +47,31 @@ export interface Product {
   image?: string;
   description?: string;
 }
+
+export interface ProductVariation {
+  id: string;
+  name: string;
+  priceDelta?: number;
+}
+
+export type DeliveryMethod = 'post' | 'locker' | 'courier' | 'pickup';
+
+export type PickupLocation = 'Bakıxanov Mall' | '4 saylı DOST mərkəzi';
+
+export interface CartItem {
+  id: string; // unique cart item id
+  productId: string;
+  title: string;
+  unitPrice: number; // base price + variation delta already applied
+  image?: string;
+  variationId?: string;
+  variationName?: string;
+  quantity: number;
+}
+
+export interface CartTotals {
+  subTotal: number;
+  deliveryFee: number; // can be negative for pickup discount per product handled separately in total
+  pickupDiscount: number;
+  grandTotal: number;
+}

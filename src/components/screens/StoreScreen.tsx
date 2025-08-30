@@ -2,52 +2,10 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-
-interface Book {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import { products } from '../../lib/products';
 
 export function StoreScreen() {
-  const { t, isDarkMode } = useApp();
-  
-  const books: Book[] = [
-    {
-      id: 'book1',
-      title: 'Yol Hərəkəti Qaydaları',
-      price: 12,
-      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Tam və ətraflı yol qaydaları kitabı'
-    },
-    {
-      id: 'book2', 
-      title: 'Yol Nişanları Atlası',
-      price: 8,
-      image: 'https://images.pexels.com/photos/1370295/pexels-photo-1370295.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Bütün yol nişanlarının izahı'
-    },
-    {
-      id: 'book3',
-      title: 'Sürücülük Təcrübəsi',
-      price: 15,
-      image: 'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400', 
-      description: 'Praktiki sürücülük məsləhətləri'
-    },
-    {
-      id: 'book4',
-      title: 'İmtahan Hazırlığı',
-      price: 10,
-      image: 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'İmtahana hazırlıq üçün test kitabı'
-    }
-  ];
-
-  function purchaseBook(book: Book) {
-    alert(`"${book.title}" kitabı ${book.price} AZN-ə satın alındı! (Demo)`);
-  }
+  const { t, isDarkMode, navigate, addToCart } = useApp();
 
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
@@ -65,35 +23,37 @@ export function StoreScreen() {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {books.map((book) => (
-          <Card key={book.id} className={`p-3 transition-colors duration-200 ${
+        {products.map((book) => (
+          <Card key={book.id} className={`p-0 overflow-hidden transition-colors duration-200 ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
-            <img
-              src={book.image}
-              alt={book.title}
-              className="w-full h-32 object-cover rounded-lg mb-3"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400';
-              }}
-            />
-            <div className="space-y-2">
-              <h3 className={`font-bold text-sm leading-tight transition-colors duration-200 ${
+            <button onClick={() => navigate('ProductDetail', { productId: book.id })} className="block w-full text-left">
+              <img
+                src={book.image}
+                alt={book.title}
+                className="w-full h-32 object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400';
+                }}
+              />
+            </button>
+            <div className="p-3 flex flex-col gap-1 min-h-[120px]">
+              <h3 className={`font-bold text-sm leading-tight transition-colors duration-200 truncate ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
                 {book.title}
               </h3>
-              <p className={`text-xs leading-tight transition-colors duration-200 ${
+              <p className={`text-xs leading-tight transition-colors duration-200 line-clamp-2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>
                 {book.description}
               </p>
-              <div className="flex items-center justify-between">
+              <div className="mt-auto flex items-center justify-between pt-2">
                 <span className="text-lg font-bold text-emerald-600">
                   {book.price} AZN
                 </span>
                 <Button
-                  onClick={() => purchaseBook(book)}
+                  onClick={() => addToCart({ productId: book.id, title: book.title, unitPrice: book.price, image: book.image, quantity: 1 })}
                   size="sm"
                   className="text-xs px-3 py-1"
                 >
