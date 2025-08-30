@@ -67,6 +67,10 @@
   animation: fade-in-up 0.6s ease-out;
 }
 
+/* Hide scrollbars utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Hover effektləri */
 .hover-lift {
   transition: transform 0.2s ease-out;

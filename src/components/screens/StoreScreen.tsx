@@ -1,107 +1,43 @@
 import React from 'react';
+import { ShoppingCart } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-
-interface Book {
-  id: string;
-  title: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import { ProductCard } from '../ui/ProductCard';
+import { STORE_PRODUCTS } from '../../lib/products';
 
 export function StoreScreen() {
-  const { t, isDarkMode } = useApp();
+  const { isDarkMode, navigate } = useApp();
   
-  const books: Book[] = [
-    {
-      id: 'book1',
-      title: 'Yol Hərəkəti Qaydaları',
-      price: 12,
-      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Tam və ətraflı yol qaydaları kitabı'
-    },
-    {
-      id: 'book2', 
-      title: 'Yol Nişanları Atlası',
-      price: 8,
-      image: 'https://images.pexels.com/photos/1370295/pexels-photo-1370295.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'Bütün yol nişanlarının izahı'
-    },
-    {
-      id: 'book3',
-      title: 'Sürücülük Təcrübəsi',
-      price: 15,
-      image: 'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=400', 
-      description: 'Praktiki sürücülük məsləhətləri'
-    },
-    {
-      id: 'book4',
-      title: 'İmtahan Hazırlığı',
-      price: 10,
-      image: 'https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=400',
-      description: 'İmtahana hazırlıq üçün test kitabı'
-    }
-  ];
-
-  function purchaseBook(book: Book) {
-    alert(`"${book.title}" kitabı ${book.price} AZN-ə satın alındı! (Demo)`);
-  }
-
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      <div className="mb-6 text-center">
+      <div className="mb-3 text-center">
         <h1 className={`text-2xl font-bold mb-2 transition-colors duration-200 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Mağaza</h1>
-        <p className={`text-sm transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-600'
-        }`}>
-          Sürücülük kitabları və materialları
-        </p>
+        }`}>Onlayn mağaza</h1>
+        <div className="mt-1 rounded-md px-3 py-1 inline-block text-xs font-semibold text-white bg-red-600 whitespace-nowrap">
+          20 manatdan yuxarı çatdırılma pulsuzdur
+        </div>
       </div>
+      {/* Floating Cart button */}
+      <button
+        onClick={() => navigate('Cart')}
+        className="fixed bottom-28 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        style={{ right: 'calc(env(safe-area-inset-right, 0px) + 20px)' }}
+      >
+        <ShoppingCart size={18} />
+        <span>Səbətə bax</span>
+      </button>
 
       <div className="grid grid-cols-2 gap-3">
-        {books.map((book) => (
-          <Card key={book.id} className={`p-3 transition-colors duration-200 ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
-            <img
-              src={book.image}
-              alt={book.title}
-              className="w-full h-32 object-cover rounded-lg mb-3"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400';
-              }}
-            />
-            <div className="space-y-2">
-              <h3 className={`font-bold text-sm leading-tight transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-900'
-              }`}>
-                {book.title}
-              </h3>
-              <p className={`text-xs leading-tight transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                {book.description}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-bold text-emerald-600">
-                  {book.price} AZN
-                </span>
-                <Button
-                  onClick={() => purchaseBook(book)}
-                  size="sm"
-                  className="text-xs px-3 py-1"
-                >
-                  Səbətə at
-                </Button>
-              </div>
-            </div>
-          </Card>
+        {STORE_PRODUCTS.map((p) => (
+          <ProductCard
+            key={p.id}
+            product={p}
+            onClick={() => navigate('ProductDetail', { id: p.id })}
+            onAddToCart={() => alert('Demo: səbətə əlavə edildi')}
+          />
         ))}
       </div>
 
