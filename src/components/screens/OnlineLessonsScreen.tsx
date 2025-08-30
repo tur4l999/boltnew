@@ -175,7 +175,7 @@ export function OnlineLessonsScreen() {
             <div className={`text-base font-extrabold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               {selectedLesson.title}
             </div>
-            <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-xs mb-4`}>
+            <div className={`${isDarkMode ? 'text-gray-200' : 'text-gray-700'} text-sm leading-relaxed mb-4`}>
               {formatDateTime(new Date(selectedLesson.date))}{' • '}{selectedLesson.instructor}{' • '}{selectedLesson.durationMin} dəq
             </div>
             {selectedSource === 'upcoming' ? (
@@ -192,6 +192,16 @@ export function OnlineLessonsScreen() {
                 {/* No Qoşul for schedule; informational only */}
               </div>
             )}
+            <div className="mt-3 flex items-center justify-center">
+              <button
+                onClick={() => { setSelectedLesson(null); setSelectedSource(null); }}
+                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
+                  isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                Bağla
+              </button>
+            </div>
           </div>
         </div>
       )}
