@@ -51,15 +51,28 @@ export function OnlineLessonsScreen() {
   }, [lessons]);
 
   const groupedByDay = useMemo(() => {
+    const upcomingIds = new Set(upcoming.map(u => u.id));
+    const remaining = lessons
+      .filter(l => !upcomingIds.has(l.id))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     const map = new Map<string, LessonItem[]>();
-    for (const l of lessons.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())) {
+    for (const l of remaining) {
       const d = new Date(l.date);
       const key = d.toLocaleDateString('az-AZ', { weekday: 'long', day: '2-digit', month: 'long' });
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(l);
     }
     return Array.from(map.entries());
-  }, [lessons]);
+  }, [lessons, upcoming]);
+
+  const shouldShowPlanInsteadOfJoin = (lesson: LessonItem): boolean => {
+    if (scheduledIds.has(lesson.id)) return false;
+    const now = Date.now();
+    const start = new Date(lesson.date).getTime();
+    const sixHoursMs = 6 * 60 * 60 * 1000;
+    const timeUntil = start - now;
+    return timeUntil > 0 && timeUntil <= sixHoursMs;
+  };
 
   return (
     <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
@@ -102,7 +115,7 @@ export function OnlineLessonsScreen() {
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'}`}>🔔</div>
                   <div className={`absolute -right-1 -bottom-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDarkMode ? 'bg-emerald-600 text-white border border-emerald-400' : 'bg-emerald-600 text-white border border-white'}`}>✓</div>
                 </div>
-              ) : (
+              ) : shouldShowPlanInsteadOfJoin(l) ? (
                 <button
                   className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
                     isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
@@ -110,6 +123,15 @@ export function OnlineLessonsScreen() {
                   onClick={(e) => { e.stopPropagation(); setScheduledIds(prev => new Set([...prev, l.id])); }}
                 >
                   Planla
+                </button>
+              ) : (
+                <button
+                  className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
+                    isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                  }`}
+                  onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
+                >
+                  Qoşul
                 </button>
               )}
             </div>
