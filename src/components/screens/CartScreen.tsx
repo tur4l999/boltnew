@@ -63,7 +63,7 @@ export function CartScreen() {
           <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Tövsiyyə edilir</h3>
             <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
-              {STORE_PRODUCTS.filter(p => !items.find(i => i.id === p.id)).map(p => (
+              {STORE_PRODUCTS.filter(p => (p.stock ?? 1) > 0 && !items.find(i => i.id === p.id)).map(p => (
                 <div key={p.id} className="min-w-[45%]">
                   <div className="relative">
                     <img src={p.images[0]} alt={p.title} className="w-full h-28 object-cover rounded-md" />
