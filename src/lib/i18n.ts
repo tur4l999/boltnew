@@ -14,7 +14,7 @@ export const dictionaries = {
     // Actions
     quickTest: 'Sürətli test',
     videoLessons: '3D video dərs',
-    onlineLesson: 'Onlayn dərs',
+    onlineLesson: 'Onlayn dərslər',
     continue: 'Haradan davam edim?',
     startLesson: 'Dərsə başla',
     startTest: 'Testə başla',
@@ -26,6 +26,8 @@ export const dictionaries = {
     tests: 'Testlər',
     fines: 'Cərimələr',
     articles: 'Maddələr',
+    myResults: 'Nəticələrim',
+    notes: 'Konspektlər',
     
     // Lesson tabs
     article: 'Maddə',
@@ -97,6 +99,8 @@ export const dictionaries = {
     tests: 'Тесты',
     fines: 'Штрафы',
     articles: 'Статьи',
+    myResults: 'Мои результаты',
+    notes: 'Конспекты',
     
     // Lesson tabs
     article: 'Статья',
