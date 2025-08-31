@@ -19,7 +19,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     title: 'TEST-İMTAHAN ÇALIŞMALARI',
     price: 15,
     images: [
-      '/image.png',
+      'https://cdn.dda.az/dda-project/media/product/cover_images/talibov-suruculuk-kitab%C4%B1-en_son-_nesr-sv-2025.jpg',
     ],
     description: 'Bütün kateqoriyalara aid test-imtahan çalışmaları.',
     rating: 4.9,
@@ -36,7 +36,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     title: 'SÜRÜCÜLÜK VƏSİQƏSİ VƏSAİTİ',
     price: 10,
     images: [
-      '/image copy.png',
+      'https://cdn.dda.az/dda-project/media/product/cover_images/talibov-suruculuk-test-kitabi-2025-yeni-nesr-test-imtahan-calismala_XMGJpZK.jpg',
     ],
     description: 'Sürücülük vəsiqəsi imtahanlarına hazırlıq üçün vəsait.',
     rating: 4.8,
