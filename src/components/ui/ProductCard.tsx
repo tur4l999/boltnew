@@ -21,7 +21,7 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
   return (
     <Card
       onClick={onClick}
-      className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3`}
+      className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3 h-full flex flex-col`}
     >
       <div className="relative">
         {/* Wishlist heart */}
@@ -46,26 +46,22 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           className="w-full h-32 object-cover rounded-lg mb-3"
         />
       </div>
-      <div className="space-y-2 flex flex-col min-h-[140px]">
-        {!isOutOfStock && (
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
-            {hasDiscount && (
-              <span className="text-xs line-through opacity-60">{product.price} ₼</span>
-            )}
-          </div>
-        )}
+      <div className="space-y-2 flex flex-col min-h-[170px]">
+        <div className={`flex items-baseline gap-2 h-5 ${isOutOfStock ? 'invisible' : ''}`}>
+          <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
+          {hasDiscount && (
+            <span className="text-xs line-through opacity-60">{product.price} ₼</span>
+          )}
+        </div>
         <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
           {product.title}
         </h3>
-        {!isOutOfStock && (
-          <div className="flex items-center gap-1 text-[10px] text-amber-500">
+        <div className={`flex items-center gap-1 text-[10px] text-amber-500 h-4 ${isOutOfStock ? 'invisible' : ''}`}>
           {'★'.repeat(Math.round(product.rating ?? 4))}
           <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} ml-1`}>
             {(product.reviewsCount ?? 0)} rəylər
           </span>
         </div>
-        )}
         <div className="mt-auto pt-2 flex items-center justify-between">
           <span />
           <Button
