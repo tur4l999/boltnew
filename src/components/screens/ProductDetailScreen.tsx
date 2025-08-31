@@ -20,6 +20,7 @@ export function ProductDetailScreen() {
 
   const hasDiscount = !!product.discountPercent;
   const discounted = getDiscountedPrice(product);
+  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
   const handleSwipe = (direction: 'left' | 'right') => {
     setActiveIndex(prev => {
@@ -63,19 +64,26 @@ export function ProductDetailScreen() {
       {/* Price and CTA */}
       <div className="mt-4 flex items-center justify-between gap-3">
         <div className="min-w-0">
-          {hasDiscount ? (
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-pink-600">{discounted} ₼</span>
-              <span className="text-sm line-through opacity-60">{product.price} ₼</span>
-            </div>
-          ) : (
-            <span className="text-2xl font-bold text-emerald-600">{product.price} ₼</span>
+          {!isOutOfStock && (
+            hasDiscount ? (
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-pink-600">{discounted} ₼</span>
+                <span className="text-sm line-through opacity-60">{product.price} ₼</span>
+              </div>
+            ) : (
+              <span className="text-2xl font-bold text-emerald-600">{product.price} ₼</span>
+            )
           )}
-          <div className="text-xs mt-1 text-amber-500">★ {product.rating ?? 4.5} ({product.reviewsCount ?? 0} rəy)</div>
+          {!isOutOfStock && (
+            <div className="text-xs mt-1 text-amber-500">★ {product.rating ?? 4.5} ({product.reviewsCount ?? 0} rəy)</div>
+          )}
+          {isOutOfStock && (
+            <div className="text-red-600 font-semibold">Stokda yoxdur</div>
+          )}
         </div>
         <div className="flex items-center gap-3">
-          <QuantityStepper value={qty} onChange={setQty} />
-          <Button onClick={() => { addToCart(product.id, qty); navigate('Cart'); }}>Səbətə at</Button>
+          {!isOutOfStock && <QuantityStepper value={qty} onChange={setQty} />}
+          <Button disabled={isOutOfStock} onClick={() => { if (!isOutOfStock) { addToCart(product.id, qty); navigate('Cart'); } }}>{isOutOfStock ? 'Stokda yoxdur' : 'Səbətə at'}</Button>
         </div>
       </div>
 

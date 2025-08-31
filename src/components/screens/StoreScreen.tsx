@@ -67,7 +67,7 @@ export function StoreScreen() {
         className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
         style={{
           right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 64px)'
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
         }}
       >
         <ShoppingCart size={18} />
