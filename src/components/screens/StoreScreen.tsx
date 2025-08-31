@@ -6,7 +6,46 @@ import { ProductCard } from '../ui/ProductCard';
 import { STORE_PRODUCTS } from '../../lib/products';
 
 export function StoreScreen() {
-  const { isDarkMode, navigate } = useApp();
+  const { isDarkMode, navigate, addToCart } = useApp();
+  const cartBtnRef = React.useRef<HTMLButtonElement | null>(null);
+
+  const flyToCart = React.useCallback((sourceEl: HTMLElement | null) => {
+    if (!sourceEl || !cartBtnRef.current) return;
+    const sourceRect = sourceEl.getBoundingClientRect();
+    const targetRect = cartBtnRef.current.getBoundingClientRect();
+
+    const imgSrc = (sourceEl as HTMLImageElement).src || '';
+    const ghost = document.createElement('img');
+    ghost.src = imgSrc || '/DDA_logo.png';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${sourceRect.left + sourceRect.width / 2 - 16}px`;
+    ghost.style.top = `${sourceRect.top + sourceRect.height / 2 - 16}px`;
+    ghost.style.width = '32px';
+    ghost.style.height = '32px';
+    ghost.style.borderRadius = '6px';
+    ghost.style.boxShadow = '0 6px 12px rgba(0,0,0,0.25)';
+    ghost.style.zIndex = '9999';
+    ghost.style.pointerEvents = 'none';
+    document.body.appendChild(ghost);
+
+    const deltaX = (targetRect.left + targetRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
+    const deltaY = (targetRect.top + targetRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
+
+    const anim = ghost.animate([
+      { transform: 'translate(0px, 0px) scale(1)', opacity: 1 },
+      { transform: `translate(${deltaX * 0.7}px, ${deltaY * 0.7}px) scale(0.9)`, opacity: 0.9, offset: 0.7 },
+      { transform: `translate(${deltaX}px, ${deltaY}px) scale(0.3)`, opacity: 0 }
+    ], { duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+
+    anim.onfinish = () => {
+      ghost.remove();
+      cartBtnRef.current?.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.1)' },
+        { transform: 'scale(1)' }
+      ], { duration: 250, easing: 'ease-out' });
+    };
+  }, []);
   
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
@@ -23,7 +62,8 @@ export function StoreScreen() {
       {/* Floating Cart button */}
       <button
         onClick={() => navigate('Cart')}
-        className="fixed bottom-28 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        ref={cartBtnRef}
+        className="fixed bottom-10 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
         style={{ right: 'calc(env(safe-area-inset-right, 0px) + 20px)' }}
       >
         <ShoppingCart size={18} />
@@ -36,7 +76,7 @@ export function StoreScreen() {
             key={p.id}
             product={p}
             onClick={() => navigate('ProductDetail', { id: p.id })}
-            onAddToCart={() => alert('Demo: səbətə əlavə edildi')}
+            onAddToCart={(el) => { addToCart(p.id, 1); flyToCart(el); }}
           />
         ))}
       </div>

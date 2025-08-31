@@ -8,13 +8,14 @@ import { useApp } from '../../contexts/AppContext';
 interface ProductCardProps {
   product: StoreProduct;
   onClick?: () => void;
-  onAddToCart?: () => void;
+  onAddToCart?: (sourceEl: HTMLElement | null) => void;
 }
 
 export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps) {
   const { isDarkMode } = useApp();
   const hasDiscount = !!product.discountPercent;
   const discounted = getDiscountedPrice(product);
+  const imgRef = React.useRef<HTMLImageElement | null>(null);
 
   return (
     <Card
@@ -28,6 +29,7 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           </span>
         )}
         <img
+          ref={imgRef}
           src={product.images[0]}
           alt={product.title}
           className="w-full h-32 object-cover rounded-lg mb-3"
@@ -51,7 +53,14 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
         </div>
         <div className="flex items-center justify-between">
           <span />
-          <Button size="sm" className="text-xs px-3 py-1" onClick={onAddToCart}>
+          <Button
+            size="sm"
+            className="text-xs px-3 py-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart?.(imgRef.current);
+            }}
+          >
             Səbətə at
           </Button>
         </div>
