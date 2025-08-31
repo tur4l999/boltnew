@@ -182,7 +182,7 @@ export function HomeScreen() {
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
               🧪
             </div>
-            <div className="text-left font-black text-base leading-tight">
+            <div className="text-left font-black text-base leading-tight whitespace-nowrap">
               {`${t.examSimulator} (sınaq imtahanı)`}
             </div>
           </button>
