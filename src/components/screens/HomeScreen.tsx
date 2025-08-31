@@ -30,13 +30,19 @@ export function HomeScreen() {
     { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
-  const rows = useMemo(() => {
-    const result = [];
-    for (let i = 0; i < gridItems.length; i += 2) {
-      result.push(gridItems.slice(i, i + 2));
+  const primaryItems = gridItems.slice(0, 6);
+  const secondaryItems = gridItems.slice(6);
+
+  function toRows(items: typeof gridItems) {
+    const result = [] as typeof gridItems[];
+    for (let i = 0; i < items.length; i += 2) {
+      result.push(items.slice(i, i + 2));
     }
     return result;
-  }, [gridItems]);
+  }
+
+  const primaryRows = useMemo(() => toRows(primaryItems), [primaryItems]);
+  const secondaryRows = useMemo(() => toRows(secondaryItems), [secondaryItems]);
 
   return (
     <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
@@ -140,19 +146,19 @@ export function HomeScreen() {
         </Card>
       </FadeInUp>
 
-      {/* Grid Layout */}
+      {/* Primary Section */}
       <div className="space-y-2">
-        {rows.map((row, idx) => (
-          <React.Fragment key={idx}>
-            <SlideTransition direction="right" delay={300 + (idx * 100)}>
-              <div className="grid grid-cols-2 gap-2">
+        <div className={`text-[11px] uppercase tracking-wide font-bold mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Əsas bölmələr</div>
+        {primaryRows.map((row, idx) => (
+          <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
+            <div className="grid grid-cols-2 gap-2">
               {row.map((item) => (
                 <button
                   key={item.key}
                   onClick={item.action}
-                  className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[44px] ${
-                    isDarkMode 
-                      ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
+                  className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${
+                    isDarkMode
+                      ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100'
                       : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
                   }`}
                 >
@@ -168,28 +174,62 @@ export function HomeScreen() {
                   </div>
                 </button>
               ))}
-              </div>
-            </SlideTransition>
-            {idx === 2 && (
-              <ScaleIn delay={500}>
-                <div className="mt-2">
-                  <button
-                    onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
-                    className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-                      🧪
-                    </div>
-                    <div className="text-left font-black text-base leading-tight whitespace-nowrap">
-                      {`${t.examSimulator} (sınaq imtahanı)`}
-                    </div>
-                  </button>
-                </div>
-              </ScaleIn>
-            )}
-          </React.Fragment>
+            </div>
+          </SlideTransition>
         ))}
       </div>
+
+      {/* Long CTA */}
+      <ScaleIn delay={500}>
+        <div className="mt-2">
+          <button
+            onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
+            className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
+          >
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
+              🧪
+            </div>
+            <div className="text-left font-black text-base leading-tight whitespace-nowrap">
+              {`${t.examSimulator} (sınaq imtahanı)`}
+            </div>
+          </button>
+        </div>
+      </ScaleIn>
+
+      {/* Secondary Section */}
+      {secondaryRows.length > 0 && (
+        <div className="space-y-2 mt-3">
+          <div className={`text-[11px] uppercase tracking-wide font-bold mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Digər bölmələr</div>
+          {secondaryRows.map((row, idx) => (
+            <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
+              <div className="grid grid-cols-2 gap-2">
+                {row.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={item.action}
+                    className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100'
+                        : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                    }`}>
+                      {item.emoji}
+                    </div>
+                    <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
+                      {item.label}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </SlideTransition>
+          ))}
+        </div>
+      )}
 
       {/* (CTA is now inserted after 3rd row) */}
 
