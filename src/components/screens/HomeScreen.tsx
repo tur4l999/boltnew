@@ -22,15 +22,11 @@ export function HomeScreen() {
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     // 6) Maddələr
     { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
-    // 7) İmtahan simulyatoru (sınaq imtahanı)
-    { key: 'examSimulator', label: `${t.examSimulator} (sınaq imtahanı)`, action: () => navigate('ExamConfig', { mode: 'simulator' }), emoji: '🧪' },
-    // 8) Tətbiqdən necə istifadə edilir?
-    { key: 'howToUse', label: 'Tətbiqdən necə istifadə edilir?', action: () => alert('Tətbiqdən Necə İstifadə Edilir'), emoji: '❓' },
-    // 9) Cərimələr
+    // 7) Cərimələr
     { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
-    // 10) Konspektlər
+    // 8) Konspektlər
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
-    // 11) Yekun imtahan
+    // 9) Yekun imtahan
     { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
@@ -176,7 +172,35 @@ export function HomeScreen() {
         ))}
       </div>
 
-      {/* Remove standalone CTA and tutorial card since included in grid */}
+      {/* Exam Simulator CTA (full-width green) */}
+      <ScaleIn delay={500}>
+        <div className="mt-2">
+          <button
+            onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
+            className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
+          >
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
+              🧪
+            </div>
+            <div className="text-left font-black text-base leading-tight">
+              {`${t.examSimulator} (sınaq imtahanı)`}
+            </div>
+          </button>
+        </div>
+      </ScaleIn>
+
+      {/* Tutorial Card (bottom) */}
+      <ScaleIn delay={600}>
+        <button
+          onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}
+          className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden transform hover:scale-105 transition-transform duration-200"
+        >
+          <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
+            <span className="text-white text-base">▶</span>
+          </div>
+          <span className="text-base">Tətbiqdən Necə İstifadə Edilir</span>
+        </button>
+      </ScaleIn>
     </div>
   );
 }
