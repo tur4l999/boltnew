@@ -43,10 +43,10 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           ref={imgRef}
           src={product.images[0]}
           alt={product.title}
-          className="w-full h-32 object-cover rounded-lg mb-3"
+          className="w-full h-28 object-cover rounded-lg mb-3"
         />
       </div>
-      <div className="space-y-2 flex flex-col min-h-[170px]">
+      <div className="space-y-2 flex flex-col min-h-[150px]">
         <div className={`flex items-baseline gap-2 h-5 ${isOutOfStock ? 'invisible' : ''}`}>
           <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
           {hasDiscount && (
@@ -62,7 +62,7 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
             {(product.reviewsCount ?? 0)} rəylər
           </span>
         </div>
-        <div className="mt-auto pt-2 flex items-center justify-between">
+        <div className="mt-auto pt-2 pb-1 flex items-center justify-between">
           <span />
           <Button
             size="sm"
