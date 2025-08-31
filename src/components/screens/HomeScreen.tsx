@@ -10,24 +10,42 @@ export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow } = useApp();
   
   const gridItems = [
-    { key: 'video', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8' }), emoji: '🎬' },
-    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
+    // Əsas bölmələr (8 ədəd):
+    { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
+    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
+    { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
+    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
     { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
+    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
+
+    // Əlavə bölmələr (secondary):
+    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
+    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
+    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
+    { key: 'appeals', label: 'Appeliyasiyalarım', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
+
+    // Bölmə sonu: Yekun imtahan
+    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
-  const rows = useMemo(() => {
-    const result = [];
-    for (let i = 0; i < gridItems.length; i += 2) {
-      result.push(gridItems.slice(i, i + 2));
+  const primaryItems = gridItems.slice(0, 8);
+  const secondaryItems = gridItems.slice(8);
+
+  function toRows(items: typeof gridItems) {
+    const result = [] as typeof gridItems[];
+    for (let i = 0; i < items.length; i += 2) {
+      result.push(items.slice(i, i + 2));
     }
     return result;
-  }, [gridItems]);
+  }
+
+  const primaryRows = useMemo(() => toRows(primaryItems), [primaryItems]);
+  const secondaryRows = useMemo(() => toRows(secondaryItems), [secondaryItems]);
 
   return (
-    <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Package Status (hidden if scheduled activation exists) */}
@@ -128,39 +146,45 @@ export function HomeScreen() {
         </Card>
       </FadeInUp>
 
-      {/* Grid Layout */}
-      <div className="space-y-2">
-        {rows.map((row, idx) => (
-          <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
-            <div className="grid grid-cols-2 gap-2">
-            {row.map((item) => (
-              <button
-                key={item.key}
-                onClick={item.action}
-                className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[44px] ${
-                  isDarkMode 
-                    ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
-                    : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}>
-                  {item.emoji}
-                </div>
-                <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                }`}>
-                  {item.label}
-                </div>
-              </button>
-            ))}
-            </div>
-          </SlideTransition>
-        ))}
-      </div>
+      {/* Primary Section */}
+      <Card className="mb-2">
+        <div className="flex items-center justify-between mb-2">
+          <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Əsas bölmələr</div>
+          <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+        </div>
+        <div className="space-y-2">
+          {primaryRows.map((row, idx) => (
+            <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
+              <div className="grid grid-cols-2 gap-2">
+                {row.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={item.action}
+                    className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${
+                      isDarkMode
+                        ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100'
+                        : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
+                    }`}
+                  >
+                    <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                    }`}>
+                      {item.emoji}
+                    </div>
+                    <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
+                      {item.label}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </SlideTransition>
+          ))}
+        </div>
+      </Card>
 
-      {/* Exam Simulator CTA (full-width green) */}
+      {/* Long CTA */}
       <ScaleIn delay={500}>
         <div className="mt-2">
           <button
@@ -170,14 +194,56 @@ export function HomeScreen() {
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
               🧪
             </div>
-            <div className="text-left font-black text-base leading-tight">
-              {t.examSimulator}
+            <div className="text-left font-black text-base leading-tight whitespace-nowrap">
+              {`${t.examSimulator} (sınaq imtahanı)`}
             </div>
           </button>
         </div>
       </ScaleIn>
 
-      {/* Tutorial Card */}
+      {/* Secondary Section */}
+      {secondaryRows.length > 0 && (
+        <Card className="mt-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Əlavə bölmələr</div>
+            <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          </div>
+          <div className="space-y-2">
+            {secondaryRows.map((row, idx) => (
+              <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
+                <div className="grid grid-cols-2 gap-2">
+                  {row.map((item) => (
+                    <button
+                      key={item.key}
+                      onClick={item.action}
+                      className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${
+                        isDarkMode
+                          ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100'
+                          : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
+                      }`}
+                    >
+                      <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                        isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                      }`}>
+                        {item.emoji}
+                      </div>
+                      <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
+                        isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                      }`}>
+                        {item.label}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </SlideTransition>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* (CTA is now inserted after 3rd row) */}
+
+      {/* Tutorial Card (bottom) */}
       <ScaleIn delay={600}>
         <button
           onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}

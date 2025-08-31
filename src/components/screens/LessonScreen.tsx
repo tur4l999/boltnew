@@ -8,7 +8,9 @@ import { MODULES } from '../../lib/data';
 
 export function LessonScreen() {
   const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
-  const [activeTab, setActiveTab] = useState('video');
+  const [activeTab, setActiveTab] = useState<string>(
+    (currentScreen.params && (currentScreen.params as any).tab) || 'video'
+  );
   const [offlineDownload, setOfflineDownload] = useState(false);
   const [contactMessage, setContactMessage] = useState('');
   const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);

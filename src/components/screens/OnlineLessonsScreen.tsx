@@ -79,7 +79,7 @@ export function OnlineLessonsScreen() {
   const shouldShowPlanInsteadOfJoin = (_lesson: LessonItem): boolean => false;
 
   return (
-    <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <div className="-mx-3 -mt-2 mb-3 px-3 py-3 flex items-center gap-3">
