@@ -35,7 +35,7 @@ export function ExamScreen() {
   };
 
   return (
-    <div className={`p-3 pb-20 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <div className={`rounded-xl overflow-hidden border mb-3 transition-colors duration-200 ${

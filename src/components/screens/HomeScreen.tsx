@@ -10,28 +10,28 @@ export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow } = useApp();
   
   const gridItems = [
-    // 1) 3D video dərs
+    // Əsas bölmələr (8 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
-    // 2) Sürətli test
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
-    // 3) Onlayn dərslər
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
-    // 4) Cərimələr
-    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
-    // 5) Testlər
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    // 6) Maddələr
-    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
-    // 7) Nəticələrim
-    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
-    // 8) Konspektlər
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
-    // 9) Yekun imtahan
+    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
+    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
+    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
+    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
+
+    // Əlavə bölmələr (secondary):
+    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
+    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
+    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
+    { key: 'appeals', label: 'Appeliyasiyalarım', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
+
+    // Bölmə sonu: Yekun imtahan
     { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
-  const primaryItems = gridItems.slice(0, 6);
-  const secondaryItems = gridItems.slice(6);
+  const primaryItems = gridItems.slice(0, 8);
+  const secondaryItems = gridItems.slice(8);
 
   function toRows(items: typeof gridItems) {
     const result = [] as typeof gridItems[];
@@ -45,7 +45,7 @@ export function HomeScreen() {
   const secondaryRows = useMemo(() => toRows(secondaryItems), [secondaryItems]);
 
   return (
-    <div className={`p-3 pb-6 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Package Status (hidden if scheduled activation exists) */}
@@ -205,7 +205,7 @@ export function HomeScreen() {
       {secondaryRows.length > 0 && (
         <Card className="mt-3">
           <div className="flex items-center justify-between mb-2">
-            <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Digər bölmələr</div>
+            <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Əlavə bölmələr</div>
             <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
           </div>
           <div className="space-y-2">
