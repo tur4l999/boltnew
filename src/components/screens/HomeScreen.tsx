@@ -143,51 +143,55 @@ export function HomeScreen() {
       {/* Grid Layout */}
       <div className="space-y-2">
         {rows.map((row, idx) => (
-          <SlideTransition key={idx} direction="right" delay={300 + (idx * 100)}>
-            <div className="grid grid-cols-2 gap-2">
-            {row.map((item) => (
-              <button
-                key={item.key}
-                onClick={item.action}
-                className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[44px] ${
-                  isDarkMode 
-                    ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
-                    : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
-                }`}
-              >
-                <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}>
-                  {item.emoji}
+          <React.Fragment key={idx}>
+            <SlideTransition direction="right" delay={300 + (idx * 100)}>
+              <div className="grid grid-cols-2 gap-2">
+              {row.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={item.action}
+                  className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[44px] ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' 
+                      : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                    isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}>
+                    {item.emoji}
+                  </div>
+                  <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
+                    {item.label}
+                  </div>
+                </button>
+              ))}
+              </div>
+            </SlideTransition>
+            {idx === 2 && (
+              <ScaleIn delay={500}>
+                <div className="mt-2">
+                  <button
+                    onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
+                    className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
+                      🧪
+                    </div>
+                    <div className="text-left font-black text-base leading-tight whitespace-nowrap">
+                      {`${t.examSimulator} (sınaq imtahanı)`}
+                    </div>
+                  </button>
                 </div>
-                <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                }`}>
-                  {item.label}
-                </div>
-              </button>
-            ))}
-            </div>
-          </SlideTransition>
+              </ScaleIn>
+            )}
+          </React.Fragment>
         ))}
       </div>
 
-      {/* Exam Simulator CTA (full-width green) */}
-      <ScaleIn delay={500}>
-        <div className="mt-2">
-          <button
-            onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
-            className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
-          >
-            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-              🧪
-            </div>
-            <div className="text-left font-black text-base leading-tight whitespace-nowrap">
-              {`${t.examSimulator} (sınaq imtahanı)`}
-            </div>
-          </button>
-        </div>
-      </ScaleIn>
+      {/* (CTA is now inserted after 3rd row) */}
 
       {/* Tutorial Card (bottom) */}
       <ScaleIn delay={600}>
