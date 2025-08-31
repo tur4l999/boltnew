@@ -31,11 +31,12 @@ export function StoreScreen() {
     const deltaX = (targetRect.left + targetRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
     const deltaY = (targetRect.top + targetRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
 
+    const upY = -40; // rise a bit first
     const anim = ghost.animate([
       { transform: 'translate(0px, 0px) scale(1)', opacity: 1 },
-      { transform: `translate(${deltaX * 0.7}px, ${deltaY * 0.7}px) scale(0.9)`, opacity: 0.9, offset: 0.7 },
-      { transform: `translate(${deltaX}px, ${deltaY}px) scale(0.3)`, opacity: 0 }
-    ], { duration: 700, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      { transform: `translate(0px, ${upY}px) scale(0.95)`, opacity: 0.95, offset: 0.35 },
+      { transform: `translate(${deltaX}px, ${deltaY}px) scale(0.35)`, opacity: 0 }
+    ], { duration: 600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
 
     anim.onfinish = () => {
       ghost.remove();
@@ -63,8 +64,11 @@ export function StoreScreen() {
       <button
         onClick={() => navigate('Cart')}
         ref={cartBtnRef}
-        className="fixed bottom-10 z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
-        style={{ right: 'calc(env(safe-area-inset-right, 0px) + 20px)' }}
+        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        style={{
+          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 64px)'
+        }}
       >
         <ShoppingCart size={18} />
         <span>Səbətə bax</span>
