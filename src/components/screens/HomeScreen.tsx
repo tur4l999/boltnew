@@ -16,14 +16,14 @@ export function HomeScreen() {
     { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
     // 3) Onlayn dərslər
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
-    // 4) Nəticələrim
-    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
+    // 4) Cərimələr
+    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
     // 5) Testlər
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     // 6) Maddələr
     { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
-    // 7) Cərimələr
-    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
+    // 7) Nəticələrim
+    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
     // 8) Konspektlər
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     // 9) Yekun imtahan
