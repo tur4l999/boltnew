@@ -46,7 +46,7 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           className="w-full h-32 object-cover rounded-lg mb-3"
         />
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 flex flex-col min-h-[140px]">
         {!isOutOfStock && (
           <div className="flex items-baseline gap-2">
             <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
@@ -66,7 +66,7 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
           </span>
         </div>
         )}
-        <div className="flex items-center justify-between">
+        <div className="mt-auto pt-2 flex items-center justify-between">
           <span />
           <Button
             size="sm"
