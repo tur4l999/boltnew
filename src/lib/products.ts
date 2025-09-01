@@ -11,6 +11,7 @@ export type StoreProduct = Product & {
   language?: string;
   year?: number;
   externalUrl?: string;
+  longDescription?: string;
 };
 
 export const STORE_PRODUCTS: StoreProduct[] = [
@@ -22,6 +23,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       'https://cdn.dda.az/dda-project/media/product/cover_images/talibov-suruculuk-kitab%C4%B1-en_son-_nesr-sv-2025.jpg',
     ],
     description: 'Bütün kateqoriyalara aid test-imtahan çalışmaları.',
+    longDescription: 'Bu nəşr test-imtahan mövzularını sistemli şəkildə təqdim edir. Hər bölmədə nümunə suallar, izahlar və praktik tapşırıqlar yer alır. Tələbələr və müəllimlər üçün gündəlik hazırlıqda etibarlı mənbədir.',
     rating: 4.9,
     reviewsCount: 81,
     stock: 10,
@@ -39,6 +41,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       'https://cdn.dda.az/dda-project/media/product/cover_images/talibov-suruculuk-test-kitabi-2025-yeni-nesr-test-imtahan-calismala_XMGJpZK.jpg',
     ],
     description: 'Sürücülük vəsiqəsi imtahanlarına hazırlıq üçün vəsait.',
+    longDescription: 'İmtahan strukturu, qaydalar və ən çox verilən suallarla bağlı geniş izahlar. Sadə dil, praktik misallar və qısa xülasələr ilə yadda qalan bir hazırlıq materialı.',
     rating: 4.8,
     reviewsCount: 24,
     stock: 5,

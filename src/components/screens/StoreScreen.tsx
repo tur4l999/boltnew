@@ -75,10 +75,11 @@ export function StoreScreen() {
       </button>
 
       <div className="grid grid-cols-2 gap-3">
-        {STORE_PRODUCTS.map((p) => (
+        {STORE_PRODUCTS.map((p, idx) => (
           <ProductCard
             key={p.id}
             product={p}
+            isBestseller={idx === 0}
             onClick={() => navigate('ProductDetail', { id: p.id })}
             onAddToCart={(el) => { addToCart(p.id, 1); flyToCart(el); }}
           />

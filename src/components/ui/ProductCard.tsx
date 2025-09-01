@@ -9,9 +9,10 @@ interface ProductCardProps {
   product: StoreProduct;
   onClick?: () => void;
   onAddToCart?: (sourceEl: HTMLElement | null) => void;
+  isBestseller?: boolean;
 }
 
-export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, onClick, onAddToCart, isBestseller }: ProductCardProps) {
   const { isDarkMode } = useApp();
   const hasDiscount = !!product.discountPercent;
   const discounted = getDiscountedPrice(product);
@@ -37,6 +38,11 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
         {hasDiscount && (
           <span className="absolute -top-2 -left-2 bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
             -{product.discountPercent}%
+          </span>
+        )}
+        {isBestseller && (
+          <span className="absolute top-2 -left-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+            Bestseller
           </span>
         )}
         <img

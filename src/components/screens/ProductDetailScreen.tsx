@@ -75,7 +75,23 @@ export function ProductDetailScreen() {
             )
           )}
           {!isOutOfStock && (
-            <div className="text-xs mt-1 text-amber-500">★ {product.rating ?? 4.5} ({product.reviewsCount ?? 0} rəy)</div>
+            <div className="text-xs mt-1 flex items-center gap-2">
+              <div className="flex items-center text-amber-500">
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const rating = product.rating ?? 0;
+                  const isFull = rating >= i + 1;
+                  const isHalf = !isFull && rating > i && rating < i + 1;
+                  return (
+                    <span key={i} className="inline-block w-3.5 text-[12px] leading-none">
+                      {isFull ? '★' : isHalf ? '☆' : '☆'}
+                    </span>
+                  );
+                })}
+              </div>
+              <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {product.rating ?? 0} ({product.reviewsCount ?? 0} rəy)
+              </span>
+            </div>
           )}
           {isOutOfStock && (
             <div className="text-red-600 font-semibold">Stokda yoxdur</div>
@@ -103,6 +119,16 @@ export function ProductDetailScreen() {
           )}
         </div>
       </Card>
+
+      {/* Extra Description */}
+      {product.longDescription && (
+        <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+          <h3 className="font-bold mb-2">Təsvir</h3>
+          <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <p>{product.longDescription}</p>
+          </div>
+        </Card>
+      )}
 
       {/* Reviews with add form */}
       <ReviewsCard />
