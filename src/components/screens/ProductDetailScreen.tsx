@@ -105,9 +105,7 @@ export function ProductDetailScreen() {
 
       {/* Bestseller badge above details for first product */}
       {product.id === STORE_PRODUCTS[0]?.id && (
-        <div className="mt-3">
-          <span className="inline-block bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-md">Bestseller</span>
-        </div>
+        <DetailBestsellerBadge hasDiscount={hasDiscount} />
       )}
 
       {/* Details */}
@@ -142,6 +140,34 @@ export function ProductDetailScreen() {
 
       {/* Recommended carousel (2 per view) */}
       <RecommendedCarousel currentId={product.id} />
+    </div>
+  );
+}
+
+function DetailBestsellerBadge({ hasDiscount }: { hasDiscount: boolean }) {
+  const { isDarkMode } = useApp();
+  const [hoursLeft, setHoursLeft] = useState<number | null>(null);
+  React.useEffect(() => {
+    const calc = () => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999);
+      const diffMs = endOfDay.getTime() - now.getTime();
+      const hrs = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60)));
+      setHoursLeft(hrs);
+    };
+    calc();
+    const id = setInterval(calc, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
+        <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-md animate-pulse">
+          {hoursLeft} saat
+        </span>
+      )}
+      <span className="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-md">Bestseller</span>
     </div>
   );
 }

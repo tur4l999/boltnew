@@ -18,6 +18,21 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
   const discounted = getDiscountedPrice(product);
   const imgRef = React.useRef<HTMLImageElement | null>(null);
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
+  const [hoursLeft, setHoursLeft] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const calc = () => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999);
+      const diffMs = endOfDay.getTime() - now.getTime();
+      const hrs = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60)));
+      setHoursLeft(hrs);
+    };
+    calc();
+    const id = setInterval(calc, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <Card
@@ -41,9 +56,16 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
           </span>
         )}
         {isBestseller && (
-          <span className="absolute top-4 -left-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-            Bestseller
-          </span>
+          <div className="absolute top-4 left-2 flex items-center gap-1">
+            {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
+              <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow animate-pulse">
+                {hoursLeft} saat
+              </span>
+            )}
+            <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+              Bestseller
+            </span>
+          </div>
         )}
         <img
           ref={imgRef}
