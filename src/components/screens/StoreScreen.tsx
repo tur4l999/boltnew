@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Search, SlidersHorizontal } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { ProductCard } from '../ui/ProductCard';
@@ -17,6 +17,7 @@ export function StoreScreen() {
   const [language, setLanguage] = React.useState<'AZ' | 'RU' | ''>('');
   const [sort, setSort] = React.useState<'relevance' | 'priceAsc' | 'priceDesc' | 'ratingDesc' | 'titleAsc' | 'titleDesc'>('relevance');
   const [showAdvanced, setShowAdvanced] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
 
   const flyToCart = React.useCallback((sourceEl: HTMLElement | null) => {
     if (!sourceEl || !cartBtnRef.current) return;
@@ -88,36 +89,57 @@ export function StoreScreen() {
         </div>
       </div>
 
-      {/* Compact top bar: search on left, sort and advanced toggle on right */}
-      <div className="flex items-center gap-2">
-        <input
-          value={q}
-          onChange={e => setQ(e.target.value)}
-          placeholder="Axtarış..."
-          className={`${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 outline-none flex-1`}
-        />
-        <select
-          value={sort}
-          onChange={e=>setSort(e.target.value as any)}
-          className={`${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 text-sm`}
-        >
-          <option value="relevance">Uyğunluq</option>
-          <option value="priceAsc">Qiymət ↑</option>
-          <option value="priceDesc">Qiymət ↓</option>
-          <option value="titleAsc">A-Z</option>
-          <option value="titleDesc">Z-A</option>
-          <option value="ratingDesc">Reytinq</option>
-        </select>
-        <button
-          onClick={() => setShowAdvanced(v => !v)}
-          className={`${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-100'} rounded-md border px-3 py-2 text-sm`}
-        >
-          Əlavə filter
-        </button>
+      {/* Compact top bar: animated search, sort select, advanced toggle */}
+      <div className={`flex items-center justify-between gap-2 rounded-xl border shadow-sm px-2 py-2 ${isDarkMode ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-gray-200'} backdrop-blur`}>
+        <div className="flex items-center gap-2 min-w-0">
+          <button
+            aria-label="Axtarış"
+            onClick={() => setIsSearchOpen(v => !v)}
+            className={`h-9 w-9 rounded-full flex items-center justify-center border transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+          >
+            <Search size={16} />
+          </button>
+          <input
+            value={q}
+            onChange={e => setQ(e.target.value)}
+            placeholder="Axtarış..."
+            className={`${isDarkMode ? 'bg-gray-900 text-gray-100 border-gray-700' : 'bg-white text-gray-900 border-gray-300'} rounded-md border outline-none transition-all duration-300 ease-out overflow-hidden ${isSearchOpen ? 'w-40 opacity-100 px-3 py-2' : 'w-0 opacity-0 px-0 py-0 border-transparent'}`}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={sort}
+            onChange={e=>setSort(e.target.value as any)}
+            className={`${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 text-sm`}
+          >
+            <option value="relevance">Uyğunluq</option>
+            <option value="priceAsc">Qiymət ↑</option>
+            <option value="priceDesc">Qiymət ↓</option>
+            <option value="titleAsc">A-Z</option>
+            <option value="titleDesc">Z-A</option>
+            <option value="ratingDesc">Reytinq</option>
+          </select>
+          <button
+            onClick={() => setShowAdvanced(v => !v)}
+            className={`h-9 px-3 rounded-md border flex items-center gap-2 transition-colors ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-100'}`}
+          >
+            <SlidersHorizontal size={16} />
+            <span className="text-sm">Əlavə filter</span>
+          </button>
+        </div>
       </div>
 
       {showAdvanced && (
         <Card className={`mt-2 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="font-medium">Əlavə filterlər</div>
+            <button
+              onClick={() => { setQ(''); setMinPrice(''); setMaxPrice(''); setInStockOnly(false); setDiscountOnly(false); setMinRating(0); setLanguage(''); setSort('relevance'); }}
+              className={`${isDarkMode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'} rounded-md px-3 py-1.5 text-xs`}
+            >
+              Sıfırla
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-2 text-sm">
             <div className="flex items-center gap-2">
               <input type="number" min={0} value={minPrice} onChange={e=>setMinPrice(e.target.value)} placeholder="Min ₼" className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 outline-none w-full`} />
@@ -145,14 +167,6 @@ export function StoreScreen() {
                 <option value="AZ">AZ</option>
                 <option value="RU">RU</option>
               </select>
-            </div>
-            <div className="col-span-2 flex items-center gap-2">
-              <button
-                onClick={() => { setQ(''); setMinPrice(''); setMaxPrice(''); setInStockOnly(false); setDiscountOnly(false); setMinRating(0); setLanguage(''); setSort('relevance'); }}
-                className={`${isDarkMode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'} rounded-md px-3 py-2 text-xs ml-auto`}
-              >
-                Sıfırla
-              </button>
             </div>
           </div>
         </Card>
