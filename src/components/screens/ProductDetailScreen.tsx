@@ -103,6 +103,13 @@ export function ProductDetailScreen() {
         </div>
       </div>
 
+      {/* Bestseller badge above details for first product */}
+      {product.id === STORE_PRODUCTS[0]?.id && (
+        <div className="mt-3">
+          <span className="inline-block bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded-md">Bestseller</span>
+        </div>
+      )}
+
       {/* Details */}
       <Card className={`mt-4 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
         <h3 className="font-bold mb-2">Ətraflı məlumat</h3>
