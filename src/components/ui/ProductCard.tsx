@@ -9,14 +9,30 @@ interface ProductCardProps {
   product: StoreProduct;
   onClick?: () => void;
   onAddToCart?: (sourceEl: HTMLElement | null) => void;
+  isBestseller?: boolean;
 }
 
-export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, onClick, onAddToCart, isBestseller }: ProductCardProps) {
   const { isDarkMode } = useApp();
   const hasDiscount = !!product.discountPercent;
   const discounted = getDiscountedPrice(product);
   const imgRef = React.useRef<HTMLImageElement | null>(null);
   const isOutOfStock = product.stock !== undefined && product.stock <= 0;
+  const [hoursLeft, setHoursLeft] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    const calc = () => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999);
+      const diffMs = endOfDay.getTime() - now.getTime();
+      const hrs = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60)));
+      setHoursLeft(hrs);
+    };
+    calc();
+    const id = setInterval(calc, 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <Card
@@ -34,10 +50,24 @@ export function ProductCard({ product, onClick, onAddToCart }: ProductCardProps)
             <path fill="none" stroke="currentColor" strokeWidth="2" d="M12.1 8.64l-.1.1l-.11-.11a3.5 3.5 0 0 0-4.95 0a3.5 3.5 0 0 0 0 4.95l5.06 5.06l5.06-5.06a3.5 3.5 0 1 0-4.95-4.95Z"/>
           </svg>
         </button>
-        {hasDiscount && (
-          <span className="absolute -top-2 -left-2 bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-            -{product.discountPercent}%
-          </span>
+        {(hasDiscount || isBestseller) && (
+          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">
+            {hasDiscount && (
+              <span className="bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+                -{product.discountPercent}%
+              </span>
+            )}
+            {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
+              <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow animate-pulse">
+                {hoursLeft} saat
+              </span>
+            )}
+            {isBestseller && (
+              <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+                Bestseller
+              </span>
+            )}
+          </div>
         )}
         <img
           ref={imgRef}
