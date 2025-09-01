@@ -95,7 +95,8 @@ export function StoreScreen() {
           <button
             aria-label="Axtarış"
             onClick={() => setIsSearchOpen(v => !v)}
-            className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all duration-300 ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'} ${isSearchOpen ? 'rotate-90' : 'rotate-0'}`}
+            aria-expanded={isSearchOpen}
+            className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all duration-300 ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'} ${isSearchOpen ? 'order-2 rotate-180' : 'order-1 rotate-0'}`}
           >
             <Search size={16} />
           </button>
@@ -103,7 +104,7 @@ export function StoreScreen() {
             value={q}
             onChange={e => setQ(e.target.value)}
             placeholder="Axtarış..."
-            className={`${isDarkMode ? 'bg-gray-900 text-gray-100 border-gray-700' : 'bg-white text-gray-900 border-gray-300'} rounded-md border outline-none transition-all duration-300 ease-out overflow-hidden ${isSearchOpen ? 'w-40 opacity-100 px-3 py-2' : 'w-0 opacity-0 px-0 py-0 border-transparent'}`}
+            className={`${isDarkMode ? 'bg-gray-900 text-gray-100 border-gray-700' : 'bg-white text-gray-900 border-gray-300'} rounded-md border outline-none transition-all duration-300 ease-out overflow-hidden ${isSearchOpen ? 'order-1 w-40 opacity-100 px-3 py-2' : 'order-2 w-0 opacity-0 px-0 py-0 border-transparent'}`}
           />
         </div>
         <div className="flex items-center gap-2 ml-auto">
