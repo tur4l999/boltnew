@@ -41,7 +41,7 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
           </span>
         )}
         {isBestseller && (
-          <span className="absolute top-2 -left-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+          <span className="absolute top-4 -left-2 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
             Bestseller
           </span>
         )}
