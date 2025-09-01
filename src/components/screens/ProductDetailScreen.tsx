@@ -195,30 +195,62 @@ function ReviewsCard() {
     { name: 'Aysel', text: 'Məhsul çox keyfiyyətlidir, tövsiyə edirəm.', stars: 5},
     { name: 'Kamran', text: 'Qiymətinə görə yaxşı seçimdir.', stars: 4},
   ]);
-  const [name, setName] = useState('');
   const [text, setText] = useState('');
   const [stars, setStars] = useState(5);
+  const [isAnonymous, setIsAnonymous] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+
+  const generateRandomName = (): string => {
+    const firstNames = ['Aysel', 'Kamran', 'Elvin', 'Nigar', 'Ramil', 'Günel', 'Murad', 'Laman'];
+    const lastNames = ['Mehdiyev', 'Quliyeva', 'İsmayılov', 'Həsənova', 'Aliyev', 'Mammadov', 'Hüseynli', 'Rzayev'];
+    const f = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const l = lastNames[Math.floor(Math.random() * lastNames.length)];
+    return `${f} ${l}`;
+  };
+
+  const maskName = (fullName: string): string => {
+    const parts = fullName.split(' ');
+    const masked = parts.map(p => p.length > 0 ? (p[0] + '*'.repeat(Math.max(0, p.length - 1))) : p);
+    return masked.join(' ');
+  };
+
   const add = () => {
-    if (!name || !text) return;
-    setReviews([{ name, text, stars }, ...reviews]);
-    setName('');
+    if (!text.trim()) return;
+    const baseName = generateRandomName();
+    const nameToShow = isAnonymous ? maskName(baseName) : baseName;
+    setReviews([{ name: nameToShow, text: text.trim(), stars }, ...reviews]);
     setText('');
     setStars(5);
+    setIsAnonymous(true);
+    setShowForm(false);
   };
+
   return (
     <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-      <h3 className="font-bold mb-2">Rəylər</h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-bold">Şərhlər</h3>
+        <Button size="sm" onClick={() => setShowForm(v => !v)}>
+          Rəy əlavə et
+        </Button>
+      </div>
       <div className="space-y-3 text-sm">
-        <div className="flex items-center gap-2">
-          <input value={name} onChange={(e)=>setName(e.target.value)} placeholder="Adınız" className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`} />
-          <select value={stars} onChange={(e)=>setStars(Number(e.target.value))} className={`rounded-md border px-2 py-2 ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}>
-            {[5,4,3,2,1].map(s=>(<option key={s} value={s}>{s} ★</option>))}
-          </select>
-        </div>
-        <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="Rəyinizi yazın" rows={3} className={`w-full rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`} />
-        <div className="flex justify-end">
-          <Button onClick={add}>Rəyi əlavə et</Button>
-        </div>
+        {showForm && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <select value={stars} onChange={(e)=>setStars(Number(e.target.value))} className={`rounded-md border px-2 py-2 ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}>
+                {[5,4,3,2,1].map(s=>(<option key={s} value={s}>{s} ★</option>))}
+              </select>
+              <label className="flex items-center gap-2 text-xs cursor-pointer">
+                <input type="checkbox" checked={isAnonymous} onChange={(e)=>setIsAnonymous(e.target.checked)} />
+                <span>Anonim</span>
+              </label>
+            </div>
+            <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder="Rəyinizi yazın" rows={3} className={`w-full rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`} />
+            <div className="flex justify-end">
+              <Button onClick={add}>Göndər</Button>
+            </div>
+          </div>
+        )}
         <div className="divide-y divide-gray-200/20">
           {reviews.map((r, idx) => (
             <div key={idx} className="py-2">
