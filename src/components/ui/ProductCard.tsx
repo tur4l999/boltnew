@@ -50,21 +50,23 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
             <path fill="none" stroke="currentColor" strokeWidth="2" d="M12.1 8.64l-.1.1l-.11-.11a3.5 3.5 0 0 0-4.95 0a3.5 3.5 0 0 0 0 4.95l5.06 5.06l5.06-5.06a3.5 3.5 0 1 0-4.95-4.95Z"/>
           </svg>
         </button>
-        {hasDiscount && (
-          <span className="absolute -top-2 -left-2 bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-            -{product.discountPercent}%
-          </span>
-        )}
-        {isBestseller && (
-          <div className="absolute top-4 left-2 flex items-center gap-1">
+        {(hasDiscount || isBestseller) && (
+          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">
+            {hasDiscount && (
+              <span className="bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+                -{product.discountPercent}%
+              </span>
+            )}
             {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
               <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow animate-pulse">
                 {hoursLeft} saat
               </span>
             )}
-            <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-              Bestseller
-            </span>
+            {isBestseller && (
+              <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+                Bestseller
+              </span>
+            )}
           </div>
         )}
         <img
