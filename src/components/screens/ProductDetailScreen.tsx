@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { ShoppingCart } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { STORE_PRODUCTS, getDiscountedPrice, type StoreProduct } from '../../lib/products';
 import { Card } from '../ui/Card';
@@ -15,6 +16,8 @@ export function ProductDetailScreen() {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [qty, setQty] = useState(1);
+  const cartBtnRef = React.useRef<HTMLButtonElement | null>(null);
+  const imgRef = React.useRef<HTMLImageElement | null>(null);
 
   if (!product) return null;
 
@@ -31,12 +34,65 @@ export function ProductDetailScreen() {
     });
   };
 
+  const flyToCart = React.useCallback((sourceEl: HTMLElement | null) => {
+    if (!sourceEl || !cartBtnRef.current) return;
+    const sourceRect = sourceEl.getBoundingClientRect();
+    const targetRect = cartBtnRef.current.getBoundingClientRect();
+
+    const imgSrc = (sourceEl as HTMLImageElement).src || '';
+    const ghost = document.createElement('img');
+    ghost.src = imgSrc || '/DDA_logo.png';
+    ghost.style.position = 'fixed';
+    ghost.style.left = `${sourceRect.left + sourceRect.width / 2 - 16}px`;
+    ghost.style.top = `${sourceRect.top + sourceRect.height / 2 - 16}px`;
+    ghost.style.width = '32px';
+    ghost.style.height = '32px';
+    ghost.style.borderRadius = '6px';
+    ghost.style.boxShadow = '0 6px 12px rgba(0,0,0,0.25)';
+    ghost.style.zIndex = '9999';
+    ghost.style.pointerEvents = 'none';
+    document.body.appendChild(ghost);
+
+    const deltaX = (targetRect.left + targetRect.width / 2) - (sourceRect.left + sourceRect.width / 2);
+    const deltaY = (targetRect.top + targetRect.height / 2) - (sourceRect.top + sourceRect.height / 2);
+
+    const upY = -40;
+    const anim = ghost.animate([
+      { transform: 'translate(0px, 0px) scale(1)', opacity: 1 },
+      { transform: `translate(0px, ${upY}px) scale(0.95)`, opacity: 0.95, offset: 0.35 },
+      { transform: `translate(${deltaX}px, ${deltaY}px) scale(0.35)`, opacity: 0 }
+    ], { duration: 600, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+
+    anim.onfinish = () => {
+      ghost.remove();
+      cartBtnRef.current?.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.1)' },
+        { transform: 'scale(1)' }
+      ], { duration: 250, easing: 'ease-out' });
+    };
+  }, []);
+
   return (
     <div className={`p-3 pb-24 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <div className="flex items-center gap-3 mb-3">
         <button onClick={goBack} className="text-sm opacity-75">← Geri</button>
         <h1 className="text-lg font-bold">{product.title}</h1>
       </div>
+
+      {/* Floating Cart button */}
+      <button
+        onClick={() => navigate('Cart')}
+        ref={cartBtnRef}
+        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        style={{
+          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
+          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+        }}
+      >
+        <ShoppingCart size={18} />
+        <span>Səbətə bax</span>
+      </button>
 
       {/* Gallery with swipe */}
       <div
@@ -50,6 +106,7 @@ export function ProductDetailScreen() {
         }}
       >
         <img
+          ref={imgRef}
           src={product.images[activeIndex]}
           alt={product.title}
           className="w-full h-64 object-cover"
@@ -99,7 +156,17 @@ export function ProductDetailScreen() {
         </div>
         <div className="flex items-center gap-3">
           {!isOutOfStock && <QuantityStepper value={qty} onChange={setQty} />}
-          <Button disabled={isOutOfStock} onClick={() => { if (!isOutOfStock) { addToCart(product.id, qty); navigate('Cart'); } }}>{isOutOfStock ? 'Stokda yoxdur' : 'Səbətə at'}</Button>
+          <Button
+            disabled={isOutOfStock}
+            onClick={() => {
+              if (!isOutOfStock) {
+                addToCart(product.id, qty);
+                flyToCart(imgRef.current);
+              }
+            }}
+          >
+            {isOutOfStock ? 'Stokda yoxdur' : 'Səbətə at'}
+          </Button>
         </div>
       </div>
 
