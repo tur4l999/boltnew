@@ -48,7 +48,7 @@ export function ExamScreen() {
         <div className="grid grid-cols-3">
           <button
             onClick={() => setActiveTab('byTickets')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'byTickets'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
@@ -58,7 +58,7 @@ export function ExamScreen() {
           </button>
           <button
             onClick={() => setActiveTab('byTopics')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'byTopics'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
@@ -68,7 +68,7 @@ export function ExamScreen() {
           </button>
           <button
             onClick={() => setActiveTab('exam')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'exam'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
