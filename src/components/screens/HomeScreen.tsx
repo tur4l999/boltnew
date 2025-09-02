@@ -12,7 +12,7 @@ export function HomeScreen() {
   const gridItems = [
     // Əsas bölmələr (8 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
-    { key: 'quick', label: t.quickTest, action: () => navigate('Practice'), emoji: '📝' },
+    { key: 'quick', label: 'Biletlər', action: () => navigate('Exam'), emoji: '📝' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
@@ -51,7 +51,7 @@ export function HomeScreen() {
       {/* Package Status (hidden if scheduled activation exists) */}
       {!hasActivePackage() && !(useApp().activePackage && new Date() < useApp().activePackage.activationDate) && (
         <SlideTransition direction="down" delay={100}>
-          <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
+          <div className={`mb-3 p-3 rounded-lg border flex items-center gap-2 transition-colors duration-200 ${
             isDarkMode 
               ? 'bg-blue-900/20 border-blue-700' 
               : 'bg-blue-50 border-blue-200'
@@ -72,11 +72,9 @@ export function HomeScreen() {
             </div>
             <button
               onClick={() => navigate('Packages')}
-              className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
-                isDarkMode 
-                  ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
+              className={
+                `px-3 py-2 rounded-xl text-sm font-bold transition-colors min-h-[32px] bg-emerald-600 hover:bg-emerald-700 text-white`
+              }
             >
               Paket al
             </button>

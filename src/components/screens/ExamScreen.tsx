@@ -39,6 +39,9 @@ export function ExamScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
+      <div className={`mb-2 text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        Testlər
+      </div>
       <div className={`rounded-xl overflow-hidden border mb-3 transition-colors duration-200 ${
         isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
       }`}>
