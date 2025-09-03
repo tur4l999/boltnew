@@ -9,7 +9,9 @@ import { formatTime, showToast } from '../../lib/utils';
 export function ExamRunScreen() {
   const { navigate, currentScreen, isDarkMode } = useApp();
   const { config } = currentScreen.params || {};
-  const questionCount: number = config?.questionCount ?? 20;
+  const runMode: string | undefined = config?.mode;
+  const isQuickTest = runMode === 'ticket';
+  const questionCount: number = (config?.questionCount ?? config?.questionsCount) ?? 20;
   const ticketNumber: number | undefined = config?.ticketNumber ?? 1;
   const startInQuestion: boolean = config?.startInQuestion ?? false;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
@@ -55,7 +57,6 @@ export function ExamRunScreen() {
   function setAnswer(optionId: string) {
     setSelectedOptions(prev => {
       const currentlySelected = prev[currentQuestion.id];
-      // Toggle off if the same option is clicked again
       if (currentlySelected === optionId) {
         const updated = { ...prev };
         delete updated[currentQuestion.id];
@@ -63,6 +64,15 @@ export function ExamRunScreen() {
       }
       return { ...prev, [currentQuestion.id]: optionId };
     });
+    if (isQuickTest) {
+      // Auto-confirm for quick test mode
+      const isCorrect = optionId === currentQuestion.correctOptionId;
+      const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
+      setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+      setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
+      setShowOverlay(true);
+      setTimeout(() => setShowOverlay(false), 500);
+    }
   }
 
   function openQuestion(index: number) {
@@ -285,21 +295,24 @@ export function ExamRunScreen() {
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" onClick={goPrev} disabled={currentIndex === 0}>← Geri</Button>
-                {!isConfirmed && selectedOptions[currentQuestion.id] && (
-                  <Button onClick={confirmAnswer}>Təsdiq et</Button>
+                {!isQuickTest && (
+                  <>
+                    <Button variant="ghost" onClick={goPrev} disabled={currentIndex === 0}>← Geri</Button>
+                    {!isConfirmed && selectedOptions[currentQuestion.id] && (
+                      <Button onClick={confirmAnswer}>Təsdiq et</Button>
+                    )}
+                    <Button variant="ghost" onClick={goNext} disabled={currentIndex === questions.length - 1}>İrəli →</Button>
+                  </>
                 )}
-                <Button variant="ghost" onClick={goNext} disabled={currentIndex === questions.length - 1}>İrəli →</Button>
               </div>
             </div>
           </div>
 
           {/* Numeric navigation (only in question view) */}
-          <div className="mt-4 grid grid-cols-5 gap-2">
+          <div className="mt-4 grid grid-cols-8 gap-1">
             {questions.map((q, idx) => {
               const status = outcomes[q.id];
               const isActive = idx === currentIndex;
-              const answered = !!status;
               return (
                 <button
                   key={q.id}
@@ -307,7 +320,7 @@ export function ExamRunScreen() {
                     setCurrentIndex(idx);
                     setSelectedOptions({});
                   }}
-                  className={`h-10 rounded-lg text-sm font-bold transition-colors ${
+                  className={`h-8 rounded-md text-xs font-bold transition-colors ${
                     isActive
                       ? 'bg-gray-600 text-white'
                       : status === 'correct'
@@ -336,9 +349,9 @@ export function ExamRunScreen() {
         )}
       </div>
 
-      {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
-      <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+      {/* Persistent timer bubble - top right for quick test */}
+      <div className="fixed top-16 right-4 select-none z-50">
+        <div className="px-3 py-1.5 rounded-lg bg-white text-black text-base font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>
