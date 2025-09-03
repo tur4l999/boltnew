@@ -27,6 +27,9 @@ export function ExamRunScreen() {
   const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
   const [bookmarks, setBookmarks] = useState<Record<string, boolean>>({});
   const touchStartXRef = useRef<number | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportText, setReportText] = useState('');
+  const [showExplanation, setShowExplanation] = useState(false);
 
   function truncateText(text: string, maxChars: number): string {
     if (!text) return '';
@@ -80,6 +83,9 @@ export function ExamRunScreen() {
     setView('question');
     // Do not keep previous temporary selections when opening a question
     setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
   }
 
   function toggleBookmark(questionId: string) {
@@ -101,11 +107,17 @@ export function ExamRunScreen() {
   function goPrev() {
     setCurrentIndex(idx => Math.max(0, idx - 1));
     setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
   }
 
   function goNext() {
     setCurrentIndex(idx => Math.min(questions.length - 1, idx + 1));
     setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
   }
 
   function finishExam() {
@@ -126,6 +138,7 @@ export function ExamRunScreen() {
     const isCorrect = selected === currentQuestion.correctOptionId;
     const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
     setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+    if (!isCorrect) setShowExplanation(true);
 
     // Show overlay result in center for 0.5s then go back to grid
     setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
@@ -170,8 +183,8 @@ export function ExamRunScreen() {
       )}
       {/* Header */}
       <div className="flex items-center justify-between mb-4 text-white">
-        <div className="text-sm font-bold opacity-70">{ticketNumber ? `Bilet ${ticketNumber}` : ''}</div>
-        <div className="text-base font-black">Sürətli test</div>
+        <div className="w-8 h-8"></div>
+        <div className="text-base font-black">{ticketNumber ? `Bilet ${ticketNumber}` : ''}</div>
         <div className="w-8 h-8"></div>
       </div>
 
@@ -228,12 +241,47 @@ export function ExamRunScreen() {
             }}
           >
             {currentQuestion.imageUrl && (
-              <img
-                src={currentQuestion.imageUrl}
-                alt="Question visual"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+              <div className="relative mb-3">
+                <img
+                  src={currentQuestion.imageUrl}
+                  alt="Question visual"
+                  className="w-full h-40 object-cover rounded-lg"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <button
+                  onClick={() => setReportOpen(v => !v)}
+                  className="absolute top-2 right-2 px-2 py-1 rounded-lg text-xs font-bold bg-black/70 text-white hover:bg-black/80 border border-white/20"
+                  aria-label="Sualla bağlı problem bildir"
+                >
+                  ⚠️
+                </button>
+              </div>
+            )}
+            {reportOpen && (
+              <div className={`mb-3 p-3 rounded-xl border ${isDarkMode ? 'bg-gray-900/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                <div className="text-xs font-bold mb-2">Sualla bağlı problem bildir</div>
+                <textarea
+                  value={reportText}
+                  onChange={(e) => setReportText(e.target.value)}
+                  placeholder="Problemi təsvir edin..."
+                  className={`w-full p-2 rounded-lg border text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'}`}
+                  rows={3}
+                />
+                <div className="mt-2 flex items-center gap-2 justify-end">
+                  <button
+                    onClick={() => setReportOpen(false)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${isDarkMode ? 'border-gray-700 text-gray-200 hover:bg-gray-800' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={() => { showToast('Problem göndərildi. Təşəkkürlər!'); setReportOpen(false); setReportText(''); }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Göndər
+                  </button>
+                </div>
+              </div>
             )}
             <div className={`font-bold mb-3 text-white`}>
               {currentIndex + 1}. {currentQuestion.text}
@@ -272,6 +320,27 @@ export function ExamRunScreen() {
               })}
             </div>
 
+            {/* Explanation toggle */}
+            <div className="mt-3 mb-2">
+              <button
+                onClick={() => setShowExplanation(v => !v)}
+                className="px-3 py-2 rounded-xl border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
+              >
+                İzah
+              </button>
+            </div>
+
+            {(showExplanation || (isConfirmed && currentOutcome === 'wrong')) && (
+              <div className={`mt-2 p-3 rounded-xl border ${isDarkMode ? 'bg-gray-900/60 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                {currentOutcome === 'wrong' && (
+                  <div className="text-sm font-bold mb-1 text-emerald-400">
+                    Düzgün cavab: {currentQuestion.options.find(o => o.id === currentQuestion.correctOptionId)?.text}
+                  </div>
+                )}
+                <div className="text-sm text-white/90">{currentQuestion.explanation}</div>
+              </div>
+            )}
+
             {/* Actions row */}
             <div className="mt-4 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -280,12 +349,6 @@ export function ExamRunScreen() {
                   className={`px-3 py-2 rounded-xl border text-xs font-bold ${isBookmarked ? 'border-yellow-400 bg-yellow-900/30 text-yellow-200' : 'border-gray-700 text-white hover:bg-gray-800'}`}
                 >
                   {isBookmarked ? '★ Yadda saxlanıldı' : '☆ Yadda saxla'}
-                </button>
-                <button
-                  onClick={() => reportIssue(currentQuestion.id)}
-                  className="px-3 py-2 rounded-xl border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
-                >
-                  ⚠️ Problem bildir
                 </button>
                 <button
                   onClick={() => askTeacher(currentQuestion.id)}
