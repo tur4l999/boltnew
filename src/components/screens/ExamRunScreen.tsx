@@ -7,7 +7,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime, showToast } from '../../lib/utils';
 
 export function ExamRunScreen() {
-  const { navigate, currentScreen, isDarkMode } = useApp();
+  const { navigate, currentScreen, isDarkMode, goBack } = useApp();
   const { config } = currentScreen.params || {};
   const runMode: string | undefined = config?.mode;
   const isQuickTest = runMode === 'ticket';
@@ -183,7 +183,13 @@ export function ExamRunScreen() {
       )}
       {/* Header */}
       <div className="flex items-center justify-between mb-4 text-white">
-        <div className="w-8 h-8"></div>
+        <button
+          onClick={goBack}
+          className="px-4 py-2 rounded-xl bg-black text-white flex items-center gap-2"
+          aria-label="Geriyə"
+        >
+          ←
+        </button>
         <div className="text-base font-black">{ticketNumber ? `Bilet ${ticketNumber}` : ''}</div>
         <div className="w-8 h-8"></div>
       </div>
