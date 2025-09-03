@@ -75,7 +75,7 @@ const AZ_RULES = [
 ];
 
 export function RulesScreen() {
-  const { isDarkMode, goBack } = useApp();
+  const { isDarkMode, goBack, switchTab } = useApp();
   // Home with 3 entries; each opens its own sub-view
   const [view, setView] = useState<'home' | 'signs' | 'markings' | 'vertical'>('home');
   const [activeSignCategory, setActiveSignCategory] = useState<SignCategoryKey>('prohibitory');
@@ -115,18 +115,15 @@ export function RulesScreen() {
   };
 
   const handleBackClick = () => {
-    if (view === 'signs' && signsStage === 'detail') {
-      setSignsStage('categories');
-      setSelectedSignId(null);
-      return;
-    }
-    if (view !== 'home') {
-      setView('home');
-      return;
-    }
-    if (goBack) {
-      try { goBack(); } catch (_) { /* noop */ }
-    }
+    // Top bar back: always to app main Home tab
+    try {
+      if (switchTab) {
+        switchTab('Home');
+        return;
+      }
+    } catch (_) {}
+    // Fallback
+    try { goBack(); } catch (_) { /* noop */ }
   };
 
   return (
@@ -221,7 +218,7 @@ export function RulesScreen() {
               ) : (
                 <>
                   <div className="mb-2">
-                    <button onClick={() => { setSignsStage('categories'); setSelectedSignId(null); }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+                    <button onClick={() => { setSignsStage('categories'); setSelectedSignId(null); }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← 3 seçimə qayıt</button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     {filteredSigns.map((s, idx) => (
