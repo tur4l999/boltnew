@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useApp } from '../../contexts/AppContext';
 // removed Card to avoid forced light backgrounds; using custom dark container
 import { Button } from '../ui/Button';
+import { SlideTransition } from '../ui/SlideTransition';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 
@@ -10,6 +11,7 @@ type AnswerStatus = 'correct' | 'wrong' | null;
 export function QuickTestScreen() {
   const { isDarkMode, navigate } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
   // Prepare 20 questions for Ticket 1 (repeat SAMPLE_QUESTIONS if needed)
   const questions = useMemo(() => {
@@ -69,9 +71,11 @@ export function QuickTestScreen() {
   };
 
   const goNext = useCallback(() => {
+    setSlideDir('right');
     setCurrentIndex((i) => Math.min(questions.length - 1, i + 1));
   }, [questions.length]);
   const goPrev = useCallback(() => {
+    setSlideDir('left');
     setCurrentIndex((i) => Math.max(0, i - 1));
   }, []);
 
@@ -156,7 +160,8 @@ export function QuickTestScreen() {
         </div>
       )}
 
-      <div className="rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
+      <SlideTransition direction={slideDir} key={currentIndex}>
+        <div className="rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
           <div className="mb-3 relative">
@@ -313,7 +318,8 @@ export function QuickTestScreen() {
             Müəllimə yaz
           </Button>
         </div>
-      </div>
+        </div>
+      </SlideTransition>
 
       {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
