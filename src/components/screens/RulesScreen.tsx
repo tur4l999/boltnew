@@ -61,7 +61,7 @@ const AZ_RULES = [
 ];
 
 export function RulesScreen() {
-  const { isDarkMode } = useApp();
+  const { isDarkMode, goBack } = useApp();
   // Home with 3 entries; each opens its own sub-view
   const [view, setView] = useState<'home' | 'signs' | 'markings' | 'vertical'>('home');
   const [activeSignCategory, setActiveSignCategory] = useState<SignCategoryKey>('prohibitory');
@@ -100,29 +100,47 @@ export function RulesScreen() {
     target.src = '/image.png';
   };
 
+  const handleBackClick = () => {
+    if (view === 'signs' && signsStage === 'detail') {
+      setSignsStage('categories');
+      setSelectedSignId(null);
+      return;
+    }
+    if (view !== 'home') {
+      setView('home');
+      return;
+    }
+    if (goBack) {
+      try { goBack(); } catch (_) { /* noop */ }
+    }
+  };
+
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Search / Filter */}
       <div className="mb-3">
-        <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
-          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-        }`}>
-          <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔎</span>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Axtarış..."
-            className={`flex-1 bg-transparent outline-none text-sm ${isDarkMode ? 'text-gray-100 placeholder-gray-500' : 'text-gray-900 placeholder-gray-500'}`}
-          />
-          {query && (
-            <button
-              aria-label="Təmizlə"
-              onClick={() => setQuery('')}
-              className={`${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
-            >✕</button>
-          )}
+        <div className="flex items-center gap-2">
+          <button onClick={handleBackClick} className={`px-3 py-2 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}>←</button>
+          <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-xl border ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔎</span>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Axtarış..."
+              className={`flex-1 bg-transparent outline-none text-sm ${isDarkMode ? 'text-gray-100 placeholder-gray-500' : 'text-gray-900 placeholder-gray-500'}`}
+            />
+            {query && (
+              <button
+                aria-label="Təmizlə"
+                onClick={() => setQuery('')}
+                className={`${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
+              >✕</button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -163,14 +181,12 @@ export function RulesScreen() {
         </Card>
       ) : (
         <Card className="mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <button onClick={() => { if (view === 'signs' && signsStage === 'detail') { setSignsStage('categories'); setSelectedSignId(null); } else { setView('home'); } }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+          <div className="mb-2">
             <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
               {view === 'signs' && (signsStage === 'categories' ? 'Nişanlar' : (SIGN_CATEGORIES.find(c => c.key === selectedCategory)?.title || 'Nişanlar'))}
               {view === 'markings' && 'Nişanlanma xəttləri'}
               {view === 'vertical' && 'Vertikal nişanlar'}
             </div>
-            <div className="opacity-0">←</div>
           </div>
 
           {view === 'signs' && (
