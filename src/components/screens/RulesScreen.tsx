@@ -44,20 +44,34 @@ const VERTICAL_SIGNS = [
   { id: 'vs2', name: 'Maneə əks etdiricisi', description: 'Maneələrin kənarlarını göstərir.' },
 ];
 
-// AZ traffic rules topics (titles + brief summaries)
+// AZ traffic rules topics (titles + brief summaries) – 26 items
 const AZ_RULES = [
-  { id: 'r1', title: 'Maddə 1. Əsas anlayışlar', content: 'Qanunda işlədilən termin və anlayışların izahı verilir. Nəqliyyat vasitəsi, sürücü, sərnişin, piyada, yol, yol hərəkəti iştirakçısı kimi anlayışlar dəqiq müəyyənləşdirilir. Bu anlayışlar bütün digər maddələrin düzgün başa düşülməsi üçün bazadır.' },
-  { id: 'r2', title: 'Maddə 2. Qanunun təyinatı', content: 'Qanunun məqsədi yol hərəkətində təhlükəsizliyi təmin etmək və hərəkətin təşkili üçün hüquqi çərçivə yaratmaqdır. Həm sürücülər, həm də digər iştirakçılar üçün ümumi davranış qaydaları müəyyən edilir.' },
-  { id: 'r3', title: 'Maddə 3. Yol hərəkəti haqqında qanunvericilik', content: 'Yol hərəkətini tənzimləyən normativ aktların sistemi göstərilir. Qanunun digər qaydalar və standartlarla əlaqəsi və üstünlük münasibətləri izah olunur.' },
-  { id: 'r4', title: 'Maddə 4. Dövlət orqanlarının vəzifələri', content: 'Yol hərəkəti sahəsində nəzarət, təşkil və təhlükəsizliyin təmin edilməsi üzrə dövlət qurumlarının səlahiyyətləri təsbit olunur. Təlim, maarifləndirmə və infrastrukturun saxlanması da bu vəzifələrə daxildir.' },
-  { id: 'r5', title: 'Maddə 5. Hüquqi şəxslərin vəzifələri', content: 'Daşıma fəaliyyəti göstərən və ya nəqliyyat parkı olan təşkilatların öhdəlikləri müəyyən edilir. Texniki sazlıq, sürücülərin hazırlığı və təhlükəsizlik tələblərinə əməl olunması şərtdir.' },
-  { id: 'r6', title: 'Maddə 6. Fiziki şəxslərin hüquq və vəzifələri', content: 'Sürücü və piyadaların hüquqları, vəzifələri və məsuliyyəti göstərilir. Hərəkət zamanı bir-birinə hörmət və təhlükəsizliyin təmin edilməsi əsas prinsipdir.' },
-  { id: 'r7', title: 'Maddə 6-1. Beynəlxalq daşımalarda iştirak edənlərin vəzifələri', content: 'Beynəlxalq sərnişin və yük daşımalarını təşkil edən və icra edən şəxslərə əlavə tələblər müəyyən olunur. Sənədləşmə, təhlükəsizlik və beynəlxalq normalara uyğunluq önəmlidir.' },
-  { id: 'r8', title: 'Maddə 7. Yol hərəkətinin təşkili', content: 'Yol hərəkatının planlaşdırılması, nişan və nişanlanmaların tətbiqi qaydaları izah edilir. Hərəkət axınının təhlükəsiz və fasiləsiz olması üçün təşkilati tədbirlər nəzərdə tutulur.' },
-  { id: 'r9', title: 'Maddə 8. Hərəkətə başlama və manevr', content: 'Hərəkətə başlama, dönmə, ötmə, zolaq dəyişmə və digər manevrlərin qaydaları təsvir olunur. Sürücü əvvəlcədən siqnal verməli və təhlükəsizliyi təmin etməlidir.' },
-  { id: 'r10', title: 'Maddə 9. Dayanma və durma', content: 'Dayanma və durmanın icazəli və qadağan edildiyi hallar göstərilir. Qaydaların pozulması yol hərəkətinə maneə yarada və təhlükə doğura bilər.' },
-  { id: 'r11', title: 'Maddə 10. Sürət rejimi', content: 'Müxtəlif yol şəraitlərində tətbiq olunan sürət məhdudiyyətləri müəyyən edilir. Zərurət yarandıqda sürət hava, yol və nəqliyyat axınına uyğun azaldılmalıdır.' },
-  { id: 'r12', title: 'Maddə 11. Piyadaların hərəkəti', content: 'Piyadaların keçidlərdən istifadə qaydaları, yolun təhlükəsiz keçilməsi və gecə-gündüz görünmə tələbləri izah olunur. Sürücülər piyadalara xüsusi diqqət yetirməlidirlər.' },
+  { id: 'r1', title: 'Maddə 1. Əsas anlayışlar', content: 'Qanunda istifadə olunan terminlər izah edilir. “Yol”, “sürücü”, “piyada”, “nəqliyyat vasitəsi” kimi anlayışlar dəqiq tərif olunur. Bu terminlər digər maddələrin düzgün anlaşılması üçün baza yaradır.' },
+  { id: 'r2', title: 'Maddə 2. Qanunun təyinatı', content: 'Yol hərəkəti sahəsində təhlükəsizlik və nizam-intizamı təmin etmək məqsədi açıqlanır. Qanun, bütün iştirakçılar üçün hüquqi çərçivə və davranış standartları müəyyənləşdirir.' },
+  { id: 'r3', title: 'Maddə 3. Yol hərəkəti haqqında qanunvericilik', content: 'Tətbiq olunan normativ sənədlərin iyerarxiyası göstərilir. Standartlar, qaydalar və digər aktlarla qarşılıqlı əlaqə və üstünlük prinsipləri müəyyən edilir.' },
+  { id: 'r4', title: 'Maddə 4. Dövlət orqanlarının vəzifələri', content: 'Yol hərəkətinə nəzarət, təşkil və təhlükəsizlik üzrə səlahiyyətlər sadalanır. Maarifləndirmə, statistika aparılması və infrastrukturun saxlanılması da bu səlahiyyətlərə daxildir.' },
+  { id: 'r5', title: 'Maddə 5. Hüquqi şəxslərin vəzifələri', content: 'Daşımalarla məşğul olan və ya avtomobil parkı saxlayan təşkilatların öhdəlikləri müəyyən edilir. Texniki baxım, sürücülərin hazırlığı və təhlükəsizlik standartlarına əməl vacibdir.' },
+  { id: 'r6', title: 'Maddə 6. Fiziki şəxslərin hüquq və vəzifələri', content: 'Sürücü, sərnişin və piyadaların hüquqları və öhdəlikləri açıqlanır. Hörmət, ehtiyat və təhlükəsizliyin prioritetliyi vurğulanır.' },
+  { id: 'r7', title: 'Maddə 6-1. Beynəlxalq daşımalarda vəzifələr', content: 'Beynəlxalq sərnişin və yük daşımalarını təşkil edən və icra edənlər üçün əlavə tələblər göstərilir. Sənədləşmə, marşrut planlaşdırılması və təhlükəsizlik normaları əsasdır.' },
+  { id: 'r8', title: 'Maddə 7. Yol hərəkətinin təşkili', content: 'Nişanların, işıqforların və nişanlanma xətlərinin tətbiqi qaydaları izah edilir. Hərəkət axınının fasiləsizliyi və təhlükəsizliyi üçün təşkilati tədbirlər göstərilir.' },
+  { id: 'r9', title: 'Maddə 8. Başlanğıc və manevrlər', content: 'Hərəkətə başlama, dönmə, ötmə və zolaq dəyişmə zamanı davranış qaydaları verilir. Sürücü əvvəlcədən siqnal verir və təhlükəsizliyi təmin edir.' },
+  { id: 'r10', title: 'Maddə 9. Dayanma və durma', content: 'Dayanma/durma yerləri və qadağaları sadalanır. Görünüşə mane olmamaq və hərəkətə təhlükə yaratmamaq əsas şərtdir.' },
+  { id: 'r11', title: 'Maddə 10. Sürət rejimi', content: 'Müxtəlif yol şəraitləri üçün sürət məhdudiyyətləri müəyyən edilir. Havanın, yolun və nəqliyyat axınının vəziyyətinə uyğun sürət seçilməlidir.' },
+  { id: 'r12', title: 'Maddə 11. Piyadaların hərəkəti', content: 'Piyadaların keçidlərdən istifadəsi və yolun təhlükəsiz keçilməsi qaydaları verilir. Sürücülərin piyadalara qarşı məsuliyyəti ayrıca vurğulanır.' },
+  { id: 'r13', title: 'Maddə 12. Sərnişinlərin daşınması', content: 'Avtomobildə sərnişinlərin oturması, uşaq oturacaqları və təhlükəsizlik kəmərləri ilə bağlı tələblər. Sərnişinlərin düşmə/minmə zamanı təhlükəsizlik qaydaları göstərilir.' },
+  { id: 'r14', title: 'Maddə 13. Yük daşınması', content: 'Yükün yerləşdirilməsi, bərkidilməsi və ölçü-kütlə məhdudiyyətləri izah olunur. Yük hərəkətə, görünüşə və stabilliyə mane olmamalıdır.' },
+  { id: 'r15', title: 'Maddə 14. Xüsusi siqnalların tətbiqi', content: 'Xüsusi təyinatlı nəqliyyat vasitələrinin işıq və səs siqnallarından istifadəsi qaydaları. Digər sürücülərin belə vasitələrə üstünlük vermə öhdəliyi xatırladılır.' },
+  { id: 'r16', title: 'Maddə 15. Dəmiryolu keçidləri', content: 'Keçidlərdən istifadə zamanı dayanma, görünüş və siqnalların tələbləri təsvir edilir. Qırmızı işıq və ya baryerlər zamanı keçid qadağandır.' },
+  { id: 'r17', title: 'Maddə 16. Avtobus zolaqları və ictimai nəqliyyat', content: 'İctimai nəqliyyat üçün ayrılmış zolaqlardan istifadə qaydaları. Sürücülər bu zolaqlara məhdud hallarda daxil ola bilər.' },
+  { id: 'r18', title: 'Maddə 17. Yol nişanları və nişanlanma', content: 'Yol nişanlarının və üfüqi/vertikal nişanlanmanın hüquqi qüvvəsi və üstünlüyü göstərilir. Ziddiyyət olduqda prioritet qaydası açıqlanır.' },
+  { id: 'r19', title: 'Maddə 18. İşıqfor və tənzimləyici siqnalları', content: 'İşıqfor işıqlarının mənası və tənzimləyicinin jestlərinə tabe olmaq qaydaları izah olunur. Ziddiyyət olduqda tənzimləyici üstünlük təşkil edir.' },
+  { id: 'r20', title: 'Maddə 19. Ötmə və qarşıdan gələn hərəkət', content: 'Ötmənin icazəli olduğu hallar, qadağalar və təhlükəsizlik şərtləri. Qarşıdan gələn nəqliyyatla qarşılaşmada davranış qaydaları qeyd edilir.' },
+  { id: 'r21', title: 'Maddə 20. Fövqəladə dayanma və nişanlar', content: 'Qəza dayanacağı və fövqəladə işıq siqnalının tətbiqi qaydaları. Maneə barədə digər sürücülərin vaxtında xəbərdar edilməsi vacibdir.' },
+  { id: 'r22', title: 'Maddə 21. Sərxoşluq və tibbi yoxlama', content: 'Spirtli içki və ya narkotik təsiri altında idarənin qadağan edilməsi. Tibbi müayinəyə göndərmə və hüquqi nəticələr izah olunur.' },
+  { id: 'r23', title: 'Maddə 22. Velosiped və fərdi mikromobilite', content: 'Velosiped, skuter kimi vasitələrin hərəkət qaydaları və prioritetləri. Yolun kənarı və velosiped zolaqlarından istifadə tələbləri verilir.' },
+  { id: 'r24', title: 'Maddə 23. Ekoloji tələblər', content: 'Zərərli tullantıların azaldılması, səs-küy və tüstü normativləri. Texniki baxımın vaxtında aparılması ekoloji təhlükəsizlik üçün vacibdir.' },
+  { id: 'r25', title: 'Maddə 24. Qəzalar və hadisələrin rəsmiləşdirilməsi', content: 'Yol-nəqliyyat hadisəsi zamanı tərəflərin davranışı, ilkin yardım və polisin çağırılması qaydaları. Foto/video sənədləşdirmə və protokollaşdırma prinsipləri qeyd olunur.' },
+  { id: 'r26', title: 'Maddə 25. Məsuliyyət və cərimələr', content: 'Qaydaların pozulmasına görə inzibati məsuliyyətin əsasları və sanksiyalar xatırladılır. Təhlükəsizliyin təmin olunması üçün profilaktik tədbirlər tövsiyə edilir.' },
 ];
 
 export function RulesScreen() {
@@ -120,7 +134,7 @@ export function RulesScreen() {
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Search / Filter */}
-      <div className="mb-3">
+      <div className="mb-3 sticky top-[44px] z-30">
         <div className="flex items-center gap-2">
           <button onClick={handleBackClick} className={`px-3 py-2 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}>←</button>
           <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-xl border ${
@@ -206,6 +220,9 @@ export function RulesScreen() {
                 </div>
               ) : (
                 <>
+                  <div className="mb-2">
+                    <button onClick={() => { setSignsStage('categories'); setSelectedSignId(null); }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+                  </div>
                   <div className="grid grid-cols-2 gap-2">
                     {filteredSigns.map((s, idx) => (
                       <SlideTransition key={s.id} direction="right" delay={200 + idx * 50}>
