@@ -44,11 +44,20 @@ const VERTICAL_SIGNS = [
   { id: 'vs2', name: 'Maneə əks etdiricisi', description: 'Maneələrin kənarlarını göstərir.' },
 ];
 
-// Demo rules/articles
+// AZ traffic rules topics (titles + brief summaries)
 const AZ_RULES = [
-  { id: 'r1', title: '1. Ümumi müddəalar', content: 'Yol hərəkəti qaydalarının ümumi prinsipləri...' },
-  { id: 'r2', title: '2. Sürücünün vəzifələri', content: 'Sürücünün əsas vəzifələri və məsuliyyətləri...' },
-  { id: 'r3', title: '3. Piyadaların vəzifələri', content: 'Piyadaların hərəkət qaydaları...' },
+  { id: 'r1', title: 'Maddə 1. Əsas anlayışlar', content: 'Qanunda işlədilən termin və anlayışların izahı verilir. Nəqliyyat vasitəsi, sürücü, sərnişin, piyada, yol, yol hərəkəti iştirakçısı kimi anlayışlar dəqiq müəyyənləşdirilir. Bu anlayışlar bütün digər maddələrin düzgün başa düşülməsi üçün bazadır.' },
+  { id: 'r2', title: 'Maddə 2. Qanunun təyinatı', content: 'Qanunun məqsədi yol hərəkətində təhlükəsizliyi təmin etmək və hərəkətin təşkili üçün hüquqi çərçivə yaratmaqdır. Həm sürücülər, həm də digər iştirakçılar üçün ümumi davranış qaydaları müəyyən edilir.' },
+  { id: 'r3', title: 'Maddə 3. Yol hərəkəti haqqında qanunvericilik', content: 'Yol hərəkətini tənzimləyən normativ aktların sistemi göstərilir. Qanunun digər qaydalar və standartlarla əlaqəsi və üstünlük münasibətləri izah olunur.' },
+  { id: 'r4', title: 'Maddə 4. Dövlət orqanlarının vəzifələri', content: 'Yol hərəkəti sahəsində nəzarət, təşkil və təhlükəsizliyin təmin edilməsi üzrə dövlət qurumlarının səlahiyyətləri təsbit olunur. Təlim, maarifləndirmə və infrastrukturun saxlanması da bu vəzifələrə daxildir.' },
+  { id: 'r5', title: 'Maddə 5. Hüquqi şəxslərin vəzifələri', content: 'Daşıma fəaliyyəti göstərən və ya nəqliyyat parkı olan təşkilatların öhdəlikləri müəyyən edilir. Texniki sazlıq, sürücülərin hazırlığı və təhlükəsizlik tələblərinə əməl olunması şərtdir.' },
+  { id: 'r6', title: 'Maddə 6. Fiziki şəxslərin hüquq və vəzifələri', content: 'Sürücü və piyadaların hüquqları, vəzifələri və məsuliyyəti göstərilir. Hərəkət zamanı bir-birinə hörmət və təhlükəsizliyin təmin edilməsi əsas prinsipdir.' },
+  { id: 'r7', title: 'Maddə 6-1. Beynəlxalq daşımalarda iştirak edənlərin vəzifələri', content: 'Beynəlxalq sərnişin və yük daşımalarını təşkil edən və icra edən şəxslərə əlavə tələblər müəyyən olunur. Sənədləşmə, təhlükəsizlik və beynəlxalq normalara uyğunluq önəmlidir.' },
+  { id: 'r8', title: 'Maddə 7. Yol hərəkətinin təşkili', content: 'Yol hərəkatının planlaşdırılması, nişan və nişanlanmaların tətbiqi qaydaları izah edilir. Hərəkət axınının təhlükəsiz və fasiləsiz olması üçün təşkilati tədbirlər nəzərdə tutulur.' },
+  { id: 'r9', title: 'Maddə 8. Hərəkətə başlama və manevr', content: 'Hərəkətə başlama, dönmə, ötmə, zolaq dəyişmə və digər manevrlərin qaydaları təsvir olunur. Sürücü əvvəlcədən siqnal verməli və təhlükəsizliyi təmin etməlidir.' },
+  { id: 'r10', title: 'Maddə 9. Dayanma və durma', content: 'Dayanma və durmanın icazəli və qadağan edildiyi hallar göstərilir. Qaydaların pozulması yol hərəkətinə maneə yarada və təhlükə doğura bilər.' },
+  { id: 'r11', title: 'Maddə 10. Sürət rejimi', content: 'Müxtəlif yol şəraitlərində tətbiq olunan sürət məhdudiyyətləri müəyyən edilir. Zərurət yarandıqda sürət hava, yol və nəqliyyat axınına uyğun azaldılmalıdır.' },
+  { id: 'r12', title: 'Maddə 11. Piyadaların hərəkəti', content: 'Piyadaların keçidlərdən istifadə qaydaları, yolun təhlükəsiz keçilməsi və gecə-gündüz görünmə tələbləri izah olunur. Sürücülər piyadalara xüsusi diqqət yetirməlidirlər.' },
 ];
 
 export function RulesScreen() {
@@ -59,6 +68,8 @@ export function RulesScreen() {
   const [selectedSignId, setSelectedSignId] = useState<string | null>(null);
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const [signsStage, setSignsStage] = useState<'categories' | 'detail'>('categories');
+  const [selectedCategory, setSelectedCategory] = useState<SignCategoryKey | null>(null);
 
   const currentSigns = useMemo(() => SIGNS[activeSignCategory] || [], [activeSignCategory]);
   const selectedSign = useMemo(() => currentSigns.find(s => s.id === selectedSignId) || null, [currentSigns, selectedSignId]);
@@ -118,7 +129,7 @@ export function RulesScreen() {
       {view === 'home' ? (
         <Card className="mb-3">
           <div className="grid grid-cols-1 gap-2">
-            <button onClick={() => setView('signs')} className={`w-full p-4 rounded-xl border flex items-center justify-between ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}>
+            <button onClick={() => { setView('signs'); setSignsStage('categories'); setSelectedCategory(null); }} className={`w-full p-4 rounded-xl border flex items-center justify-between ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}>
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>🛑</div>
                 <div className="text-left">
@@ -153,9 +164,9 @@ export function RulesScreen() {
       ) : (
         <Card className="mb-3">
           <div className="flex items-center justify-between mb-2">
-            <button onClick={() => setView('home')} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+            <button onClick={() => { if (view === 'signs' && signsStage === 'detail') { setSignsStage('categories'); setSelectedSignId(null); } else { setView('home'); } }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
             <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-              {view === 'signs' && 'Nişanlar'}
+              {view === 'signs' && (signsStage === 'categories' ? 'Nişanlar' : (SIGN_CATEGORIES.find(c => c.key === selectedCategory)?.title || 'Nişanlar'))}
               {view === 'markings' && 'Nişanlanma xəttləri'}
               {view === 'vertical' && 'Vertikal nişanlar'}
             </div>
@@ -164,49 +175,54 @@ export function RulesScreen() {
 
           {view === 'signs' && (
             <div>
-              <div className="flex gap-2 overflow-x-auto pb-1 mb-2">
-                {SIGN_CATEGORIES.map(cat => (
-                  <button
-                    key={cat.key}
-                    onClick={() => { setActiveSignCategory(cat.key); setSelectedSignId(null); }}
-                    className={`px-3 py-1 whitespace-nowrap rounded-lg text-xs font-medium border ${activeSignCategory===cat.key ? 'bg-emerald-600 text-white border-emerald-600' : (isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700')}`}
-                  >
-                    {cat.title}
-                  </button>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                {filteredSigns.map((s, idx) => (
-                  <SlideTransition key={s.id} direction="right" delay={200 + idx * 50}>
+              {signsStage === 'categories' ? (
+                <div className="space-y-2">
+                  {SIGN_CATEGORIES.map(cat => (
                     <button
-                      onClick={() => setSelectedSignId(s.id)}
-                      className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}
+                      key={cat.key}
+                      onClick={() => { setSelectedCategory(cat.key); setActiveSignCategory(cat.key); setSelectedSignId(null); setSignsStage('detail'); }}
+                      className={`w-full p-3 flex items-center justify-between rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}
                     >
-                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                        <img src={s.img} alt={s.name} className="w-10 h-10 object-contain" onError={handleImgError} />
-                      </div>
-                      <div className="text-left">
-                        <div className={`font-bold text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{s.name}</div>
-                        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Baxmaq üçün toxunun</div>
-                      </div>
+                      <div className="text-sm font-medium">{cat.title}</div>
+                      <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>›</span>
                     </button>
-                  </SlideTransition>
-                ))}
-              </div>
-
-              {selectedSign && (
-                <Card className="mt-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
-                      <img src={selectedSign.img} alt={selectedSign.name} className="w-14 h-14 object-contain" onError={handleImgError} />
-                    </div>
-                    <div>
-                      <div className="font-bold text-sm">{selectedSign.name}</div>
-                      <div className="text-xs text-gray-600">{selectedSign.description}</div>
-                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-2">
+                    {filteredSigns.map((s, idx) => (
+                      <SlideTransition key={s.id} direction="right" delay={200 + idx * 50}>
+                        <button
+                          onClick={() => setSelectedSignId(s.id)}
+                          className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}
+                        >
+                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                            <img src={s.img} alt={s.name} className="w-10 h-10 object-contain" onError={handleImgError} />
+                          </div>
+                          <div className="text-left">
+                            <div className={`font-bold text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{s.name}</div>
+                            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Baxmaq üçün toxunun</div>
+                          </div>
+                        </button>
+                      </SlideTransition>
+                    ))}
                   </div>
-                </Card>
+
+                  {selectedSign && (
+                    <Card className="mt-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
+                          <img src={selectedSign.img} alt={selectedSign.name} className="w-14 h-14 object-contain" onError={handleImgError} />
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm">{selectedSign.name}</div>
+                          <div className="text-xs text-gray-600">{selectedSign.description}</div>
+                        </div>
+                      </div>
+                    </Card>
+                  )}
+                </>
               )}
             </div>
           )}
