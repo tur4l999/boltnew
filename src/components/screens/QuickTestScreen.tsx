@@ -135,7 +135,7 @@ export function QuickTestScreen() {
         </div>
         <div className="flex items-center justify-end">
           <div className="mr-4">
-            <div className="px-3 py-1 rounded-lg bg-white text-black text-sm font-bold tracking-widest shadow-lg/50 shadow-black">
+            <div className="px-3 py-1 rounded-lg bg-black/70 text-white text-sm font-bold tracking-widest shadow-lg/50 shadow-black border border-white/10">
               {minutes}:{seconds}
             </div>
           </div>
