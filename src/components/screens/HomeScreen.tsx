@@ -51,12 +51,15 @@ export function HomeScreen() {
       {/* Package Status (hidden if scheduled activation exists) */}
       {!hasActivePackage() && !(useApp().activePackage && new Date() < useApp().activePackage.activationDate) && (
         <SlideTransition direction="down" delay={100}>
-          <div className={`mb-3 p-3 rounded-lg border flex items-center gap-2 transition-colors duration-200 ${
+          <div
+            onClick={() => navigate('Packages')}
+            className={`mb-3 p-2 rounded-lg border flex items-center gap-2 transition-colors duration-200 cursor-pointer ${
             isDarkMode 
               ? 'bg-blue-900/20 border-blue-700' 
               : 'bg-blue-50 border-blue-200'
-          }`}>
-            <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
+          }`}
+          >
+            <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
               isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
             }`}>
               <span className={`text-xs transition-colors duration-200 ${
@@ -73,7 +76,7 @@ export function HomeScreen() {
             <button
               onClick={() => navigate('Packages')}
               className={
-                `px-3 py-2 rounded-xl text-sm font-bold transition-colors min-h-[32px] bg-emerald-600 hover:bg-emerald-700 text-white`
+                `px-4 py-2 rounded-xl text-sm font-bold transition-colors min-h-[28px] bg-emerald-600 hover:bg-emerald-700 text-white text-center flex items-center justify-center`
               }
             >
               Paket al
@@ -135,10 +138,10 @@ export function HomeScreen() {
 
       {/* Progress Card */}
       <FadeInUp delay={200}>
-        <Card className="mb-3">
-          <div className="text-xs text-gray-500 mb-2">{t.progress}</div>
-          <Progress value={42} />
-          <div className="text-xs mt-2 text-gray-700">
+        <Card className="mb-3 p-3">
+          <div className="text-xs text-gray-500 mb-1">{t.progress}</div>
+          <Progress value={42} className="h-2" />
+          <div className="text-xs mt-1 text-gray-700">
             {t.continue} → <span className="font-bold">M8: Yol nişanları</span>
           </div>
         </Card>
