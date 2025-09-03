@@ -134,8 +134,8 @@ export function RulesScreen() {
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Search / Filter */}
-      <div className="mb-3 sticky top-[44px] z-30">
-        <div className="flex items-center gap-2">
+      <div className={`mb-3 sticky top-0 z-30 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="flex items-center gap-2 py-1">
           <button onClick={handleBackClick} className={`px-3 py-2 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}>←</button>
           <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
