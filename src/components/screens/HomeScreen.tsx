@@ -12,7 +12,7 @@ export function HomeScreen() {
   const gridItems = [
     // Əsas bölmələr (8 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
-    { key: 'quick', label: 'Biletlər', action: () => navigate('Exam'), emoji: '📝' },
+    { key: 'quick', label: 'Bilet 1', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
