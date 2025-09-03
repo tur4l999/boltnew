@@ -133,7 +133,7 @@ export function QuickTestScreen() {
           </button>
         </div>
         <div className="text-center">
-          <div className={`text-base font-black ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Bilet 1</div>
+          <div className={`text-lg font-black ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Bilet 1</div>
         </div>
         <div className="flex items-center justify-end">
           <div className={`text-sm font-bold mr-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
@@ -145,9 +145,9 @@ export function QuickTestScreen() {
       <Card>
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
-          <div className="mb-3">
-            {/* Problem report toggle above the image, aligned right */}
-            <div className="flex justify-end mb-2">
+          <div className="mb-3 relative">
+            {/* Problem report toggle above the image, aligned right, popover overlays content */}
+            <div className="flex justify-end mb-2 relative">
               <button
                 onClick={() => setIsReportOpen((v) => !v)}
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow ${
@@ -159,48 +159,48 @@ export function QuickTestScreen() {
               >
                 ⚠️
               </button>
-            </div>
-            {isReportOpen && (
-              <div
-                className={`mb-2 z-10 w-full p-3 rounded-xl shadow-lg ${
-                  isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-                }`}
-              >
-                <div className={`text-xs font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                  Sualla bağlı problem bildir
-                </div>
-                <textarea
-                  value={reportText}
-                  onChange={(e) => setReportText(e.target.value)}
-                  placeholder="Mətni daxil edin..."
-                  className={`w-full h-20 rounded-lg p-2 text-sm outline-none ${
-                    isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-800'
+              {isReportOpen && (
+                <div
+                  className={`absolute top-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg ${
+                    isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
                   }`}
-                />
-                <div className="mt-2 flex items-center gap-2 justify-end">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => {
-                      setReportText('');
-                      setIsReportOpen(false);
-                    }}
-                  >
-                    Ləğv et
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      setIsReportOpen(false);
-                      setReportText('');
-                      alert('Problem qeydə alındı (demo)');
-                    }}
-                  >
-                    Göndər
-                  </Button>
+                >
+                  <div className={`text-xs font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Sualla bağlı problem bildir
+                  </div>
+                  <textarea
+                    value={reportText}
+                    onChange={(e) => setReportText(e.target.value)}
+                    placeholder="Mətni daxil edin..."
+                    className={`w-full h-20 rounded-lg p-2 text-sm outline-none ${
+                      isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-800'
+                    }`}
+                  />
+                  <div className="mt-2 flex items-center gap-2 justify-end">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setReportText('');
+                        setIsReportOpen(false);
+                      }}
+                    >
+                      Ləğv et
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setIsReportOpen(false);
+                        setReportText('');
+                        alert('Problem qeydə alındı (demo)');
+                      }}
+                    >
+                      Göndər
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
             <img
               src={question.imageUrl}
               alt="Sual şəkli"
