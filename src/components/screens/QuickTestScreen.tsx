@@ -120,21 +120,14 @@ export function QuickTestScreen() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Top bar: back arrow, exit chip, centered title, right timer */}
+      {/* Top bar: exit chip, centered title, right timer */}
       <div className="mb-2 grid grid-cols-3 items-center">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => navigate('Exam')}
-            aria-label="Geri"
-            className={`w-8 h-8 rounded-full grid place-items-center border border-gray-700 text-gray-300`}
-          >
-            ←
-          </button>
-          <button
             onClick={() => setShowExitConfirm(true)}
-            className="px-3 py-1 rounded-lg border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
+            className="px-3 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold"
           >
-            İmtahandan çıx
+            İmtahanı bitir
           </button>
         </div>
         <div className="text-center">
