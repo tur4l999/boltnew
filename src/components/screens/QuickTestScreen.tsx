@@ -129,7 +129,7 @@ export function QuickTestScreen() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowExitConfirm(true)}
-            className="px-3 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold"
+            className="px-3 py-1 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-bold"
           >
             İmtahanı bitir
           </button>
