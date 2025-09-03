@@ -14,8 +14,9 @@ interface Comment {
 }
 
 export function TeacherContactScreen() {
-  const { goBack } = useApp();
-  const [newQuestion, setNewQuestion] = useState('');
+  const { goBack, currentScreen } = useApp();
+  const draft = (currentScreen.params && (currentScreen.params as any).draftQuestion) || '';
+  const [newQuestion, setNewQuestion] = useState(draft);
   
   const comments: Comment[] = [
     {
