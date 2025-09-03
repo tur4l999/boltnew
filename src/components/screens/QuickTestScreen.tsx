@@ -142,7 +142,7 @@ export function QuickTestScreen() {
         </div>
       </div>
 
-      <Card>
+      <Card className="bg-gray-800 border-gray-700 text-gray-100">
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
           <div className="mb-3 relative">
@@ -256,6 +256,7 @@ export function QuickTestScreen() {
             <Button
               size="sm"
               variant="ghost"
+              className="border-gray-600 text-gray-300 hover:bg-gray-800"
               onClick={() => {
                 const next = [...showExplanation];
                 next[currentIndex] = !next[currentIndex];
@@ -284,6 +285,7 @@ export function QuickTestScreen() {
           <Button
             size="sm"
             variant={savedQuestions[currentIndex] ? 'primary' : 'ghost'}
+            className={savedQuestions[currentIndex] ? '' : 'border-gray-600 text-gray-300 hover:bg-gray-800'}
             onClick={toggleSave}
           >
             {savedQuestions[currentIndex] ? 'Yadda saxlandı' : 'Yadda saxla'}
@@ -291,6 +293,7 @@ export function QuickTestScreen() {
           <Button
             size="sm"
             variant="ghost"
+            className="border-gray-600 text-gray-300 hover:bg-gray-800"
             onClick={() => navigate('TeacherContact', { questionId: question.id })}
           >
             Müəllimə yaz
@@ -327,10 +330,10 @@ export function QuickTestScreen() {
 
       {/* Navigation buttons (optional) */}
       <div className="mt-3 flex items-center justify-between">
-        <Button size="sm" variant="ghost" onClick={goPrev} disabled={currentIndex === 0}>
+        <Button size="sm" variant="ghost" className="border-gray-600 text-gray-300 hover:bg-gray-800" onClick={goPrev} disabled={currentIndex === 0}>
           Geri
         </Button>
-        <Button size="sm" variant="ghost" onClick={goNext} disabled={currentIndex === questions.length - 1}>
+        <Button size="sm" variant="ghost" className="border-gray-600 text-gray-300 hover:bg-gray-800" onClick={goNext} disabled={currentIndex === questions.length - 1}>
           Sonrakı
         </Button>
       </div>
