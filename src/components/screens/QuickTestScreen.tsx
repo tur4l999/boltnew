@@ -121,40 +121,48 @@ export function QuickTestScreen() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Top bar: left Bilet 1, right timer */}
-      <div className="mb-2 flex items-center justify-between">
-        <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Bilet 1</div>
-        <div className={`text-sm font-bold mr-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          {minutes}:{seconds}
+      {/* Top bar: back arrow (to tickets), centered title, right timer */}
+      <div className="mb-2 grid grid-cols-3 items-center">
+        <div className="flex items-center">
+          <button
+            onClick={() => navigate('Exam')}
+            aria-label="Geri"
+            className={`w-8 h-8 rounded-full grid place-items-center border ${isDarkMode ? 'border-gray-700 text-gray-300' : 'border-gray-300 text-gray-700'}`}
+          >
+            ←
+          </button>
+        </div>
+        <div className="text-center">
+          <div className={`text-base font-black ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Bilet 1</div>
+        </div>
+        <div className="flex items-center justify-end">
+          <div className={`text-sm font-bold mr-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            {minutes}:{seconds}
+          </div>
         </div>
       </div>
 
       <Card>
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
-          <div className="relative mb-3">
-            <img
-              src={question.imageUrl}
-              alt="Sual şəkli"
-              className="w-full h-40 object-cover rounded-lg"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
-            <button
-              onClick={() => setIsReportOpen((v) => !v)}
-              className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-xs shadow ${
-                isDarkMode
-                  ? 'bg-gray-800/90 text-gray-200 border border-gray-700'
-                  : 'bg-white/90 text-gray-700 border border-gray-200'
-              }`}
-              aria-label="Problem bildir"
-            >
-              ⚠️
-            </button>
+          <div className="mb-3">
+            {/* Problem report toggle above the image, aligned right */}
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={() => setIsReportOpen((v) => !v)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow ${
+                  isDarkMode
+                    ? 'bg-gray-800/90 text-gray-200 border border-gray-700'
+                    : 'bg-white/90 text-gray-700 border border-gray-200'
+                }`}
+                aria-label="Problem bildir"
+              >
+                ⚠️
+              </button>
+            </div>
             {isReportOpen && (
               <div
-                className={`absolute top-12 right-2 z-10 w-64 p-3 rounded-xl shadow-lg ${
+                className={`mb-2 z-10 w-full p-3 rounded-xl shadow-lg ${
                   isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
                 }`}
               >
@@ -183,7 +191,6 @@ export function QuickTestScreen() {
                   <Button
                     size="sm"
                     onClick={() => {
-                      // For demo: just close
                       setIsReportOpen(false);
                       setReportText('');
                       alert('Problem qeydə alındı (demo)');
@@ -194,6 +201,14 @@ export function QuickTestScreen() {
                 </div>
               </div>
             )}
+            <img
+              src={question.imageUrl}
+              alt="Sual şəkli"
+              className="w-full h-40 object-cover rounded-lg"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
           </div>
         )}
 
@@ -299,13 +314,13 @@ export function QuickTestScreen() {
         </div>
       </Card>
 
-      {/* Numbers 1..20 row */}
+      {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+        <div className="grid grid-cols-10 gap-1">
           {questions.map((_, i) => {
             const status = answerStatuses[i];
             const isCurrent = i === currentIndex;
-            const base = 'w-6 h-6 rounded-md grid place-items-center text-[10px] font-bold border flex-shrink-0';
+            const base = 'w-6 h-6 rounded-md grid place-items-center text-[10px] font-bold border';
             const style = isCurrent
               ? isDarkMode
                 ? 'bg-gray-600 text-gray-100 border-gray-500'
