@@ -25,12 +25,12 @@ export const dictionaries = {
     examSimulator: 'İmtahan simulyatoru',
     tests: 'Testlər',
     fines: 'Cərimələr',
-    articles: 'Maddələr',
+    articles: 'Qaydalar',
     myResults: 'Nəticələrim',
     notes: 'Konspektlər',
     
     // Lesson tabs
-    article: 'Maddə',
+    article: 'Qayda',
     video: 'Video dərs',
     materials: 'Dərs materialları',
     questions: 'Suallar',

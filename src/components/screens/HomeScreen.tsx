@@ -17,7 +17,7 @@ export function HomeScreen() {
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    { key: 'articles', label: t.articles, action: () => alert('Maddələr (demo)'), emoji: '📜' },
+    { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
 
     // Əlavə bölmələr (secondary):
@@ -138,10 +138,10 @@ export function HomeScreen() {
 
       {/* Progress Card */}
       <FadeInUp delay={200}>
-        <Card className="mb-3 p-3">
-          <div className="text-xs text-gray-500 mb-1">{t.progress}</div>
-          <Progress value={42} className="h-2" />
-          <div className="text-xs mt-1 text-gray-700">
+        <Card className="mb-2 p-2">
+          <div className="text-[11px] text-gray-500 mb-1">{t.progress}</div>
+          <Progress value={42} className="h-1" />
+          <div className="text-[11px] mt-1 text-gray-700">
             {t.continue} → <span className="font-bold">M8: Yol nişanları</span>
           </div>
         </Card>

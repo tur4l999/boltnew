@@ -12,7 +12,7 @@ export function Progress({ value, max = 100, className = '' }: ProgressProps) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
   
   return (
-    <div className={`w-full h-3 rounded-full overflow-hidden border transition-colors duration-200 ${
+    <div className={`w-full h-1.5 rounded-full overflow-hidden border transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gray-700 border-gray-600' 
         : 'bg-gray-100 border-gray-200'
