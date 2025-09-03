@@ -135,14 +135,14 @@ export function QuickTestScreen() {
         </div>
         <div className="flex items-center justify-end">
           <div className="mr-4">
-            <div className="px-3 py-1 rounded-lg bg-black/70 text-white text-sm font-bold tracking-widest shadow-lg/50 shadow-black border border-white/10">
+            <div className="px-3 py-1 rounded-lg bg-white text-black text-sm font-bold tracking-widest shadow-lg/50 shadow-black">
               {minutes}:{seconds}
             </div>
           </div>
         </div>
       </div>
 
-      <Card className="bg-gray-800 border-gray-700 text-gray-100">
+      <Card className="bg-gray-900 border-gray-700 text-gray-100">
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
           <div className="mb-3 relative">
