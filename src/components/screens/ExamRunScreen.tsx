@@ -266,7 +266,7 @@ export function ExamRunScreen() {
                   disabled={answered}
                   className={`h-10 rounded-lg text-sm font-bold transition-colors ${
                     isActive
-                      ? 'bg-sky-600 text-white' /* distinct active color */
+                      ? 'bg-gray-600 text-white' /* changed active color to gray */
                       : status === 'correct'
                         ? 'bg-emerald-600 text-white'
                         : status === 'wrong'

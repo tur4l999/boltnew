@@ -39,13 +39,16 @@ export function ExamScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
+      <div className={`mb-2 text-sm font-bold text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        Testlər
+      </div>
       <div className={`rounded-xl overflow-hidden border mb-3 transition-colors duration-200 ${
         isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
       }`}>
         <div className="grid grid-cols-3">
           <button
             onClick={() => setActiveTab('byTickets')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'byTickets'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
@@ -55,7 +58,7 @@ export function ExamScreen() {
           </button>
           <button
             onClick={() => setActiveTab('byTopics')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'byTopics'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
@@ -65,7 +68,7 @@ export function ExamScreen() {
           </button>
           <button
             onClick={() => setActiveTab('exam')}
-            className={`py-2 text-xs font-bold ${
+            className={`py-2 text-sm font-bold ${
               activeTab === 'exam'
                 ? 'text-emerald-600 border-b-2 border-emerald-600'
                 : 'text-gray-500'
