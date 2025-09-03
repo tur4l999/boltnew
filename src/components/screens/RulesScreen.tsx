@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { SlideTransition } from '../ui/SlideTransition';
@@ -53,31 +53,79 @@ const AZ_RULES = [
 
 export function RulesScreen() {
   const { isDarkMode } = useApp();
-  const [activeSection, setActiveSection] = useState<'signs' | 'markings' | 'vertical' | 'rules'>('signs');
+  // Only three sections as requested; rules list will be shown below them
+  const [activeSection, setActiveSection] = useState<'signs' | 'markings' | 'vertical'>('signs');
   const [activeSignCategory, setActiveSignCategory] = useState<SignCategoryKey>('prohibitory');
   const [selectedSignId, setSelectedSignId] = useState<string | null>(null);
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
 
   const currentSigns = useMemo(() => SIGNS[activeSignCategory] || [], [activeSignCategory]);
   const selectedSign = useMemo(() => currentSigns.find(s => s.id === selectedSignId) || null, [currentSigns, selectedSignId]);
   const selectedRule = useMemo(() => AZ_RULES.find(r => r.id === selectedRuleId) || null, [selectedRuleId]);
 
+  const norm = useCallback((s: string) => s.toLowerCase().trim(), []);
+  const q = norm(query);
+  const filteredSigns = useMemo(
+    () => (q ? currentSigns.filter(s => norm(s.name).includes(q) || norm(s.description).includes(q)) : currentSigns),
+    [currentSigns, q, norm]
+  );
+  const filteredMarkings = useMemo(
+    () => (q ? MARKINGS.filter(m => norm(m.name).includes(q) || norm(m.description).includes(q)) : MARKINGS),
+    [q, norm]
+  );
+  const filteredVertical = useMemo(
+    () => (q ? VERTICAL_SIGNS.filter(v => norm(v.name).includes(q) || norm(v.description).includes(q)) : VERTICAL_SIGNS),
+    [q, norm]
+  );
+  const filteredRules = useMemo(
+    () => (q ? AZ_RULES.filter(r => norm(r.title).includes(q) || norm(r.content).includes(q)) : AZ_RULES),
+    [q, norm]
+  );
+
+  const handleImgError: React.ReactEventHandler<HTMLImageElement> = (e) => {
+    const target = e.currentTarget;
+    target.onerror = null;
+    target.src = '/image.png';
+  };
+
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      <Card className="mb-2">
+      {/* Search / Filter */}
+      <div className="mb-3">
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔎</span>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Axtarış..."
+            className={`flex-1 bg-transparent outline-none text-sm ${isDarkMode ? 'text-gray-100 placeholder-gray-500' : 'text-gray-900 placeholder-gray-500'}`}
+          />
+          {query && (
+            <button
+              aria-label="Təmizlə"
+              onClick={() => setQuery('')}
+              className={`${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
+            >✕</button>
+          )}
+        </div>
+      </div>
+
+      <Card className="mb-3">
         <div className="flex items-center justify-between mb-2">
           <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Nişanlar</div>
           <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
         </div>
 
-        {/* Tabs for sections */}
+        {/* Sections */}
         <div className="flex gap-2 mb-3">
           <button onClick={() => setActiveSection('signs')} className={`px-3 py-1 rounded-lg text-xs font-bold ${activeSection==='signs' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700')}`}>Nişanlar</button>
           <button onClick={() => setActiveSection('markings')} className={`px-3 py-1 rounded-lg text-xs font-bold ${activeSection==='markings' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700')}`}>Nişanlanma xəttləri</button>
           <button onClick={() => setActiveSection('vertical')} className={`px-3 py-1 rounded-lg text-xs font-bold ${activeSection==='vertical' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700')}`}>Vertikal nişanlar</button>
-          <button onClick={() => setActiveSection('rules')} className={`px-3 py-1 rounded-lg text-xs font-bold ${activeSection==='rules' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700')}`}>Azərbaycan yol hərəkəti qaydaları</button>
         </div>
 
         {/* Content Area */}
@@ -98,14 +146,14 @@ export function RulesScreen() {
 
             {/* Signs list */}
             <div className="grid grid-cols-2 gap-2">
-              {currentSigns.map((s, idx) => (
+              {filteredSigns.map((s, idx) => (
                 <SlideTransition key={s.id} direction="right" delay={200 + idx * 50}>
                   <button
                     onClick={() => setSelectedSignId(s.id)}
                     className={`rounded-xl border shadow-sm p-3 flex items-center gap-3 transition-colors min-h-[48px] ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}
                   >
                     <div className={`w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <img src={s.img} alt={s.name} className="w-10 h-10 object-contain" />
+                      <img src={s.img} alt={s.name} className="w-10 h-10 object-contain" onError={handleImgError} />
                     </div>
                     <div className="text-left">
                       <div className={`font-bold text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{s.name}</div>
@@ -121,7 +169,7 @@ export function RulesScreen() {
               <Card className="mt-2">
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
-                    <img src={selectedSign.img} alt={selectedSign.name} className="w-14 h-14 object-contain" />
+                    <img src={selectedSign.img} alt={selectedSign.name} className="w-14 h-14 object-contain" onError={handleImgError} />
                   </div>
                   <div>
                     <div className="font-bold text-sm">{selectedSign.name}</div>
@@ -136,7 +184,7 @@ export function RulesScreen() {
         {activeSection === 'markings' && (
           <div>
             <div className="grid grid-cols-2 gap-2">
-              {MARKINGS.map(m => (
+              {filteredMarkings.map(m => (
                 <Card key={m.id} className="p-3">
                   <div className="font-bold text-sm">{m.name}</div>
                   <div className="text-xs text-gray-600">{m.description}</div>
@@ -149,7 +197,7 @@ export function RulesScreen() {
         {activeSection === 'vertical' && (
           <div>
             <div className="grid grid-cols-2 gap-2">
-              {VERTICAL_SIGNS.map(v => (
+              {filteredVertical.map(v => (
                 <Card key={v.id} className="p-3">
                   <div className="font-bold text-sm">{v.name}</div>
                   <div className="text-xs text-gray-600">{v.description}</div>
@@ -158,19 +206,30 @@ export function RulesScreen() {
             </div>
           </div>
         )}
+      </Card>
 
-        {activeSection === 'rules' && (
-          <div className="space-y-2">
-            {AZ_RULES.map(r => (
-              <Card key={r.id} onClick={() => setSelectedRuleId(r.id)}>
+      {/* Rules list always below the sections */}
+      <Card>
+        <div className="flex items-center justify-between mb-2">
+          <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Azərbaycan yol hərəkəti qaydaları</div>
+          <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+        </div>
+        <div className="space-y-2">
+          {filteredRules.map(r => (
+            <Card key={r.id} onClick={() => setSelectedRuleId(prev => prev === r.id ? null : r.id)}>
+              <div className="flex items-center justify-between">
                 <div className="font-bold text-sm">{r.title}</div>
-                {selectedRule?.id === r.id && (
-                  <div className="text-xs text-gray-600 mt-1">{r.content}</div>
-                )}
-              </Card>
-            ))}
-          </div>
-        )}
+                <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{selectedRule?.id === r.id ? '▾' : '▸'}</div>
+              </div>
+              {selectedRule?.id === r.id && (
+                <div className="text-xs text-gray-600 mt-2 leading-relaxed">{r.content}</div>
+              )}
+            </Card>
+          ))}
+          {filteredRules.length === 0 && (
+            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Heç nə tapılmadı.</div>
+          )}
+        </div>
       </Card>
     </div>
   );
