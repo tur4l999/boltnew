@@ -1,33 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../../contexts/AppContext';
 // import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
-import { formatTime } from '../../lib/utils';
+import { formatTime, showToast } from '../../lib/utils';
 
 export function ExamRunScreen() {
   const { navigate, currentScreen, isDarkMode, goBack } = useApp();
-  const { config } = currentScreen.params;
+  const { config } = currentScreen.params || {};
+  const runMode: string | undefined = config?.mode;
+  const isQuickTest = runMode === 'ticket';
+  const questionCount: number = (config?.questionCount ?? config?.questionsCount) ?? 20;
+  const ticketNumber: number | undefined = config?.ticketNumber ?? 1;
+  const startInQuestion: boolean = config?.startInQuestion ?? false;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
   // Selected option per question (not yet confirmed)
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>({});
   // Outcome per question after confirmation: 'correct' | 'wrong'
   const [outcomes, setOutcomes] = useState<Record<string, 'correct' | 'wrong' | undefined>>({});
-  const [view, setView] = useState<'grid' | 'question'>('grid');
+  const [view, setView] = useState<'grid' | 'question'>(startInQuestion ? 'question' : 'grid');
   // Center overlay state
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
+  const [bookmarks, setBookmarks] = useState<Record<string, boolean>>({});
+  const touchStartXRef = useRef<number | null>(null);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportText, setReportText] = useState('');
+  const [showExplanation, setShowExplanation] = useState(false);
 
   function truncateText(text: string, maxChars: number): string {
     if (!text) return '';
     return text.length > maxChars ? text.slice(0, maxChars - 1) + '…' : text;
   }
   
-  // Create 10 questions by repeating sample questions
-  const questions = Array.from({ length: 10 }, (_, i) => ({
+  // Create questions by repeating sample questions to match desired count
+  const questions = Array.from({ length: questionCount }, (_, i) => ({
     ...SAMPLE_QUESTIONS[i % SAMPLE_QUESTIONS.length],
     id: `q${i + 1}`,
     imageUrl: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=800'
@@ -50,7 +60,6 @@ export function ExamRunScreen() {
   function setAnswer(optionId: string) {
     setSelectedOptions(prev => {
       const currentlySelected = prev[currentQuestion.id];
-      // Toggle off if the same option is clicked again
       if (currentlySelected === optionId) {
         const updated = { ...prev };
         delete updated[currentQuestion.id];
@@ -58,6 +67,15 @@ export function ExamRunScreen() {
       }
       return { ...prev, [currentQuestion.id]: optionId };
     });
+    if (isQuickTest) {
+      // Auto-confirm for quick test mode
+      const isCorrect = optionId === currentQuestion.correctOptionId;
+      const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
+      setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+      setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
+      setShowOverlay(true);
+      setTimeout(() => setShowOverlay(false), 500);
+    }
   }
 
   function openQuestion(index: number) {
@@ -65,6 +83,41 @@ export function ExamRunScreen() {
     setView('question');
     // Do not keep previous temporary selections when opening a question
     setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
+  }
+
+  function toggleBookmark(questionId: string) {
+    setBookmarks(prev => ({ ...prev, [questionId]: !prev[questionId] }));
+    const nowBookmarked = !bookmarks[questionId];
+    showToast(nowBookmarked ? 'Sual yadda saxlanıldı' : 'Yadda saxlananlardan çıxarıldı');
+  }
+
+  function reportIssue(questionId: string) {
+    showToast('Problem göndərildi. Təşəkkürlər!');
+  }
+
+  function askTeacher(questionId: string) {
+    const q = questions.find(x => x.id === questionId);
+    const draft = `Bilet ${ticketNumber ?? ''} • Sual ${currentIndex + 1}: ${q?.text}`;
+    navigate('TeacherContact', { draftQuestion: draft });
+  }
+
+  function goPrev() {
+    setCurrentIndex(idx => Math.max(0, idx - 1));
+    setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
+  }
+
+  function goNext() {
+    setCurrentIndex(idx => Math.min(questions.length - 1, idx + 1));
+    setSelectedOptions({});
+    setReportOpen(false);
+    setReportText('');
+    setShowExplanation(false);
   }
 
   function finishExam() {
@@ -85,14 +138,14 @@ export function ExamRunScreen() {
     const isCorrect = selected === currentQuestion.correctOptionId;
     const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
     setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+    if (!isCorrect) setShowExplanation(true);
 
     // Show overlay result in center for 0.5s then go back to grid
     setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');
     setShowOverlay(true);
     setTimeout(() => {
       setShowOverlay(false);
-      // If exam not finished, go back to grid; full-screen state may take over
-      setView('grid');
+      // Stay in question view for quicker navigation
     }, 500);
 
     // After setting outcome, compute totals and check pass/fail conditions
@@ -109,6 +162,7 @@ export function ExamRunScreen() {
 
   const currentOutcome = outcomes[currentQuestion?.id];
   const isConfirmed = !!currentOutcome;
+  const isBookmarked = !!bookmarks[currentQuestion?.id];
 
   return (
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
@@ -127,31 +181,16 @@ export function ExamRunScreen() {
           </div>
         </div>
       )}
-      {/* Header with back button */}
+      {/* Header */}
       <div className="flex items-center justify-between mb-4 text-white">
-        {view === 'question' ? (
-          <button
-            onClick={() => setView('grid')}
-            className="px-4 py-2 rounded-xl bg-black text-white flex items-center gap-2"
-            aria-label="Geriyə"
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="block"
-            >
-              <path d="M9 15l-3-3 3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M6 12h7a4 4 0 000-8H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span className="text-sm font-bold">Geriyə</span>
-          </button>
-        ) : (
-          <div className="w-8 h-8"></div>
-        )}
-        <div className="text-center"></div>
+        <button
+          onClick={goBack}
+          className="px-4 py-2 rounded-xl bg-black text-white flex items-center gap-2"
+          aria-label="Geriyə"
+        >
+          ←
+        </button>
+        <div className="text-base font-black">{ticketNumber ? `Bilet ${ticketNumber}` : ''}</div>
         <div className="w-8 h-8"></div>
       </div>
 
@@ -193,14 +232,62 @@ export function ExamRunScreen() {
       {view === 'question' && currentQuestion && (
         <>
           {/* Question container without white background */}
-          <div className="mt-2 rounded-xl p-4 text-white">
+          <div
+            className="mt-2 rounded-xl p-4 text-white"
+            onTouchStart={(e) => { touchStartXRef.current = e.changedTouches[0].clientX; }}
+            onTouchEnd={(e) => {
+              const startX = touchStartXRef.current;
+              const endX = e.changedTouches[0].clientX;
+              if (startX == null) return;
+              const deltaX = endX - startX;
+              const threshold = 40;
+              if (deltaX < -threshold) { goNext(); }
+              else if (deltaX > threshold) { goPrev(); }
+              touchStartXRef.current = null;
+            }}
+          >
             {currentQuestion.imageUrl && (
-              <img
-                src={currentQuestion.imageUrl}
-                alt="Question visual"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+              <div className="relative mb-3">
+                <img
+                  src={currentQuestion.imageUrl}
+                  alt="Question visual"
+                  className="w-full h-40 object-cover rounded-lg"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <button
+                  onClick={() => setReportOpen(v => !v)}
+                  className="absolute top-2 right-2 px-2 py-1 rounded-lg text-xs font-bold bg-black/70 text-white hover:bg-black/80 border border-white/20"
+                  aria-label="Sualla bağlı problem bildir"
+                >
+                  ⚠️
+                </button>
+              </div>
+            )}
+            {reportOpen && (
+              <div className={`mb-3 p-3 rounded-xl border ${isDarkMode ? 'bg-gray-900/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                <div className="text-xs font-bold mb-2">Sualla bağlı problem bildir</div>
+                <textarea
+                  value={reportText}
+                  onChange={(e) => setReportText(e.target.value)}
+                  placeholder="Problemi təsvir edin..."
+                  className={`w-full p-2 rounded-lg border text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-500' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'}`}
+                  rows={3}
+                />
+                <div className="mt-2 flex items-center gap-2 justify-end">
+                  <button
+                    onClick={() => setReportOpen(false)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold border ${isDarkMode ? 'border-gray-700 text-gray-200 hover:bg-gray-800' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={() => { showToast('Problem göndərildi. Təşəkkürlər!'); setReportOpen(false); setReportText(''); }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Göndər
+                  </button>
+                </div>
+              </div>
             )}
             <div className={`font-bold mb-3 text-white`}>
               {currentIndex + 1}. {currentQuestion.text}
@@ -217,7 +304,7 @@ export function ExamRunScreen() {
                     optionClasses = 'border-red-500 bg-red-900/30';
                   }
                 } else if (isSelected) {
-                  optionClasses = 'border-sky-500 bg-sky-900/30';
+                  optionClasses = 'border-gray-500 bg-gray-800';
                 }
 
                 return (
@@ -239,40 +326,78 @@ export function ExamRunScreen() {
               })}
             </div>
 
-            {/* Actions row: only Confirm on the right */}
-            <div className="mt-4 flex items-center gap-2 justify-end">
-              {!isConfirmed && selectedOptions[currentQuestion.id] && (
-                <Button onClick={confirmAnswer}>Təsdiq et</Button>
-              )}
+            {/* Explanation toggle */}
+            <div className="mt-3 mb-2">
+              <button
+                onClick={() => setShowExplanation(v => !v)}
+                className="px-3 py-2 rounded-xl border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
+              >
+                İzah
+              </button>
+            </div>
+
+            {(showExplanation || (isConfirmed && currentOutcome === 'wrong')) && (
+              <div className={`mt-2 p-3 rounded-xl border ${isDarkMode ? 'bg-gray-900/60 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                {currentOutcome === 'wrong' && (
+                  <div className="text-sm font-bold mb-1 text-emerald-400">
+                    Düzgün cavab: {currentQuestion.options.find(o => o.id === currentQuestion.correctOptionId)?.text}
+                  </div>
+                )}
+                <div className="text-sm text-white/90">{currentQuestion.explanation}</div>
+              </div>
+            )}
+
+            {/* Actions row */}
+            <div className="mt-4 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => toggleBookmark(currentQuestion.id)}
+                  className={`px-3 py-2 rounded-xl border text-xs font-bold ${isBookmarked ? 'border-yellow-400 bg-yellow-900/30 text-yellow-200' : 'border-gray-700 text-white hover:bg-gray-800'}`}
+                >
+                  {isBookmarked ? '★ Yadda saxlanıldı' : '☆ Yadda saxla'}
+                </button>
+                <button
+                  onClick={() => askTeacher(currentQuestion.id)}
+                  className="px-3 py-2 rounded-xl border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
+                >
+                  👨‍🏫 Müəllimə soruş
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                {!isQuickTest && (
+                  <>
+                    <Button variant="ghost" onClick={goPrev} disabled={currentIndex === 0}>← Geri</Button>
+                    {!isConfirmed && selectedOptions[currentQuestion.id] && (
+                      <Button onClick={confirmAnswer}>Təsdiq et</Button>
+                    )}
+                    <Button variant="ghost" onClick={goNext} disabled={currentIndex === questions.length - 1}>İrəli →</Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Numeric navigation (only in question view) */}
-          <div className="mt-4 grid grid-cols-5 gap-2">
+          <div className="mt-4 grid grid-cols-8 gap-1">
             {questions.map((q, idx) => {
               const status = outcomes[q.id];
               const isActive = idx === currentIndex;
-              const answered = !!status;
               return (
                 <button
                   key={q.id}
                   onClick={() => {
-                    if (!answered) {
-                      setCurrentIndex(idx);
-                      // Clear temporary selection when switching to a different question
-                      setSelectedOptions({});
-                    }
+                    setCurrentIndex(idx);
+                    setSelectedOptions({});
                   }}
-                  disabled={answered}
-                  className={`h-10 rounded-lg text-sm font-bold transition-colors ${
+                  className={`h-8 rounded-md text-xs font-bold transition-colors ${
                     isActive
-                      ? 'bg-gray-600 text-white' /* changed active color to gray */
+                      ? 'bg-gray-600 text-white'
                       : status === 'correct'
                         ? 'bg-emerald-600 text-white'
                         : status === 'wrong'
                           ? 'bg-red-600 text-white'
                           : 'bg-transparent border border-gray-700 text-white'
-                  } ${answered ? 'cursor-default' : ''}`}
+                  }`}
                 >
                   {idx + 1}
                 </button>
@@ -293,9 +418,9 @@ export function ExamRunScreen() {
         )}
       </div>
 
-      {/* Persistent timer bubble below notch, centered (moved slightly lower) */}
-      <div className="fixed top-16 left-1/2 -translate-x-1/2 select-none z-50">
-        <div className="px-4 py-1.5 rounded-lg bg-white text-black text-xl font-bold tracking-widest shadow-lg/50 shadow-black">
+      {/* Persistent timer bubble - top right for quick test */}
+      <div className="fixed top-16 right-4 select-none z-50">
+        <div className="px-3 py-1.5 rounded-lg bg-white text-black text-base font-bold tracking-widest shadow-lg/50 shadow-black">
           {formatTime(timeLeft)}
         </div>
       </div>

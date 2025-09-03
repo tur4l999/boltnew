@@ -23,7 +23,7 @@ export const dictionaries = {
     prev: 'Geri',
     finish: 'Bitir',
     examSimulator: 'İmtahan simulyatoru',
-    tests: 'Testlər',
+    tests: 'Biletlər',
     fines: 'Cərimələr',
     articles: 'Qaydalar',
     myResults: 'Nəticələrim',
