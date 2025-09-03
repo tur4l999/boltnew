@@ -265,6 +265,9 @@ export function RulesScreen() {
 
           {view === 'markings' && (
             <div>
+              <div className="mb-2">
+                <button onClick={() => setView('home')} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 {filteredMarkings.map(m => (
                   <Card key={m.id} className="p-3">
@@ -278,6 +281,9 @@ export function RulesScreen() {
 
           {view === 'vertical' && (
             <div>
+              <div className="mb-2">
+                <button onClick={() => setView('home')} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 {filteredVertical.map(v => (
                   <Card key={v.id} className="p-3">
