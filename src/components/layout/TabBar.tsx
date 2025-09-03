@@ -6,7 +6,7 @@ export function TabBar() {
   
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠' },
-    { key: 'Topics', label: 'Təlimlər', emoji: '📚' },
+    { key: 'Topics', label: 'Mövzular', emoji: '📚' },
     { key: 'Exam', label: t.exam, emoji: '🧪' },
     { key: 'Store', label: t.store, emoji: '🛍️' },
   ];
