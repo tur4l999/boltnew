@@ -9,6 +9,7 @@ type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
   const { isDarkMode, navigate } = useApp();
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   // Prepare 20 questions for Ticket 1 (repeat SAMPLE_QUESTIONS if needed)
   const questions = useMemo(() => {
@@ -119,15 +120,21 @@ export function QuickTestScreen() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Top bar: back arrow (to tickets), centered title, right timer */}
+      {/* Top bar: back arrow, exit chip, centered title, right timer */}
       <div className="mb-2 grid grid-cols-3 items-center">
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => navigate('Exam')}
             aria-label="Geri"
             className={`w-8 h-8 rounded-full grid place-items-center border border-gray-700 text-gray-300`}
           >
             ←
+          </button>
+          <button
+            onClick={() => setShowExitConfirm(true)}
+            className="px-3 py-1 rounded-lg border border-gray-700 text-white text-xs font-bold hover:bg-gray-800"
+          >
+            İmtahandan çıx
           </button>
         </div>
         <div className="text-center">
@@ -141,6 +148,20 @@ export function QuickTestScreen() {
           </div>
         </div>
       </div>
+
+      {/* Exit confirmation modal */}
+      {showExitConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowExitConfirm(false)} />
+          <div className="relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border bg-gray-900 border-gray-700 text-gray-100">
+            <div className="text-base font-bold mb-3">İmtahanı bitirmək istədiyinizdən əminsiniz?</div>
+            <div className="flex items-center justify-end gap-2">
+              <Button variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={() => setShowExitConfirm(false)}>Bağla</Button>
+              <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('Exam')}>Bəli</Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
         {/* Question header with optional image and report button */}
@@ -256,7 +277,7 @@ export function QuickTestScreen() {
             <Button
               size="sm"
               variant="ghost"
-              className="border-gray-600 text-gray-300 hover:bg-gray-800"
+              className="border-gray-600 text-white hover:bg-gray-800"
               onClick={() => {
                 const next = [...showExplanation];
                 next[currentIndex] = !next[currentIndex];
@@ -285,7 +306,7 @@ export function QuickTestScreen() {
           <Button
             size="sm"
             variant={savedQuestions[currentIndex] ? 'primary' : 'ghost'}
-            className={savedQuestions[currentIndex] ? '' : 'border-gray-600 text-gray-300 hover:bg-gray-800'}
+            className={savedQuestions[currentIndex] ? 'text-white' : 'border-gray-600 text-white hover:bg-gray-800'}
             onClick={toggleSave}
           >
             {savedQuestions[currentIndex] ? 'Yadda saxlandı' : 'Yadda saxla'}
@@ -293,7 +314,7 @@ export function QuickTestScreen() {
           <Button
             size="sm"
             variant="ghost"
-            className="border-gray-600 text-gray-300 hover:bg-gray-800"
+            className="border-gray-600 text-white hover:bg-gray-800"
             onClick={() => navigate('TeacherContact', { questionId: question.id })}
           >
             Müəllimə yaz
@@ -330,10 +351,10 @@ export function QuickTestScreen() {
 
       {/* Navigation buttons (optional) */}
       <div className="mt-3 flex items-center justify-between">
-        <Button size="sm" variant="ghost" className="border-gray-600 text-gray-300 hover:bg-gray-800" onClick={goPrev} disabled={currentIndex === 0}>
+        <Button size="sm" variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={goPrev} disabled={currentIndex === 0}>
           Geri
         </Button>
-        <Button size="sm" variant="ghost" className="border-gray-600 text-gray-300 hover:bg-gray-800" onClick={goNext} disabled={currentIndex === questions.length - 1}>
+        <Button size="sm" variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={goNext} disabled={currentIndex === questions.length - 1}>
           Sonrakı
         </Button>
       </div>
