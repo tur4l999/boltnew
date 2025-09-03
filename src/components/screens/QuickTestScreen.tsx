@@ -114,9 +114,7 @@ export function QuickTestScreen() {
 
   return (
     <div
-      className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
-        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      }`}
+      className={`p-3 pb-24 min-h-screen transition-colors duration-200 bg-gray-900 text-gray-100`}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -127,17 +125,19 @@ export function QuickTestScreen() {
           <button
             onClick={() => navigate('Exam')}
             aria-label="Geri"
-            className={`w-8 h-8 rounded-full grid place-items-center border ${isDarkMode ? 'border-gray-700 text-gray-300' : 'border-gray-300 text-gray-700'}`}
+            className={`w-8 h-8 rounded-full grid place-items-center border border-gray-700 text-gray-300`}
           >
             ←
           </button>
         </div>
         <div className="text-center">
-          <div className={`text-lg font-black ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Bilet 1</div>
+          <div className={`text-lg font-black text-gray-200`}>Bilet 1</div>
         </div>
         <div className="flex items-center justify-end">
-          <div className={`text-sm font-bold mr-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            {minutes}:{seconds}
+          <div className="mr-4">
+            <div className="px-3 py-1 rounded-lg bg-white text-black text-sm font-bold tracking-widest shadow-lg/50 shadow-black">
+              {minutes}:{seconds}
+            </div>
           </div>
         </div>
       </div>
@@ -150,31 +150,23 @@ export function QuickTestScreen() {
             <div className="flex justify-end mb-2 relative">
               <button
                 onClick={() => setIsReportOpen((v) => !v)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow ${
-                  isDarkMode
-                    ? 'bg-gray-800/90 text-gray-200 border border-gray-700'
-                    : 'bg-white/90 text-gray-700 border border-gray-200'
-                }`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow bg-gray-800/90 text-gray-200 border border-gray-700`}
                 aria-label="Problem bildir"
               >
                 ⚠️
               </button>
               {isReportOpen && (
                 <div
-                  className={`absolute top-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg ${
-                    isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-                  }`}
+                  className={`absolute top-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg bg-gray-800 border border-gray-700`}
                 >
-                  <div className={`text-xs font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                  <div className={`text-xs font-bold mb-2 text-gray-200`}>
                     Sualla bağlı problem bildir
                   </div>
                   <textarea
                     value={reportText}
                     onChange={(e) => setReportText(e.target.value)}
                     placeholder="Mətni daxil edin..."
-                    className={`w-full h-20 rounded-lg p-2 text-sm outline-none ${
-                      isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-800'
-                    }`}
+                    className={`w-full h-20 rounded-lg p-2 text-sm outline-none bg-gray-700 text-gray-200`}
                   />
                   <div className="mt-2 flex items-center gap-2 justify-end">
                     <Button
@@ -214,11 +206,11 @@ export function QuickTestScreen() {
 
         {/* Question meta and text */}
         <div className="flex items-center justify-between mb-2">
-          <div className={`text-[11px] ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          <div className={`text-[11px] text-gray-400`}>
             {currentIndex + 1}/20
           </div>
         </div>
-        <div className={`font-bold mb-3 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{question.text}</div>
+        <div className={`font-bold mb-3 text-gray-100`}>{question.text}</div>
 
         {/* Options: auto-confirm on select */}
         <div className="space-y-2">
@@ -235,21 +227,13 @@ export function QuickTestScreen() {
                 } ${
                   locked
                     ? isCorrectOption
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/20'
-                        : 'border-emerald-600 bg-green-50'
+                      ? 'border-emerald-500 bg-emerald-900/20'
                       : isWrongSelected
-                        ? 'border-red-600 bg-red-50'
-                        : isDarkMode
-                          ? 'border-gray-600 bg-gray-700'
-                          : 'border-gray-300 bg-white'
+                        ? 'border-red-600 bg-red-900/20'
+                        : 'border-gray-600 bg-gray-700'
                     : isSelected
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/20'
-                        : 'border-emerald-600 bg-gray-50'
-                      : isDarkMode
-                        ? 'border-gray-600 bg-gray-700'
-                        : 'border-gray-300 bg-white'
+                      ? 'border-emerald-500 bg-emerald-900/20'
+                      : 'border-gray-600 bg-gray-700'
                 }`}
               >
                 <input
@@ -260,7 +244,7 @@ export function QuickTestScreen() {
                   onChange={() => selectAnswer(option.id)}
                   className="w-4 h-4 text-emerald-600"
                 />
-                <span className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{option.text}</span>
+                <span className={`text-sm text-gray-200`}>{option.text}</span>
               </label>
             );
           })}
@@ -281,7 +265,7 @@ export function QuickTestScreen() {
               İzah
             </Button>
             {isAnswerLocked && currentStatus === 'wrong' && (
-              <div className={`text-xs font-semibold ${isDarkMode ? 'text-red-300' : 'text-red-600'}`}>
+              <div className={`text-xs font-semibold text-red-300`}>
                 Doğru cavab: <span className="font-bold">{
                   question.options.find(o => o.id === question.correctOptionId)?.text
                 }</span>
@@ -289,7 +273,7 @@ export function QuickTestScreen() {
             )}
           </div>
           {showExplanation[currentIndex] && (
-            <div className={`text-sm mt-2 p-2 rounded-lg ${isDarkMode ? 'text-gray-200 bg-gray-700' : 'text-gray-700 bg-gray-50'}`}>
+            <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
               {question.explanation}
             </div>
           )}
@@ -322,16 +306,12 @@ export function QuickTestScreen() {
             const isCurrent = i === currentIndex;
             const base = 'w-6 h-6 rounded-md grid place-items-center text-[10px] font-bold border';
             const style = isCurrent
-              ? isDarkMode
-                ? 'bg-gray-600 text-gray-100 border-gray-500'
-                : 'bg-gray-200 text-gray-800 border-gray-300'
+              ? 'bg-gray-600 text-gray-100 border-gray-500'
               : status === 'correct'
                 ? 'bg-emerald-600 text-white border-emerald-700'
                 : status === 'wrong'
                   ? 'bg-red-600 text-white border-red-700'
-                  : isDarkMode
-                    ? 'bg-gray-800 text-gray-300 border-gray-700'
-                    : 'bg-white text-gray-700 border-gray-300';
+                  : 'bg-gray-800 text-gray-300 border-gray-700';
             return (
               <button
                 key={i}
