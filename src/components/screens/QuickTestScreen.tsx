@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
-import { Card } from '../ui/Card';
+// removed Card to avoid forced light backgrounds; using custom dark container
 import { Button } from '../ui/Button';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
@@ -142,7 +142,7 @@ export function QuickTestScreen() {
         </div>
       </div>
 
-      <Card className="bg-gray-900 border-gray-700 text-gray-100">
+      <div className="rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
         {/* Question header with optional image and report button */}
         {question.imageUrl && (
           <div className="mb-3 relative">
@@ -299,7 +299,7 @@ export function QuickTestScreen() {
             Müəllimə yaz
           </Button>
         </div>
-      </Card>
+      </div>
 
       {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
