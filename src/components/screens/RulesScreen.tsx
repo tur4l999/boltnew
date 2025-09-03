@@ -204,6 +204,9 @@ export function RulesScreen() {
             <div>
               {signsStage === 'categories' ? (
                 <div className="space-y-2">
+                  <div className="mb-2">
+                    <button onClick={() => setView('home')} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+                  </div>
                   {SIGN_CATEGORIES.map(cat => (
                     <button
                       key={cat.key}
@@ -218,7 +221,7 @@ export function RulesScreen() {
               ) : (
                 <>
                   <div className="mb-2">
-                    <button onClick={() => { setSignsStage('categories'); setSelectedSignId(null); }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← 3 seçimə qayıt</button>
+                    <button onClick={() => { setSignsStage('categories'); setSelectedSignId(null); }} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     {filteredSigns.map((s, idx) => (
@@ -241,6 +244,9 @@ export function RulesScreen() {
 
                   {selectedSign && (
                     <Card className="mt-2">
+                      <div className="mb-2">
+                        <button onClick={() => setSelectedSignId(null)} className={`px-2 py-1 rounded-lg text-xs ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>← Geri</button>
+                      </div>
                       <div className="flex items-center gap-3">
                         <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
                           <img src={selectedSign.img} alt={selectedSign.name} className="w-14 h-14 object-contain" onError={handleImgError} />
