@@ -217,25 +217,14 @@ export function QuickTestScreen() {
               onTouchEnd={onMediaTouchEnd}
             >
               {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
-                <>
-                  <img
-                    src={question.imageUrl}
-                    alt="Sual şəkli"
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                  {question.videoUrl && (
-                    <button
-                      onClick={() => focusMedia('video')}
-                      className="absolute inset-0 grid place-items-center text-white/90 hover:text-white bg-black/0 hover:bg-black/20 transition-colors"
-                      aria-label="İzah videonu aç"
-                    >
-                      <span className="px-3 py-1 rounded-full bg-black/60 border border-white/20 text-sm font-bold">▶ İzah</span>
-                    </button>
-                  )}
-                </>
+                <img
+                  src={question.imageUrl}
+                  alt="Sual şəkli"
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
               )}
               {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
                 <div className="w-full bg-black">
@@ -261,6 +250,36 @@ export function QuickTestScreen() {
           )}
 
           <div className="p-4">
+            {/* Explanation controls and content under media */}
+            <div className="mb-3">
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="border-gray-600 text-white hover:bg-gray-800"
+                  onClick={() => {
+                    const next = [...showExplanation];
+                    next[currentIndex] = !next[currentIndex];
+                    setShowExplanation(next);
+                    focusMedia('video');
+                  }}
+                >
+                  İzah
+                </Button>
+                {isAnswerLocked && currentStatus === 'wrong' && (
+                  <div className={`text-xs font-semibold text-red-300`}>
+                    Doğru cavab: <span className="font-bold">{
+                      question.options.find(o => o.id === question.correctOptionId)?.text
+                    }</span>
+                  </div>
+                )}
+              </div>
+              {showExplanation[currentIndex] && (
+                <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
+                  {question.explanation}
+                </div>
+              )}
+            </div>
             {/* Question meta and text */}
             <div className="flex items-center justify-between mb-2">
               <div className={`text-[11px] text-gray-400`}>
@@ -310,36 +329,7 @@ export function QuickTestScreen() {
               })}
             </div>
 
-            {/* Explanation toggle and content */}
-            <div className="mt-3">
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="border-gray-600 text-white hover:bg-gray-800"
-                  onClick={() => {
-                    const next = [...showExplanation];
-                    next[currentIndex] = !next[currentIndex];
-                    setShowExplanation(next);
-                    focusMedia('video');
-                  }}
-                >
-                  İzah
-                </Button>
-                {isAnswerLocked && currentStatus === 'wrong' && (
-                  <div className={`text-xs font-semibold text-red-300`}>
-                    Doğru cavab: <span className="font-bold">{
-                      question.options.find(o => o.id === question.correctOptionId)?.text
-                    }</span>
-                  </div>
-                )}
-              </div>
-              {showExplanation[currentIndex] && (
-                <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
-                  {question.explanation}
-                </div>
-              )}
-            </div>
+            {/* Explanation moved above, under media */}
 
             {/* Save and Ask Teacher actions + report button on the right of "Müəllimə yaz" */}
             <div className="mt-3 flex items-center gap-2">
