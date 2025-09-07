@@ -180,6 +180,7 @@ export function QuickTestScreen() {
               <div className={`text-[11px] text-gray-400`}>
                 {currentIndex + 1}/20
               </div>
+              <div className={`text-[11px] text-gray-400`}>ID {question.id?.replace(/^q/, '')}</div>
             </div>
             <div className={`font-bold mb-3 text-gray-100`}>{question.text}</div>
 

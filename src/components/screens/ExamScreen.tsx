@@ -84,25 +84,24 @@ export function ExamScreen() {
           {Array.from({ length: 20 }, (_, idx) => {
             const unlocked = hasActivePackage() || idx < 5;
             return (
-              <div
+              <button
                 key={idx}
-                onClick={() => { if (!unlocked) setShowPurchasePopup(true); }}
-                className={!unlocked ? 'cursor-pointer' : ''}
+                onClick={() => {
+                  if (!unlocked) { setShowPurchasePopup(true); return; }
+                  navigate('ExamRun', { config: { mode: 'byTicket', ticket: idx + 1 } });
+                }}
+                className={`w-full text-left rounded-lg border p-3 text-sm flex items-center justify-between transition-colors duration-200 ${
+                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                } ${!unlocked ? 'opacity-60 cursor-pointer' : 'hover:bg-gray-700/20'} `}
               >
-                <div
-                  className={`rounded-lg border p-3 text-sm flex items-center justify-between transition-colors duration-200 ${
-                    isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                  } ${!unlocked ? 'opacity-60' : ''}`}
-                >
-                  <div className="font-bold flex items-center gap-2">
-                    {!unlocked && (
-                      <span className="text-gray-400 text-base animate-pulse">🔒</span>
-                    )}
-                    <span>Bilet {idx + 1}</span>
-                  </div>
-                  <div className="text-gray-500">{unlocked ? '0/20' : 'Kilidli'}</div>
+                <div className="font-bold flex items-center gap-2">
+                  {!unlocked && (
+                    <span className="text-gray-400 text-base animate-pulse">🔒</span>
+                  )}
+                  <span>Bilet {idx + 1}</span>
                 </div>
-              </div>
+                <div className="text-gray-500">{unlocked ? '0/20' : 'Kilidli'}</div>
+              </button>
             );
           })}
         </div>
