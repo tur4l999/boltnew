@@ -217,25 +217,14 @@ export function QuickTestScreen() {
               onTouchEnd={onMediaTouchEnd}
             >
               {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
-                <>
-                  <img
-                    src={question.imageUrl}
-                    alt="Sual şəkli"
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                  {question.videoUrl && (
-                    <button
-                      onClick={() => focusMedia('video')}
-                      className="absolute inset-0 grid place-items-center text-white/90 hover:text-white bg-black/0 hover:bg-black/20 transition-colors"
-                      aria-label="İzah videonu aç"
-                    >
-                      <span className="px-3 py-1 rounded-full bg-black/60 border border-white/20 text-sm font-bold">▶ İzah</span>
-                    </button>
-                  )}
-                </>
+                <img
+                  src={question.imageUrl}
+                  alt="Sual şəkli"
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
               )}
               {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
                 <div className="w-full bg-black">
