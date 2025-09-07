@@ -22,6 +22,7 @@ export interface Question {
   moduleId: string;
   text: string;
   imageUrl?: string;
+  videoUrl?: string;
   options: QuestionOption[];
   correctOptionId: string;
   explanation: string;
