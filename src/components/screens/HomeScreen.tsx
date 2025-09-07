@@ -1,3 +1,4 @@
+/** @jsxImportSource react */
 import React, { useMemo } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
@@ -7,7 +8,7 @@ import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
 
 export function HomeScreen() {
-  const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow } = useApp();
+  const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
   
   const gridItems = [
     // Əsas bölmələr (8 ədəd):
@@ -18,7 +19,7 @@ export function HomeScreen() {
     { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
-    { key: 'fines', label: t.fines, action: () => alert('Cərimələr (demo)'), emoji: '💸' },
+    { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
 
     // Əlavə bölmələr (secondary):
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
@@ -50,7 +51,7 @@ export function HomeScreen() {
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Package Status (hidden if scheduled activation exists) */}
-      {!hasActivePackage() && !(useApp().activePackage && new Date() < useApp().activePackage.activationDate) && (
+      {!hasActivePackage() && !(activePackage && new Date() < activePackage.activationDate) && (
         <SlideTransition direction="down" delay={100}>
           <div
             onClick={() => navigate('Packages')}
@@ -87,7 +88,7 @@ export function HomeScreen() {
       )}
 
       {/* Scheduled package info */}
-      {!hasActivePackage() && useApp().activePackage && new Date() < useApp().activePackage.activationDate && (
+      {!hasActivePackage() && activePackage && new Date() < activePackage.activationDate && (
         <SlideTransition direction="down" delay={100}>
           <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
             isDarkMode 
@@ -105,7 +106,7 @@ export function HomeScreen() {
               <div className={`text-xs font-medium transition-colors duration-200 ${
                 isDarkMode ? 'text-amber-300' : 'text-amber-900'
               }`}>
-                Paket {useApp().activePackage?.activationDate.toLocaleString('az-AZ')} tarixində aktivləşəcək
+                Paket {activePackage?.activationDate.toLocaleString('az-AZ')} tarixində aktivləşəcək
               </div>
             </div>
             <button
@@ -130,7 +131,7 @@ export function HomeScreen() {
             </div>
             <div className="flex-1">
               <div className="text-emerald-900 text-[11px] font-medium">
-                {useApp().activePackage?.name} • Bitmə: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
+                {activePackage?.name} • Bitmə: {activePackage?.expiryDate.toLocaleDateString('az-AZ')}
               </div>
             </div>
           </div>
