@@ -108,6 +108,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     moduleId: 'M1',
     text: 'C avtomobilinin sürücüsü bu şəraitdə hansı nəqliyyat vasitələrinə yol verməlidir?',
     imageUrl: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=800',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Yalnız 1 №-li tramvaya.' },
       { id: 'o2', text: 'Yalnız 2 №-li tramvaya.' },
@@ -121,6 +122,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q2',
     moduleId: 'M1',
     text: 'Şəkildə neçə yolayrıcı göstərilmişdir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: '1' },
       { id: 'o2', text: '2' },
@@ -134,6 +136,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q3',
     moduleId: 'M1',
     text: 'Bu şəraitdə hansı avtomobil tramvaya nisbətən üstünlüyə malikdir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'A avtomobili' },
       { id: 'o2', text: 'B avtomobili' },
@@ -147,6 +150,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q4',
     moduleId: 'M1',
     text: 'Bu şəraitdə hansı avtomobilin sürücüsü digər avtomobillərə yol vermədən hərəkəti davam etdirə bilər?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Solda yerləşən avtomobil' },
       { id: 'o2', text: 'Sağda yerləşən avtomobil' },

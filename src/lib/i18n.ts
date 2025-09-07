@@ -48,6 +48,9 @@ export const dictionaries = {
     timeLeft: 'Qalan vaxt',
     confirmAnswer: 'Cavabı təsdiq et',
     explanation: 'İzah',
+    explanationImage: 'Şəkil',
+    explanationVideo: 'Video',
+    close: 'Bağla',
     
     // Results
     yourScore: 'Sənin balın',
@@ -121,6 +124,9 @@ export const dictionaries = {
     timeLeft: 'Осталось',
     confirmAnswer: 'Подтвердить ответ',
     explanation: 'Пояснение',
+    explanationImage: 'Изображение',
+    explanationVideo: 'Видео',
+    close: 'Закрыть',
     
     // Results
     yourScore: 'Твой балл',

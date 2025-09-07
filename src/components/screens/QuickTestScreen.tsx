@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useApp } from '../../contexts/AppContext';
 // removed Card to avoid forced light backgrounds; using custom dark container
 import { Button } from '../ui/Button';
+import { VideoPlayer } from '../media/VideoPlayer';
 import { SlideTransition } from '../ui/SlideTransition';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
@@ -9,7 +10,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { isDarkMode, navigate, currentScreen } = useApp();
+  const { navigate, currentScreen, t } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -30,6 +31,8 @@ export function QuickTestScreen() {
   const [answerStatuses, setAnswerStatuses] = useState<AnswerStatus[]>(Array(20).fill(null));
   const [showExplanation, setShowExplanation] = useState<boolean[]>(Array(20).fill(false));
   const [savedQuestions, setSavedQuestions] = useState<boolean[]>(Array(20).fill(false));
+  const [isExplanationOpen, setIsExplanationOpen] = useState<boolean>(false);
+  const [explanationTab, setExplanationTab] = useState<'image' | 'video'>('image');
 
   // Problem report UI
   const [isReportOpen, setIsReportOpen] = useState(false);
@@ -39,7 +42,7 @@ export function QuickTestScreen() {
   const [secondsLeft, setSecondsLeft] = useState(20 * 60);
   useEffect(() => {
     const timer = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+      setSecondsLeft((prevSeconds: number) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -72,11 +75,11 @@ export function QuickTestScreen() {
 
   const goNext = useCallback(() => {
     setSlideDir('right');
-    setCurrentIndex((i) => Math.min(questions.length - 1, i + 1));
+    setCurrentIndex((i: number) => Math.min(questions.length - 1, i + 1));
   }, [questions.length]);
   const goPrev = useCallback(() => {
     setSlideDir('left');
-    setCurrentIndex((i) => Math.max(0, i - 1));
+    setCurrentIndex((i: number) => Math.max(0, i - 1));
   }, []);
 
   const question = questions[currentIndex];
@@ -100,8 +103,13 @@ export function QuickTestScreen() {
     setAnswerStatuses(newStatuses);
 
     const newShow = [...showExplanation];
-    newShow[currentIndex] = !isCorrect; // show explanation automatically if wrong
+    newShow[currentIndex] = !isCorrect; // legacy inline panel control
     setShowExplanation(newShow);
+    if (!isCorrect) {
+      // Open overlay centered over the question visual
+      setExplanationTab(question.videoUrl ? 'video' : 'image');
+      setIsExplanationOpen(true);
+    }
 
     if (!isCorrect) {
       mistakesStore.add(question.id);
@@ -233,12 +241,11 @@ export function QuickTestScreen() {
                   variant="ghost"
                   className="border-gray-600 text-white hover:bg-gray-800"
                   onClick={() => {
-                    const next = [...showExplanation];
-                    next[currentIndex] = !next[currentIndex];
-                    setShowExplanation(next);
+                    setExplanationTab(question.videoUrl ? 'video' : 'image');
+                    setIsExplanationOpen(true);
                   }}
                 >
-                  İzah
+                  {t.explanation}
                 </Button>
                 {isAnswerLocked && currentStatus === 'wrong' && (
                   <div className={`text-xs font-semibold text-red-300`}>
@@ -323,6 +330,73 @@ export function QuickTestScreen() {
           </div>
         </div>
       </SlideTransition>
+
+      {/* Explanation overlay modal */}
+      {isExplanationOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-10">
+          <div className="absolute inset-0 bg-black/70" onClick={() => setIsExplanationOpen(false)} />
+          <div className="relative z-10 w-[92%] max-w-md rounded-2xl overflow-hidden border bg-gray-900 border-gray-700 text-gray-100 shadow-2xl">
+            {/* Tabs */}
+            <div className="flex items-center justify-between px-3 pt-3">
+              <div className="flex gap-1 rounded-lg p-1 bg-gray-800 border border-gray-700">
+                <button
+                  className={`px-3 py-1 text-sm font-bold rounded-md ${explanationTab === 'image' ? 'bg-gray-700 text-white' : 'text-gray-300'}`}
+                  onClick={() => setExplanationTab('image')}
+                >
+                  {t.explanationImage ?? 'Şəkil'}
+                </button>
+                <button
+                  className={`px-3 py-1 text-sm font-bold rounded-md ${explanationTab === 'video' ? 'bg-gray-700 text-white' : 'text-gray-300'} ${!question.videoUrl ? 'opacity-40 cursor-not-allowed' : ''}`}
+                  onClick={() => question.videoUrl && setExplanationTab('video')}
+                >
+                  {t.explanationVideo ?? 'Video'}
+                </button>
+              </div>
+              <button
+                className="px-3 py-1 rounded-lg text-sm font-bold bg-gray-800 border border-gray-700 hover:bg-gray-700"
+                onClick={() => setIsExplanationOpen(false)}
+              >
+                {t.close ?? 'Bağla'}
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-3">
+              {explanationTab === 'image' && (
+                <div>
+                  {question.imageUrl ? (
+                    <img
+                      src={question.imageUrl}
+                      alt="Sual şəkli"
+                      className="w-full h-56 object-cover rounded-lg border border-gray-700"
+                    />
+                  ) : (
+                    <div className="w-full h-56 grid place-items-center rounded-lg border border-gray-700 bg-gray-800 text-gray-400 text-sm">
+                      Şəkil yoxdur
+                    </div>
+                  )}
+                </div>
+              )}
+              {explanationTab === 'video' && (
+                <div>
+                  {question.videoUrl ? (
+                    <VideoPlayer src={question.videoUrl} watermark="dda.az" />
+                  ) : (
+                    <div className="w-full h-56 grid place-items-center rounded-lg border border-gray-700 bg-gray-800 text-gray-400 text-sm">
+                      Video yoxdur
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Text explanation */}
+              <div className="mt-3 text-sm p-2 rounded-lg text-gray-200 bg-gray-800 border border-gray-700">
+                {question.explanation}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
