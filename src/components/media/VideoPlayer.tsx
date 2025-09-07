@@ -4,9 +4,10 @@ import { IconButton } from '../ui/IconButton';
 interface VideoPlayerProps {
   src: string;
   watermark: string;
+  heightClass?: string;
 }
 
-export function VideoPlayer({ src, watermark }: VideoPlayerProps) {
+export function VideoPlayer({ src, watermark, heightClass = 'h-56' }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   const skipBackward = () => {
@@ -37,7 +38,7 @@ export function VideoPlayer({ src, watermark }: VideoPlayerProps) {
         src={src}
         controls
         playsInline
-        className="w-full h-56 object-cover"
+        className={`w-full ${heightClass} object-cover`}
       />
       <div className="absolute right-2 bottom-2 text-xs text-white/70 pointer-events-none select-none">
         {watermark}
