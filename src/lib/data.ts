@@ -108,6 +108,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     moduleId: 'M1',
     text: 'C avtomobilinin sürücüsü bu şəraitdə hansı nəqliyyat vasitələrinə yol verməlidir?',
     imageUrl: 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg?auto=compress&cs=tinysrgb&w=800',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Yalnız 1 №-li tramvaya.' },
       { id: 'o2', text: 'Yalnız 2 №-li tramvaya.' },
@@ -121,6 +122,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q2',
     moduleId: 'M1',
     text: 'Şəkildə neçə yolayrıcı göstərilmişdir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: '1' },
       { id: 'o2', text: '2' },
@@ -134,6 +136,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q3',
     moduleId: 'M1',
     text: 'Bu şəraitdə hansı avtomobil tramvaya nisbətən üstünlüyə malikdir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'A avtomobili' },
       { id: 'o2', text: 'B avtomobili' },
@@ -147,6 +150,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q4',
     moduleId: 'M1',
     text: 'Bu şəraitdə hansı avtomobilin sürücüsü digər avtomobillərə yol vermədən hərəkəti davam etdirə bilər?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Solda yerləşən avtomobil' },
       { id: 'o2', text: 'Sağda yerləşən avtomobil' },
@@ -160,6 +164,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q5',
     moduleId: 'M1',
     text: 'Yolayrıcıdan sonra siz hansı hərəkətə girə bilərsiniz?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Yalnız sola dönə bilərsiniz' },
       { id: 'o2', text: 'Yalnız sağa dönə bilərsiniz' },
@@ -173,6 +178,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q6',
     moduleId: 'M1',
     text: 'Qoşqu aparan minik avtomobilində hansı maksimal sürətlə hərəkəti davam etdirə bilərsiniz?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: '60 km/saat' },
       { id: 'o2', text: '70 km/saat' },
@@ -186,6 +192,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q7',
     moduleId: 'M1',
     text: 'Bu şəraitdə sizə dəmir yol keçidinə daxil olmağa icazə verilir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Bəli, maneə yoxdursa' },
       { id: 'o2', text: 'Xeyr, siqnal verilir' },
@@ -199,6 +206,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q8',
     moduleId: 'M1',
     text: 'İşçi tormoz sistemi nasaz olan avtomobili necə yedəyə almaq olar?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Yalnız bərk yedəklə' },
       { id: 'o2', text: 'Yalnız elastik yedəklə' },
@@ -212,6 +220,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q9',
     moduleId: 'M1',
     text: 'Travmatik şoka düşmüş zərərçəkənə ilk yardımın əsas məqsədi nədir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Ağrını artırmaq' },
       { id: 'o2', text: 'Sakitlik və hərəkətsizliyi təmin etmək, bədəni isti saxlamaq' },
@@ -225,6 +234,7 @@ export const SAMPLE_QUESTIONS: Question[] = [
     id: 'q10',
     moduleId: 'M1',
     text: 'Siz ağ rəngli avtomobili idarə edirsiniz. Bu şəraitdə kimlərə hərəkəti davam etdirməyə icazə verilir?',
+    videoUrl: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
     options: [
       { id: 'o1', text: 'Yalnız sizə' },
       { id: 'o2', text: 'Sizə və sağdakı avtomobilə' },

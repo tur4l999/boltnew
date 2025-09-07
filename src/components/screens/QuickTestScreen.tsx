@@ -5,11 +5,12 @@ import { Button } from '../ui/Button';
 import { SlideTransition } from '../ui/SlideTransition';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
+import { VideoPlayer } from '../media/VideoPlayer';
 
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { isDarkMode, navigate, currentScreen } = useApp();
+  const { navigate, currentScreen } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -31,6 +32,147 @@ export function QuickTestScreen() {
   const [showExplanation, setShowExplanation] = useState<boolean[]>(Array(20).fill(false));
   const [savedQuestions, setSavedQuestions] = useState<boolean[]>(Array(20).fill(false));
 
+  // Inline media state (image/video with swipe in-place)
+  const [mediaIndex, setMediaIndex] = useState<number>(0); // 0=image, 1=video (if available)
+  const mediaTouchStartX = useRef<number | null>(null);
+  const mediaTouchEndX = useRef<number | null>(null);
+
+  // Image preview (full-screen zoomable)
+  const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastPan = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastTapTime = useRef<number>(0);
+  const previewImgRef = useRef<HTMLImageElement | null>(null);
+  const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastTouch = useRef<{ x: number; y: number } | null>(null);
+
+  const clampOffsetToBounds = (nx: number, ny: number, scale: number) => {
+    const container = previewContainerRef.current;
+    const img = previewImgRef.current;
+    if (!container || !img) return { x: nx, y: ny };
+    const rect = container.getBoundingClientRect();
+    const containerW = rect.width;
+    const containerH = rect.height;
+    const naturalW = img.naturalWidth || containerW;
+    const naturalH = img.naturalHeight || containerH;
+    const imageAspect = naturalW / naturalH;
+    const containerAspect = containerW / containerH;
+
+    let baseW: number;
+    let baseH: number;
+    if (imageAspect > containerAspect) {
+      baseW = containerW;
+      baseH = containerW / imageAspect;
+    } else {
+      baseH = containerH;
+      baseW = containerH * imageAspect;
+    }
+    const scaledW = baseW * scale;
+    const scaledH = baseH * scale;
+    const maxX = Math.max(0, (scaledW - containerW) / 2);
+    const maxY = Math.max(0, (scaledH - containerH) / 2);
+    const clampedX = Math.max(-maxX, Math.min(maxX, nx));
+    const clampedY = Math.max(-maxY, Math.min(maxY, ny));
+    return { x: clampedX, y: clampedY };
+  };
+
+  const openImagePreview = () => {
+    if (!question.imageUrl) return;
+    setIsImagePreviewOpen(true);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+    lastPan.current = { x: 0, y: 0 };
+  };
+  const closeImagePreview = () => {
+    setIsImagePreviewOpen(false);
+  };
+
+  const onPreviewTouchStart = (e: React.TouchEvent) => {
+    const now = Date.now();
+    if (now - lastTapTime.current < 300) {
+      // double tap to toggle zoom
+      setZoomScale((z) => (z === 1 ? 2 : 1));
+      setOffset({ x: 0, y: 0 });
+      lastPan.current = { x: 0, y: 0 };
+    }
+    lastTapTime.current = now;
+    if (e.touches && e.touches.length === 1) {
+      const t = e.touches[0];
+      lastTouch.current = { x: t.clientX, y: t.clientY };
+    }
+  };
+  const onPreviewTouchMove = (e: React.TouchEvent) => {
+    if (zoomScale === 1) return;
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const prev = lastTouch.current;
+    if (!prev) {
+      lastTouch.current = { x: t.clientX, y: t.clientY };
+      return;
+    }
+    const dx = t.clientX - prev.x;
+    const dy = t.clientY - prev.y;
+    lastTouch.current = { x: t.clientX, y: t.clientY };
+    setOffset((o) => {
+      const nx = o.x + dx;
+      const ny = o.y + dy;
+      const clamped = clampOffsetToBounds(nx, ny, zoomScale);
+      lastPan.current = clamped;
+      return clamped;
+    });
+  };
+  const onPreviewWheel: React.WheelEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    setZoomScale((z) => {
+      const nz = Math.min(3, Math.max(1, z + (e.deltaY < 0 ? 0.2 : -0.2)));
+      if (nz === 1) {
+        setOffset({ x: 0, y: 0 });
+      } else {
+        setOffset((o) => clampOffsetToBounds(o.x, o.y, nz));
+      }
+      return nz;
+    });
+  };
+
+  const availableMedia: Array<'image' | 'video'> = useMemo(() => {
+    const list: Array<'image' | 'video'> = [];
+    if (questions[currentIndex]?.imageUrl) list.push('image');
+    if (questions[currentIndex]?.videoUrl) list.push('video');
+    return list;
+  }, [questions, currentIndex]);
+
+  const focusMedia = useCallback((preferred: 'video' | 'image' = 'video') => {
+    if (availableMedia.length === 0) return;
+    const idx = availableMedia.indexOf(preferred);
+    setMediaIndex(idx === -1 ? 0 : idx);
+  }, [availableMedia]);
+
+  const onMediaTouchStart = (e: React.TouchEvent) => {
+    mediaTouchStartX.current = e.changedTouches[0].clientX;
+    mediaTouchEndX.current = null;
+  };
+  const onMediaTouchMove = (e: React.TouchEvent) => {
+    mediaTouchEndX.current = e.changedTouches[0].clientX;
+  };
+  const onMediaTouchEnd = () => {
+    if (mediaTouchStartX.current == null || mediaTouchEndX.current == null) return;
+    const dx = mediaTouchEndX.current - mediaTouchStartX.current;
+    const threshold = 40;
+    if (dx < -threshold) {
+      setMediaIndex((i: number) => Math.min(availableMedia.length - 1, i + 1));
+    } else if (dx > threshold) {
+      setMediaIndex((i: number) => Math.max(0, i - 1));
+    }
+  };
+
+  // Reset media to first available for each question
+  useEffect(() => {
+    if (availableMedia.length > 0) {
+      setMediaIndex(0);
+    }
+  }, [currentIndex, availableMedia.length]);
+
   // Problem report UI
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [reportText, setReportText] = useState('');
@@ -39,7 +181,7 @@ export function QuickTestScreen() {
   const [secondsLeft, setSecondsLeft] = useState(20 * 60);
   useEffect(() => {
     const timer = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+      setSecondsLeft((s: number) => (s > 0 ? s - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -72,11 +214,11 @@ export function QuickTestScreen() {
 
   const goNext = useCallback(() => {
     setSlideDir('right');
-    setCurrentIndex((i) => Math.min(questions.length - 1, i + 1));
+    setCurrentIndex((i: number) => Math.min(questions.length - 1, i + 1));
   }, [questions.length]);
   const goPrev = useCallback(() => {
     setSlideDir('left');
-    setCurrentIndex((i) => Math.max(0, i - 1));
+    setCurrentIndex((i: number) => Math.max(0, i - 1));
   }, []);
 
   const question = questions[currentIndex];
@@ -105,6 +247,7 @@ export function QuickTestScreen() {
 
     if (!isCorrect) {
       mistakesStore.add(question.id);
+      focusMedia('video');
     }
   }
 
@@ -164,15 +307,45 @@ export function QuickTestScreen() {
       <SlideTransition direction={slideDir} key={currentIndex}>
         <div className="rounded-xl overflow-hidden border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
           {/* Image should complete the top frame */}
-          {question.imageUrl && (
-            <img
-              src={question.imageUrl}
-              alt="Sual şəkli"
-              className="w-full h-48 object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
+          {availableMedia.length > 0 && (
+            <div
+              className="relative"
+              onTouchStart={onMediaTouchStart}
+              onTouchMove={onMediaTouchMove}
+              onTouchEnd={onMediaTouchEnd}
+            >
+              {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
+                <img
+                  src={question.imageUrl}
+                  alt="Sual şəkli"
+                  className="w-full h-48 object-cover cursor-zoom-in"
+                  onClick={openImagePreview}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              )}
+              {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
+                <div className="w-full bg-black">
+                  <VideoPlayer src={question.videoUrl} watermark="DDA.az" heightClass="h-48" />
+                </div>
+              )}
+              {availableMedia.length > 1 && (
+                <div className="absolute top-2 right-2 flex items-center gap-2">
+                  {availableMedia.map((m, idx) => (
+                    <button
+                      key={`${m}-${idx}`}
+                      onClick={() => setMediaIndex(idx)}
+                      className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${
+                        mediaIndex === idx ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-black/50 text-white border-white/20'
+                      }`}
+                    >
+                      {m === 'image' ? 'Şəkil' : 'Video'}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
 
           <div className="p-4">
@@ -236,6 +409,7 @@ export function QuickTestScreen() {
                     const next = [...showExplanation];
                     next[currentIndex] = !next[currentIndex];
                     setShowExplanation(next);
+                    focusMedia('video');
                   }}
                 >
                   İzah
@@ -323,6 +497,45 @@ export function QuickTestScreen() {
           </div>
         </div>
       </SlideTransition>
+
+      {isImagePreviewOpen && question.imageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/80" onClick={closeImagePreview} />
+          <div
+            ref={previewContainerRef}
+            className="absolute inset-0 flex items-center justify-center"
+            onWheel={onPreviewWheel}
+            onTouchStart={onPreviewTouchStart}
+            onTouchMove={onPreviewTouchMove}
+          >
+            <div className="relative max-w-[95vw] max-h-[90vh]">
+              <img
+                ref={previewImgRef}
+                src={question.imageUrl}
+                alt="Sual şəkli"
+                className="select-none"
+                style={{
+                  transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                  transformOrigin: 'center center',
+                  maxWidth: '95vw',
+                  maxHeight: '90vh',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+                draggable={false}
+              />
+              <button
+                onClick={closeImagePreview}
+                className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
+              >
+                Bağla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* No popup; media shown inline above */}
 
       {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
