@@ -5,11 +5,12 @@ import { Button } from '../ui/Button';
 import { SlideTransition } from '../ui/SlideTransition';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
+import { VideoPlayer } from '../media/VideoPlayer';
 
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { isDarkMode, navigate, currentScreen } = useApp();
+  const { navigate, currentScreen } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -31,6 +32,46 @@ export function QuickTestScreen() {
   const [showExplanation, setShowExplanation] = useState<boolean[]>(Array(20).fill(false));
   const [savedQuestions, setSavedQuestions] = useState<boolean[]>(Array(20).fill(false));
 
+  // Media overlay state (image/video with swipe)
+  const [isMediaOpen, setIsMediaOpen] = useState(false);
+  const [mediaIndex, setMediaIndex] = useState<number>(0); // 0=image, 1=video (if available)
+  const mediaTouchStartX = useRef<number | null>(null);
+  const mediaTouchEndX = useRef<number | null>(null);
+
+  const availableMedia: Array<'image' | 'video'> = useMemo(() => {
+    const list: Array<'image' | 'video'> = [];
+    if (questions[currentIndex]?.imageUrl) list.push('image');
+    if (questions[currentIndex]?.videoUrl) list.push('video');
+    return list;
+  }, [questions, currentIndex]);
+
+  const openMedia = useCallback((preferred: 'video' | 'image' = 'video') => {
+    if (availableMedia.length === 0) return;
+    const idx = availableMedia.indexOf(preferred);
+    setMediaIndex(idx === -1 ? 0 : idx);
+    setIsMediaOpen(true);
+  }, [availableMedia]);
+
+  const closeMedia = () => setIsMediaOpen(false);
+
+  const onMediaTouchStart = (e: React.TouchEvent) => {
+    mediaTouchStartX.current = e.changedTouches[0].clientX;
+    mediaTouchEndX.current = null;
+  };
+  const onMediaTouchMove = (e: React.TouchEvent) => {
+    mediaTouchEndX.current = e.changedTouches[0].clientX;
+  };
+  const onMediaTouchEnd = () => {
+    if (mediaTouchStartX.current == null || mediaTouchEndX.current == null) return;
+    const dx = mediaTouchEndX.current - mediaTouchStartX.current;
+    const threshold = 40;
+    if (dx < -threshold) {
+      setMediaIndex((i: number) => Math.min(availableMedia.length - 1, i + 1));
+    } else if (dx > threshold) {
+      setMediaIndex((i: number) => Math.max(0, i - 1));
+    }
+  };
+
   // Problem report UI
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [reportText, setReportText] = useState('');
@@ -39,7 +80,7 @@ export function QuickTestScreen() {
   const [secondsLeft, setSecondsLeft] = useState(20 * 60);
   useEffect(() => {
     const timer = setInterval(() => {
-      setSecondsLeft((s) => (s > 0 ? s - 1 : 0));
+      setSecondsLeft((s: number) => (s > 0 ? s - 1 : 0));
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -72,11 +113,11 @@ export function QuickTestScreen() {
 
   const goNext = useCallback(() => {
     setSlideDir('right');
-    setCurrentIndex((i) => Math.min(questions.length - 1, i + 1));
+    setCurrentIndex((i: number) => Math.min(questions.length - 1, i + 1));
   }, [questions.length]);
   const goPrev = useCallback(() => {
     setSlideDir('left');
-    setCurrentIndex((i) => Math.max(0, i - 1));
+    setCurrentIndex((i: number) => Math.max(0, i - 1));
   }, []);
 
   const question = questions[currentIndex];
@@ -105,6 +146,7 @@ export function QuickTestScreen() {
 
     if (!isCorrect) {
       mistakesStore.add(question.id);
+      openMedia('video');
     }
   }
 
@@ -165,14 +207,25 @@ export function QuickTestScreen() {
         <div className="rounded-xl overflow-hidden border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
           {/* Image should complete the top frame */}
           {question.imageUrl && (
-            <img
-              src={question.imageUrl}
-              alt="Sual şəkli"
-              className="w-full h-48 object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
-              }}
-            />
+            <div className="relative">
+              <img
+                src={question.imageUrl}
+                alt="Sual şəkli"
+                className="w-full h-48 object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+              {(question.videoUrl || question.imageUrl) && (
+                <button
+                  onClick={() => openMedia('video')}
+                  className="absolute inset-0 grid place-items-center text-white/90 hover:text-white bg-black/0 hover:bg-black/20 transition-colors"
+                  aria-label="İzah videonu aç"
+                >
+                  <span className="px-3 py-1 rounded-full bg-black/60 border border-white/20 text-sm font-bold">▶ İzah</span>
+                </button>
+              )}
+            </div>
           )}
 
           <div className="p-4">
@@ -236,6 +289,7 @@ export function QuickTestScreen() {
                     const next = [...showExplanation];
                     next[currentIndex] = !next[currentIndex];
                     setShowExplanation(next);
+                    openMedia('video');
                   }}
                 >
                   İzah
@@ -323,6 +377,45 @@ export function QuickTestScreen() {
           </div>
         </div>
       </SlideTransition>
+
+      {isMediaOpen && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/70" onClick={closeMedia} />
+          <div className="absolute inset-x-3 top-[10vh] bottom-[12vh] rounded-2xl border bg-gray-900 border-gray-700 overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700">
+              <div className="flex items-center gap-2">
+                {availableMedia.map((m, idx) => (
+                  <button
+                    key={`${m}-${idx}`}
+                    onClick={() => setMediaIndex(idx)}
+                    className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors ${
+                      mediaIndex === idx ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-gray-800 text-gray-200 border-gray-700'
+                    }`}
+                  >
+                    {m === 'image' ? 'Şəkil' : 'Video'}
+                  </button>
+                ))}
+              </div>
+              <button onClick={closeMedia} className="px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700">✕</button>
+            </div>
+            <div
+              className="flex-1 relative bg-black"
+              onTouchStart={onMediaTouchStart}
+              onTouchMove={onMediaTouchMove}
+              onTouchEnd={onMediaTouchEnd}
+            >
+              {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
+                <img src={question.imageUrl} alt="Sual şəkli" className="w-full h-full object-contain" />
+              )}
+              {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
+                <div className="w-full h-full">
+                  <VideoPlayer src={question.videoUrl} watermark="DDA.az" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Numbers 1..20 grid (wrap into rows) */}
       <div className="mt-3">
