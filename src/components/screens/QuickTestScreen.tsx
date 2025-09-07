@@ -44,6 +44,38 @@ export function QuickTestScreen() {
   const lastPan = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const lastTapTime = useRef<number>(0);
   const previewImgRef = useRef<HTMLImageElement | null>(null);
+  const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastTouch = useRef<{ x: number; y: number } | null>(null);
+
+  const clampOffsetToBounds = (nx: number, ny: number, scale: number) => {
+    const container = previewContainerRef.current;
+    const img = previewImgRef.current;
+    if (!container || !img) return { x: nx, y: ny };
+    const rect = container.getBoundingClientRect();
+    const containerW = rect.width;
+    const containerH = rect.height;
+    const naturalW = img.naturalWidth || containerW;
+    const naturalH = img.naturalHeight || containerH;
+    const imageAspect = naturalW / naturalH;
+    const containerAspect = containerW / containerH;
+
+    let baseW: number;
+    let baseH: number;
+    if (imageAspect > containerAspect) {
+      baseW = containerW;
+      baseH = containerW / imageAspect;
+    } else {
+      baseH = containerH;
+      baseW = containerH * imageAspect;
+    }
+    const scaledW = baseW * scale;
+    const scaledH = baseH * scale;
+    const maxX = Math.max(0, (scaledW - containerW) / 2);
+    const maxY = Math.max(0, (scaledH - containerH) / 2);
+    const clampedX = Math.max(-maxX, Math.min(maxX, nx));
+    const clampedY = Math.max(-maxY, Math.min(maxY, ny));
+    return { x: clampedX, y: clampedY };
+  };
 
   const openImagePreview = () => {
     if (!question.imageUrl) return;
@@ -65,25 +97,40 @@ export function QuickTestScreen() {
       lastPan.current = { x: 0, y: 0 };
     }
     lastTapTime.current = now;
+    if (e.touches && e.touches.length === 1) {
+      const t = e.touches[0];
+      lastTouch.current = { x: t.clientX, y: t.clientY };
+    }
   };
   const onPreviewTouchMove = (e: React.TouchEvent) => {
     if (zoomScale === 1) return;
     if (e.touches.length !== 1) return;
-    const dx = e.changedTouches[0].movementX ?? 0;
-    const dy = e.changedTouches[0].movementY ?? 0;
-    // Fallback if movementX/Y not supported: compute from last positions
+    const t = e.touches[0];
+    const prev = lastTouch.current;
+    if (!prev) {
+      lastTouch.current = { x: t.clientX, y: t.clientY };
+      return;
+    }
+    const dx = t.clientX - prev.x;
+    const dy = t.clientY - prev.y;
+    lastTouch.current = { x: t.clientX, y: t.clientY };
     setOffset((o) => {
       const nx = o.x + dx;
       const ny = o.y + dy;
-      lastPan.current = { x: nx, y: ny };
-      return { x: nx, y: ny };
+      const clamped = clampOffsetToBounds(nx, ny, zoomScale);
+      lastPan.current = clamped;
+      return clamped;
     });
   };
   const onPreviewWheel: React.WheelEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     setZoomScale((z) => {
       const nz = Math.min(3, Math.max(1, z + (e.deltaY < 0 ? 0.2 : -0.2)));
-      if (nz === 1) setOffset({ x: 0, y: 0 });
+      if (nz === 1) {
+        setOffset({ x: 0, y: 0 });
+      } else {
+        setOffset((o) => clampOffsetToBounds(o.x, o.y, nz));
+      }
       return nz;
     });
   };
@@ -455,6 +502,7 @@ export function QuickTestScreen() {
         <div className="fixed inset-0 z-50">
           <div className="absolute inset-0 bg-black/80" onClick={closeImagePreview} />
           <div
+            ref={previewContainerRef}
             className="absolute inset-0 flex items-center justify-center"
             onWheel={onPreviewWheel}
             onTouchStart={onPreviewTouchStart}
