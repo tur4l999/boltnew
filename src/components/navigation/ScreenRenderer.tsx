@@ -24,6 +24,7 @@ import { ProductDetailScreen } from '../screens/ProductDetailScreen';
 import { RulesScreen } from '../screens/RulesScreen';
 import { CartScreen } from '../screens/CartScreen';
 import { QuickTestScreen } from '../screens/QuickTestScreen';
+import { BlogsScreen } from '../screens/BlogsScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -67,9 +68,10 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'ProductDetail' && <ProductDetailScreen />}
       {currentScreen.screen === 'Rules' && <RulesScreen />}
       {currentScreen.screen === 'Cart' && <CartScreen />}
+      {currentScreen.screen === 'Blogs' && <BlogsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
