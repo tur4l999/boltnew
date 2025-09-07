@@ -1,4 +1,4 @@
-import type { Language } from './types';
+// i18n dictionary definitions
 
 export const dictionaries = {
   az: {
