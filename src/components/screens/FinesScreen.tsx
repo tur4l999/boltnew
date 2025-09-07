@@ -57,23 +57,7 @@ export function FinesScreen() {
         </div>
       </div>
 
-      {/* Intro and Videos */}
-      <Card className="mb-3">
-        <div className="flex items-center justify-between mb-2">
-          <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
-            Cərimələr və video izahlar
-          </div>
-          <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
-        </div>
-        <div className="space-y-3">
-          <div className="w-full bg-black rounded-xl overflow-hidden">
-            <VideoPlayer src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" watermark="DDA.az" heightClass="h-48" />
-          </div>
-          <div className="w-full bg-black rounded-xl overflow-hidden">
-            <VideoPlayer src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" watermark="DDA.az" heightClass="h-48" />
-          </div>
-        </div>
-      </Card>
+      {/* Video content will be inside each rule item below */}
 
       {/* Rules (reused) */}
       <Card>
@@ -89,7 +73,12 @@ export function FinesScreen() {
                 <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{expandedId === r.id ? '▾' : '▸'}</div>
               </div>
               {expandedId === r.id && (
-                <div className="text-xs text-gray-600 mt-2 leading-relaxed">{r.content}</div>
+                <div className="mt-2 space-y-3">
+                  <div className="text-xs text-gray-600 leading-relaxed">{r.content}</div>
+                  <div className="w-full bg-black rounded-xl overflow-hidden">
+                    <VideoPlayer src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" watermark="DDA.az" heightClass="h-48" />
+                  </div>
+                </div>
               )}
             </Card>
           ))}
