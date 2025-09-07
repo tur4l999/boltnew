@@ -11,6 +11,11 @@ export function TabBar() {
     { key: 'Store', label: t.store, emoji: '🛍️' },
   ];
 
+  // Hide TabBar on Quick Test screen
+  if (currentScreen?.screen === 'QuickTest') {
+    return null;
+  }
+
   return (
     <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-sm border-t transition-colors duration-200 ${
       isDarkMode 
