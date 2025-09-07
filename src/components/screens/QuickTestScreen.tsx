@@ -37,6 +37,57 @@ export function QuickTestScreen() {
   const mediaTouchStartX = useRef<number | null>(null);
   const mediaTouchEndX = useRef<number | null>(null);
 
+  // Image preview (full-screen zoomable)
+  const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastPan = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastTapTime = useRef<number>(0);
+  const previewImgRef = useRef<HTMLImageElement | null>(null);
+
+  const openImagePreview = () => {
+    if (!question.imageUrl) return;
+    setIsImagePreviewOpen(true);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+    lastPan.current = { x: 0, y: 0 };
+  };
+  const closeImagePreview = () => {
+    setIsImagePreviewOpen(false);
+  };
+
+  const onPreviewTouchStart = (e: React.TouchEvent) => {
+    const now = Date.now();
+    if (now - lastTapTime.current < 300) {
+      // double tap to toggle zoom
+      setZoomScale((z) => (z === 1 ? 2 : 1));
+      setOffset({ x: 0, y: 0 });
+      lastPan.current = { x: 0, y: 0 };
+    }
+    lastTapTime.current = now;
+  };
+  const onPreviewTouchMove = (e: React.TouchEvent) => {
+    if (zoomScale === 1) return;
+    if (e.touches.length !== 1) return;
+    const dx = e.changedTouches[0].movementX ?? 0;
+    const dy = e.changedTouches[0].movementY ?? 0;
+    // Fallback if movementX/Y not supported: compute from last positions
+    setOffset((o) => {
+      const nx = o.x + dx;
+      const ny = o.y + dy;
+      lastPan.current = { x: nx, y: ny };
+      return { x: nx, y: ny };
+    });
+  };
+  const onPreviewWheel: React.WheelEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    setZoomScale((z) => {
+      const nz = Math.min(3, Math.max(1, z + (e.deltaY < 0 ? 0.2 : -0.2)));
+      if (nz === 1) setOffset({ x: 0, y: 0 });
+      return nz;
+    });
+  };
+
   const availableMedia: Array<'image' | 'video'> = useMemo(() => {
     const list: Array<'image' | 'video'> = [];
     if (questions[currentIndex]?.imageUrl) list.push('image');
@@ -220,7 +271,8 @@ export function QuickTestScreen() {
                 <img
                   src={question.imageUrl}
                   alt="Sual şəkli"
-                  className="w-full h-48 object-cover"
+                  className="w-full h-48 object-cover cursor-zoom-in"
+                  onClick={openImagePreview}
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
@@ -398,6 +450,42 @@ export function QuickTestScreen() {
           </div>
         </div>
       </SlideTransition>
+
+      {isImagePreviewOpen && question.imageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/80" onClick={closeImagePreview} />
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            onWheel={onPreviewWheel}
+            onTouchStart={onPreviewTouchStart}
+            onTouchMove={onPreviewTouchMove}
+          >
+            <div className="relative max-w-[95vw] max-h-[90vh]">
+              <img
+                ref={previewImgRef}
+                src={question.imageUrl}
+                alt="Sual şəkli"
+                className="select-none"
+                style={{
+                  transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                  transformOrigin: 'center center',
+                  maxWidth: '95vw',
+                  maxHeight: '90vh',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+                draggable={false}
+              />
+              <button
+                onClick={closeImagePreview}
+                className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
+              >
+                Bağla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* No popup; media shown inline above */}
 
