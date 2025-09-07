@@ -5,6 +5,43 @@ import { Card } from '../ui/Card';
 import { AZ_RULES } from '../../lib/rules';
 import { VideoPlayer } from '../media/VideoPlayer';
 
+function RuleVideos({ sources }: { sources: string[] }) {
+  const { isDarkMode } = useApp();
+  const [active, setActive] = useState(0);
+
+  const handleSwipe = (direction: 'left' | 'right') => {
+    setActive(prev => {
+      const next = direction === 'left' ? prev + 1 : prev - 1;
+      if (next < 0) return sources.length - 1;
+      if (next >= sources.length) return 0;
+      return next;
+    });
+  };
+
+  return (
+    <div
+      className="relative rounded-xl overflow-hidden"
+      onTouchStart={(e) => (e.currentTarget as any)._x = e.touches[0].clientX}
+      onTouchEnd={(e) => {
+        const startX = (e.currentTarget as any)._x as number | undefined;
+        if (typeof startX !== 'number') return;
+        const delta = e.changedTouches[0].clientX - startX;
+        if (Math.abs(delta) > 30) handleSwipe(delta < 0 ? 'left' : 'right');
+      }}
+    >
+      <VideoPlayer src={sources[active]} watermark="DDA.az" heightClass="h-48" />
+      <div className={`absolute top-2 right-2 text-[11px] px-2 py-1 rounded-md ${isDarkMode ? 'bg-black/60 text-gray-100' : 'bg-black/40 text-white'}`}>
+        {active + 1}/{sources.length}
+      </div>
+      <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+        {sources.map((_, idx) => (
+          <span key={idx} className={`h-1.5 w-6 rounded-full ${idx === active ? 'bg-white' : 'bg-white/40'}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function FinesScreen() {
   const { isDarkMode, goBack, switchTab } = useApp();
   const [query, setQuery] = useState('');
@@ -75,9 +112,17 @@ export function FinesScreen() {
               {expandedId === r.id && (
                 <div className="mt-2 space-y-3">
                   <div className="text-xs text-gray-600 leading-relaxed">{r.content}</div>
-                  <div className="w-full bg-black rounded-xl overflow-hidden">
-                    <VideoPlayer src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" watermark="DDA.az" heightClass="h-48" />
-                  </div>
+                  {/* Example: for demo, attach 1 or multiple videos depending on rule id */}
+                  {r.id === 'r26' ? (
+                    <RuleVideos sources={[
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                    ]} />
+                  ) : (
+                    <RuleVideos sources={[
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                    ]} />
+                  )}
                 </div>
               )}
             </Card>
