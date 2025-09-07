@@ -167,7 +167,7 @@ export function QuickTestScreen() {
             <img
               src={question.imageUrl}
               alt="Sual şəkli"
-              className="w-full h-40 object-cover"
+              className="w-full h-48 object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
@@ -275,11 +275,11 @@ export function QuickTestScreen() {
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow bg-gray-800/90 text-gray-200 border border-gray-700`}
                   aria-label="Problem bildir"
                 >
-                  ▼
+                  ▲
                 </button>
                 {isReportOpen && (
                   <div
-                    className={`absolute top-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg bg-gray-800 border border-gray-700`}
+                    className={`absolute bottom-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg bg-gray-800 border border-gray-700`}
                   >
                     <div className={`text-xs font-bold mb-2 text-gray-200`}>
                       Sualla bağlı problem bildir
