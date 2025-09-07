@@ -125,7 +125,7 @@ export function QuickTestScreen() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Top bar: exit chip, centered title, right timer */
+      {/* Top bar: exit chip, centered title, right timer */}
       <div className="mb-4 grid grid-cols-3 items-center">
         <div className="flex items-center gap-2">
           <button
