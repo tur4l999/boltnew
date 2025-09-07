@@ -1,3 +1,4 @@
+/** @jsxImportSource react */
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { PageTransition } from './PageTransition';
@@ -25,6 +26,7 @@ import { RulesScreen } from '../screens/RulesScreen';
 import { CartScreen } from '../screens/CartScreen';
 import { QuickTestScreen } from '../screens/QuickTestScreen';
 import { BlogsScreen } from '../screens/BlogsScreen';
+import { FinesScreen } from '../screens/FinesScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -68,10 +70,11 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'ProductDetail' && <ProductDetailScreen />}
       {currentScreen.screen === 'Rules' && <RulesScreen />}
       {currentScreen.screen === 'Cart' && <CartScreen />}
+      {currentScreen.screen === 'Fines' && <FinesScreen />}
       {currentScreen.screen === 'Blogs' && <BlogsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

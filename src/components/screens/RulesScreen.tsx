@@ -1,7 +1,9 @@
+/** @jsxImportSource react */
 import React, { useMemo, useState, useCallback } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { SlideTransition } from '../ui/SlideTransition';
+import { AZ_RULES } from '../../lib/rules';
 
 type SignCategoryKey = 'prohibitory' | 'priority' | 'warning' | 'mandatory' | 'informational';
 
@@ -44,35 +46,7 @@ const VERTICAL_SIGNS = [
   { id: 'vs2', name: 'Maneə əks etdiricisi', description: 'Maneələrin kənarlarını göstərir.' },
 ];
 
-// AZ traffic rules topics (titles + brief summaries) – 26 items
-const AZ_RULES = [
-  { id: 'r1', title: 'Maddə 1. Əsas anlayışlar', content: 'Qanunda istifadə olunan terminlər izah edilir. “Yol”, “sürücü”, “piyada”, “nəqliyyat vasitəsi” kimi anlayışlar dəqiq tərif olunur. Bu terminlər digər maddələrin düzgün anlaşılması üçün baza yaradır.' },
-  { id: 'r2', title: 'Maddə 2. Qanunun təyinatı', content: 'Yol hərəkəti sahəsində təhlükəsizlik və nizam-intizamı təmin etmək məqsədi açıqlanır. Qanun, bütün iştirakçılar üçün hüquqi çərçivə və davranış standartları müəyyənləşdirir.' },
-  { id: 'r3', title: 'Maddə 3. Yol hərəkəti haqqında qanunvericilik', content: 'Tətbiq olunan normativ sənədlərin iyerarxiyası göstərilir. Standartlar, qaydalar və digər aktlarla qarşılıqlı əlaqə və üstünlük prinsipləri müəyyən edilir.' },
-  { id: 'r4', title: 'Maddə 4. Dövlət orqanlarının vəzifələri', content: 'Yol hərəkətinə nəzarət, təşkil və təhlükəsizlik üzrə səlahiyyətlər sadalanır. Maarifləndirmə, statistika aparılması və infrastrukturun saxlanılması da bu səlahiyyətlərə daxildir.' },
-  { id: 'r5', title: 'Maddə 5. Hüquqi şəxslərin vəzifələri', content: 'Daşımalarla məşğul olan və ya avtomobil parkı saxlayan təşkilatların öhdəlikləri müəyyən edilir. Texniki baxım, sürücülərin hazırlığı və təhlükəsizlik standartlarına əməl vacibdir.' },
-  { id: 'r6', title: 'Maddə 6. Fiziki şəxslərin hüquq və vəzifələri', content: 'Sürücü, sərnişin və piyadaların hüquqları və öhdəlikləri açıqlanır. Hörmət, ehtiyat və təhlükəsizliyin prioritetliyi vurğulanır.' },
-  { id: 'r7', title: 'Maddə 6-1. Beynəlxalq daşımalarda vəzifələr', content: 'Beynəlxalq sərnişin və yük daşımalarını təşkil edən və icra edənlər üçün əlavə tələblər göstərilir. Sənədləşmə, marşrut planlaşdırılması və təhlükəsizlik normaları əsasdır.' },
-  { id: 'r8', title: 'Maddə 7. Yol hərəkətinin təşkili', content: 'Nişanların, işıqforların və nişanlanma xətlərinin tətbiqi qaydaları izah edilir. Hərəkət axınının fasiləsizliyi və təhlükəsizliyi üçün təşkilati tədbirlər göstərilir.' },
-  { id: 'r9', title: 'Maddə 8. Başlanğıc və manevrlər', content: 'Hərəkətə başlama, dönmə, ötmə və zolaq dəyişmə zamanı davranış qaydaları verilir. Sürücü əvvəlcədən siqnal verir və təhlükəsizliyi təmin edir.' },
-  { id: 'r10', title: 'Maddə 9. Dayanma və durma', content: 'Dayanma/durma yerləri və qadağaları sadalanır. Görünüşə mane olmamaq və hərəkətə təhlükə yaratmamaq əsas şərtdir.' },
-  { id: 'r11', title: 'Maddə 10. Sürət rejimi', content: 'Müxtəlif yol şəraitləri üçün sürət məhdudiyyətləri müəyyən edilir. Havanın, yolun və nəqliyyat axınının vəziyyətinə uyğun sürət seçilməlidir.' },
-  { id: 'r12', title: 'Maddə 11. Piyadaların hərəkəti', content: 'Piyadaların keçidlərdən istifadəsi və yolun təhlükəsiz keçilməsi qaydaları verilir. Sürücülərin piyadalara qarşı məsuliyyəti ayrıca vurğulanır.' },
-  { id: 'r13', title: 'Maddə 12. Sərnişinlərin daşınması', content: 'Avtomobildə sərnişinlərin oturması, uşaq oturacaqları və təhlükəsizlik kəmərləri ilə bağlı tələblər. Sərnişinlərin düşmə/minmə zamanı təhlükəsizlik qaydaları göstərilir.' },
-  { id: 'r14', title: 'Maddə 13. Yük daşınması', content: 'Yükün yerləşdirilməsi, bərkidilməsi və ölçü-kütlə məhdudiyyətləri izah olunur. Yük hərəkətə, görünüşə və stabilliyə mane olmamalıdır.' },
-  { id: 'r15', title: 'Maddə 14. Xüsusi siqnalların tətbiqi', content: 'Xüsusi təyinatlı nəqliyyat vasitələrinin işıq və səs siqnallarından istifadəsi qaydaları. Digər sürücülərin belə vasitələrə üstünlük vermə öhdəliyi xatırladılır.' },
-  { id: 'r16', title: 'Maddə 15. Dəmiryolu keçidləri', content: 'Keçidlərdən istifadə zamanı dayanma, görünüş və siqnalların tələbləri təsvir edilir. Qırmızı işıq və ya baryerlər zamanı keçid qadağandır.' },
-  { id: 'r17', title: 'Maddə 16. Avtobus zolaqları və ictimai nəqliyyat', content: 'İctimai nəqliyyat üçün ayrılmış zolaqlardan istifadə qaydaları. Sürücülər bu zolaqlara məhdud hallarda daxil ola bilər.' },
-  { id: 'r18', title: 'Maddə 17. Yol nişanları və nişanlanma', content: 'Yol nişanlarının və üfüqi/vertikal nişanlanmanın hüquqi qüvvəsi və üstünlüyü göstərilir. Ziddiyyət olduqda prioritet qaydası açıqlanır.' },
-  { id: 'r19', title: 'Maddə 18. İşıqfor və tənzimləyici siqnalları', content: 'İşıqfor işıqlarının mənası və tənzimləyicinin jestlərinə tabe olmaq qaydaları izah olunur. Ziddiyyət olduqda tənzimləyici üstünlük təşkil edir.' },
-  { id: 'r20', title: 'Maddə 19. Ötmə və qarşıdan gələn hərəkət', content: 'Ötmənin icazəli olduğu hallar, qadağalar və təhlükəsizlik şərtləri. Qarşıdan gələn nəqliyyatla qarşılaşmada davranış qaydaları qeyd edilir.' },
-  { id: 'r21', title: 'Maddə 20. Fövqəladə dayanma və nişanlar', content: 'Qəza dayanacağı və fövqəladə işıq siqnalının tətbiqi qaydaları. Maneə barədə digər sürücülərin vaxtında xəbərdar edilməsi vacibdir.' },
-  { id: 'r22', title: 'Maddə 21. Sərxoşluq və tibbi yoxlama', content: 'Spirtli içki və ya narkotik təsiri altında idarənin qadağan edilməsi. Tibbi müayinəyə göndərmə və hüquqi nəticələr izah olunur.' },
-  { id: 'r23', title: 'Maddə 22. Velosiped və fərdi mikromobilite', content: 'Velosiped, skuter kimi vasitələrin hərəkət qaydaları və prioritetləri. Yolun kənarı və velosiped zolaqlarından istifadə tələbləri verilir.' },
-  { id: 'r24', title: 'Maddə 23. Ekoloji tələblər', content: 'Zərərli tullantıların azaldılması, səs-küy və tüstü normativləri. Texniki baxımın vaxtında aparılması ekoloji təhlükəsizlik üçün vacibdir.' },
-  { id: 'r25', title: 'Maddə 24. Qəzalar və hadisələrin rəsmiləşdirilməsi', content: 'Yol-nəqliyyat hadisəsi zamanı tərəflərin davranışı, ilkin yardım və polisin çağırılması qaydaları. Foto/video sənədləşdirmə və protokollaşdırma prinsipləri qeyd olunur.' },
-  { id: 'r26', title: 'Maddə 25. Məsuliyyət və cərimələr', content: 'Qaydaların pozulmasına görə inzibati məsuliyyətin əsasları və sanksiyalar xatırladılır. Təhlükəsizliyin təmin olunması üçün profilaktik tədbirlər tövsiyə edilir.' },
-];
+
 
 export function RulesScreen() {
   const { isDarkMode, goBack, switchTab } = useApp();
