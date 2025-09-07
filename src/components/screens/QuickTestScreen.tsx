@@ -9,7 +9,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { isDarkMode, navigate } = useApp();
+  const { isDarkMode, navigate, currentScreen } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -80,6 +80,7 @@ export function QuickTestScreen() {
   }, []);
 
   const question = questions[currentIndex];
+  const ticketNumber = (currentScreen?.params?.ticket as number) || 1;
 
   // When user selects an option, auto-confirm and lock
   function selectAnswer(optionId: string) {
@@ -125,7 +126,7 @@ export function QuickTestScreen() {
       onTouchEnd={onTouchEnd}
     >
       {/* Top bar: exit chip, centered title, right timer */}
-      <div className="mb-2 grid grid-cols-3 items-center">
+      <div className="mb-4 grid grid-cols-3 items-center">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowExitConfirm(true)}
@@ -135,7 +136,7 @@ export function QuickTestScreen() {
           </button>
         </div>
         <div className="text-center">
-          <div className={`text-lg font-black text-gray-200`}>Bilet 1</div>
+          <div className={`text-lg font-black text-gray-200`}>Bilet {ticketNumber}</div>
         </div>
         <div className="flex items-center justify-end">
           <div className="mr-4">
@@ -161,163 +162,165 @@ export function QuickTestScreen() {
       )}
 
       <SlideTransition direction={slideDir} key={currentIndex}>
-        <div className="rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
-        {/* Question header with optional image and report button */}
-        {question.imageUrl && (
-          <div className="mb-3 relative">
-            {/* Problem report toggle above the image, aligned right, popover overlays content */}
-            <div className="flex justify-end mb-2 relative">
-              <button
-                onClick={() => setIsReportOpen((v) => !v)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow bg-gray-800/90 text-gray-200 border border-gray-700`}
-                aria-label="Problem bildir"
-              >
-                ⚠️
-              </button>
-              {isReportOpen && (
-                <div
-                  className={`absolute top-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg bg-gray-800 border border-gray-700`}
-                >
-                  <div className={`text-xs font-bold mb-2 text-gray-200`}>
-                    Sualla bağlı problem bildir
-                  </div>
-                  <textarea
-                    value={reportText}
-                    onChange={(e) => setReportText(e.target.value)}
-                    placeholder="Mətni daxil edin..."
-                    className={`w-full h-20 rounded-lg p-2 text-sm outline-none bg-gray-700 text-gray-200`}
-                  />
-                  <div className="mt-2 flex items-center gap-2 justify-end">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        setReportText('');
-                        setIsReportOpen(false);
-                      }}
-                    >
-                      Ləğv et
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setIsReportOpen(false);
-                        setReportText('');
-                        alert('Problem qeydə alındı (demo)');
-                      }}
-                    >
-                      Göndər
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
+        <div className="rounded-xl overflow-hidden border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] bg-gray-900 border-gray-700 text-gray-100">
+          {/* Image should complete the top frame */}
+          {question.imageUrl && (
             <img
               src={question.imageUrl}
               alt="Sual şəkli"
-              className="w-full h-40 object-cover rounded-lg"
+              className="w-full h-48 object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
-          </div>
-        )}
-
-        {/* Question meta and text */}
-        <div className="flex items-center justify-between mb-2">
-          <div className={`text-[11px] text-gray-400`}>
-            {currentIndex + 1}/20
-          </div>
-        </div>
-        <div className={`font-bold mb-3 text-gray-100`}>{question.text}</div>
-
-        {/* Options: auto-confirm on select */}
-        <div className="space-y-2">
-          {question.options.map((option) => {
-            const isSelected = selected === option.id;
-            const locked = isAnswerLocked;
-            const isCorrectOption = locked && option.id === question.correctOptionId;
-            const isWrongSelected = locked && isSelected && option.id !== question.correctOptionId;
-            return (
-              <label
-                key={option.id}
-                className={`flex items-center gap-3 p-3 rounded-xl border min-h-[44px] ${
-                  locked ? 'cursor-default' : 'cursor-pointer'
-                } ${
-                  locked
-                    ? isCorrectOption
-                      ? 'border-emerald-500 bg-emerald-900/20'
-                      : isWrongSelected
-                        ? 'border-red-600 bg-red-900/20'
-                        : 'border-gray-600 bg-gray-700'
-                    : isSelected
-                      ? 'border-emerald-500 bg-emerald-900/20'
-                      : 'border-gray-600 bg-gray-700'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name={`answer-${currentIndex}`}
-                  checked={isSelected}
-                  disabled={locked}
-                  onChange={() => selectAnswer(option.id)}
-                  className="w-4 h-4 text-emerald-600"
-                />
-                <span className={`text-sm text-gray-200`}>{option.text}</span>
-              </label>
-            );
-          })}
-        </div>
-
-        {/* Explanation toggle and content */}
-        <div className="mt-3">
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="border-gray-600 text-white hover:bg-gray-800"
-              onClick={() => {
-                const next = [...showExplanation];
-                next[currentIndex] = !next[currentIndex];
-                setShowExplanation(next);
-              }}
-            >
-              İzah
-            </Button>
-            {isAnswerLocked && currentStatus === 'wrong' && (
-              <div className={`text-xs font-semibold text-red-300`}>
-                Doğru cavab: <span className="font-bold">{
-                  question.options.find(o => o.id === question.correctOptionId)?.text
-                }</span>
-              </div>
-            )}
-          </div>
-          {showExplanation[currentIndex] && (
-            <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
-              {question.explanation}
-            </div>
           )}
-        </div>
 
-        {/* Save and Ask Teacher actions */}
-        <div className="mt-3 flex items-center gap-2">
-          <Button
-            size="sm"
-            variant={savedQuestions[currentIndex] ? 'primary' : 'ghost'}
-            className={savedQuestions[currentIndex] ? 'text-white' : 'border-gray-600 text-white hover:bg-gray-800'}
-            onClick={toggleSave}
-          >
-            {savedQuestions[currentIndex] ? 'Yadda saxlandı' : 'Yadda saxla'}
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            className="border-gray-600 text-white hover:bg-gray-800"
-            onClick={() => navigate('TeacherContact', { questionId: question.id })}
-          >
-            Müəllimə yaz
-          </Button>
-        </div>
+          <div className="p-4">
+            {/* Question meta and text */}
+            <div className="flex items-center justify-between mb-2">
+              <div className={`text-[11px] text-gray-400`}>
+                {currentIndex + 1}/20
+              </div>
+              <div className={`text-[11px] text-gray-400`}>
+                ID {200 + (ticketNumber - 1) * 20 + (currentIndex + 1)}
+              </div>
+            </div>
+            <div className={`font-bold mb-3 text-gray-100`}>{question.text}</div>
+
+            {/* Options: auto-confirm on select */}
+            <div className="space-y-2">
+              {question.options.map((option) => {
+                const isSelected = selected === option.id;
+                const locked = isAnswerLocked;
+                const isCorrectOption = locked && option.id === question.correctOptionId;
+                const isWrongSelected = locked && isSelected && option.id !== question.correctOptionId;
+                return (
+                  <label
+                    key={option.id}
+                    className={`flex items-center gap-3 p-3 rounded-xl border min-h-[44px] ${
+                      locked ? 'cursor-default' : 'cursor-pointer'
+                    } ${
+                      locked
+                        ? isCorrectOption
+                          ? 'border-emerald-500 bg-emerald-900/20'
+                          : isWrongSelected
+                            ? 'border-red-600 bg-red-900/20'
+                            : 'border-gray-600 bg-gray-700'
+                        : isSelected
+                          ? 'border-emerald-500 bg-emerald-900/20'
+                          : 'border-gray-600 bg-gray-700'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name={`answer-${currentIndex}`}
+                      checked={isSelected}
+                      disabled={locked}
+                      onChange={() => selectAnswer(option.id)}
+                      className="w-4 h-4 text-emerald-600"
+                    />
+                    <span className={`text-sm text-gray-200`}>{option.text}</span>
+                  </label>
+                );
+              })}
+            </div>
+
+            {/* Explanation toggle and content */}
+            <div className="mt-3">
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="border-gray-600 text-white hover:bg-gray-800"
+                  onClick={() => {
+                    const next = [...showExplanation];
+                    next[currentIndex] = !next[currentIndex];
+                    setShowExplanation(next);
+                  }}
+                >
+                  İzah
+                </Button>
+                {isAnswerLocked && currentStatus === 'wrong' && (
+                  <div className={`text-xs font-semibold text-red-300`}>
+                    Doğru cavab: <span className="font-bold">{
+                      question.options.find(o => o.id === question.correctOptionId)?.text
+                    }</span>
+                  </div>
+                )}
+              </div>
+              {showExplanation[currentIndex] && (
+                <div className={`text-sm mt-2 p-2 rounded-lg text-gray-200 bg-gray-700`}>
+                  {question.explanation}
+                </div>
+              )}
+            </div>
+
+            {/* Save and Ask Teacher actions + report button on the right of "Müəllimə yaz" */}
+            <div className="mt-3 flex items-center gap-2">
+              <Button
+                size="sm"
+                variant={savedQuestions[currentIndex] ? 'primary' : 'ghost'}
+                className={savedQuestions[currentIndex] ? 'text-white' : 'border-gray-600 text-white hover:bg-gray-800'}
+                onClick={toggleSave}
+              >
+                {savedQuestions[currentIndex] ? 'Yadda saxlandı' : 'Yadda saxla'}
+              </Button>
+              <div className="relative flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="border-gray-600 text-white hover:bg-gray-800"
+                  onClick={() => navigate('TeacherContact', { questionId: question.id })}
+                >
+                  Müəllimə yaz
+                </Button>
+                <button
+                  onClick={() => setIsReportOpen((v) => !v)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shadow bg-gray-800/90 text-gray-200 border border-gray-700`}
+                  aria-label="Problem bildir"
+                >
+                  ▲
+                </button>
+                {isReportOpen && (
+                  <div
+                    className={`absolute bottom-10 right-0 z-20 w-64 p-3 rounded-xl shadow-lg bg-gray-800 border border-gray-700`}
+                  >
+                    <div className={`text-xs font-bold mb-2 text-gray-200`}>
+                      Sualla bağlı problem bildir
+                    </div>
+                    <textarea
+                      value={reportText}
+                      onChange={(e) => setReportText(e.target.value)}
+                      placeholder="Mətni daxil edin..."
+                      className={`w-full h-20 rounded-lg p-2 text-sm outline-none bg-gray-700 text-gray-200`}
+                    />
+                    <div className="mt-2 flex items-center gap-2 justify-end">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setReportText('');
+                          setIsReportOpen(false);
+                        }}
+                      >
+                        Ləğv et
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setIsReportOpen(false);
+                          setReportText('');
+                          alert('Problem qeydə alındı (demo)');
+                        }}
+                      >
+                        Göndər
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </SlideTransition>
 

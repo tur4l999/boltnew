@@ -127,7 +127,7 @@ export function ExamRunScreen() {
           </div>
         </div>
       )}
-      {/* Header with back button */}
+      {/* Header with back button and dynamic ticket title */}
       <div className="flex items-center justify-between mb-4 text-white">
         {view === 'question' ? (
           <button
@@ -151,7 +151,9 @@ export function ExamRunScreen() {
         ) : (
           <div className="w-8 h-8"></div>
         )}
-        <div className="text-center"></div>
+        <div className="text-center text-lg font-black">
+          {config?.ticket ? `Bilet ${config.ticket}` : ''}
+        </div>
         <div className="w-8 h-8"></div>
       </div>
 
