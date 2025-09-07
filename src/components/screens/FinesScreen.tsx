@@ -113,7 +113,13 @@ export function FinesScreen() {
                 <div className="mt-2 space-y-3">
                   <div className="text-xs text-gray-600 leading-relaxed">{r.content}</div>
                   {/* Example: for demo, attach 1 or multiple videos depending on rule id */}
-                  {r.id === 'r26' ? (
+                  {r.id === 'r1' ? (
+                    <RuleVideos sources={[
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                    ]} />
+                  ) : r.id === 'r26' ? (
                     <RuleVideos sources={[
                       'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
                       'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
