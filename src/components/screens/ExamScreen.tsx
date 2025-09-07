@@ -88,7 +88,7 @@ export function ExamScreen() {
                 key={idx}
                 onClick={() => {
                   if (!unlocked) { setShowPurchasePopup(true); return; }
-                  navigate('ExamRun', { config: { mode: 'byTicket', ticket: idx + 1 } });
+                  navigate('QuickTest', { ticket: idx + 1 });
                 }}
                 className={`w-full text-left rounded-lg border p-3 text-sm flex items-center justify-between transition-colors duration-200 ${
                   isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'

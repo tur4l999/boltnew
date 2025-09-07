@@ -9,7 +9,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { isDarkMode, navigate } = useApp();
+  const { isDarkMode, navigate, currentScreen } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -80,6 +80,7 @@ export function QuickTestScreen() {
   }, []);
 
   const question = questions[currentIndex];
+  const ticketNumber = (currentScreen?.params?.ticket as number) || 1;
 
   // When user selects an option, auto-confirm and lock
   function selectAnswer(optionId: string) {
@@ -124,7 +125,7 @@ export function QuickTestScreen() {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Top bar: exit chip, centered title, right timer */}
+      {/* Top bar: exit chip, centered title, right timer */
       <div className="mb-4 grid grid-cols-3 items-center">
         <div className="flex items-center gap-2">
           <button
@@ -135,7 +136,7 @@ export function QuickTestScreen() {
           </button>
         </div>
         <div className="text-center">
-          <div className={`text-lg font-black text-gray-200`}>Bilet 1</div>
+          <div className={`text-lg font-black text-gray-200`}>Bilet {ticketNumber}</div>
         </div>
         <div className="flex items-center justify-end">
           <div className="mr-4">
@@ -180,7 +181,9 @@ export function QuickTestScreen() {
               <div className={`text-[11px] text-gray-400`}>
                 {currentIndex + 1}/20
               </div>
-              <div className={`text-[11px] text-gray-400`}>ID {question.id?.replace(/^q/, '')}</div>
+              <div className={`text-[11px] text-gray-400`}>
+                ID {200 + (ticketNumber - 1) * 20 + (currentIndex + 1)}
+              </div>
             </div>
             <div className={`font-bold mb-3 text-gray-100`}>{question.text}</div>
 
