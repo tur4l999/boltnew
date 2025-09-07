@@ -25,6 +25,7 @@ export function HomeScreen() {
     { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
     { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
     { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
+    { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
 
     // Bölmə sonu: Yekun imtahan
     { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
