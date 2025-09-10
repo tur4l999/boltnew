@@ -232,7 +232,7 @@ export function PackagesScreen() {
   }
 
   return (
-    <div className={`relative p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`relative p-3 pb-24 min-h-full transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     } pt-6`}>
       {/* Header */}

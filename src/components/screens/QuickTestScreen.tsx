@@ -263,7 +263,7 @@ export function QuickTestScreen() {
 
   return (
     <div
-      className={`p-3 pb-24 min-h-screen transition-colors duration-200 bg-gray-900 text-gray-100`}
+      className={`p-3 pb-24 min-h-full transition-colors duration-200 bg-gray-900 text-gray-100`}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}

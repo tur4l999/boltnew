@@ -22,7 +22,7 @@ export function TabBar() {
         ? 'bg-gray-800/90 border-gray-700' 
         : 'bg-white/90 border-gray-200'
     }`}>
-      <div className="max-w-md mx-auto grid grid-cols-5">
+      <div className="w-[393px] mx-auto grid grid-cols-5">
         {tabs.map((tab) => (
           <button
             key={tab.key}

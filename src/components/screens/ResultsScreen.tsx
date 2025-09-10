@@ -9,7 +9,7 @@ export function ResultsScreen() {
   const passed = result.score >= Math.ceil(result.total * 0.8);
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-full transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <Card className="mb-3 text-center">

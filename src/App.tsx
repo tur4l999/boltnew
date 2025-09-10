@@ -39,15 +39,17 @@ function AppContent() {
   const hideTabBar = currentScreen.screen === 'ExamRun' || currentScreen.screen === 'ProductDetail' || currentScreen.screen === 'Cart';
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${
+    <div className={`min-h-full transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      <div className={`max-w-md mx-auto h-screen relative transition-colors duration-200 ${
-        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } overflow-y-auto`}
-      id="app-scroll-container"
+      <div 
+        className={`mx-auto relative transition-colors duration-200 ${
+          isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+        } overflow-y-auto`}
+        id="app-scroll-container"
+        style={{ width: 393, height: 852 }}
       >
         {/* Sticky iPhone-like status bar inside the scroll container */}
         <div className="sticky top-0 z-40">
