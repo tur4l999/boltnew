@@ -113,7 +113,7 @@ function StatusBar15Pro({
   const bg = theme === "dark" ? "bg-black text-white" : "bg-white text-black";
 
   return (
-    <div className={`relative w-[393px] mx-auto h-[44px] ${bg} flex items-center justify-between px-4 text-[15px]`}>
+    <div className={`relative w-[393px] mx-auto h-[44px] ${bg} flex items-center justify-between px-4 text-[15px] box-border`}>
       {/* Dynamic Island (mərkəzdə pill) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[126px] h-[34px] bg-black rounded-[18px]" />
