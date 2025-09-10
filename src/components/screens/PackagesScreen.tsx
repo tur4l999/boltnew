@@ -219,7 +219,7 @@ export function PackagesScreen() {
 
   function getPackageCardClass(pkg: Package): string {
     if (pkg.popular) {
-      return `relative ring-2 ring-emerald-500 ${isDarkMode ? 'bg-emerald-900/10' : 'bg-gradient-to-br from-emerald-50 to-green-50'} shadow-lg transform scale-105`;
+      return `relative ring-2 ring-emerald-500 ${isDarkMode ? 'bg-emerald-900/10' : 'bg-gradient-to-br from-emerald-50 to-green-50'} shadow-lg`;
     }
     return `relative ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white'}`;
   }

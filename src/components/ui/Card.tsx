@@ -11,7 +11,7 @@ export function Card({ children, className = '', onClick }: CardProps) {
   const { isDarkMode } = useApp();
   
   return (
-    <div onClick={onClick} className={`rounded-xl p-4 border shadow-sm transition-all duration-200 hover:shadow-md hover:scale-[1.02] ${onClick ? 'cursor-pointer' : ''} ${
+    <div onClick={onClick} className={`rounded-xl p-4 border shadow-sm transition-colors duration-200 hover:shadow-md ${onClick ? 'cursor-pointer' : ''} ${
       isDarkMode 
         ? 'bg-gray-800 border-gray-700 text-gray-100' 
         : 'bg-white border-gray-200 text-gray-900'
