@@ -13,13 +13,14 @@ export function TransactionsScreen() {
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={goBack}
+          aria-label="Geri"
           className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors duration-200 ${
             isDarkMode 
               ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
               : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
           }`}
         >
-          ←
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
         <h1 className={`text-lg font-bold transition-colors duration-200 ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'

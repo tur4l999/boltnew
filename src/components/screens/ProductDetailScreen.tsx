@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ShoppingCart } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { STORE_PRODUCTS, getDiscountedPrice, type StoreProduct } from '../../lib/products';
@@ -88,19 +89,22 @@ export function ProductDetailScreen() {
         <h1 className="text-lg font-bold">{product.title}</h1>
       </div>
 
-      {/* Floating Cart button */}
-      <button
-        onClick={() => navigate('Cart')}
-        ref={cartBtnRef}
-        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
-        style={{
-          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
-        }}
-      >
-        <ShoppingCart size={18} />
-        <span>Səbətə bax</span>
-      </button>
+      {/* Floating Cart button (portal to body) */}
+      {typeof document !== 'undefined' && createPortal(
+        <button
+          onClick={() => navigate('Cart')}
+          ref={cartBtnRef}
+          className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+          style={{
+            right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
+            bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+          }}
+        >
+          <ShoppingCart size={18} />
+          <span>Səbətə bax</span>
+        </button>,
+        document.body
+      )}
 
       {/* Gallery with swipe */}
       <div

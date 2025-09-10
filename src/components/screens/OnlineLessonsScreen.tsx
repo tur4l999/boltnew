@@ -85,9 +85,10 @@ export function OnlineLessonsScreen() {
       <div className="-mx-3 -mt-2 mb-3 px-3 py-3 flex items-center gap-3">
         <button
           onClick={goBack}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700 border border-gray-200'}`}
+          aria-label="Geri"
+          className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-sm ${isDarkMode ? 'bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100'}`}
         >
-          ← {t.home}
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
         <div className={`text-lg font-extrabold tracking-tight ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{t.onlineLesson}</div>
       </div>

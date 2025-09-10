@@ -107,7 +107,9 @@ export function RulesScreen() {
       {/* Search / Filter */}
       <div className={`mb-3 sticky top-0 z-40 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className="flex items-center gap-2 py-1">
-          <button onClick={handleBackClick} className={`px-3 py-2 rounded-xl border ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200' : 'bg-white border-gray-200 text-gray-700'}`}>←</button>
+          <button onClick={handleBackClick} aria-label="Geri" className={`h-9 w-9 rounded-full flex items-center justify-center border shadow-sm transition-all duration-200 ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-100'}`}>
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
           <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
