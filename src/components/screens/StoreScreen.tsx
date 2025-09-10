@@ -173,14 +173,14 @@ export function StoreScreen() {
         </Card>
       )}
 
-      {/* Floating Cart button */}
+      {/* Floating Cart button (within container, above TabBar) */}
       <button
         onClick={() => navigate('Cart')}
         ref={cartBtnRef}
-        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+        className="absolute z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
         style={{
-          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+          right: 20,
+          bottom: 76
         }}
       >
         <ShoppingCart size={18} />
