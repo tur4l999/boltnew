@@ -189,9 +189,10 @@ export function AIChatScreen() {
             <div className="flex items-center gap-3">
               <button
                 onClick={goBack}
+                aria-label="Geri"
                 className="w-9 h-9 rounded-lg border border-gray-300 bg-gray-50 flex items-center justify-center hover:bg-gray-100"
               >
-                ←
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
               </button>
               <button
                 onClick={() => setHistoryOpen(!historyOpen)}
