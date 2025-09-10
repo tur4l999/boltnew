@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { ShoppingCart, Search, SlidersHorizontal } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
@@ -185,19 +186,22 @@ export function StoreScreen() {
         </Card>
       )}
 
-      {/* Floating Cart button */}
-      <button
-        onClick={() => navigate('Cart')}
-        ref={cartBtnRef}
-        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
-        style={{
-          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
-        }}
-      >
-        <ShoppingCart size={18} />
-        <span>Səbətə bax</span>
-      </button>
+      {/* Floating Cart button (portal to body to remain fixed across scroll containers) */}
+      {typeof document !== 'undefined' && createPortal(
+        <button
+          onClick={() => navigate('Cart')}
+          ref={cartBtnRef}
+          className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
+          style={{
+            right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
+            bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+          }}
+        >
+          <ShoppingCart size={18} />
+          <span>Səbətə bax</span>
+        </button>,
+        document.body
+      )}
 
       <div className="grid grid-cols-2 gap-3 mt-3">
         {filtered.map((p, idx) => (

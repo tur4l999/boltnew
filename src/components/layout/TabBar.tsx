@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useApp } from '../../contexts/AppContext';
 
 export function TabBar() {
@@ -17,12 +18,13 @@ export function TabBar() {
   }
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-sm border-t transition-colors duration-200 ${
-      isDarkMode 
-        ? 'bg-gray-800/90 border-gray-700' 
-        : 'bg-white/90 border-gray-200'
-    }`}>
-      <div className="max-w-md mx-auto grid grid-cols-5">
+    typeof document !== 'undefined' ? createPortal(
+      <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-sm border-t transition-colors duration-200 ${
+        isDarkMode 
+          ? 'bg-gray-800/90 border-gray-700' 
+          : 'bg-white/90 border-gray-200'
+      }`}>
+        <div className="max-w-md mx-auto grid grid-cols-5">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -69,7 +71,9 @@ export function TabBar() {
             currentTab === 'More' ? 'transform scale-105' : ''
           }`}>{t.more}</div>
         </button>
-      </div>
-    </div>
+        </div>
+      </div>,
+      document.body
+    ) : null
   );
 }
