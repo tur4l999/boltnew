@@ -494,7 +494,7 @@ export function PackagesScreen() {
       {activationModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setActivationModalOpen(null)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-4 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-[393px] rounded-2xl p-4 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Aktivləşdirmə seçimi</div>
@@ -621,7 +621,7 @@ export function PackagesScreen() {
       {scheduledPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-[393px] rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <button
@@ -659,7 +659,7 @@ export function PackagesScreen() {
       {paymentModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setPaymentModalOpen(null)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-[393px] rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <button
@@ -727,7 +727,7 @@ export function PackagesScreen() {
       {otherModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setOtherModalOpen(null)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-[393px] rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <button
@@ -825,7 +825,7 @@ export function PackagesScreen() {
       {insufficientTrainingOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setInsufficientTrainingOpen(false)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-[393px] rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <div className="text-4xl mb-2">⚠️</div>

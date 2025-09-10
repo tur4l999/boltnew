@@ -75,7 +75,7 @@ export function Calendar({ initialDate, minDate, maxDate, onChange }: CalendarPr
   }, [viewYear, viewMonth]);
 
   return (
-    <div className={`w-full max-w-sm select-none ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+    <div className={`w-full max-w-[393px] select-none ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
       <div className="flex items-center justify-between mb-2">
         <button
           onClick={goPrevMonth}
