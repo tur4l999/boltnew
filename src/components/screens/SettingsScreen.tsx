@@ -48,7 +48,7 @@ export function SettingsScreen() {
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${
+    <div className={`min-h-full transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     } pt-11`}>
       <div className="p-3 pb-24">

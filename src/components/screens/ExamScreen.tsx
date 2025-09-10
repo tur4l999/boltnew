@@ -36,7 +36,7 @@ export function ExamScreen() {
   };
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-full transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <div className={`mb-2 text-sm font-bold text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
@@ -201,7 +201,7 @@ export function ExamScreen() {
       {showPurchasePopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowPurchasePopup(false)} />
-          <div className={`relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[90%] max-w-[393px] rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>

@@ -15,7 +15,7 @@ export function MistakesScreen() {
   }, []);
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`p-3 pb-24 min-h-full transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <Card>

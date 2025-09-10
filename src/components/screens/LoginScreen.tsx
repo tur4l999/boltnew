@@ -30,7 +30,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-200 ${
+    <div className={`min-h-full flex items-center justify-center p-4 relative overflow-hidden transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gradient-to-br from-gray-900 to-gray-800' 
         : 'bg-gradient-to-br from-emerald-50 to-green-100'
@@ -63,7 +63,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         <div className="absolute top-2/3 left-1/4 w-16 h-0.5 bg-emerald-300/10 rotate-45 opacity-15"></div>
       </div>
       
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-[393px] mx-auto relative z-10">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className={`w-24 h-24 mx-auto mb-4 rounded-2xl shadow-lg flex items-center justify-center transition-colors duration-200 ${

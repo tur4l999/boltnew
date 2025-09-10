@@ -133,7 +133,7 @@ export function AIChatScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 relative pt-11">
+    <div className="min-h-full bg-gray-50 relative pt-11">
       {/* Backdrop */}
       {historyOpen && (
         <div 
@@ -182,7 +182,7 @@ export function AIChatScreen() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-full">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 bg-white mt-11">
           <div className="flex items-center justify-between">
@@ -213,7 +213,7 @@ export function AIChatScreen() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: 'calc(100vh - 184px)' }}>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4" style={{ height: 'calc(100% - 184px)' }}>
           {messages.map((message) => (
             <div
               key={message.id}

@@ -158,7 +158,7 @@ export default function MobileDevicePreview({ children }: MobileDevicePreviewPro
   );
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-8">
+    <div className="w-full min-h-full bg-gray-50 p-8">
       {/* AZ: İdarəetmə paneli */}
       {/* EN: Control panel */}
       <div className="mb-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
