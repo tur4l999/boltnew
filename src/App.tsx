@@ -47,7 +47,7 @@ function AppContent() {
       <div 
         className={`mx-auto relative transition-colors duration-200 ${
           isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-        } overflow-y-auto overflow-x-hidden`}
+        } overflow-y-auto overflow-x-hidden pb-[56px]`}
         id="app-scroll-container"
         style={{ width: 393, height: 852 }}
       >

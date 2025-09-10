@@ -17,11 +17,11 @@ export function TabBar() {
   }
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-sm border-t transition-colors duration-200 ${
+    <div className={`sticky bottom-0 z-30 backdrop-blur-sm border-t transition-colors duration-200 ${
       isDarkMode 
         ? 'bg-gray-800/90 border-gray-700' 
         : 'bg-white/90 border-gray-200'
-    }`}>
+    }`} style={{ minHeight: 56 }}>
       <div className="w-[393px] mx-auto grid grid-cols-5 box-border">
         {tabs.map((tab) => (
           <button
