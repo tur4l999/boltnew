@@ -89,6 +89,22 @@ export function LessonScreen() {
               src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
               watermark={watermark}
             />
+            <div className="flex gap-1 items-center">
+              <button
+                onClick={() => setOfflineDownload(!offlineDownload)}
+                className={`flex items-center gap-1 px-2 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50 transition-colors min-h-[28px] ${
+                  offlineDownload ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-gray-600'
+                }`}
+              >
+                📱 {t.download}
+              </button>
+              <button
+                onClick={() => navigate('TeacherContact')}
+                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
+              >
+                💬 Sualını qeyd et
+              </button>
+            </div>
           </div>
         );
 
