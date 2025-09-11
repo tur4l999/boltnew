@@ -29,26 +29,34 @@ export function OnlineLessonsScreen() {
     return MODULES.find(m => m.id === moduleId)?.title || moduleId;
   };
 
-  const getLessonStatus = (lessonDate: string): LessonStatus => {
+  const getLessonStatus = (lessonDate: string): LessonStatus | null => {
     const now = new Date();
     const date = new Date(lessonDate);
     const endTime = new Date(date.getTime() + 60 * 60 * 1000); // Dərs bitməsi (1 saat sonra)
+    
+    // Yalnız bu günün tarixi üçün status göstərilir
+    const today = new Date();
+    if (date.toDateString() !== today.toDateString()) {
+      return null;
+    }
     
     if (now < date) return 'scheduled';
     if (now >= date && now <= endTime) return 'ongoing';
     return 'completed';
   };
 
-  const getStatusInfo = (status: LessonStatus) => {
+  const getStatusInfo = (status: LessonStatus | null) => {
+    if (!status) return null;
+    
     switch (status) {
       case 'scheduled':
         return {
-          label: 'Planlaşdırılıb',
+          label: 'Başlayacaq',
           bgColor: isDarkMode ? 'bg-blue-900/20' : 'bg-blue-50',
           borderColor: isDarkMode ? 'border-blue-700' : 'border-blue-200',
           textColor: isDarkMode ? 'text-blue-400' : 'text-blue-700',
           dotColor: isDarkMode ? 'bg-blue-500' : 'bg-blue-500',
-          icon: '🗓️'
+          icon: '⏰'
         };
       case 'ongoing':
         return {
@@ -61,7 +69,7 @@ export function OnlineLessonsScreen() {
         };
       case 'completed':
         return {
-          label: 'Tamamlandı',
+          label: 'Bitib',
           bgColor: isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100',
           borderColor: isDarkMode ? 'border-gray-700' : 'border-gray-300',
           textColor: isDarkMode ? 'text-gray-400' : 'text-gray-600',
@@ -177,7 +185,7 @@ export function OnlineLessonsScreen() {
             <div
               key={l.id}
               className={`relative overflow-hidden rounded-2xl border shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer ${
-                status === 'ongoing' 
+                status === 'ongoing' && statusInfo
                   ? `${statusInfo.bgColor} ${statusInfo.borderColor} border-2` 
                   : isDarkMode 
                     ? 'bg-gray-800 border-gray-700' 
@@ -212,14 +220,7 @@ export function OnlineLessonsScreen() {
                   
                   {/* Mərkəz - Dərs məlumatları */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start gap-3">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-md ${
-                        isDarkMode 
-                          ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
-                          : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200'
-                      }`}>
-                        {emoji}
-                      </div>
+                    <div className="flex items-start">
                       <div className="flex-1">
                         <div className={`text-lg font-black leading-tight mb-1 ${
                           isDarkMode ? 'text-gray-100' : 'text-gray-900'
@@ -238,16 +239,18 @@ export function OnlineLessonsScreen() {
                         </div>
                         
                         {/* Status Badge */}
-                        <div className="mt-3 flex items-center gap-2">
-                          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
-                            statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor} border`}>
-                            <span>{statusInfo.icon}</span>
-                            <span>{statusInfo.label}</span>
-                            {status === 'ongoing' && (
-                              <div className="w-2 h-2 rounded-full animate-pulse bg-current"></div>
-                            )}
+                        {statusInfo && (
+                          <div className="mt-3 flex items-center gap-2">
+                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                              statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor} border`}>
+                              <span>{statusInfo.icon}</span>
+                              <span>{statusInfo.label}</span>
+                              {status === 'ongoing' && (
+                                <div className="w-2 h-2 rounded-full animate-pulse bg-current"></div>
+                              )}
+                            </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -307,16 +310,7 @@ export function OnlineLessonsScreen() {
                     onClick={() => { setSelectedLesson(l); setSelectedSource('schedule'); }}
                   >
                     <div className="p-4">
-                      <div className="flex items-center gap-4">
-                        {/* Emoji */}
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow ${
-                          isDarkMode 
-                            ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
-                            : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200'
-                        }`}>
-                          {emoji}
-                        </div>
-                        
+                      <div className="flex items-center">
                         {/* Məlumatlar */}
                         <div className="flex-1 min-w-0">
                           <div className={`text-base font-bold truncate mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
@@ -344,11 +338,13 @@ export function OnlineLessonsScreen() {
                         </div>
                         
                         {/* Status */}
-                        <div className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
-                          statusInfo.bgColor} ${statusInfo.textColor} ${statusInfo.borderColor} border`}>
-                          <span className="text-xs">{statusInfo.icon}</span>
-                          <span className="text-[10px]">{statusInfo.label}</span>
-                        </div>
+                        {statusInfo && (
+                          <div className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                            statusInfo.bgColor} ${statusInfo.textColor} ${statusInfo.borderColor} border`}>
+                            <span className="text-xs">{statusInfo.icon}</span>
+                            <span className="text-[10px]">{statusInfo.label}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -369,25 +365,21 @@ export function OnlineLessonsScreen() {
             <div className={`p-6 pb-4 ${
               isDarkMode ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-gray-50 to-white'
             }`}>
-              <div className="flex items-start gap-4">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg ${
-                  isDarkMode 
-                    ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
-                    : 'bg-white border border-gray-200'
-                }`}>
-                  {getLessonEmoji(selectedLesson.moduleId)}
-                </div>
+              <div className="flex items-start">
                 <div className="flex-1">
                   <h3 className={`text-xl font-black mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     {selectedLesson.title}
                   </h3>
-                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
-                    getStatusInfo(getLessonStatus(selectedLesson.date)).bgColor} ${
-                    getStatusInfo(getLessonStatus(selectedLesson.date)).textColor} ${
-                    getStatusInfo(getLessonStatus(selectedLesson.date)).borderColor} border`}>
-                    <span>{getStatusInfo(getLessonStatus(selectedLesson.date)).icon}</span>
-                    <span>{getStatusInfo(getLessonStatus(selectedLesson.date)).label}</span>
-                  </div>
+                  {(() => {
+                    const modalStatusInfo = getStatusInfo(getLessonStatus(selectedLesson.date));
+                    return modalStatusInfo ? (
+                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                        modalStatusInfo.bgColor} ${modalStatusInfo.textColor} ${modalStatusInfo.borderColor} border`}>
+                        <span>{modalStatusInfo.icon}</span>
+                        <span>{modalStatusInfo.label}</span>
+                      </div>
+                    ) : null;
+                  })()}
                 </div>
               </div>
             </div>
