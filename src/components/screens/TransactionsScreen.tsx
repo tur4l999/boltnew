@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { CreditCardIcon, ClipboardIcon, PackageIcon, WalletIcon, PhoneIcon, BankIcon } from '../icons';
 
 export function TransactionsScreen() {
   const { goBack, balance, transactions, isDarkMode } = useApp();
@@ -38,7 +39,8 @@ export function TransactionsScreen() {
           onClick={() => alert('Balans artırma (demo)')}
           className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
         >
-          💳 Balans artır
+          <CreditCardIcon size={20} className="inline mr-1" />
+          Balans artır
         </button>
       </Card>
 
@@ -55,7 +57,9 @@ export function TransactionsScreen() {
             <div className={`text-center py-8 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
-              <div className="text-4xl mb-2">📋</div>
+              <div className="mb-2">
+                <ClipboardIcon size={48} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
+              </div>
               <div className="text-sm">Hələlik ödəniş yoxdur</div>
             </div>
           </Card>
@@ -72,7 +76,10 @@ export function TransactionsScreen() {
                         ? 'bg-red-100 text-red-600' 
                         : 'bg-green-100 text-green-600'
                     }`}>
-                      {transaction.type === 'purchase' ? '📦' : '💰'}
+                      {transaction.type === 'purchase' ? 
+                        <PackageIcon size={24} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} /> : 
+                        <WalletIcon size={24} className={isDarkMode ? 'text-green-400' : 'text-green-600'} />
+                      }
                     </div>
                     <div>
                       <div className={`font-medium text-sm transition-colors duration-200 ${
@@ -115,7 +122,9 @@ export function TransactionsScreen() {
                 : 'border-gray-200 hover:bg-gray-50'
             }`}
           >
-            <div className="text-2xl mb-1">💳</div>
+            <div className="mb-1">
+              <CreditCardIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Kart</div>
@@ -128,7 +137,9 @@ export function TransactionsScreen() {
                 : 'border-gray-200 hover:bg-gray-50'
             }`}
           >
-            <div className="text-2xl mb-1">📱</div>
+            <div className="mb-1">
+              <PhoneIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Mobil</div>
@@ -141,7 +152,9 @@ export function TransactionsScreen() {
                 : 'border-gray-200 hover:bg-gray-50'
             }`}
           >
-            <div className="text-2xl mb-1">🏦</div>
+            <div className="mb-1">
+              <BankIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Bank</div>

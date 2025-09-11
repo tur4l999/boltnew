@@ -6,30 +6,36 @@ import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
+import { 
+  VideoIcon, DocumentIcon, GlobeIcon, ChartIcon, PackageIcon, StarIcon,
+  NoteIcon, FileTextIcon, DollarIcon, NewspaperIcon, GraduationIcon, 
+  ToolIcon, MailIcon, ClipboardIcon, PlayIcon, ClockIcon
+} from '../icons/modern';
+import { FlaskIcon } from '../icons';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
   
   const gridItems = [
     // Əsas bölmələr (8 ədəd):
-    { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
-    { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
-    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
-    { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
-    { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📊' },
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
-    { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
+    { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), icon: VideoIcon },
+    { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), icon: DocumentIcon },
+    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), icon: GlobeIcon },
+    { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), icon: NoteIcon },
+    { key: 'results', label: t.myResults, action: () => navigate('Results'), icon: ChartIcon },
+    { key: 'tests', label: t.tests, action: () => navigate('Practice'), icon: FileTextIcon },
+    { key: 'articles', label: t.articles, action: () => navigate('Rules'), icon: NewspaperIcon },
+    { key: 'fines', label: t.fines, action: () => navigate('Fines'), icon: DollarIcon },
 
     // Əlavə bölmələr (secondary):
-    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
-    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
-    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
-    { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
-    { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
+    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), icon: PackageIcon },
+    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), icon: GraduationIcon },
+    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), icon: ToolIcon },
+    { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), icon: MailIcon },
+    { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), icon: NewspaperIcon },
 
     // Bölmə sonu: Yekun imtahan
-    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
+    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), icon: ClipboardIcon },
   ];
   
   const primaryItems = gridItems.slice(0, 8);
@@ -66,7 +72,9 @@ export function HomeScreen() {
             }`}>
               <span className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-blue-300' : 'text-blue-600'
-              }`}>📦</span>
+              }`}>
+                <PackageIcon size={12} />
+              </span>
             </div>
             <div className="flex-1">
               <div className={`text-xs font-medium transition-colors duration-200 ${
@@ -98,9 +106,12 @@ export function HomeScreen() {
             <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
               isDarkMode ? 'bg-amber-800' : 'bg-amber-100'
             }`}>
-              <span className={`text-xs transition-colors duration-200 ${
-                isDarkMode ? 'text-amber-300' : 'text-amber-600'
-              }`}>⏰</span>
+              <ClockIcon 
+                size={12} 
+                className={`transition-colors duration-200 ${
+                  isDarkMode ? 'text-amber-300' : 'text-amber-600'
+                }`} 
+              />
             </div>
             <div className="flex-1">
               <div className={`text-xs font-medium transition-colors duration-200 ${
@@ -127,7 +138,7 @@ export function HomeScreen() {
         <ScaleIn delay={100}>
           <div className="-mx-3 -mt-2 mb-3 px-3 py-2 bg-gradient-to-r from-emerald-50 to-green-50 border-b border-emerald-200 rounded-t-none flex items-center gap-2">
             <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-emerald-600 text-[10px]">👑</span>
+              <span className="text-emerald-600 text-[10px]">★</span>
             </div>
             <div className="flex-1">
               <div className="text-emerald-900 text-[11px] font-medium">
@@ -169,10 +180,15 @@ export function HomeScreen() {
                         : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'
                     }`}
                   >
-                    <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
                       isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                     }`}>
-                      {item.emoji}
+                      <item.icon 
+                        size={22} 
+                        className={`transition-colors duration-200 ${
+                          isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                        }`}
+                      />
                     </div>
                     <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-200' : 'text-gray-700'
@@ -194,8 +210,8 @@ export function HomeScreen() {
             onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
             className="w-full rounded-2xl p-3 flex items-center gap-3 min-h-[56px] bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors"
           >
-            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-              🧪
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+              <FlaskIcon size={22} className="text-white" />
             </div>
             <div className="text-left font-black text-base leading-tight whitespace-nowrap">
               {`${t.examSimulator} (sınaq imtahanı)`}
@@ -228,7 +244,12 @@ export function HomeScreen() {
                       <div className={`w-10 h-10 rounded-lg text-emerald-600 flex items-center justify-center text-lg transition-colors duration-200 ${
                         isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
                       }`}>
-                        {item.emoji}
+                        <item.icon 
+                          size={22} 
+                          className={`transition-colors duration-200 ${
+                            isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                          }`}
+                        />
                       </div>
                       <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-200' : 'text-gray-700'
@@ -253,7 +274,7 @@ export function HomeScreen() {
           className="w-full h-36 rounded-2xl p-4 flex items-end justify-end mt-3 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 text-white font-black relative overflow-hidden transform hover:scale-105 transition-transform duration-200"
         >
           <div className="absolute left-4 top-4 w-12 h-12 rounded-full bg-white/25 border border-white/35 flex items-center justify-center">
-            <span className="text-white text-base">▶</span>
+            <PlayIcon size={24} className="text-white" />
           </div>
           <span className="text-base">Tətbiqdən Necə İstifadə Edilir</span>
         </button>

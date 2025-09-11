@@ -5,6 +5,7 @@ import { STORE_PRODUCTS, getDiscountedPrice, type StoreProduct } from '../../lib
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { QuantityStepper } from '../ui/QuantityStepper';
+import { StarIcon } from '../icons';
 
 export function ProductDetailScreen() {
   const { currentScreen, goBack, isDarkMode, addToCart, navigate } = useApp();
@@ -148,7 +149,7 @@ export function ProductDetailScreen() {
                   const isHalf = !isFull && rating > i && rating < i + 1;
                   return (
                     <span key={i} className="inline-block w-3.5 text-[12px] leading-none">
-                      {isFull ? '★' : isHalf ? '☆' : '☆'}
+                      <StarIcon size={14} filled={isFull} className={isFull || isHalf ? "text-amber-500" : "text-gray-300"} />
                     </span>
                   );
                 })}
@@ -339,7 +340,7 @@ function ReviewsCard() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <select value={stars} onChange={(e)=>setStars(Number(e.target.value))} className={`rounded-md border px-2 py-2 ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}>
-                {[5,4,3,2,1].map(s=>(<option key={s} value={s}>{s} ★</option>))}
+                {[5,4,3,2,1].map(s=>(<option key={s} value={s}>{s} ulduz</option>))}
               </select>
               <label className="flex items-center gap-2 text-xs cursor-pointer">
                 <input type="checkbox" checked={isAnonymous} onChange={(e)=>setIsAnonymous(e.target.checked)} />
@@ -357,7 +358,11 @@ function ReviewsCard() {
             <div key={idx} className="py-2">
               <div className="font-medium flex items-center gap-2">
                 {r.name}
-                <span className="text-amber-500 text-xs">{'★'.repeat(r.stars)}</span>
+                <span className="flex items-center gap-0.5 text-xs">
+                  {Array.from({length: 5}).map((_, i) => (
+                    <StarIcon key={i} size={10} filled={i < r.stars} className={i < r.stars ? "text-amber-500" : "text-gray-300"} />
+                  ))}
+                </span>
               </div>
               <p className="opacity-80">{r.text}</p>
             </div>

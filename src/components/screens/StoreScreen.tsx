@@ -4,6 +4,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { ProductCard } from '../ui/ProductCard';
 import { STORE_PRODUCTS } from '../../lib/products';
+import { CreditCardIcon, PhoneIcon, BankIcon, LockIcon, ZapIcon, TargetIcon, StarIcon } from '../icons';
 
 export function StoreScreen() {
   const { isDarkMode, navigate, addToCart } = useApp();
@@ -159,9 +160,9 @@ export function StoreScreen() {
             <div className="flex items-center gap-2">
               <select value={minRating} onChange={e=>setMinRating(Number(e.target.value))} className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 w-full`}>
                 <option value={0}>Reytinq: hamısı</option>
-                <option value={3}>3★+</option>
-                <option value={4}>4★+</option>
-                <option value={5}>5★</option>
+                <option value={3}>3+ ulduz</option>
+                <option value={4}>4+ ulduz</option>
+                <option value={5}>5 ulduz</option>
               </select>
               <select value={language} onChange={e=>setLanguage(e.target.value as any)} className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 w-full`}>
                 <option value="">Dil: hamısı</option>
@@ -212,7 +213,9 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">💳</div>
+            <div className="mb-1">
+              <CreditCardIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Kart</div>
@@ -222,7 +225,9 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">📱</div>
+            <div className="mb-1">
+              <PhoneIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Mobil</div>
@@ -232,7 +237,9 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">🏦</div>
+            <div className="mb-1">
+              <BankIcon size={32} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
+            </div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Bank</div>
@@ -246,13 +253,16 @@ export function StoreScreen() {
           isDarkMode ? 'text-gray-500' : 'text-gray-500'
         }`}>
           <span className="flex items-center gap-1">
-            🔒 Təhlükəsiz ödəniş
+            <LockIcon size={12} className="inline" />
+            Təhlükəsiz ödəniş
           </span>
           <span className="flex items-center gap-1">
-            ⚡ Ani çatdırılma
+            <ZapIcon size={12} className="inline" />
+            Ani çatdırılma
           </span>
           <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
+            <TargetIcon size={12} className="inline" />
+            7/24 dəstək
           </span>
         </div>
       </div>
