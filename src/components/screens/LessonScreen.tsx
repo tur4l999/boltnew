@@ -75,9 +75,9 @@ export function LessonScreen() {
       case 'materials':
         return (
           <Card>
-            <div className="font-bold mb-2 text-gray-900">Konspekt</div>
-            {moduleId === 'M25' ? (
-              <div className="text-sm text-gray-700 leading-relaxed">
+            <div className={`font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Konspekt</div>
+            {moduleId === 'M25' || moduleId === 'M8' ? (
+              <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 <div className="space-y-3">
                   <div>
                     <div className="font-semibold mb-1">I.</div>
@@ -88,9 +88,9 @@ export function LessonScreen() {
 
                   <div className="my-3 flex justify-center">
                     <img
-                      src="/image.png"
+                      src="/image copy.png"
                       alt="Velosiped və moped qaydaları"
-                      className="max-w-full rounded-xl shadow-md"
+                      className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
                     />
                   </div>
 
@@ -119,7 +119,7 @@ export function LessonScreen() {
                 </div>
               </div>
             ) : (
-              <div className="text-sm text-gray-700">
+              <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
               </div>
             )}
