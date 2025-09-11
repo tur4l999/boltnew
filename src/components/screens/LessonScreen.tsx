@@ -25,7 +25,7 @@ export function LessonScreen() {
 
   const lessonTabs = [
     { key: 'article', label: t.article },
-    { key: 'video3d', label: '3D video' },
+    { key: 'video3d', label: t.video3d },
     { key: 'video', label: 'Video dərs' },
     { key: 'materials', label: 'Konspekt' },
   ];
@@ -84,12 +84,28 @@ export function LessonScreen() {
 
       case 'video3d':
         return (
-          <Card>
-            <div className="font-bold mb-2 text-gray-900">3D Video (Demo)</div>
-            <div className="text-sm text-gray-700">
-              3D video məzmunu burada göstəriləcək.
+          <div className="space-y-3">
+            <VideoPlayer 
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              watermark={watermark}
+            />
+            <div className="flex gap-1 items-center">
+              <button
+                onClick={() => setOfflineDownload(!offlineDownload)}
+                className={`flex items-center gap-1 px-2 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50 transition-colors min-h-[28px] ${
+                  offlineDownload ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-gray-600'
+                }`}
+              >
+                📱 {t.download}
+              </button>
+              <button
+                onClick={() => navigate('TeacherContact')}
+                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
+              >
+                💬 Sualını qeyd et
+              </button>
             </div>
-          </Card>
+          </div>
         );
 
       default:
