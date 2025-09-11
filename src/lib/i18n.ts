@@ -1,5 +1,3 @@
-import type { Language } from './types';
-
 export const dictionaries = {
   az: {
     // Common
@@ -70,8 +68,12 @@ export const dictionaries = {
     notifications: 'Bildirişlər',
     assistant: 'AI köməkçi',
     language: 'Dil',
-    upcomingLessons: 'Davam edən Onlayn dərslər',
+    upcomingLessons: 'Onlayn dərslər (canlı və yaxın)',
     classSchedule: 'Dərs cədvəli',
+    // Status
+    statusPlanned: 'Planlaşdırılıb',
+    statusLive: 'Davam edir',
+    statusEnded: 'Bitib',
   },
   
   ru: {
@@ -143,7 +145,11 @@ export const dictionaries = {
     notifications: 'Уведомления',
     assistant: 'AI помощник',
     language: 'Язык',
-    upcomingLessons: 'Ближайшие занятия',
+    upcomingLessons: 'Онлайн занятия (в эфире и ближайшие)',
     classSchedule: 'Расписание занятий',
+    // Status
+    statusPlanned: 'Запланировано',
+    statusLive: 'Идёт',
+    statusEnded: 'Завершено',
   },
 };
