@@ -55,6 +55,15 @@ export const dictionaries = {
     learnFromMistakes: 'Səhvlərimi işlət',
     pass: 'Keçdin',
     fail: 'Keçmədin',
+    resultsFilters: 'Nəticələri filtrlə',
+    dateFrom: 'Tarixdən',
+    dateTo: 'Tarixədək',
+    examType: 'İmtahan növü',
+    all: 'Hamısı',
+    ticketsType: 'Biletlər üzrə',
+    topicsType: 'Mövzular üzrə',
+    simulatorType: 'Simulyator İmtahanı',
+    finalType: 'Yekun imtahan',
     
     // Store
     addToCart: 'Səbətə at',
@@ -128,6 +137,15 @@ export const dictionaries = {
     learnFromMistakes: 'Учить ошибки',
     pass: 'Сдал',
     fail: 'Не сдал',
+    resultsFilters: 'Фильтр результатов',
+    dateFrom: 'C',
+    dateTo: 'По',
+    examType: 'Тип экзамена',
+    all: 'Все',
+    ticketsType: 'По билетам',
+    topicsType: 'По темам',
+    simulatorType: 'Симулятор экзамена',
+    finalType: 'Итоговый экзамен',
     
     // Store
     addToCart: 'В корзину',

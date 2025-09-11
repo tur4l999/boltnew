@@ -7,7 +7,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
 
 export function ExamRunScreen() {
-  const { navigate, currentScreen, isDarkMode, goBack } = useApp();
+  const { navigate, currentScreen, isDarkMode, goBack, addResult } = useApp();
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -74,6 +74,17 @@ export function ExamRunScreen() {
         mistakesStore.add(q.id);
       }
     });
+    try {
+      const type = config?.mode === 'final' ? 'final' : 'simulator';
+      addResult({
+        type,
+        title: type === 'final' ? 'Yekun imtahan' : 'Simulyator',
+        date: new Date(),
+        score,
+        total: questions.length,
+        durationSec: (15 * 60) - timeLeft,
+      });
+    } catch {}
     navigate('Results', {
       result: { score, total: questions.length, timeSpent: (15 * 60) - timeLeft }
     });

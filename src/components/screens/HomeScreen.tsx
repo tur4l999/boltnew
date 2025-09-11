@@ -16,7 +16,7 @@ export function HomeScreen() {
     { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '🌐' },
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
-    { key: 'results', label: t.myResults, action: () => navigate('Results', { result: { score: 16, total: 20 } }), emoji: '📊' },
+    { key: 'results', label: t.myResults, action: () => navigate('ResultsHistory'), emoji: '📊' },
     { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },

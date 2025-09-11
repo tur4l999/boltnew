@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
 import type { Language, NavigationScreen } from '../lib/types';
+import { STORE_PRODUCTS } from '../lib/products';
+import type { ExamAttempt, ExamType } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -22,6 +24,8 @@ interface Transaction {
   description: string;
   date: Date;
 }
+
+type CartItem = { productId: string; qty: number };
 
 interface AppContextType {
   language: Language;
@@ -56,6 +60,9 @@ interface AppContextType {
   deliveryMethod: DeliveryMethod;
   setDeliveryMethod: (m: DeliveryMethod) => void;
   checkoutByCard: (deliveryAddress: string, method: DeliveryMethod) => boolean;
+  // Results
+  results: ExamAttempt[];
+  addResult: (attempt: Omit<ExamAttempt, 'id'>) => ExamAttempt;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -74,6 +81,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('locker');
+  // Results store (demo seeded)
+  const [results, setResults] = useState<ExamAttempt[]>([
+    { id: 'r1', type: 'simulator', title: 'Simulyator', date: new Date(Date.now() - 86400000 * 1), score: 8, total: 10, durationSec: 12 * 60 },
+    { id: 'r2', type: 'final', title: 'Yekun imtahan', date: new Date(Date.now() - 86400000 * 3), score: 17, total: 20, durationSec: 18 * 60 },
+    { id: 'r3', type: 'tickets', title: 'Bilet 1', date: new Date(Date.now() - 86400000 * 5), score: 18, total: 20, durationSec: 22 * 60 },
+    { id: 'r4', type: 'topics', title: 'Mövzu M8', date: new Date(Date.now() - 86400000 * 8), score: 14, total: 20, durationSec: 25 * 60 },
+  ]);
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -200,7 +214,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const currentScreen = navigationStack[navigationStack.length - 1];
 
   // Cart helpers
-  type CartItem = { productId: string; qty: number };
   const addToCart = (productId: string, qty: number = 1) => {
     setCart(prev => {
       const exists = prev.find(i => i.productId === productId);
@@ -216,7 +229,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const checkoutByBalance = (deliveryAddress: string, method: DeliveryMethod): boolean => {
     // Simple balance deduction based on mock prices found in products module at runtime
     try {
-      const { STORE_PRODUCTS } = require('../lib/products');
       const getDeliveryFee = (m: DeliveryMethod): number => {
         switch (m) {
           case 'locker': return 2.5; // Kargomat
@@ -254,7 +266,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Card checkout simulation (same as balance, but does not change balance)
   const checkoutByCard = (deliveryAddress: string, method: DeliveryMethod): boolean => {
     try {
-      const { STORE_PRODUCTS } = require('../lib/products');
       const getDeliveryFee = (m: DeliveryMethod): number => {
         switch (m) {
           case 'locker': return 2.5;
@@ -287,6 +298,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
   
+  // Results API
+  const addResult = (attempt: Omit<ExamAttempt, 'id'>): ExamAttempt => {
+    const newAttempt: ExamAttempt = {
+      ...attempt,
+      id: Date.now().toString(),
+      date: attempt.date ? new Date(attempt.date) : new Date(),
+    } as ExamAttempt;
+    setResults(prev => [newAttempt, ...prev]);
+    return newAttempt;
+  };
+  
   return (
     <AppContext.Provider value={{
       language,
@@ -315,6 +337,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , cart, addToCart, removeFromCart, updateCartQty, clearCart, checkoutByBalance
       , checkoutByCard
       , deliveryMethod, setDeliveryMethod
+      , results, addResult
     }}>
       {children}
     </AppContext.Provider>
