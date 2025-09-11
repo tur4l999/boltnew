@@ -22,6 +22,18 @@ export function LessonScreen() {
   const currentModule = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
   const displayTitle = currentModule ? currentModule.title : moduleId;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
+  
+  const handleKonspektImgError: React.ReactEventHandler<HTMLImageElement> = (e) => {
+    const target = e.currentTarget;
+    const url = new URL(target.src);
+    const pathname = url.pathname || '';
+    if (pathname.endsWith('/unnamed.jpg')) {
+      target.src = '/unnamed.png';
+      return;
+    }
+    target.onerror = null;
+    target.src = '/image.png';
+  };
 
   const lessonTabs = [
     { key: 'article', label: t.article },
@@ -75,10 +87,55 @@ export function LessonScreen() {
       case 'materials':
         return (
           <Card>
-            <div className="font-bold mb-2 text-gray-900">Konspekt</div>
-            <div className="text-sm text-gray-700">
-              Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
-            </div>
+            <div className={`font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Konspekt</div>
+            {moduleId === 'M25' || moduleId === 'M8' ? (
+              <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <div className="space-y-3">
+                  <div>
+                    <div className="font-semibold mb-1">I.</div>
+                    <p>
+                      Velosipedlər və mopedlər yalnız yolun sağ kənar zolağında, yol nişanları və ya yol nişanlanmasının tələblərinə riayət etməklə, mümkün qədər sağ tərəfdə bir cərgə ilə hərəkət etməlidirlər. Piyadalar üçün maneə yaratmamaq şərti ilə velosipedlərin yol çiyini ilə hərəkətinə icazə verilir. Velosiped dəstələri yolun hərəkət hissəsi ilə getdikləri vaxt hərəsi 10 velosipedçidən çox olmayan qruplardan ibarət olmalıdırlar. Nəqliyyat vasitələrinin ötməsini asanlaşdırmaq üçün dəstələrin arasındakı məsafə 80—100 metr olmalıdır.
+                    </p>
+                  </div>
+
+                  <div className="my-3 flex justify-center">
+                    <img
+                      src="/unnamed.jpg"
+                      alt="Velosiped və moped qaydaları"
+                      className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
+                      onError={handleKonspektImgError}
+                    />
+                  </div>
+
+                  <div>
+                    <div className="font-semibold mb-1">II. Velosiped və moped sürücülərinə:</div>
+                    <ol className="list-decimal pl-5 space-y-1">
+                      <li>
+                        sükanı tutmadan və ya təhlükəsizlik dəbilqələrindən istifadə qaydalarını pozmaqla hərəkət etmək;
+                      </li>
+                      <li>
+                        velosipedin və mopedin uzunu və ya eni üzrə qabaritlərindən 0,5 metrdən artıq kənara çıxan və ya velosipedi, mopedi idarə etməyə mane olan yük aparmaq;
+                      </li>
+                      <li>
+                        velosiped yolu olduğu halda, onun yanındakı yolla hərəkət etmək (yalnız velosipedçilərə şamil edilir);
+                      </li>
+                      <li>
+                        tramvay hərəkəti olan yollarda və həmin istiqamətdə hərəkət üçün birdən artıq zolağı olan yollarda sola və ya geriyə dönmək;
+                      </li>
+                      <li> sərnişin daşımaq; </li>
+                      <li> nasaz velosipeddən istifadə etmək; </li>
+                      <li>
+                        velosiped və ya mopedlə birgə istismar üçün nəzərdə tutulan qoşqunun yedəyə alınması istisna olmaqla, velosipedləri və mopedləri, eləcə də velosipedlərlə və mopedlərlə yedəyə almaq qadağandır.
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
+              </div>
+            )}
           </Card>
         );
 
