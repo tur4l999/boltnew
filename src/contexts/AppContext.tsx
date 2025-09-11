@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -56,6 +56,8 @@ interface AppContextType {
   deliveryMethod: DeliveryMethod;
   setDeliveryMethod: (m: DeliveryMethod) => void;
   checkoutByCard: (deliveryAddress: string, method: DeliveryMethod) => boolean;
+  examResults: StoredExamResult[];
+  addExamResult: (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details?: any) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -74,6 +76,53 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('locker');
+  const [examResults, setExamResults] = useState<StoredExamResult[]>([
+    // Demo data
+    {
+      id: '1',
+      type: 'simulator',
+      score: 8,
+      total: 10,
+      timeSpent: 12 * 60,
+      weakTopics: ['M3', 'M5'],
+      date: new Date('2024-12-10T14:30:00'),
+      passed: true,
+      details: {}
+    },
+    {
+      id: '2',
+      type: 'tickets',
+      score: 6,
+      total: 20,
+      timeSpent: 18 * 60,
+      weakTopics: ['M1', 'M8', 'M12'],
+      date: new Date('2024-12-08T10:15:00'),
+      passed: false,
+      details: { ticketNumber: 5 }
+    },
+    {
+      id: '3',
+      type: 'topics',
+      score: 9,
+      total: 10,
+      timeSpent: 8 * 60,
+      weakTopics: ['M27'],
+      date: new Date('2024-12-05T16:45:00'),
+      passed: true,
+      details: { moduleId: 'M3' }
+    },
+    {
+      id: '4',
+      type: 'final',
+      score: 17,
+      total: 20,
+      timeSpent: 25 * 60,
+      weakTopics: ['M15', 'M19', 'M23'],
+      date: new Date('2024-12-01T09:00:00'),
+      passed: true,
+      details: {}
+    }
+  ]);
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -196,6 +245,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     newExpiry.setDate(now.getDate() + activePackage.days);
     setActivePackage({ ...activePackage, activationDate: now, expiryDate: newExpiry });
   };
+
+  const addExamResult = (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details: any = {}): void => {
+    const newResult: StoredExamResult = {
+      id: Date.now().toString(),
+      type,
+      score,
+      total,
+      timeSpent,
+      weakTopics,
+      date: new Date(),
+      passed: score >= Math.ceil(total * 0.8),
+      details
+    };
+    setExamResults(prev => [newResult, ...prev]);
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -315,6 +379,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , cart, addToCart, removeFromCart, updateCartQty, clearCart, checkoutByBalance
       , checkoutByCard
       , deliveryMethod, setDeliveryMethod
+      , examResults, addExamResult
     }}>
       {children}
     </AppContext.Provider>

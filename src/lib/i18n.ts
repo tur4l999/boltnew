@@ -55,6 +55,28 @@ export const dictionaries = {
     learnFromMistakes: 'Səhvlərimi işlət',
     pass: 'Keçdin',
     fail: 'Keçmədin',
+    allResults: 'Bütün nəticələr',
+    filterByType: 'İmtahan növü',
+    filterByDate: 'Tarix üzrə',
+    examTypes: {
+      all: 'Hamısı',
+      tickets: 'Biletlər üzrə',
+      topics: 'Mövzular üzrə',
+      simulator: 'Simulyator İmtahanı',
+      final: 'Yekun imtahan'
+    },
+    dateFilters: {
+      all: 'Bütün tarixlər',
+      today: 'Bu gün',
+      thisWeek: 'Bu həftə',
+      thisMonth: 'Bu ay',
+      lastMonth: 'Keçən ay'
+    },
+    noResults: 'Hələ nəticəniz yoxdur',
+    tryTakingExam: 'İmtahan verməyə başlayın',
+    timeSpent: 'Vaxt',
+    examDate: 'Tarix',
+    score: 'Bal',
     
     // Store
     addToCart: 'Səbətə at',
@@ -128,6 +150,28 @@ export const dictionaries = {
     learnFromMistakes: 'Учить ошибки',
     pass: 'Сдал',
     fail: 'Не сдал',
+    allResults: 'Все результаты',
+    filterByType: 'Тип экзамена',
+    filterByDate: 'По дате',
+    examTypes: {
+      all: 'Все',
+      tickets: 'По билетам',
+      topics: 'По темам',
+      simulator: 'Симулятор экзамена',
+      final: 'Итоговый экзамен'
+    },
+    dateFilters: {
+      all: 'Все даты',
+      today: 'Сегодня',
+      thisWeek: 'На этой неделе',
+      thisMonth: 'В этом месяце',
+      lastMonth: 'В прошлом месяце'
+    },
+    noResults: 'У вас пока нет результатов',
+    tryTakingExam: 'Начните сдавать экзамены',
+    timeSpent: 'Время',
+    examDate: 'Дата',
+    score: 'Балл',
     
     // Store
     addToCart: 'В корзину',
