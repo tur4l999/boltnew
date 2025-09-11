@@ -88,7 +88,7 @@ export function LessonScreen() {
 
                   <div className="my-3 flex justify-center">
                     <img
-                      src="/image copy.png"
+                      src="/image.png"
                       alt="Velosiped və moped qaydaları"
                       className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
                     />
