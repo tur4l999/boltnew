@@ -10,7 +10,7 @@ import { VideoPlayer } from '../media/VideoPlayer';
 type AnswerStatus = 'correct' | 'wrong' | null;
 
 export function QuickTestScreen() {
-  const { navigate, currentScreen } = useApp();
+  const { navigate, currentScreen, addExamResult } = useApp();
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right'>('right');
 
@@ -220,6 +220,41 @@ export function QuickTestScreen() {
     setSlideDir('left');
     setCurrentIndex((i: number) => Math.max(0, i - 1));
   }, []);
+
+  const finishTest = () => {
+    const score = answerStatuses.filter(status => status === 'correct').length;
+    const total = questions.length;
+    const weakTopics: string[] = [];
+    
+    // Add questions with wrong answers to mistakes store and collect weak topics
+    questions.forEach((q, index) => {
+      if (answerStatuses[index] === 'wrong') {
+        mistakesStore.add(q.id);
+        if (q.moduleId && !weakTopics.includes(q.moduleId)) {
+          weakTopics.push(q.moduleId);
+        }
+      }
+    });
+
+    const ticketNumber = currentScreen.params?.ticket;
+    
+    // Save result to context
+    addExamResult(
+      'tickets',
+      score,
+      total,
+      0, // Quick test doesn't have time tracking
+      weakTopics,
+      {
+        ticketNumber,
+        questions: questions.map(q => q.id)
+      }
+    );
+
+    navigate('Results', {
+      result: { score, total, timeSpent: 0, weakTopics }
+    });
+  };
 
   const question = questions[currentIndex];
   const ticketNumber = (currentScreen?.params?.ticket as number) || 1;
@@ -569,6 +604,14 @@ export function QuickTestScreen() {
         <Button size="sm" variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={goPrev} disabled={currentIndex === 0}>
           Geri
         </Button>
+        
+        {/* Show finish button if all questions are answered */}
+        {selectedAnswers.every(answer => answer !== null) && (
+          <Button size="sm" onClick={finishTest} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            Testi bitir
+          </Button>
+        )}
+        
         <Button size="sm" variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={goNext} disabled={currentIndex === questions.length - 1}>
           Sonrakı
         </Button>

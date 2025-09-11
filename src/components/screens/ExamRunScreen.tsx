@@ -7,7 +7,7 @@ import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
 
 export function ExamRunScreen() {
-  const { navigate, currentScreen, isDarkMode, goBack } = useApp();
+  const { navigate, currentScreen, isDarkMode, goBack, addExamResult } = useApp();
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -69,13 +69,46 @@ export function ExamRunScreen() {
 
   function finishExam() {
     const score = questions.reduce((acc, q) => acc + (outcomes[q.id] === 'correct' ? 1 : 0), 0);
+    const total = questions.length;
+    const timeSpent = (15 * 60) - timeLeft;
+    const weakTopics: string[] = [];
+    
     questions.forEach(q => {
       if (outcomes[q.id] !== 'correct') {
         mistakesStore.add(q.id);
+        // Extract module from question moduleId
+        if (q.moduleId && !weakTopics.includes(q.moduleId)) {
+          weakTopics.push(q.moduleId);
+        }
       }
     });
+
+    // Determine exam type based on config
+    let examType: 'simulator' | 'final' | 'tickets' | 'topics' = 'simulator';
+    if (config?.mode === 'final') {
+      examType = 'final';
+    } else if (config?.ticket) {
+      examType = 'tickets';
+    } else if (config?.moduleId) {
+      examType = 'topics';
+    }
+
+    // Save result to context
+    addExamResult(
+      examType, 
+      score, 
+      total, 
+      timeSpent, 
+      weakTopics,
+      {
+        ticketNumber: config?.ticket,
+        moduleId: config?.moduleId,
+        questions: questions.map(q => q.id)
+      }
+    );
+
     navigate('Results', {
-      result: { score, total: questions.length, timeSpent: (15 * 60) - timeLeft }
+      result: { score, total, timeSpent, weakTopics }
     });
   }
 
@@ -122,7 +155,7 @@ export function ExamRunScreen() {
           </div>
           <div className="w-full max-w-xs space-y-2 px-4">
             <Button onClick={() => window.location.reload()} className="w-full" variant="secondary">Yenidən Başla</Button>
-            <Button onClick={() => navigate('Results', { result: { score: Object.values(outcomes).filter(v => v === 'correct').length, total: questions.length, timeSpent: (15 * 60) - timeLeft } })} className="w-full">Nəticələr</Button>
+            <Button onClick={finishExam} className="w-full">Nəticələr</Button>
             <Button onClick={() => navigate('Lesson', { moduleId: 'M1' })} className="w-full" variant="ghost">Dərsə Başla</Button>
           </div>
         </div>

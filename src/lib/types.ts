@@ -41,6 +41,24 @@ export interface ExamResult {
   weakTopics: string[];
 }
 
+export type ExamType = 'tickets' | 'topics' | 'simulator' | 'final';
+
+export interface StoredExamResult {
+  id: string;
+  type: ExamType;
+  score: number;
+  total: number;
+  timeSpent: number;
+  weakTopics: string[];
+  date: Date;
+  passed: boolean;
+  details?: {
+    moduleId?: string;
+    ticketNumber?: number;
+    questions?: string[];
+  };
+}
+
 export interface Product {
   id: string;
   title: string;
