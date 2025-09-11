@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { MODULES } from '../../lib/data';
 
+type LessonStatus = 'scheduled' | 'ongoing' | 'completed';
+
 type LessonItem = {
   id: string;
   moduleId: string;
@@ -9,6 +11,7 @@ type LessonItem = {
   instructor: string;
   date: string; // ISO string
   durationMin: number;
+  status?: LessonStatus;
 };
 
 export function OnlineLessonsScreen() {
@@ -26,6 +29,58 @@ export function OnlineLessonsScreen() {
     return MODULES.find(m => m.id === moduleId)?.title || moduleId;
   };
 
+  const getLessonStatus = (lessonDate: string): LessonStatus => {
+    const now = new Date();
+    const date = new Date(lessonDate);
+    const endTime = new Date(date.getTime() + 60 * 60 * 1000); // Dərs bitməsi (1 saat sonra)
+    
+    if (now < date) return 'scheduled';
+    if (now >= date && now <= endTime) return 'ongoing';
+    return 'completed';
+  };
+
+  const getStatusInfo = (status: LessonStatus) => {
+    switch (status) {
+      case 'scheduled':
+        return {
+          label: 'Planlaşdırılıb',
+          bgColor: isDarkMode ? 'bg-blue-900/20' : 'bg-blue-50',
+          borderColor: isDarkMode ? 'border-blue-700' : 'border-blue-200',
+          textColor: isDarkMode ? 'text-blue-400' : 'text-blue-700',
+          dotColor: isDarkMode ? 'bg-blue-500' : 'bg-blue-500',
+          icon: '🗓️'
+        };
+      case 'ongoing':
+        return {
+          label: 'Davam edir',
+          bgColor: isDarkMode ? 'bg-green-900/20' : 'bg-green-50',
+          borderColor: isDarkMode ? 'border-green-700' : 'border-green-200',
+          textColor: isDarkMode ? 'text-green-400' : 'text-green-700',
+          dotColor: isDarkMode ? 'bg-green-500' : 'bg-green-500',
+          icon: '🔴'
+        };
+      case 'completed':
+        return {
+          label: 'Tamamlandı',
+          bgColor: isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100',
+          borderColor: isDarkMode ? 'border-gray-700' : 'border-gray-300',
+          textColor: isDarkMode ? 'text-gray-400' : 'text-gray-600',
+          dotColor: isDarkMode ? 'bg-gray-500' : 'bg-gray-400',
+          icon: '✅'
+        };
+    }
+  };
+
+  const getLessonEmoji = (moduleId: string): string => {
+    const emojiMap: { [key: string]: string } = {
+      'M1': '📚', 'M2': '🔍', 'M3': '🧮', 'M4': '📊', 
+      'M5': '🎯', 'M6': '💡', 'M7': '🔬', 'M8': '🎨',
+      'M9': '🏗️', 'M10': '📈', 'M11': '🌟', 'M12': '🏆',
+      'M13': '🚀', 'M14': '💼', 'M15': '🌐', 'QA': '❓'
+    };
+    return emojiMap[moduleId] || '📖';
+  };
+
   const formatDateTime = (d: Date): string => {
     const dd = String(d.getDate()).padStart(2, '0');
     const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -33,6 +88,19 @@ export function OnlineLessonsScreen() {
     const hh = String(d.getHours()).padStart(2, '0');
     const min = String(d.getMinutes()).padStart(2, '0');
     return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+  };
+
+  const formatDateTimeModern = (d: Date): { date: string; time: string; month: string } => {
+    const months = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyn', 'İyl', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek'];
+    const dd = d.getDate();
+    const month = months[d.getMonth()];
+    const hh = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return {
+      date: `${dd}`,
+      time: `${hh}:${min}`,
+      month: month
+    };
   };
 
   const getAzWeekdayShort = (d: Date): string => {
@@ -93,71 +161,196 @@ export function OnlineLessonsScreen() {
       </div>
 
       {/* Upcoming (top 2) */}
-      <div className="space-y-3">
-        <div className={`${isDarkMode ? 'text-gray-200' : 'text-gray-700'} text-sm font-extrabold`}>{t.upcomingLessons}</div>
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">🔥</span>
+          <div className={`${isDarkMode ? 'text-gray-200' : 'text-gray-700'} text-base font-extrabold`}>Yaxınlaşan Dərslər</div>
+        </div>
         {upcoming.map((l, idx) => {
           const d = new Date(l.date);
+          const dateInfo = formatDateTimeModern(d);
+          const status = getLessonStatus(l.date);
+          const statusInfo = getStatusInfo(status);
+          const emoji = getLessonEmoji(l.moduleId);
+          
           return (
             <div
               key={l.id}
-              className={`rounded-2xl border p-4 flex items-start gap-4 shadow-sm ${
-                isDarkMode ? 'bg-emerald-900/10 border-emerald-800' : 'bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-200'
+              className={`relative overflow-hidden rounded-2xl border shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer ${
+                status === 'ongoing' 
+                  ? `${statusInfo.bgColor} ${statusInfo.borderColor} border-2` 
+                  : isDarkMode 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-200'
               }`}
               onClick={() => { setSelectedLesson(l); setSelectedSource('upcoming'); }}
             >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                isDarkMode ? 'bg-emerald-800 text-emerald-200' : 'bg-white text-emerald-700 border border-emerald-200 shadow'
-              }`}>📡</div>
-              <div className="flex-1">
-                <div className={`text-base font-black leading-tight ${isDarkMode ? 'text-emerald-100' : 'text-emerald-900'}`}>{truncate(l.title, 64)}</div>
-                <div className={`text-xs mt-1 ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
-                  {formatDateTime(d)}{' • '}{l.instructor}{' • '}{l.durationMin} dəq
+              {status === 'ongoing' && (
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-green-400 to-green-500 animate-pulse"></div>
+              )}
+              
+              <div className="p-5">
+                <div className="flex items-start gap-4">
+                  {/* Sol tərəf - Tarix və Saat */}
+                  <div className={`flex flex-col items-center justify-center rounded-2xl px-4 py-3 ${
+                    isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-br from-gray-50 to-gray-100'
+                  }`}>
+                    <div className={`text-3xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      {dateInfo.date}
+                    </div>
+                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      {dateInfo.month}
+                    </div>
+                    <div className={`mt-2 text-sm font-bold ${
+                      status === 'ongoing' 
+                        ? 'text-green-500' 
+                        : isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      {dateInfo.time}
+                    </div>
+                  </div>
+                  
+                  {/* Mərkəz - Dərs məlumatları */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start gap-3">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-md ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
+                          : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200'
+                      }`}>
+                        {emoji}
+                      </div>
+                      <div className="flex-1">
+                        <div className={`text-lg font-black leading-tight mb-1 ${
+                          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                        }`}>
+                          {truncate(l.title, 50)}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-lg">👨‍🏫</span>
+                          <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {l.instructor}
+                          </span>
+                          <span className={`${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>•</span>
+                          <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            {l.durationMin} dəq
+                          </span>
+                        </div>
+                        
+                        {/* Status Badge */}
+                        <div className="mt-3 flex items-center gap-2">
+                          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                            statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor} border`}>
+                            <span>{statusInfo.icon}</span>
+                            <span>{statusInfo.label}</span>
+                            {status === 'ongoing' && (
+                              <div className="w-2 h-2 rounded-full animate-pulse bg-current"></div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Sağ tərəf - Düymə */}
+                  <div className="flex flex-col items-end">
+                    {status !== 'completed' && (
+                      <button
+                        className={`px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap shadow-lg transition-all duration-200 ${
+                          status === 'ongoing'
+                            ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse'
+                            : isDarkMode 
+                              ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                              : 'bg-blue-500 text-white hover:bg-blue-600'
+                        }`}
+                        onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
+                      >
+                        {status === 'ongoing' ? '🔴 Qoşul' : '📅 Qoşul'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-              {
-                <button
-                  className={`px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap shadow ${
-                    isDarkMode ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  }`}
-                  onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
-                >
-                  Qoşul
-                </button>
-              }
             </div>
           );
         })}
       </div>
 
       {/* Schedule */}
-      <div className="mt-4">
-        <div className={`text-sm font-extrabold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>{t.classSchedule}</div>
-        <div className="space-y-3">
+      <div className="mt-8">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-2xl">📅</span>
+          <div className={`${isDarkMode ? 'text-gray-200' : 'text-gray-700'} text-base font-extrabold`}>Dərs Cədvəli</div>
+        </div>
+        <div className="space-y-4">
           {groupedByDay.map(([dayLabel, items]) => (
-            <div key={dayLabel} className="space-y-2">
-              <div className={`sticky top-0 z-10 -mx-3 px-3 py-1.5 text-[11px] font-extrabold tracking-wide ${
-                isDarkMode ? 'bg-gray-900 text-gray-300' : 'bg-gray-50 text-gray-600'
-              }`}>{dayLabel}</div>
+            <div key={dayLabel} className="space-y-3">
+              <div className={`sticky top-0 z-10 -mx-3 px-3 py-2 backdrop-blur-md text-sm font-extrabold tracking-wide flex items-center gap-2 ${
+                isDarkMode ? 'bg-gray-900/80 text-gray-300' : 'bg-gray-50/80 text-gray-700'
+              }`}>
+                <span className="text-lg">📌</span>
+                {dayLabel}
+              </div>
               {items.map((l) => {
                 const d = new Date(l.date);
+                const dateInfo = formatDateTimeModern(d);
+                const status = getLessonStatus(l.date);
+                const statusInfo = getStatusInfo(status);
+                const emoji = getLessonEmoji(l.moduleId);
+                
                 return (
                   <div
                     key={l.id}
-                    className={`rounded-xl border p-3 flex items-center gap-3 shadow-sm ${
+                    className={`rounded-xl border shadow-md transition-all duration-300 hover:shadow-lg cursor-pointer overflow-hidden ${
                       isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
                     }`}
                     onClick={() => { setSelectedLesson(l); setSelectedSource('schedule'); }}
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${
-                      isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-50 text-gray-700'
-                    }`}>🎓</div>
-                    <div className="flex-1 min-w-0">
-                      <div className={`text-sm font-extrabold truncate ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{truncate(l.title, 48)}</div>
-                      <div className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                        {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })} • {l.instructor} • {l.durationMin} dəq
+                    <div className="p-4">
+                      <div className="flex items-center gap-4">
+                        {/* Emoji */}
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow ${
+                          isDarkMode 
+                            ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
+                            : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200'
+                        }`}>
+                          {emoji}
+                        </div>
+                        
+                        {/* Məlumatlar */}
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-base font-bold truncate mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                            {truncate(l.title, 45)}
+                          </div>
+                          <div className="flex items-center gap-3 text-sm">
+                            <div className="flex items-center gap-1">
+                              <span className="text-base">⏰</span>
+                              <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                {dateInfo.time}
+                              </span>
+                            </div>
+                            <span className={`${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>•</span>
+                            <div className="flex items-center gap-1">
+                              <span className="text-base">👤</span>
+                              <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                {l.instructor}
+                              </span>
+                            </div>
+                            <span className={`${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>•</span>
+                            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              {l.durationMin} dəq
+                            </span>
+                          </div>
+                        </div>
+                        
+                        {/* Status */}
+                        <div className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 ${
+                          statusInfo.bgColor} ${statusInfo.textColor} ${statusInfo.borderColor} border`}>
+                          <span className="text-xs">{statusInfo.icon}</span>
+                          <span className="text-[10px]">{statusInfo.label}</span>
+                        </div>
                       </div>
                     </div>
-                    {/* No Planla button in schedule; informational only */}
                   </div>
                 );
               })}
@@ -167,36 +360,114 @@ export function OnlineLessonsScreen() {
       </div>
 
       {selectedLesson && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => { setSelectedLesson(null); setSelectedSource(null); }} />
-          <div className={`relative z-10 w-[92%] max-w-sm rounded-2xl p-5 shadow-xl border ${
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => { setSelectedLesson(null); setSelectedSource(null); }} />
+          <div className={`relative z-10 w-full max-w-md rounded-3xl shadow-2xl border overflow-hidden ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
-            <div className={`text-base font-extrabold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              {selectedLesson.title}
+            {/* Header */}
+            <div className={`p-6 pb-4 ${
+              isDarkMode ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-gray-50 to-white'
+            }`}>
+              <div className="flex items-start gap-4">
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-lg ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-br from-gray-700 to-gray-600' 
+                    : 'bg-white border border-gray-200'
+                }`}>
+                  {getLessonEmoji(selectedLesson.moduleId)}
+                </div>
+                <div className="flex-1">
+                  <h3 className={`text-xl font-black mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {selectedLesson.title}
+                  </h3>
+                  <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                    getStatusInfo(getLessonStatus(selectedLesson.date)).bgColor} ${
+                    getStatusInfo(getLessonStatus(selectedLesson.date)).textColor} ${
+                    getStatusInfo(getLessonStatus(selectedLesson.date)).borderColor} border`}>
+                    <span>{getStatusInfo(getLessonStatus(selectedLesson.date)).icon}</span>
+                    <span>{getStatusInfo(getLessonStatus(selectedLesson.date)).label}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className={`${isDarkMode ? 'text-gray-200' : 'text-gray-700'} text-sm leading-relaxed mb-4`}>
-              {formatDateTime(new Date(selectedLesson.date))}{' • '}{selectedLesson.instructor}{' • '}{selectedLesson.durationMin} dəq
+            
+            {/* Content */}
+            <div className="p-6 pt-2 space-y-4">
+              {/* Tarix və Saat */}
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  <span className="text-xl">📆</span>
+                </div>
+                <div>
+                  <div className={`text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Tarix və Saat
+                  </div>
+                  <div className={`text-base font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {formatDateTimeModern(new Date(selectedLesson.date)).date} {formatDateTimeModern(new Date(selectedLesson.date)).month}, {formatDateTimeModern(new Date(selectedLesson.date)).time}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Müəllim */}
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  <span className="text-xl">👨‍🏫</span>
+                </div>
+                <div>
+                  <div className={`text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Müəllim
+                  </div>
+                  <div className={`text-base font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {selectedLesson.instructor}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Müddət */}
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  <span className="text-xl">⏱️</span>
+                </div>
+                <div>
+                  <div className={`text-sm font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Müddət
+                  </div>
+                  <div className={`text-base font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {selectedLesson.durationMin} dəqiqə
+                  </div>
+                </div>
+              </div>
             </div>
-            {selectedSource === 'upcoming' ? (
-              <div className="flex items-center justify-center">
+            
+            {/* Actions */}
+            <div className={`p-6 pt-2 space-y-3 ${
+              isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+            }`}>
+              {selectedSource === 'upcoming' && getLessonStatus(selectedLesson.date) !== 'completed' && (
                 <button
                   onClick={() => alert('Qoşulma linki (demo)')}
-                  className="px-5 py-3 rounded-xl font-bold min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className={`w-full px-6 py-3.5 rounded-2xl font-bold text-base shadow-lg transition-all duration-200 ${
+                    getLessonStatus(selectedLesson.date) === 'ongoing'
+                      ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse'
+                      : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                  }`}
                 >
-                  Qoşul
+                  {getLessonStatus(selectedLesson.date) === 'ongoing' ? '🔴 Dərsə Qoşul' : '📅 Dərsə Qoşul'}
                 </button>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center">
-                {/* No Qoşul for schedule; informational only */}
-              </div>
-            )}
-            <div className="mt-3 flex items-center justify-center">
+              )}
               <button
                 onClick={() => { setSelectedLesson(null); setSelectedSource(null); }}
-                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
+                className={`w-full px-6 py-3 rounded-2xl font-bold text-base border transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600' 
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 Bağla
