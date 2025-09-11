@@ -25,7 +25,7 @@ export function LessonScreen() {
 
   const lessonTabs = [
     { key: 'article', label: t.article },
-    { key: 'video3d', label: '3D video' },
+    { key: 'video3d', label: t.video3d },
     { key: 'video', label: 'Video dərs' },
     { key: 'materials', label: 'Konspekt' },
   ];
@@ -84,12 +84,12 @@ export function LessonScreen() {
 
       case 'video3d':
         return (
-          <Card>
-            <div className="font-bold mb-2 text-gray-900">3D Video (Demo)</div>
-            <div className="text-sm text-gray-700">
-              3D video məzmunu burada göstəriləcək.
-            </div>
-          </Card>
+          <div className="space-y-3">
+            <VideoPlayer 
+              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              watermark={watermark}
+            />
+          </div>
         );
 
       default:
