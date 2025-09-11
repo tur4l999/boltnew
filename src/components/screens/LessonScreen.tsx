@@ -22,6 +22,18 @@ export function LessonScreen() {
   const currentModule = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
   const displayTitle = currentModule ? currentModule.title : moduleId;
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
+  
+  const handleKonspektImgError: React.ReactEventHandler<HTMLImageElement> = (e) => {
+    const target = e.currentTarget;
+    const url = new URL(target.src);
+    const pathname = url.pathname || '';
+    if (pathname.endsWith('/unnamed.jpg')) {
+      target.src = '/unnamed.png';
+      return;
+    }
+    target.onerror = null;
+    target.src = '/image.png';
+  };
 
   const lessonTabs = [
     { key: 'article', label: t.article },
@@ -88,9 +100,10 @@ export function LessonScreen() {
 
                   <div className="my-3 flex justify-center">
                     <img
-                      src="/image.png"
+                      src="/unnamed.jpg"
                       alt="Velosiped və moped qaydaları"
                       className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
+                      onError={handleKonspektImgError}
                     />
                   </div>
 
