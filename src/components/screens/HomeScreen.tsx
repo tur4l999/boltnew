@@ -7,8 +7,11 @@ import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
 import { 
-  VideoIcon, DocumentIcon, GlobeIcon, NoteIcon, ChartIcon, FileTextIcon, DollarIcon,
-  PackageIcon, GraduationIcon, ToolIcon, MailIcon, NewspaperIcon, ClipboardIcon, FlaskIcon, PlayIcon, ClockIcon
+  VideoIcon, DocumentIcon, GlobeIcon, ChartIcon, PackageIcon, StarIcon,
+  NoteIcon, FileTextIcon, DollarIcon, NewspaperIcon
+} from '../icons/modern';
+import {
+  GraduationIcon, ToolIcon, MailIcon, ClipboardIcon, FlaskIcon, PlayIcon, ClockIcon
 } from '../icons';
 
 export function HomeScreen() {

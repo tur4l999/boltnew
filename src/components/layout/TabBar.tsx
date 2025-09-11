@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
-import { HomeIcon, BookIcon, FlaskIcon, ShoppingBagIcon, PlusIcon } from '../icons';
+import { HomeIcon, BookIcon, FlaskIcon, ShoppingBagIcon, PlusIcon } from '../icons/modern';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
