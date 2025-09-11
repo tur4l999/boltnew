@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { Bell } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { MODULES } from '../../lib/data';
 
@@ -197,82 +198,99 @@ export function OnlineLessonsScreen() {
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-green-400 to-green-500 animate-pulse"></div>
               )}
               
-              <div className="p-5">
-                <div className="flex items-start gap-4">
-                  {/* Sol tərəf - Tarix və Saat */}
-                  <div className={`flex flex-col items-center justify-center rounded-2xl px-4 py-3 ${
-                    isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-br from-gray-50 to-gray-100'
-                  }`}>
-                    <div className={`text-3xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                      {dateInfo.date}
-                    </div>
-                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {dateInfo.month}
-                    </div>
-                    <div className={`mt-2 text-sm font-bold ${
-                      status === 'ongoing' 
-                        ? 'text-green-500' 
-                        : isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              <div className="flex flex-col h-full">
+                {/* Top Section */}
+                <div className="p-5 pb-3">
+                  <div className="flex items-start gap-4">
+                    {/* Sol tərəf - Tarix və Saat */}
+                    <div className={`flex flex-col items-center justify-center rounded-2xl px-4 py-3 ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gradient-to-br from-gray-50 to-gray-100'
                     }`}>
-                      {dateInfo.time}
-                    </div>
-                  </div>
-                  
-                  {/* Mərkəz - Dərs məlumatları */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start">
-                      <div className="flex-1">
-                        <div className={`text-lg font-black leading-tight mb-1 ${
-                          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                        }`}>
-                          {truncate(l.title, 50)}
-                        </div>
-                        <div className="flex items-center gap-2 text-sm">
-                          <span className="text-lg">👨‍🏫</span>
-                          <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {l.instructor}
-                          </span>
-                          <span className={`${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>•</span>
-                          <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {l.durationMin} dəq
-                          </span>
-                        </div>
-                        
-                        {/* Status Badge */}
-                        {statusInfo && (
-                          <div className="mt-3 flex items-center gap-2">
-                            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
-                              statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor} border`}>
-                              <span>{statusInfo.icon}</span>
-                              <span>{statusInfo.label}</span>
-                              {status === 'ongoing' && (
-                                <div className="w-2 h-2 rounded-full animate-pulse bg-current"></div>
-                              )}
-                            </div>
-                          </div>
-                        )}
+                      <div className={`text-3xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {dateInfo.date}
+                      </div>
+                      <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {dateInfo.month}
+                      </div>
+                      <div className={`mt-2 text-sm font-bold ${
+                        status === 'ongoing' 
+                          ? 'text-green-500' 
+                          : isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        {dateInfo.time}
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Sağ tərəf - Düymə */}
-                  <div className="flex flex-col items-end">
-                    {status !== 'completed' && (
+                    
+                    {/* Mərkəz - Dərs məlumatları */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start">
+                        <div className="flex-1">
+                          <div className={`text-lg font-black leading-tight mb-1 ${
+                            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
+                            {truncate(l.title, 50)}
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-lg">👨‍🏫</span>
+                            <span className={`font-semibold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {l.instructor}
+                            </span>
+                            <span className={`${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>•</span>
+                            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              {l.durationMin} dəq
+                            </span>
+                          </div>
+                          
+                          {/* Status Badge */}
+                          {statusInfo && (
+                            <div className="mt-3 flex items-center gap-2">
+                              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                                statusInfo.bgColor} ${statusInfo.borderColor} ${statusInfo.textColor} border`}>
+                                <span>{statusInfo.icon}</span>
+                                <span>{statusInfo.label}</span>
+                                {status === 'ongoing' && (
+                                  <div className="w-2 h-2 rounded-full animate-pulse bg-current"></div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Sağ tərəf - Bildiriş ikonu */}
+                    <div className="flex flex-col items-end">
                       <button
-                        className={`px-4 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap shadow-lg transition-all duration-200 ${
-                          status === 'ongoing'
-                            ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse'
-                            : isDarkMode 
-                              ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                              : 'bg-blue-500 text-white hover:bg-blue-600'
+                        className={`p-2 rounded-xl transition-all duration-200 ${
+                          isDarkMode 
+                            ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                            : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
                         }`}
-                        onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
+                        onClick={(e) => { e.stopPropagation(); alert('Bildiriş ayarları (demo)'); }}
                       >
-                        {status === 'ongoing' ? '🔴 Qoşul' : '📅 Qoşul'}
+                        <Bell className="w-5 h-5" />
                       </button>
-                    )}
+                    </div>
                   </div>
                 </div>
+                
+                {/* Bottom Section - Button */}
+                {status !== 'completed' && (
+                  <div className="px-5 pb-4 mt-auto">
+                    <button
+                      className={`w-full px-6 py-3 rounded-xl text-base font-bold shadow-lg transition-all duration-200 ${
+                        status === 'ongoing'
+                          ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse'
+                          : isDarkMode 
+                            ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                            : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`}
+                      onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
+                    >
+                      {status === 'ongoing' ? '🔴 Qoşul' : '📅 Qoşul'}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           );
