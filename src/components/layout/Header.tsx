@@ -2,7 +2,8 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
-import { StarIcon, HandWaveIcon, BellIcon, BotIcon, GlobeIcon, MegaphoneIcon } from '../icons';
+import { StarIcon, HandWaveIcon, BellIcon, BotIcon, GlobeIcon } from '../icons/modern';
+import { MegaphoneIcon } from '../icons';
 
 export function Header() {
   const { t, language, setLanguage, navigate, isDarkMode } = useApp();

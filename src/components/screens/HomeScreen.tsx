@@ -8,11 +8,10 @@ import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
 import { 
   VideoIcon, DocumentIcon, GlobeIcon, ChartIcon, PackageIcon, StarIcon,
-  NoteIcon, FileTextIcon, DollarIcon, NewspaperIcon
+  NoteIcon, FileTextIcon, DollarIcon, NewspaperIcon, GraduationIcon, 
+  ToolIcon, MailIcon, ClipboardIcon, PlayIcon, ClockIcon
 } from '../icons/modern';
-import {
-  GraduationIcon, ToolIcon, MailIcon, ClipboardIcon, FlaskIcon, PlayIcon, ClockIcon
-} from '../icons';
+import { FlaskIcon } from '../icons';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
