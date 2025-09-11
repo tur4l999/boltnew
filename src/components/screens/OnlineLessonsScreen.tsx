@@ -183,26 +183,6 @@ export function OnlineLessonsScreen() {
                         {truncate(l.title, 64)}
                       </div>
                       
-                      {/* Enhanced date/time display */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">📅</span>
-                          <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                            {d.toLocaleDateString('az-AZ', { weekday: 'long', day: 'numeric', month: 'long' })}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">🕐</span>
-                          <span className={`text-lg font-extrabold ${
-                            status === 'live' 
-                              ? 'text-red-600 animate-pulse' 
-                              : isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
-                          }`}>
-                            {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
-                      </div>
-                      
                       <div className="flex items-center gap-3 mt-2">
                         <div className="flex items-center gap-1">
                           <span className="text-base">👨‍🏫</span>
@@ -219,12 +199,26 @@ export function OnlineLessonsScreen() {
                       </div>
                     </div>
                     
-                    {/* Status badge */}
-                    <div className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 ${statusDisplay.bgColor} ${statusDisplay.borderColor} border`}>
-                      <span className="text-sm">{statusDisplay.emoji}</span>
-                      <span className={`text-xs font-bold ${statusDisplay.textColor}`}>
-                        {statusDisplay.text}
-                      </span>
+                    {/* Date, time and status on right */}
+                    <div className="flex flex-col items-end gap-2">
+                      <div className="text-right">
+                        <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                          {d.toLocaleDateString('az-AZ', { weekday: 'short', day: 'numeric', month: 'short' })}
+                        </div>
+                        <div className={`text-lg font-extrabold ${
+                          status === 'live' 
+                            ? 'text-red-600 animate-pulse' 
+                            : isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+                        }`}>
+                          {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
+                      <div className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 ${statusDisplay.bgColor} ${statusDisplay.borderColor} border`}>
+                        <span className="text-sm">{statusDisplay.emoji}</span>
+                        <span className={`text-xs font-bold ${statusDisplay.textColor}`}>
+                          {statusDisplay.text}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   
@@ -308,16 +302,6 @@ export function OnlineLessonsScreen() {
                             </div>
                             <div className="flex items-center gap-3 flex-wrap">
                               <div className="flex items-center gap-1">
-                                <span className="text-sm">🕐</span>
-                                <span className={`text-xs font-semibold ${
-                                  status === 'live'
-                                    ? 'text-red-600 animate-pulse'
-                                    : isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                                }`}>
-                                  {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1">
                                 <span className="text-sm">👨‍🏫</span>
                                 <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                                   {l.instructor}
@@ -332,12 +316,21 @@ export function OnlineLessonsScreen() {
                             </div>
                           </div>
                           
-                          {/* Status badge */}
-                          <div className={`px-2.5 py-1 rounded-full flex items-center gap-1 ${statusDisplay.bgColor} ${statusDisplay.borderColor} border`}>
-                            <span className="text-xs">{statusDisplay.emoji}</span>
-                            <span className={`text-[10px] font-bold ${statusDisplay.textColor}`}>
-                              {statusDisplay.text}
-                            </span>
+                          {/* Date, time and status on right */}
+                          <div className="flex flex-col items-end gap-1">
+                            <div className={`text-sm font-semibold ${
+                              status === 'live'
+                                ? 'text-red-600 animate-pulse'
+                                : isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {d.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                            <div className={`px-2.5 py-1 rounded-full flex items-center gap-1 ${statusDisplay.bgColor} ${statusDisplay.borderColor} border`}>
+                              <span className="text-xs">{statusDisplay.emoji}</span>
+                              <span className={`text-[10px] font-bold ${statusDisplay.textColor}`}>
+                                {statusDisplay.text}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
