@@ -129,16 +129,9 @@ export function OnlineLessonsScreen() {
     }
   };
 
-  // Enhanced emoji selection based on module type
+  // Simple emoji for all lessons
   const getModuleEmoji = (moduleId: string): string => {
-    const emojiMap: Record<string, string> = {
-      'M1': '🚗', 'M2': '⚙️', 'M3': '🛣️', 'M4': '🚦', 'M5': '🏁',
-      'M6': '🚸', 'M7': '🌧️', 'M8': '🏔️', 'M9': '🌃', 'M10': '⛑️',
-      'M11': '🚨', 'M12': '🔧', 'M13': '🛡️', 'M14': '🌍', 'M15': '🚌',
-      'M16': '🚜', 'M17': '🏍️', 'M18': '♿', 'M19': '📋', 'M20': '🎯',
-      'QA': '❓', 'default': '📚'
-    };
-    return emojiMap[moduleId] || emojiMap['default'];
+    return moduleId === 'QA' ? '💬' : '📚';
   };
 
   return (
