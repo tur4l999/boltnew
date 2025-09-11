@@ -10,6 +10,7 @@ export function MoreScreen() {
     { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
     { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
     { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },
+    { key: 'results', label: 'Nəticələrim', emoji: '📊', action: () => navigate('ResultsList') },
     { key: 'mistakes', label: 'Səhvlərim', emoji: '⚠️', action: () => navigate('Mistakes') },
     { key: 'qa', label: 'Sual-cavab', emoji: '❓', action: () => alert('Sual-cavab (demo)') },
     { key: 'appeal', label: 'Apellyasiyalarım', emoji: '📝', action: () => alert('Apellyasiya (demo)') },

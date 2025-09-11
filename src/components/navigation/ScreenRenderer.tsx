@@ -10,6 +10,7 @@ import { ExamConfigScreen } from '../screens/ExamConfigScreen';
 import { ExamScreen } from '../screens/ExamScreen';
 import { ExamRunScreen } from '../screens/ExamRunScreen';
 import { ResultsScreen } from '../screens/ResultsScreen';
+import { ResultsListScreen } from '../screens/ResultsListScreen';
 import { MistakesScreen } from '../screens/MistakesScreen';
 import { StoreScreen } from '../screens/StoreScreen';
 import { MoreScreen } from '../screens/MoreScreen';
@@ -61,6 +62,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'ExamIntro' && <ExamIntroScreen />}
       {currentScreen.screen === 'ExamRun' && <ExamRunScreen />}
       {currentScreen.screen === 'Results' && <ResultsScreen />}
+      {currentScreen.screen === 'ResultsList' && <ResultsListScreen />}
       {currentScreen.screen === 'Mistakes' && <MistakesScreen />}
       {currentScreen.screen === 'TeacherContact' && <TeacherContactScreen />}
       {currentScreen.screen === 'Packages' && <PackagesScreen />}
@@ -74,7 +76,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Blogs' && <BlogsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultsList', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
