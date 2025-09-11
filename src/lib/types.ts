@@ -41,6 +41,18 @@ export interface ExamResult {
   weakTopics: string[];
 }
 
+export type ExamType = 'tickets' | 'topics' | 'simulator' | 'final';
+
+export interface ExamAttempt {
+  id: string;
+  type: ExamType;
+  title?: string; // e.g., "Bilet 1" or "Mövzu M8"
+  date: Date;
+  score: number;
+  total: number;
+  durationSec?: number;
+}
+
 export interface Product {
   id: string;
   title: string;
