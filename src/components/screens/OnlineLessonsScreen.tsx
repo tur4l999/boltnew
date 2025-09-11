@@ -19,6 +19,8 @@ export function OnlineLessonsScreen() {
   const { t, isDarkMode, goBack } = useApp();
   const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
   const [selectedSource, setSelectedSource] = useState<'upcoming' | 'schedule' | null>(null);
+  const [notificationLessons, setNotificationLessons] = useState<Set<string>>(new Set());
+  const [showNotificationPopup, setShowNotificationPopup] = useState<{ lessonId: string; show: boolean } | null>(null);
   // Scheduling visuals removed per requirements
 
   const truncate = (text: string, max: number): string => {
@@ -262,11 +264,18 @@ export function OnlineLessonsScreen() {
                     <div className="flex flex-col items-end">
                       <button
                         className={`p-2 rounded-xl transition-all duration-200 ${
-                          isDarkMode 
-                            ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
-                            : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                          notificationLessons.has(l.id)
+                            ? isDarkMode
+                              ? 'bg-green-700 hover:bg-green-600 text-green-300'
+                              : 'bg-green-100 hover:bg-green-200 text-green-600'
+                            : isDarkMode 
+                              ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                              : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
                         }`}
-                        onClick={(e) => { e.stopPropagation(); alert('Bildiriş ayarları (demo)'); }}
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          setShowNotificationPopup({ lessonId: l.id, show: true });
+                        }}
                       >
                         <Bell className="w-5 h-5" />
                       </button>
@@ -482,6 +491,63 @@ export function OnlineLessonsScreen() {
               >
                 Bağla
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Popup */}
+      {showNotificationPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowNotificationPopup(null)} />
+          <div className={`relative z-10 w-full max-w-sm rounded-2xl shadow-2xl border overflow-hidden ${
+            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
+            <div className={`p-6 ${
+              isDarkMode ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-gray-50 to-white'
+            }`}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  <Bell className="w-6 h-6 text-green-500" />
+                </div>
+                <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Bildiriş ayarları
+                </h3>
+              </div>
+              
+              <p className={`text-sm mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Dərs başlama zamanına yaxın sizə bildiriş göndəriləcək
+              </p>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    if (showNotificationPopup) {
+                      setNotificationLessons(prev => new Set(prev).add(showNotificationPopup.lessonId));
+                    }
+                    setShowNotificationPopup(null);
+                  }}
+                  className={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 ${
+                    isDarkMode
+                      ? 'bg-green-600 text-white hover:bg-green-700'
+                      : 'bg-green-500 text-white hover:bg-green-600'
+                  }`}
+                >
+                  Təsdiq et
+                </button>
+                <button
+                  onClick={() => setShowNotificationPopup(null)}
+                  className={`flex-1 px-4 py-2.5 rounded-xl font-bold text-sm border transition-all duration-200 ${
+                    isDarkMode
+                      ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Ləğv et
+                </button>
+              </div>
             </div>
           </div>
         </div>
