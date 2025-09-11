@@ -76,9 +76,53 @@ export function LessonScreen() {
         return (
           <Card>
             <div className="font-bold mb-2 text-gray-900">Konspekt</div>
-            <div className="text-sm text-gray-700">
-              Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
-            </div>
+            {moduleId === 'M25' ? (
+              <div className="text-sm text-gray-700 leading-relaxed">
+                <div className="space-y-3">
+                  <div>
+                    <div className="font-semibold mb-1">I.</div>
+                    <p>
+                      Velosipedlər və mopedlər yalnız yolun sağ kənar zolağında, yol nişanları və ya yol nişanlanmasının tələblərinə riayət etməklə, mümkün qədər sağ tərəfdə bir cərgə ilə hərəkət etməlidirlər. Piyadalar üçün maneə yaratmamaq şərti ilə velosipedlərin yol çiyini ilə hərəkətinə icazə verilir. Velosiped dəstələri yolun hərəkət hissəsi ilə getdikləri vaxt hərəsi 10 velosipedçidən çox olmayan qruplardan ibarət olmalıdırlar. Nəqliyyat vasitələrinin ötməsini asanlaşdırmaq üçün dəstələrin arasındakı məsafə 80—100 metr olmalıdır.
+                    </p>
+                  </div>
+
+                  <div className="my-3 flex justify-center">
+                    <img
+                      src="/image.png"
+                      alt="Velosiped və moped qaydaları"
+                      className="max-w-full rounded-xl shadow-md"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="font-semibold mb-1">II. Velosiped və moped sürücülərinə:</div>
+                    <ol className="list-decimal pl-5 space-y-1">
+                      <li>
+                        sükanı tutmadan və ya təhlükəsizlik dəbilqələrindən istifadə qaydalarını pozmaqla hərəkət etmək;
+                      </li>
+                      <li>
+                        velosipedin və mopedin uzunu və ya eni üzrə qabaritlərindən 0,5 metrdən artıq kənara çıxan və ya velosipedi, mopedi idarə etməyə mane olan yük aparmaq;
+                      </li>
+                      <li>
+                        velosiped yolu olduğu halda, onun yanındakı yolla hərəkət etmək (yalnız velosipedçilərə şamil edilir);
+                      </li>
+                      <li>
+                        tramvay hərəkəti olan yollarda və həmin istiqamətdə hərəkət üçün birdən artıq zolağı olan yollarda sola və ya geriyə dönmək;
+                      </li>
+                      <li> sərnişin daşımaq; </li>
+                      <li> nasaz velosipeddən istifadə etmək; </li>
+                      <li>
+                        velosiped və ya mopedlə birgə istismar üçün nəzərdə tutulan qoşqunun yedəyə alınması istisna olmaqla, velosipedləri və mopedləri, eləcə də velosipedlərlə və mopedlərlə yedəyə almaq qadağandır.
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-sm text-gray-700">
+                Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
+              </div>
+            )}
           </Card>
         );
 
