@@ -15,39 +15,51 @@ export const BellIcon: React.FC<IconProps> = ({ className = '', size = 24 }) => 
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <linearGradient id="bellGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <linearGradient id="bellGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#fbbf24" />
         <stop offset="100%" stopColor="#f59e0b" />
       </linearGradient>
-      <filter id="bellGlow">
-        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
+      <filter id="bellRing">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
       </filter>
     </defs>
     
-    <g filter="url(#bellGlow)">
-      <path
-        d="M12 2C13.5913 2 15.1174 2.63214 16.2426 3.75736C17.3679 4.88258 18 6.4087 18 8C18 11.0902 18.7719 13.206 19.5 14.5C19.8224 15.1085 19.3525 16 18.6877 16H5.31233C4.64747 16 4.17765 15.1085 4.5 14.5C5.22808 13.206 6 11.0902 6 8C6 6.4087 6.63214 4.88258 7.75736 3.75736C8.88258 2.63214 10.4087 2 12 2Z"
-        stroke="url(#bellGrad)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="url(#bellGrad)"
-        fillOpacity="0.15"
-      />
-      <path
-        d="M9 16V17C9 17.7956 9.31607 18.5587 9.87868 19.1213C10.4413 19.6839 11.2044 20 12 20C12.7956 20 13.5587 19.6839 14.1213 19.1213C14.6839 18.5587 15 17.7956 15 17V16"
-        stroke="url(#bellGrad)"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="12" cy="8" r="1.5" fill="url(#bellGrad)" opacity="0.8">
-        <animate attributeName="r" values="1.5;2;1.5" dur="1.5s" repeatCount="indefinite" />
+    {/* Bell body */}
+    <path
+      d="M10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5C16.2091 5 18 6.79086 18 9V14L19.7071 15.7071C19.8946 15.8946 20 16.149 20 16.4142V17C20 17.5523 19.5523 18 19 18H5C4.44772 18 4 17.5523 4 17V16.4142C4 16.149 4.10536 15.8946 4.29289 15.7071L6 14V9C6 6.79086 7.79086 5 10 5Z"
+      stroke="url(#bellGrad1)"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    
+    {/* Bell interior */}
+    <path
+      d="M10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5C16.2091 5 18 6.79086 18 9V14L19.7071 15.7071C19.8946 15.8946 20 16.149 20 16.4142V17C20 17.5523 19.5523 18 19 18H5C4.44772 18 4 17.5523 4 17V16.4142C4 16.149 4.10536 15.8946 4.29289 15.7071L6 14V9C6 6.79086 7.79086 5 10 5Z"
+      fill="url(#bellGrad1)"
+      fillOpacity="0.1"
+    />
+    
+    {/* Clapper */}
+    <path
+      d="M9 18C9 19.6569 10.3431 21 12 21C13.6569 21 15 19.6569 15 18"
+      stroke="url(#bellGrad1)"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    
+    {/* Ring effect */}
+    <g opacity="0">
+      <circle cx="12" cy="12" r="8" stroke="url(#bellGrad1)" strokeWidth="0.5" fill="none">
+        <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0;0.5;0" dur="2s" repeatCount="indefinite" />
       </circle>
     </g>
+    
+    {/* Notification dot */}
+    <circle cx="17" cy="6" r="2" fill="#ef4444">
+      <animate attributeName="r" values="2;2.5;2" dur="1s" repeatCount="indefinite" />
+    </circle>
   </svg>
 );

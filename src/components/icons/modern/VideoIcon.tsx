@@ -15,38 +15,59 @@ export const VideoIcon: React.FC<IconProps> = ({ className = '', size = 24 }) =>
     xmlns="http://www.w3.org/2000/svg"
   >
     <defs>
-      <linearGradient id="videoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <linearGradient id="vidGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#ef4444" />
-        <stop offset="100%" stopColor="#f97316" />
+        <stop offset="100%" stopColor="#dc2626" />
       </linearGradient>
-      <filter id="videoShadow">
-        <feDropShadow dx="0" dy="3" stdDeviation="4" floodOpacity="0.2" />
-      </filter>
+      <linearGradient id="vidGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#fecaca" />
+        <stop offset="100%" stopColor="#fca5a5" />
+      </linearGradient>
     </defs>
     
-    <g filter="url(#videoShadow)">
-      <rect
-        x="2"
-        y="5"
-        width="15"
-        height="14"
-        rx="4"
-        stroke="url(#videoGrad)"
-        strokeWidth="2.5"
-        fill="url(#videoGrad)"
-        fillOpacity="0.1"
-      />
-      <path
-        d="M17 8L21.5 5.5C21.8 5.3 22.2 5.5 22.2 5.9V18.1C22.2 18.5 21.8 18.7 21.5 18.5L17 16V8Z"
-        fill="url(#videoGrad)"
-        fillOpacity="0.9"
-        stroke="url(#videoGrad)"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <circle cx="9.5" cy="12" r="2.5" fill="url(#videoGrad)" fillOpacity="0.8">
-        <animate attributeName="r" values="2.5;3;2.5" dur="2s" repeatCount="indefinite" />
-      </circle>
-    </g>
+    {/* Main camera body */}
+    <rect
+      x="3"
+      y="6"
+      width="13"
+      height="12"
+      rx="2"
+      stroke="url(#vidGrad1)"
+      strokeWidth="1.5"
+      fill="none"
+    />
+    
+    {/* Lens */}
+    <circle
+      cx="9.5"
+      cy="12"
+      r="3"
+      stroke="url(#vidGrad1)"
+      strokeWidth="1.5"
+      fill="url(#vidGrad2)"
+      fillOpacity="0.2"
+    />
+    
+    {/* Inner lens */}
+    <circle cx="9.5" cy="12" r="1.5" fill="url(#vidGrad1)" fillOpacity="0.4" />
+    <circle cx="9.5" cy="12" r="0.5" fill="url(#vidGrad1)" />
+    
+    {/* Side piece */}
+    <path
+      d="M16 9V15L20.5 17.5C20.7761 17.6381 21.1 17.4478 21.1 17.1382V6.86185C21.1 6.55223 20.7761 6.36193 20.5 6.5L16 9Z"
+      stroke="url(#vidGrad1)"
+      strokeWidth="1.5"
+      strokeLinejoin="round"
+      fill="url(#vidGrad1)"
+      fillOpacity="0.1"
+    />
+    
+    {/* Recording indicator */}
+    <circle cx="5" cy="8" r="1" fill="#ef4444">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+    </circle>
+    
+    {/* Lens flare */}
+    <circle cx="8" cy="10.5" r="0.5" fill="white" opacity="0.6" />
   </svg>
 );
