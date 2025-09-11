@@ -1,14 +1,15 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { HomeIcon, BookIcon, FlaskIcon, ShoppingBagIcon, PlusIcon } from '../icons';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
   
   const tabs = [
-    { key: 'Home', label: t.home, emoji: '🏠' },
-    { key: 'Topics', label: 'Mövzular', emoji: '📚' },
-    { key: 'Exam', label: t.exam, emoji: '🧪' },
-    { key: 'Store', label: t.store, emoji: '🛍️' },
+    { key: 'Home', label: t.home, icon: HomeIcon },
+    { key: 'Topics', label: 'Mövzular', icon: BookIcon },
+    { key: 'Exam', label: t.exam, icon: FlaskIcon },
+    { key: 'Store', label: t.store, icon: ShoppingBagIcon },
   ];
 
   // Hide TabBar on Quick Test screen
@@ -44,7 +45,14 @@ export function TabBar() {
                 ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110'
                 : 'bg-transparent'
             }`}>
-              <span className="text-base">{tab.emoji}</span>
+              <tab.icon 
+                size={20} 
+                className={`transition-colors duration-200 ${
+                  (currentScreen.screen === tab.key)
+                    ? 'text-emerald-600' 
+                    : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}
+              />
             </div>
             <div className={`text-xs font-semibold transition-all duration-200 ${
               (currentScreen.screen === tab.key)
@@ -63,7 +71,14 @@ export function TabBar() {
               ? isDarkMode ? 'bg-gray-700 scale-110' : 'bg-gray-50 scale-110' 
               : 'bg-transparent'
           }`}>
-            <span className="text-base">➕</span>
+            <PlusIcon 
+              size={20} 
+              className={`transition-colors duration-200 ${
+                currentTab === 'More' 
+                  ? 'text-emerald-600' 
+                  : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}
+            />
           </div>
           <div className={`text-xs font-semibold transition-all duration-200 ${
             currentTab === 'More' ? 'transform scale-105' : ''

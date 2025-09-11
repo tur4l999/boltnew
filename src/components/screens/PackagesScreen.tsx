@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { 
+  FireIcon, CheckIcon, RocketIcon, CalendarIcon, CreditCardIcon, PhoneIcon, 
+  BankIcon, LockIcon, ZapIcon, TargetIcon, ShoppingBagIcon, AlertIcon, XIcon 
+} from '../icons';
 import { Calendar } from '../ui/Calendar';
 
 interface Package {

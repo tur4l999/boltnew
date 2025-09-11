@@ -1,6 +1,10 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { 
+  SunIcon, MoonIcon, PhoneIcon, UserIcon, LockIcon, ShieldIcon, BellIcon,
+  TrashIcon, RefreshIcon, QuestionIcon, MessageIcon, InfoIcon, LogoutIcon
+} from '../icons';
 
 export function SettingsScreen() {
   const { goBack, language, setLanguage, theme, setTheme, balance, activePackage, isDarkMode } = useApp();
@@ -8,9 +12,9 @@ export function SettingsScreen() {
   const userEmail = "tural.qarayev@example.com";
 
   const themeOptions = [
-    { value: 'light', label: '☀️ Gündüz', description: 'Açıq tema' },
-    { value: 'dark', label: '🌙 Gecə', description: 'Qaranlıq tema' },
-    { value: 'system', label: '📱 Cihaza uyğun', description: 'Sistem ayarına görə' }
+    { value: 'light', label: 'Gündüz', description: 'Açıq tema', icon: SunIcon },
+    { value: 'dark', label: 'Gecə', description: 'Qaranlıq tema', icon: MoonIcon },
+    { value: 'system', label: 'Cihaza uyğun', description: 'Sistem ayarına görə', icon: PhoneIcon }
   ];
 
   const languageOptions = [
@@ -22,27 +26,27 @@ export function SettingsScreen() {
     {
       section: 'Hesabım',
       items: [
-        { key: 'profile', label: 'Profil məlumatları', emoji: '👤', action: () => alert('Profil məlumatları (demo)') },
-        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔒', action: () => alert('Təhlükəsizlik (demo)') },
-        { key: 'privacy', label: 'Məxfilik', emoji: '🛡️', action: () => alert('Məxfilik (demo)') },
-        { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildiriş ayarları (demo)') }
+        { key: 'profile', label: 'Profil məlumatları', icon: UserIcon, action: () => alert('Profil məlumatları (demo)') },
+        { key: 'security', label: 'Təhlükəsizlik', icon: LockIcon, action: () => alert('Təhlükəsizlik (demo)') },
+        { key: 'privacy', label: 'Məxfilik', icon: ShieldIcon, action: () => alert('Məxfilik (demo)') },
+        { key: 'notifications', label: 'Bildirişlər', icon: BellIcon, action: () => alert('Bildiriş ayarları (demo)') }
       ]
     },
     {
       section: 'Tətbiq',
       items: [
-        { key: 'offline', label: 'Offline məzmun', emoji: '📱', action: () => alert('Offline məzmun (demo)') },
-        { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', action: () => alert('Keş təmizləndi (demo)') },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') }
+        { key: 'offline', label: 'Offline məzmun', icon: PhoneIcon, action: () => alert('Offline məzmun (demo)') },
+        { key: 'cache', label: 'Keş təmizlə', icon: TrashIcon, action: () => alert('Keş təmizləndi (demo)') },
+        { key: 'updates', label: 'Yeniləmələr', icon: RefreshIcon, action: () => alert('Yeniləmələr (demo)') }
       ]
     },
     {
       section: 'Dəstək',
       items: [
-        { key: 'help', label: 'Kömək mərkəzi', emoji: '❓', action: () => alert('Kömək mərkəzi (demo)') },
-        { key: 'contact', label: 'Bizimlə əlaqə', emoji: '📞', action: () => alert('Əlaqə (demo)') },
-        { key: 'feedback', label: 'Rəy bildirin', emoji: '💬', action: () => alert('Rəy bildirin (demo)') },
-        { key: 'about', label: 'Haqqında', emoji: 'ℹ️', action: () => alert('DDA.az v1.0.0 (demo)') }
+        { key: 'help', label: 'Kömək mərkəzi', icon: QuestionIcon, action: () => alert('Kömək mərkəzi (demo)') },
+        { key: 'contact', label: 'Bizimlə əlaqə', icon: PhoneIcon, action: () => alert('Əlaqə (demo)') },
+        { key: 'feedback', label: 'Rəy bildirin', icon: MessageIcon, action: () => alert('Rəy bildirin (demo)') },
+        { key: 'about', label: 'Haqqında', icon: InfoIcon, action: () => alert('DDA.az v1.0.0 (demo)') }
       ]
     }
   ];
@@ -132,9 +136,12 @@ export function SettingsScreen() {
                   className="w-4 h-4 text-emerald-600"
                 />
                 <div className="flex-1">
-                  <div className={`font-medium transition-colors duration-200 ${
+                  <div className={`font-medium flex items-center gap-2 transition-colors duration-200 ${
                     isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                  }`}>{option.label}</div>
+                  }`}>
+                    <option.icon size={16} />
+                    {option.label}
+                  </div>
                   <div className={`text-xs transition-colors duration-200 ${
                     isDarkMode ? 'text-gray-400' : 'text-gray-600'
                   }`}>{option.description}</div>
@@ -201,10 +208,15 @@ export function SettingsScreen() {
                         : 'hover:bg-gray-50 text-gray-900'
                     } ${index !== section.items.length - 1 ? 'border-b border-gray-200 dark:border-gray-700' : ''}`}
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
                       isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
                     }`}>
-                      {item.emoji}
+                      <item.icon 
+                        size={20} 
+                        className={`transition-colors duration-200 ${
+                          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                        }`}
+                      />
                     </div>
                     <div className="flex-1">
                       <div className="font-medium">{item.label}</div>
@@ -231,7 +243,7 @@ export function SettingsScreen() {
             }}
             className="w-full p-4 flex items-center justify-center gap-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 font-medium"
           >
-            <span className="text-lg">🚪</span>
+            <LogoutIcon size={20} />
             Hesabdan çıx
           </button>
         </Card>

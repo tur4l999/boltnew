@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
+import { StarIcon, HandWaveIcon, BellIcon, BotIcon, GlobeIcon, MegaphoneIcon } from '../icons';
 
 export function Header() {
   const { t, language, setLanguage, navigate, isDarkMode } = useApp();
@@ -23,7 +24,9 @@ export function Header() {
               {userName.charAt(0).toUpperCase()}
             </button>
             {useApp().hasActivePackage() && (
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white">★</div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 grid place-items-center border-2 border-white">
+                <StarIcon size={10} className="text-yellow-900" filled />
+              </div>
             )}
           </div>
           <div className="flex-1 leading-tight">
@@ -33,26 +36,28 @@ export function Header() {
             <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName} 👋
+              <span className="flex items-center gap-1">
+                {t.hello}, {userName} <HandWaveIcon size={16} className="text-emerald-600" />
+              </span>
             </div>
           </div>
           <IconButton
-            onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
+            onClick={() => showToast(<div className="flex items-center gap-2"><MegaphoneIcon size={20} /> Push (demo): Bu gün 15 dəq məşq et!</div>)}
             label={t.notifications}
           >
-            🔔
+            <BellIcon size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
           </IconButton>
           <IconButton
             onClick={() => navigate('AIChat')}
             label={t.assistant}
           >
-            🤖
+            <BotIcon size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
           </IconButton>
           <IconButton 
             onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')} 
             label={t.language}
           >
-            🌐
+            <GlobeIcon size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
           </IconButton>
         </div>
       </div>
