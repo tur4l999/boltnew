@@ -10,8 +10,8 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react",
-    "types": ["react", "react-dom", "vite/client"]
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom", "node", "vite/client"]
   },
   "files": [],
   "references": [

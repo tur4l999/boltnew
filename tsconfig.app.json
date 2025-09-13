@@ -12,8 +12,8 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react",
-    "types": ["react", "react-dom"],
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom", "node"],
 
     /* Linting */
     "strict": true,

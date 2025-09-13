@@ -37,6 +37,8 @@ interface AppContextType {
   switchTab: (tab: string) => void;
   moreSheetVisible: boolean;
   setMoreSheetVisible: (visible: boolean) => void;
+  hasCompletedOnboarding: boolean;
+  completeOnboarding: () => void;
   balance: number;
   activePackage: UserPackage | null;
   transactions: Transaction[];
@@ -60,6 +62,11 @@ interface AppContextType {
   addExamResult: (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details?: any) => void;
 }
 
+interface CartItem {
+  productId: string;
+  qty: number;
+}
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
@@ -70,6 +77,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     { screen: 'Home', params: {} }
   ]);
   const [moreSheetVisible, setMoreSheetVisible] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(() => {
+    // Check localStorage for onboarding completion
+    try {
+      return localStorage.getItem('hasCompletedOnboarding') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [balance, setBalance] = useState(100); // Demo account starts with 100 AZN
   const [tickets, setTickets] = useState(3); // Demo starts with 3 tickets
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
@@ -260,11 +275,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setExamResults(prev => [newResult, ...prev]);
   };
+
+  const completeOnboarding = (): void => {
+    setHasCompletedOnboarding(true);
+    try {
+      localStorage.setItem('hasCompletedOnboarding', 'true');
+    } catch {
+      // localStorage might not be available
+    }
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
   // Cart helpers
-  type CartItem = { productId: string; qty: number };
   const addToCart = (productId: string, qty: number = 1) => {
     setCart(prev => {
       const exists = prev.find(i => i.productId === productId);
@@ -280,6 +303,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const checkoutByBalance = (deliveryAddress: string, method: DeliveryMethod): boolean => {
     // Simple balance deduction based on mock prices found in products module at runtime
     try {
+      // @ts-ignore - Dynamic require for products
       const { STORE_PRODUCTS } = require('../lib/products');
       const getDeliveryFee = (m: DeliveryMethod): number => {
         switch (m) {
@@ -318,6 +342,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Card checkout simulation (same as balance, but does not change balance)
   const checkoutByCard = (deliveryAddress: string, method: DeliveryMethod): boolean => {
     try {
+      // @ts-ignore - Dynamic require for products
       const { STORE_PRODUCTS } = require('../lib/products');
       const getDeliveryFee = (m: DeliveryMethod): number => {
         switch (m) {
@@ -366,6 +391,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       switchTab,
       moreSheetVisible,
       setMoreSheetVisible,
+      hasCompletedOnboarding,
+      completeOnboarding,
       balance,
       tickets,
       activePackage,
