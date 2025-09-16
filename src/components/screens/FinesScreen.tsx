@@ -2,7 +2,9 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { PenaltyCard } from '../ui/PenaltyCard';
 import { AZ_RULES } from '../../lib/rules';
+import { AZ_PENALTIES } from '../../lib/penalties';
 import { VideoPlayer } from '../media/VideoPlayer';
 
 function RuleVideos({ sources }: { sources: string[] }) {
@@ -46,12 +48,23 @@ export function FinesScreen() {
   const { isDarkMode, goBack, switchTab } = useApp();
   const [query, setQuery] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>('r26');
+  const [expandedPenaltyId, setExpandedPenaltyId] = useState<string | null>('ixm-327-1');
 
   const norm = useCallback((s: string) => s.toLowerCase().trim(), []);
   const q = norm(query);
 
   const filteredRules = useMemo(
     () => (q ? AZ_RULES.filter(r => norm(r.title).includes(q) || norm(r.content).includes(q)) : AZ_RULES),
+    [q, norm]
+  );
+
+  const filteredPenalties = useMemo(
+    () => (q ? AZ_PENALTIES.filter(p => 
+      norm(p.title).includes(q) || 
+      norm(p.content).includes(q) || 
+      norm(p.articleNumber).includes(q) ||
+      p.subTopics.some(st => norm(st.title).includes(q))
+    ) : AZ_PENALTIES),
     [q, norm]
   );
 
@@ -94,49 +107,82 @@ export function FinesScreen() {
         </div>
       </div>
 
-      {/* Video content will be inside each rule item below */}
-
-      {/* Rules (reused) */}
+      {/* Penalties Section */}
       <Card>
-        <div className="flex items-center justify-between mb-2">
-          <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>Azərbaycan yol hərəkəti qaydaları</div>
-          <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
-        </div>
-        <div className="space-y-2">
-          {filteredRules.map(r => (
-            <Card key={r.id} onClick={() => setExpandedId(prev => prev === r.id ? null : r.id)}>
-              <div className="flex items-center justify-between">
-                <div className="font-bold text-sm">{r.title}</div>
-                <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{expandedId === r.id ? '▾' : '▸'}</div>
+        <>
+          <div className="flex items-center justify-between mb-4">
+            <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+              Cərimələr və İnzibati Məsuliyyət
+            </div>
+            <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          </div>
+          <div className="space-y-3">
+            {filteredPenalties.map(penalty => (
+              <PenaltyCard
+                key={penalty.id}
+                penalty={penalty}
+                isExpanded={expandedPenaltyId === penalty.id}
+                onToggle={() => setExpandedPenaltyId(prev => prev === penalty.id ? null : penalty.id)}
+              />
+            ))}
+            {filteredPenalties.length === 0 && query && (
+              <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-sm text-center py-4`}>
+                Cərimələrdə heç nə tapılmadı.
               </div>
-              {expandedId === r.id && (
-                <div className="mt-2 space-y-3">
-                  <div className="text-xs text-gray-600 leading-relaxed">{r.content}</div>
-                  {/* Example: for demo, attach 1 or multiple videos depending on rule id */}
-                  {r.id === 'r1' ? (
-                    <RuleVideos sources={[
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
-                    ]} />
-                  ) : r.id === 'r26' ? (
-                    <RuleVideos sources={[
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
-                    ]} />
-                  ) : (
-                    <RuleVideos sources={[
-                      'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
-                    ]} />
+            )}
+          </div>
+        </>
+      </Card>
+
+      {/* Rules Section */}
+      <Card>
+        <>
+          <div className="flex items-center justify-between mb-2">
+            <div className={`text-xs uppercase tracking-wide font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+              Azərbaycan yol hərəkəti qaydaları
+            </div>
+            <div className={`h-px flex-1 ml-2 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+          </div>
+          <div className="space-y-2">
+            {filteredRules.map(r => (
+              <Card key={r.id} onClick={() => setExpandedId(prev => prev === r.id ? null : r.id)}>
+                <>
+                  <div className="flex items-center justify-between">
+                    <div className="font-bold text-sm">{r.title}</div>
+                    <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{expandedId === r.id ? '▾' : '▸'}</div>
+                  </div>
+                  {expandedId === r.id && (
+                    <div className="mt-2 space-y-3">
+                      <div className="text-xs text-gray-600 leading-relaxed">{r.content}</div>
+                      {/* Example: for demo, attach 1 or multiple videos depending on rule id */}
+                      {r.id === 'r1' ? (
+                        <RuleVideos sources={[
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                        ]} />
+                      ) : r.id === 'r26' ? (
+                        <RuleVideos sources={[
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                        ]} />
+                      ) : (
+                        <RuleVideos sources={[
+                          'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
+                        ]} />
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
-            </Card>
-          ))}
-          {filteredRules.length === 0 && (
-            <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-sm`}>Heç nə tapılmadı.</div>
-          )}
-        </div>
+                </>
+              </Card>
+            ))}
+            {filteredRules.length === 0 && query && (
+              <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} text-sm text-center py-4`}>
+                Qaydalarda heç nə tapılmadı.
+              </div>
+            )}
+          </div>
+        </>
       </Card>
     </div>
   );
