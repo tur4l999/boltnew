@@ -362,36 +362,42 @@ export function ResultsScreen() {
                       {getTypeIcon(result.type)}
                     </div>
                     <div>
+                      {/* Main Info - Ticket/Topic Number */}
                       <h3 className={`font-bold text-lg transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-100' : 'text-gray-900'
                       }`}>
-                        {getTypeLabel(result.type)}
+                        {result.details?.ticketNumber 
+                          ? `Bilet ${result.details.ticketNumber}`
+                          : result.details?.moduleId 
+                            ? `${result.details.moduleId} mövzu`
+                            : getTypeLabel(result.type)
+                        }
                       </h3>
                       <div className={`text-sm font-medium transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-300' : 'text-gray-600'
                       }`}>
-                        {new Intl.DateTimeFormat('az-AZ', {
+                        {examDate.toLocaleDateString('az-AZ', {
                           day: '2-digit',
-                          month: 'long',
-                          year: 'numeric'
-                        }).format(examDate)}
-                      </div>
-                      <div className={`text-xs transition-colors duration-200 ${
-                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                      }`}>
-                        {new Intl.DateTimeFormat('az-AZ', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        }).format(examDate)} • {Math.floor(result.timeSpent / 60)} dəqiqə
+                          month: '2-digit',
+                          year: '2-digit'
+                        }).replace(/\//g, '.')} • {Math.floor(result.timeSpent / 60)} dəqiqə
                       </div>
                     </div>
                   </div>
-                  <div className={`px-4 py-2 rounded-2xl text-sm font-bold shadow-md ${
-                    result.passed
-                      ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
-                      : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
-                  }`}>
-                    {result.passed ? 'Keçdi' : 'Keçmədi'}
+                  <div className="flex flex-col items-end gap-2">
+                    <div className={`px-4 py-2 rounded-2xl text-sm font-bold shadow-md ${
+                      result.passed
+                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
+                        : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
+                    }`}>
+                      {result.passed ? 'Keçdi' : 'Keçmədi'}
+                    </div>
+                    {/* Small exam type label */}
+                    <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {getTypeLabel(result.type)}
+                    </div>
                   </div>
                 </div>
 
@@ -431,22 +437,13 @@ export function ResultsScreen() {
                 </div>
 
                 {/* Additional Info */}
-                <div className="flex items-center justify-between">
-                  <div className={`text-sm font-medium transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    {result.weakTopics.length > 0 
-                      ? `Təlim mövzuları: ${result.weakTopics.join(', ')}`
-                      : 'Təlim mövzuları: Yoxdur'
-                    }
-                  </div>
-                  {result.details?.ticketNumber && (
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      Bilet #{result.details.ticketNumber}
-                    </div>
-                  )}
+                <div className={`text-sm font-medium transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
+                  {result.weakTopics.length > 0 
+                    ? `Təlim mövzuları: ${result.weakTopics.join(', ')}`
+                    : 'Təlim mövzuları: Yoxdur'
+                  }
                 </div>
               </div>
             );
