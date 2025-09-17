@@ -156,55 +156,59 @@ export function ResultsScreen() {
   };
 
   return (
-    <div className={`p-4 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`px-4 pt-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Statistics Header */}
-      <div className="mb-6">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="mb-4">
+        <div className="grid grid-cols-2 gap-3">
           {/* Overall Pass Percentage */}
-          <Card className="p-4 text-center">
-            <div className={`text-xs mb-1 transition-colors duration-200 ${
+          <div className={`rounded-2xl p-4 text-center transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <div className={`text-xs font-medium mb-1 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
-              Ümumi keçmə faizi
+              Ümumi keçmə
             </div>
-            <div className={`text-3xl font-black transition-colors duration-200 ${
+            <div className={`text-2xl font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
               {statistics.overallPassPercentage}%
             </div>
-          </Card>
+          </div>
 
           {/* This Week Exam Count */}
-          <Card className="p-4 text-center">
-            <div className={`text-xs mb-1 transition-colors duration-200 ${
+          <div className={`rounded-2xl p-4 text-center transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <div className={`text-xs font-medium mb-1 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
               Bu həftə
             </div>
-            <div className={`text-3xl font-black transition-colors duration-200 ${
+            <div className={`text-2xl font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
               {statistics.thisWeekExamCount} imtahan
             </div>
-          </Card>
+          </div>
         </div>
       </div>
 
       {/* Filter Button */}
-      <div className="mb-4">
+      <div className="mb-3">
         <button
           onClick={() => setFiltersVisible(!filtersVisible)}
-          className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-colors duration-200 ${
+          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl transition-colors duration-200 ${
             isDarkMode
-              ? 'bg-gray-800 border-gray-700 text-gray-100 hover:bg-gray-700'
-              : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'
+              ? 'bg-gray-800 text-gray-100 hover:bg-gray-700'
+              : 'bg-white text-gray-900 hover:bg-gray-50'
           }`}
         >
-          <span className="font-medium">Filterlər</span>
+          <span className="font-medium text-sm">Filterlər</span>
           <svg
-            className={`w-5 h-5 transition-transform duration-200 ${filtersVisible ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 transition-transform duration-200 ${filtersVisible ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -216,67 +220,53 @@ export function ResultsScreen() {
 
       {/* Collapsible Filters */}
       {filtersVisible && (
-        <div className="mb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-          {/* Exam Type Filter */}
-          <div>
-            <div className={`text-sm font-medium mb-3 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              İmtahan növü
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { key: 'all', label: 'Hamısı' },
-                { key: 'tickets', label: 'Biletlər üzrə' },
-                { key: 'topics', label: 'Mövzular üzrə' },
-                { key: 'simulator', label: 'Simulyator İmtahanı' },
-              ].map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedType(key as ExamType | 'all')}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    selectedType === key
-                      ? 'bg-blue-600 text-white shadow-lg scale-105'
-                      : isDarkMode
-                        ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+        <div className="mb-4 space-y-3 animate-in slide-in-from-top-2 duration-200">
+          {/* Exam Type Filter Tabs */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { key: 'all', label: 'Bütün tarixlər' },
+              { key: 'today', label: 'Bu gün' },
+              { key: 'thisWeek', label: 'Bu həftə' },
+              { key: 'thisMonth', label: 'Bu ay' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setSelectedDateFilter(key as DateFilter)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  selectedDateFilter === key
+                    ? 'bg-blue-600 text-white'
+                    : isDarkMode
+                      ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
 
-          {/* Date Filter */}
-          <div>
-            <div className={`text-sm font-medium mb-3 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              Tarix
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { key: 'all', label: 'Bütün tarixlər' },
-                { key: 'today', label: 'Bu gün' },
-                { key: 'thisWeek', label: 'Bu həftə' },
-                { key: 'thisMonth', label: 'Bu ay' },
-              ].map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedDateFilter(key as DateFilter)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                    selectedDateFilter === key
-                      ? 'bg-emerald-600 text-white shadow-lg scale-105'
-                      : isDarkMode
-                        ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+          {/* Exam Type Categories */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { key: 'all', label: 'Hamısı' },
+              { key: 'tickets', label: 'Biletlər üzrə' },
+              { key: 'topics', label: 'Mövzular üzrə' },
+              { key: 'simulator', label: 'Simulyator İmtahanı' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setSelectedType(key as ExamType | 'all')}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                  selectedType === key
+                    ? 'bg-blue-600 text-white'
+                    : isDarkMode
+                      ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                      : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -300,99 +290,80 @@ export function ResultsScreen() {
           </Button>
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filteredResults.map((result) => {
             const percentage = Math.round((result.score / result.total) * 100);
-            const progressColor = result.passed ? 'emerald' : 'red';
             
             return (
-              <Card key={result.id} className="p-0 overflow-hidden">
-                {/* Header with exam type and status */}
-                <div className="flex items-center justify-between p-4 pb-3">
+              <div key={result.id} className={`rounded-2xl p-4 transition-colors duration-200 ${
+                isDarkMode ? 'bg-gray-800' : 'bg-white'
+              }`}>
+                {/* Header */}
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                    }`}>
+                    <div className="text-lg">
                       {getTypeIcon(result.type)}
                     </div>
                     <div>
-                      <div className={`font-semibold text-base transition-colors duration-200 ${
+                      <div className={`font-medium text-sm transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-100' : 'text-gray-900'
                       }`}>
                         {getTypeLabel(result.type)}
                       </div>
-                      <div className={`text-sm transition-colors duration-200 ${
+                      <div className={`text-xs transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-400' : 'text-gray-500'
                       }`}>
                         {new Intl.DateTimeFormat('az-AZ', {
                           day: '2-digit',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        }).format(new Date(result.date))}
+                          month: '2-digit'
+                        }).format(new Date(result.date))} • {Math.floor(result.timeSpent / 60)} dəqiqə
                       </div>
                     </div>
                   </div>
-                  <div className={`px-3 py-1.5 rounded-full text-sm font-bold ${
+                  <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
                     result.passed
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-red-500 text-white'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-red-100 text-red-800'
                   }`}>
                     {result.passed ? 'Keçdi' : 'Keçmədi'}
                   </div>
                 </div>
 
-                {/* Score and Progress */}
-                <div className="px-4 pb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className={`text-2xl font-bold transition-colors duration-200 ${
-                      result.passed ? 'text-emerald-600' : 'text-red-600'
-                    }`}>
-                      {result.score}/{result.total}
-                    </div>
-                    <div className={`text-xl font-bold transition-colors duration-200 ${
-                      result.passed ? 'text-emerald-600' : 'text-red-600'
-                    }`}>
-                      {percentage}%
-                    </div>
-                  </div>
-                  
-                  {/* Progress Bar */}
-                  <div className={`w-full h-2 rounded-full mb-3 ${
-                    isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                {/* Score Display */}
+                <div className="flex items-center justify-between mb-2">
+                  <div className={`text-xl font-bold transition-colors duration-200 ${
+                    result.passed ? 'text-emerald-600' : 'text-red-600'
                   }`}>
-                    <div
-                      className={`h-2 rounded-full transition-all duration-500 ${
-                        result.passed ? 'bg-emerald-500' : 'bg-red-500'
-                      }`}
-                      style={{ width: `${percentage}%` }}
-                    />
+                    {result.score}/{result.total}
                   </div>
-
-                  {/* Additional Info */}
-                  <div className="flex items-center justify-between text-sm">
-                    <div className={`transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      Təlim mövzuları: {result.weakTopics.length > 0 ? result.weakTopics.join(', ') : 'Yoxdur'}
-                    </div>
-                    <div className={`transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>
-                      {formatTime(result.timeSpent)}
-                    </div>
+                  <div className={`text-sm font-medium transition-colors duration-200 ${
+                    result.passed ? 'text-emerald-600' : 'text-red-600'
+                  }`}>
+                    ({percentage}%)
                   </div>
-                  
-                  {/* Details */}
-                  {result.details?.ticketNumber && (
-                    <div className={`text-xs mt-2 transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                      Bilet #{result.details.ticketNumber}
-                    </div>
-                  )}
                 </div>
-              </Card>
+
+                {/* Progress Bar */}
+                <div className={`w-full h-1.5 rounded-full ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
+                  <div
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      result.passed ? 'bg-emerald-500' : 'bg-red-500'
+                    }`}
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+
+                {/* Weak Topics */}
+                {result.weakTopics.length > 0 && (
+                  <div className={`text-xs mt-2 transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    Təlim mövzuları: {result.weakTopics.join(', ')}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
