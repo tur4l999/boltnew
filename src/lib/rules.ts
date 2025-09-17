@@ -1,5 +1,89 @@
 export type AzRule = { id: string; title: string; content: string };
 
+export type PenaltySubsection = {
+  id: string;
+  title: string;
+  content?: string;
+  videoSrc?: string;
+};
+
+export type PenaltySection = {
+  id: string;
+  title: string;
+  description?: string;
+  subsections?: PenaltySubsection[];
+  content?: string;
+  videoSrc?: string;
+};
+
+export const PENALTY_SECTIONS: PenaltySection[] = [
+  {
+    id: 'traffic_violations',
+    title: 'Yol hərəkəti qaydalarının pozulması',
+    description: 'Yol hərəkəti qaydalarının pozulmasına görə tətbiq olunan cərimələr',
+    subsections: [
+      {
+        id: 'speed_violations',
+        title: 'Sürət həddinin pozulması',
+        content: 'Müəyyən edilmiş sürət həddini aşmağa görə:\n• 10-20 km/saat - 40 manat\n• 21-40 km/saat - 100 manat\n• 40+ km/saat - 200 manat və hüquqların məhdudlaşdırılması',
+        videoSrc: '/video 6.mp4'
+      },
+      {
+        id: 'traffic_lights',
+        title: 'İşıqfor siqnallarının pozulması',
+        content: 'Qırmızı işıqfor siqnalının pozulması - 100 manat cərimə. Təkrar pozuntu halında - 200 manat və hüquqların müvəqqəti məhdudlaşdırılması.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+      },
+      {
+        id: 'wrong_parking',
+        title: 'Qadağan edilmiş yerlərdə dayanma',
+        content: 'Dayanma qadağası olan yerlərdə avtomobilin saxlanması:\n• Adi hallar - 20 manat\n• Əlil yerləri - 100 manat\n• İctimai nəqliyyat dayanacaqları - 50 manat'
+      }
+    ]
+  },
+  {
+    id: 'document_violations',
+    title: 'Sənədlərlə bağlı pozuntular',
+    description: 'Sürücülük vəsiqəsi və digər sənədlərlə əlaqədar pozuntular',
+    subsections: [
+      {
+        id: 'no_license',
+        title: 'Sürücülük vəsiqəsinin olmaması',
+        content: 'Sürücülük vəsiqəsi olmadan avtomobil idarə etmək - 200 manat cərimə və nəqliyyat vasitəsinin saxlanması.'
+      },
+      {
+        id: 'expired_documents',
+        title: 'Vaxtı keçmiş sənədlər',
+        content: 'Vaxtı keçmiş sürücülük vəsiqəsi ilə idarə etmə - 100 manat cərimə.'
+      }
+    ]
+  },
+  {
+    id: 'alcohol_violations',
+    title: 'Sərxoşluq halında idarəetmə',
+    description: 'Spirtli içkilər və ya narkotik maddələrin təsiri altında avtomobil idarə etmə',
+    content: 'Sərxoş halda avtomobil idarə etmə:\n• Birinci dəfə - 1000 manat cərimə və 1 il hüquqların məhdudlaşdırılması\n• Təkrar pozuntu - 2000 manat və 3 il hüquqların məhdudlaşdırılması\n• Qəza törətmə halında - cinayət məsuliyyəti',
+    videoSrc: '/video 6.mp4'
+  },
+  {
+    id: 'pedestrian_violations',
+    title: 'Piyadaların hüquqlarının pozulması',
+    description: 'Piyada keçidlərində və digər yerlərdə piyadaların hüquqlarının pozulması',
+    subsections: [
+      {
+        id: 'crosswalk_violations',
+        title: 'Piyada keçidində pozuntular',
+        content: 'Piyada keçidində piyadaya yol verməmək - 100 manat cərimə. Piyadanın yaralanması halında əlavə məsuliyyət.'
+      },
+      {
+        id: 'sidewalk_driving',
+        title: 'Səkidə hərəkət',
+        content: 'Səki və piyada yolları ilə hərəkət - 50 manat cərimə.'
+      }
+    ]
+  }
+];
+
 export const AZ_RULES: AzRule[] = [
   { id: 'r1', title: 'Maddə 1. Əsas anlayışlar', content: 'Qanunda istifadə olunan terminlər izah edilir. “Yol”, “sürücü”, “piyada”, “nəqliyyat vasitəsi” kimi anlayışlar dəqiq tərif olunur. Bu terminlər digər maddələrin düzgün anlaşılması üçün baza yaradır.' },
   { id: 'r2', title: 'Maddə 2. Qanunun təyinatı', content: 'Yol hərəkəti sahəsində təhlükəsizlik və nizam-intizamı təmin etmək məqsədi açıqlanır. Qanun, bütün iştirakçılar üçün hüquqi çərçivə və davranış standartları müəyyənləşdirir.' },
