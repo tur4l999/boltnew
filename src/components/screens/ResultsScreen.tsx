@@ -366,11 +366,13 @@ export function ResultsScreen() {
                       <h3 className={`font-bold text-lg transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-100' : 'text-gray-900'
                       }`}>
-                        {result.details?.ticketNumber 
-                          ? `Bilet ${result.details.ticketNumber}`
-                          : result.details?.moduleId 
-                            ? `${result.details.moduleId} mövzu`
-                            : getTypeLabel(result.type)
+                        {result.type === 'simulator' 
+                          ? getTypeLabel(result.type)
+                          : result.details?.ticketNumber 
+                            ? `Bilet ${result.details.ticketNumber}`
+                            : result.details?.moduleId 
+                              ? `${result.details.moduleId} mövzu`
+                              : getTypeLabel(result.type)
                         }
                       </h3>
                       <div className={`text-sm font-medium transition-colors duration-200 ${
@@ -392,12 +394,14 @@ export function ResultsScreen() {
                     }`}>
                       {result.passed ? 'Keçdi' : 'Keçmədi'}
                     </div>
-                    {/* Small exam type label */}
-                    <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {getTypeLabel(result.type)}
-                    </div>
+                    {/* Small exam type label - only show if not simulator */}
+                    {result.type !== 'simulator' && (
+                      <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                        isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {getTypeLabel(result.type)}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -437,13 +441,20 @@ export function ResultsScreen() {
                 </div>
 
                 {/* Additional Info */}
-                <div className={`text-sm font-medium transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
-                  {result.weakTopics.length > 0 
-                    ? `Təlim mövzuları: ${result.weakTopics.join(', ')}`
-                    : 'Təlim mövzuları: Yoxdur'
-                  }
+                <div className="flex items-center justify-between">
+                  <div className={`text-sm font-medium transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
+                    Təlim mövzuları:
+                  </div>
+                  <div className={`text-sm font-medium text-right transition-colors duration-200 ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`}>
+                    {result.weakTopics.length > 0 
+                      ? result.weakTopics.join(', ')
+                      : 'Yoxdur'
+                    }
+                  </div>
                 </div>
               </div>
             );
