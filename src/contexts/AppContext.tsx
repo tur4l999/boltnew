@@ -81,23 +81,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
     {
       id: '1',
       type: 'simulator',
-      score: 8,
-      total: 10,
-      timeSpent: 12 * 60,
-      weakTopics: ['M3', 'M5'],
-      date: new Date('2024-12-10T14:30:00'),
+      score: 28,
+      total: 30,
+      timeSpent: 25 * 60,
+      weakTopics: ['M1', 'M5'],
+      date: new Date('2025-09-10T14:30:00'),
       passed: true,
       details: {}
     },
     {
       id: '2',
       type: 'tickets',
-      score: 6,
+      score: 18,
       total: 20,
-      timeSpent: 18 * 60,
-      weakTopics: ['M1', 'M8', 'M12'],
-      date: new Date('2024-12-08T10:15:00'),
-      passed: false,
+      timeSpent: 15 * 60,
+      weakTopics: ['M8'],
+      date: new Date('2025-09-09T10:15:00'),
+      passed: true,
       details: { ticketNumber: 5 }
     },
     {
@@ -106,21 +106,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
       score: 9,
       total: 10,
       timeSpent: 8 * 60,
-      weakTopics: ['M27'],
-      date: new Date('2024-12-05T16:45:00'),
+      weakTopics: [],
+      date: new Date('2025-09-08T16:45:00'),
       passed: true,
-      details: { moduleId: 'M3' }
+      details: { moduleId: '8ci' }
     },
     {
       id: '4',
-      type: 'final',
-      score: 17,
+      type: 'tickets',
+      score: 6,
       total: 20,
-      timeSpent: 25 * 60,
-      weakTopics: ['M15', 'M19', 'M23'],
-      date: new Date('2024-12-01T09:00:00'),
-      passed: true,
-      details: {}
+      timeSpent: 20 * 60,
+      weakTopics: ['M1', 'M3', 'M15'],
+      date: new Date('2025-09-05T09:00:00'),
+      passed: false,
+      details: { ticketNumber: 12 }
+    },
+    {
+      id: '5',
+      type: 'topics',
+      score: 7,
+      total: 10,
+      timeSpent: 12 * 60,
+      weakTopics: ['M19', 'M23'],
+      date: new Date('2025-09-03T11:30:00'),
+      passed: false,
+      details: { moduleId: '15ci' }
     }
   ]);
   
