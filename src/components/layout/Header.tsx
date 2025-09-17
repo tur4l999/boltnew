@@ -9,51 +9,70 @@ export function Header() {
   
   return (
     <div className="sticky top-0 z-30 mt-0">
-      <div className={`max-w-md mx-auto backdrop-blur-sm border-b transition-colors duration-200 ${
+      <div className={`max-w-md mx-auto backdrop-blur-xl border-b-2 transition-all duration-300 ${
         isDarkMode 
-          ? 'bg-gray-800/80 border-gray-700' 
-          : 'bg-white/80 border-gray-200'
+          ? 'bg-gray-800/90 border-gray-700/50 shadow-lg' 
+          : 'bg-white/90 border-gray-200/50 shadow-lg'
       }`}>
-        <div className="px-4 py-2 flex items-center gap-3">
-          <div className="relative">
+        <div className="px-4 py-3 flex items-center gap-4">
+          <div className="relative group">
             <button
               onClick={() => navigate('Settings')}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-500 text-white flex items-center justify-center font-bold text-sm hover:from-emerald-700 hover:to-emerald-600 transition-all duration-200"
+              className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base hover:from-emerald-700 hover:via-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl"
             >
               {userName.charAt(0).toUpperCase()}
             </button>
             {useApp().hasActivePackage() && (
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-yellow-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white">★</div>
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
+                <span className="font-bold">★</span>
+              </div>
             )}
+            
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-600 to-green-600 opacity-20 blur-lg scale-110 group-hover:opacity-30 transition-opacity duration-300"></div>
           </div>
+          
           <div className="flex-1 leading-tight">
-            <div className={`text-xs transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-500'
-            }`}>DDA.az</div>
+            <div className={`text-xs font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              <span className="bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent font-bold">DDA.az</span>
+            </div>
             <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName} 👋
+              {t.hello}, {userName.split(' ')[0]} 👋
             </div>
           </div>
-          <IconButton
-            onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
-            label={t.notifications}
-          >
-            🔔
-          </IconButton>
-          <IconButton
-            onClick={() => navigate('AIChat')}
-            label={t.assistant}
-          >
-            🤖
-          </IconButton>
-          <IconButton 
-            onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')} 
-            label={t.language}
-          >
-            🌐
-          </IconButton>
+          
+          <div className="flex items-center gap-2">
+            <IconButton
+              onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
+              label={t.notifications}
+              className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
+            >
+              <span className="relative">
+                🔔
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+              </span>
+            </IconButton>
+            
+            <IconButton
+              onClick={() => navigate('AIChat')}
+              label={t.assistant}
+              className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
+            >
+              🤖
+            </IconButton>
+            
+            <IconButton 
+              onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')} 
+              label={t.language}
+              className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
+            >
+              🌐
+            </IconButton>
+          </div>
         </div>
       </div>
     </div>

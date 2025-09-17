@@ -5,9 +5,12 @@ interface ButtonProps {
   children: ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  loading?: boolean;
+  icon?: ReactNode;
+  fullWidth?: boolean;
 }
 
 export function Button({
@@ -16,46 +19,77 @@ export function Button({
   disabled = false,
   variant = 'primary',
   size = 'md',
-  className = ''
+  className = '',
+  loading = false,
+  icon,
+  fullWidth = false
 }: ButtonProps) {
   const { isDarkMode } = useApp();
-  const baseClasses = 'font-bold rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group';
   
   const sizeClasses = {
-    sm: 'px-3 py-2 text-sm min-h-[36px]',
-    md: 'px-4 py-3 text-sm min-h-[44px]',
-    lg: 'px-6 py-4 text-base min-h-[52px]'
+    sm: 'px-4 py-2 text-sm min-h-[36px]',
+    md: 'px-6 py-3 text-sm min-h-[44px]',
+    lg: 'px-8 py-4 text-base min-h-[52px]',
+    xl: 'px-10 py-5 text-lg min-h-[60px]'
   };
   
   const variantClasses = {
-    primary: disabled 
+    primary: disabled || loading
       ? isDarkMode
         ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      : 'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500',
-    secondary: disabled
+      : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl focus:ring-emerald-500/20',
+    secondary: disabled || loading
       ? isDarkMode
-        ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-        : 'bg-gray-100 text-gray-500 cursor-not-allowed'
+        ? 'bg-gray-800 text-gray-600 cursor-not-allowed border-2 border-gray-700'
+        : 'bg-gray-100 text-gray-500 cursor-not-allowed border-2 border-gray-200'
       : isDarkMode
-        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-gray-500'
-        : 'bg-gray-800 text-white hover:bg-gray-900 focus:ring-gray-600',
-    ghost: disabled
+        ? 'bg-gray-800/80 border-2 border-gray-600 text-gray-100 hover:bg-gray-700/80 hover:border-gray-500 focus:ring-gray-500/20 backdrop-blur-sm'
+        : 'bg-white/80 border-2 border-gray-300 text-gray-900 hover:bg-gray-50/80 hover:border-gray-400 focus:ring-gray-500/20 backdrop-blur-sm shadow-md hover:shadow-lg',
+    ghost: disabled || loading
       ? isDarkMode
-        ? 'bg-transparent border border-gray-700 text-gray-600 cursor-not-allowed'
-        : 'bg-transparent border border-gray-300 text-gray-500 cursor-not-allowed'
+        ? 'bg-transparent border-2 border-gray-700 text-gray-600 cursor-not-allowed'
+        : 'bg-transparent border-2 border-gray-300 text-gray-500 cursor-not-allowed'
       : isDarkMode
-        ? 'bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 focus:ring-gray-500'
-        : 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500'
+        ? 'bg-transparent border-2 border-gray-600 text-gray-300 hover:bg-gray-800/50 hover:border-gray-500 focus:ring-gray-500/20'
+        : 'bg-transparent border-2 border-gray-300 text-gray-700 hover:bg-gray-50/50 hover:border-gray-400 focus:ring-gray-500/20',
+    danger: disabled || loading
+      ? isDarkMode
+        ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+      : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl focus:ring-red-500/20',
+    success: disabled || loading
+      ? isDarkMode
+        ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+      : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl focus:ring-green-500/20'
   };
+  
+  const isDisabled = disabled || loading;
   
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} transform hover:scale-105 active:scale-95 transition-transform duration-150 ${isDarkMode ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}`}
+      onClick={isDisabled ? undefined : onClick}
+      disabled={isDisabled}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} ${
+        fullWidth ? 'w-full' : ''
+      } ${
+        !isDisabled ? 'transform hover:scale-[1.02] active:scale-[0.98]' : ''
+      } ${isDarkMode ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}`}
     >
-      {children}
+      {/* Hover overlay effect */}
+      {!isDisabled && (
+        <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      )}
+      
+      <div className="relative flex items-center justify-center gap-2">
+        {loading && (
+          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        )}
+        {!loading && icon && <span>{icon}</span>}
+        <span>{children}</span>
+      </div>
     </button>
   );
 }
