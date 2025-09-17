@@ -5,6 +5,7 @@ export type PenaltySubsection = {
   title: string;
   content?: string;
   videoSrc?: string;
+  videoSources?: string[];
 };
 
 export type PenaltySection = {
@@ -14,6 +15,7 @@ export type PenaltySection = {
   subsections?: PenaltySubsection[];
   content?: string;
   videoSrc?: string;
+  videoSources?: string[];
 };
 
 export const PENALTY_SECTIONS: PenaltySection[] = [
@@ -26,7 +28,12 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
         id: 'speed_violations',
         title: 'Sürət həddinin pozulması',
         content: 'Müəyyən edilmiş sürət həddini aşmağa görə:\n• 10-20 km/saat - 40 manat\n• 21-40 km/saat - 100 manat\n• 40+ km/saat - 200 manat və hüquqların məhdudlaşdırılması',
-        videoSrc: '/video 6.mp4'
+        videoSources: [
+          '/video 6.mp4',
+          '/Maddə 49 NV-nin yerləşməsi 0002.mp4',
+          '/video 6.mp4',
+          '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+        ]
       },
       {
         id: 'traffic_lights',

@@ -14,6 +14,96 @@ function PenaltyVideo({ src }: { src: string }) {
   );
 }
 
+function MultipleVideos({ sources }: { sources: string[] }) {
+  const { isDarkMode } = useApp();
+  const [activeVideo, setActiveVideo] = useState(0);
+
+  const handleVideoChange = (index: number) => {
+    setActiveVideo(index);
+  };
+
+  const handleSwipe = (direction: 'left' | 'right') => {
+    setActiveVideo(prev => {
+      const next = direction === 'left' ? prev + 1 : prev - 1;
+      if (next < 0) return sources.length - 1;
+      if (next >= sources.length) return 0;
+      return next;
+    });
+  };
+
+  return (
+    <div className="mt-4 space-y-3">
+      {/* Video Player */}
+      <div
+        className="relative rounded-xl overflow-hidden"
+        onTouchStart={(e) => (e.currentTarget as any)._x = e.touches[0].clientX}
+        onTouchEnd={(e) => {
+          const startX = (e.currentTarget as any)._x as number | undefined;
+          if (typeof startX !== 'number') return;
+          const delta = e.changedTouches[0].clientX - startX;
+          if (Math.abs(delta) > 30) handleSwipe(delta < 0 ? 'left' : 'right');
+        }}
+      >
+        <VideoPlayer src={sources[activeVideo]} watermark="DDA.az" heightClass="h-48" />
+        
+        {/* Video Counter */}
+        <div className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-md ${
+          isDarkMode ? 'bg-black/60 text-gray-100' : 'bg-black/40 text-white'
+        }`}>
+          {activeVideo + 1}/{sources.length}
+        </div>
+        
+        {/* Navigation Dots */}
+        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+          {sources.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleVideoChange(idx)}
+              className={`h-2 w-6 rounded-full transition-colors ${
+                idx === activeVideo ? 'bg-white' : 'bg-white/40'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Video Thumbnails/Selector */}
+      <div className="grid grid-cols-4 gap-2">
+        {sources.map((src, index) => (
+          <button
+            key={index}
+            onClick={() => handleVideoChange(index)}
+            className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+              index === activeVideo
+                ? isDarkMode 
+                  ? 'border-blue-400 shadow-lg' 
+                  : 'border-blue-500 shadow-lg'
+                : isDarkMode
+                  ? 'border-gray-600 hover:border-gray-500'
+                  : 'border-gray-300 hover:border-gray-400'
+            }`}
+          >
+            <div className={`w-full h-full flex items-center justify-center text-xs font-medium ${
+              isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+            }`}>
+              Video {index + 1}
+            </div>
+            {index === activeVideo && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-blue-500' : 'bg-blue-600'
+                }`}>
+                  <span className="text-white text-xs">▶</span>
+                </div>
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function PenaltyContent({ content }: { content: string }) {
   const { isDarkMode } = useApp();
   
@@ -60,7 +150,13 @@ function SubsectionItem({ subsection, isExpanded, onToggle }: {
           <>
             <div className="px-3 pb-3">
               {subsection.content && <PenaltyContent content={subsection.content} />}
-              {subsection.videoSrc && <PenaltyVideo src={subsection.videoSrc} />}
+              {subsection.videoSources && subsection.videoSources.length > 1 ? (
+                <MultipleVideos sources={subsection.videoSources} />
+              ) : subsection.videoSrc ? (
+                <PenaltyVideo src={subsection.videoSrc} />
+              ) : subsection.videoSources && subsection.videoSources.length === 1 ? (
+                <PenaltyVideo src={subsection.videoSources[0]} />
+              ) : null}
             </div>
           </>
         </FadeInUp>
@@ -111,7 +207,13 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
           <>
             <div className="px-4 pb-4">
               {section.content && <PenaltyContent content={section.content} />}
-              {section.videoSrc && <PenaltyVideo src={section.videoSrc} />}
+              {section.videoSources && section.videoSources.length > 1 ? (
+                <MultipleVideos sources={section.videoSources} />
+              ) : section.videoSrc ? (
+                <PenaltyVideo src={section.videoSrc} />
+              ) : section.videoSources && section.videoSources.length === 1 ? (
+                <PenaltyVideo src={section.videoSources[0]} />
+              ) : null}
               
               {section.subsections && (
                 <div className="mt-4 space-y-2">
