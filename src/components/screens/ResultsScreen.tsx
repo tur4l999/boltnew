@@ -386,22 +386,12 @@ export function ResultsScreen() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <div className={`px-4 py-2 rounded-2xl text-sm font-bold shadow-md ${
-                      result.passed
-                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
-                        : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
-                    }`}>
-                      {result.passed ? 'Keçdi' : 'Keçmədi'}
-                    </div>
-                    {/* Small exam type label - only show if not simulator */}
-                    {result.type !== 'simulator' && (
-                      <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                        isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {getTypeLabel(result.type)}
-                      </div>
-                    )}
+                  <div className={`px-4 py-2 rounded-2xl text-sm font-bold shadow-md ${
+                    result.passed
+                      ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
+                      : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
+                  }`}>
+                    {result.passed ? 'Keçdi' : 'Keçmədi'}
                   </div>
                 </div>
 
@@ -445,16 +435,18 @@ export function ResultsScreen() {
                   <div className={`text-sm font-medium transition-colors duration-200 ${
                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                   }`}>
-                    Təlim mövzuları:
-                  </div>
-                  <div className={`text-sm font-medium text-right transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
                     {result.weakTopics.length > 0 
-                      ? result.weakTopics.join(', ')
-                      : 'Yoxdur'
+                      ? `Təlim mövzuları: ${result.weakTopics.join(', ')}`
+                      : 'Təlim mövzuları: Yoxdur'
                     }
                   </div>
+                  {result.type !== 'simulator' && (
+                    <div className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                      isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {getTypeLabel(result.type)}
+                    </div>
+                  )}
                 </div>
               </div>
             );
