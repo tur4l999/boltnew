@@ -9,7 +9,7 @@ export function SettingsScreen() {
 
   const themeOptions = [
     { value: 'light', label: '☀️ Gündüz', description: 'Açıq tema' },
-    { value: 'dark', label: '🌙 Gecə', description: 'Qaranlıq tema' },
+    { value: 'dark', label: '🌜 Gecə', description: 'Qaranlıq tema' },
     { value: 'system', label: '📱 Cihaza uyğun', description: 'Sistem ayarına görə' }
   ];
 
@@ -22,26 +22,26 @@ export function SettingsScreen() {
     {
       section: 'Hesabım',
       items: [
-        { key: 'profile', label: 'Profil məlumatları', emoji: '👤', action: () => alert('Profil məlumatları (demo)') },
-        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔒', action: () => alert('Təhlükəsizlik (demo)') },
+        { key: 'profile', label: 'Profil məlumatları', emoji: '👨‍💼', action: () => alert('Profil məlumatları (demo)') },
+        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔐', action: () => alert('Təhlükəsizlik (demo)') },
         { key: 'privacy', label: 'Məxfilik', emoji: '🛡️', action: () => alert('Məxfilik (demo)') },
-        { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildiriş ayarları (demo)') }
+        { key: 'notifications', label: 'Bildirişlər', emoji: '🔕', action: () => alert('Bildiriş ayarları (demo)') }
       ]
     },
     {
       section: 'Tətbiq',
       items: [
-        { key: 'offline', label: 'Offline məzmun', emoji: '📱', action: () => alert('Offline məzmun (demo)') },
-        { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', action: () => alert('Keş təmizləndi (demo)') },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') }
+        { key: 'offline', label: 'Offline məzmun', emoji: '📲', action: () => alert('Offline məzmun (demo)') },
+        { key: 'cache', label: 'Keş təmizlə', emoji: '🧹', action: () => alert('Keş təmizləndi (demo)') },
+        { key: 'updates', label: 'Yeniləmələr', emoji: '🔁', action: () => alert('Yeniləmələr (demo)') }
       ]
     },
     {
       section: 'Dəstək',
       items: [
-        { key: 'help', label: 'Kömək mərkəzi', emoji: '❓', action: () => alert('Kömək mərkəzi (demo)') },
+        { key: 'help', label: 'Kömək mərkəzi', emoji: '🆘', action: () => alert('Kömək mərkəzi (demo)') },
         { key: 'contact', label: 'Bizimlə əlaqə', emoji: '📞', action: () => alert('Əlaqə (demo)') },
-        { key: 'feedback', label: 'Rəy bildirin', emoji: '💬', action: () => alert('Rəy bildirin (demo)') },
+        { key: 'feedback', label: 'Rəy bildirin', emoji: '🗨️', action: () => alert('Rəy bildirin (demo)') },
         { key: 'about', label: 'Haqqında', emoji: 'ℹ️', action: () => alert('DDA.az v1.0.0 (demo)') }
       ]
     }

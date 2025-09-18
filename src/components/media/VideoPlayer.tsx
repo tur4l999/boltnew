@@ -63,7 +63,7 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-56' }: VideoPlaye
           onClick={requestPictureInPicture}
           className="bg-black/50 border-white/20 text-white hover:bg-black/70"
         >
-          🖼️
+          🎬
         </IconButton>
       </div>
     </div>

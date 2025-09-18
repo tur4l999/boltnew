@@ -38,7 +38,7 @@ export function TransactionsScreen() {
           onClick={() => alert('Balans artırma (demo)')}
           className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
         >
-          💳 Balans artır
+          💰 Balans artır
         </button>
       </Card>
 
@@ -55,7 +55,7 @@ export function TransactionsScreen() {
             <div className={`text-center py-8 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
-              <div className="text-4xl mb-2">📋</div>
+              <div className="text-4xl mb-2">📊</div>
               <div className="text-sm">Hələlik ödəniş yoxdur</div>
             </div>
           </Card>
@@ -72,7 +72,7 @@ export function TransactionsScreen() {
                         ? 'bg-red-100 text-red-600' 
                         : 'bg-green-100 text-green-600'
                     }`}>
-                      {transaction.type === 'purchase' ? '📦' : '💰'}
+                      {transaction.type === 'purchase' ? '🛒' : '💸'}
                     </div>
                     <div>
                       <div className={`font-medium text-sm transition-colors duration-200 ${

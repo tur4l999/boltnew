@@ -4,7 +4,7 @@
     {
       "name": "home",
       "title": "Home Tab Icon",
-      "emoji": "🏠",
+      "emoji": "🏡",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -22,7 +22,7 @@
     {
       "name": "topics",
       "title": "Topics Tab Icon",
-      "emoji": "📚",
+      "emoji": "📖",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -40,7 +40,7 @@
     {
       "name": "exam",
       "title": "Exam Tab Icon",
-      "emoji": "🧪",
+      "emoji": "🎯",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -58,7 +58,7 @@
     {
       "name": "mistakes",
       "title": "Mistakes Tab Icon",
-      "emoji": "⚠️",
+      "emoji": "❌",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -76,7 +76,7 @@
     {
       "name": "store",
       "title": "Store Tab Icon",
-      "emoji": "🛍️",
+      "emoji": "🛒",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -94,7 +94,7 @@
     {
       "name": "more",
       "title": "More Menu Icon",
-      "emoji": "➕",
+      "emoji": "⋯",
       "category": "icon",
       "group": "navigation",
       "format": "svg",
@@ -112,7 +112,7 @@
     {
       "name": "video",
       "title": "Video Lessons Icon",
-      "emoji": "🎬",
+      "emoji": "🎥",
       "category": "icon",
       "group": "actions",
       "format": "svg",
@@ -132,7 +132,7 @@
     {
       "name": "notifications",
       "title": "Notifications Icon",
-      "emoji": "🔔",
+      "emoji": "🔕",
       "category": "icon",
       "group": "system",
       "format": "svg",
@@ -172,7 +172,7 @@
     {
       "name": "language",
       "title": "Language Switcher Icon",
-      "emoji": "🌐",
+      "emoji": "🌍",
       "category": "icon",
       "group": "system",
       "format": "svg",

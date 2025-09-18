@@ -17,7 +17,7 @@ const FIGMA_API_TOKEN = process.env.FIGMA_API_TOKEN;
 const FIGMA_FILE_KEY = process.env.FIGMA_FILE_KEY;
 
 if (!FIGMA_API_TOKEN || !FIGMA_FILE_KEY) {
-  console.error('❌ FIGMA_API_TOKEN və FIGMA_FILE_KEY environment variables lazımdır');
+  console.error('⚠️ FIGMA_API_TOKEN və FIGMA_FILE_KEY environment variables lazımdır');
   console.log('');
   console.log('🔧 Quraşdırma:');
   console.log('1. Figma → Settings → Personal Access Tokens');
@@ -261,7 +261,7 @@ class ComponentGenerator {
 
 // Əsas sinxronlaşdırma funksiyası
 async function syncToFigma() {
-  console.log('🚀 DDA.az → Figma sinxronlaşdırması başlayır...');
+  console.log('🎯 DDA.az → Figma sinxronlaşdırması başlayır...');
   
   try {
     const figma = new FigmaAPI(FIGMA_API_TOKEN);
@@ -299,19 +299,19 @@ async function syncToFigma() {
     fs.writeFileSync(exportPath, JSON.stringify(metadata, null, 2));
 
     console.log('');
-    console.log('🎉 Sinxronlaşdırma tamamlandı!');
+    console.log('✅ Sinxronlaşdırma tamamlandı!');
     console.log('');
-    console.log('📊 Statistika:');
+    console.log('📈 Statistika:');
     console.log(`   🎨 Rənglər: ${metadata.stats.colors}`);
-    console.log(`   📝 Typography: ${metadata.stats.typography}`);
+    console.log(`   🔤 Typography: ${metadata.stats.typography}`);
     console.log(`   🧩 Komponentlər: ${metadata.stats.components}`);
-    console.log(`   📱 Ekranlar: ${metadata.stats.screens}`);
+    console.log(`   📲 Ekranlar: ${metadata.stats.screens}`);
     console.log('');
     console.log('📁 Fayllar:');
     console.log(`   📄 Metadata: figma-export.json`);
     console.log(`   🔗 Figma: ${metadata.figmaFile.url}`);
     console.log('');
-    console.log('🔄 Növbəti addım: Figma plugin istifadə edin');
+    console.log('🔁 Növbəti addım: Figma plugin istifadə edin');
 
   } catch (error) {
     console.error('❌ Xəta:', error.message);

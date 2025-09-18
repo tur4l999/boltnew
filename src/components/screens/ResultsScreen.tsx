@@ -147,11 +147,11 @@ export function ResultsScreen() {
 
   const getTypeIcon = (type: ExamType) => {
     switch (type) {
-      case 'tickets': return '📄';
-      case 'topics': return '📚';
-      case 'simulator': return '🧪';
-      case 'final': return '📋';
-      default: return '📝';
+      case 'tickets': return '🎫';
+      case 'topics': return '📖';
+      case 'simulator': return '🎯';
+      case 'final': return '🏆';
+      default: return '✍️';
     }
   };
 
@@ -324,7 +324,7 @@ export function ResultsScreen() {
       {/* Results List */}
       {filteredResults.length === 0 ? (
         <Card className="text-center py-8">
-          <div className={`text-4xl mb-3`}>📊</div>
+          <div className={`text-4xl mb-3`}>📈</div>
           <div className={`font-medium mb-2 transition-colors duration-200 ${
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
           }`}>

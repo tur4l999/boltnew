@@ -20,7 +20,7 @@ export function ActivationScheduledScreen() {
           }`}
           aria-label="Bağla"
         >
-          ✕
+          ✖
         </button>
         <div className="text-4xl mb-2">⏰</div>
         <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>

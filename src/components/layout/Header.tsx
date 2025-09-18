@@ -41,13 +41,13 @@ export function Header() {
             <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName.split(' ')[0]} 👋
+              {t.hello}, {userName.split(' ')[0]} 🙋‍♂️
             </div>
           </div>
           
           <div className="flex items-center gap-2">
             <IconButton
-              onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
+              onClick={() => showToast('📢 Push (demo): Bu gün 15 dəq məşq et!')}
               label={t.notifications}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
@@ -70,7 +70,7 @@ export function Header() {
               label={t.language}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
-              🌐
+              🌍
             </IconButton>
           </div>
         </div>

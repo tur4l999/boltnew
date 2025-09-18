@@ -368,7 +368,7 @@ export function ExamScreen() {
                 }}
                 fullWidth
                 size="lg"
-                icon="🛍️"
+                icon="🛒"
                 variant="primary"
               >
                 Paket al
