@@ -62,7 +62,7 @@ export function Progress({
         </div>
       )}
       
-      <div className={`w-full rounded-full overflow-hidden backdrop-blur-sm transition-all duration-300 ${sizeClasses[size]} ${
+      <div className={`w-full rounded-full overflow-hidden backdrop-blur-sm transition-all duration-300 relative ${sizeClasses[size]} ${
         isDarkMode 
           ? 'bg-gray-700/50 border border-gray-600/50' 
           : 'bg-gray-200/50 border border-gray-300/50'

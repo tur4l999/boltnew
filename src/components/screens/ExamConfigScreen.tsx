@@ -215,7 +215,7 @@ export function ExamConfigScreen() {
               </Button>
             </div>
           </Card>
-          </div>
+        </div>
         )}
       </div>
     </div>

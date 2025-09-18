@@ -50,7 +50,7 @@ export function Card({
   return (
     <div 
       onClick={onClick} 
-      className={`rounded-2xl border transition-all duration-300 group ${paddingClasses[padding]} ${variantClasses[variant]} ${hoverClasses} ${className}`}
+      className={`rounded-2xl border transition-all duration-300 group relative ${paddingClasses[padding]} ${variantClasses[variant]} ${hoverClasses} ${className}`}
     >
       {/* Subtle hover effect overlay */}
       {hover && (

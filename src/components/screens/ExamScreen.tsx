@@ -397,7 +397,6 @@ export function ExamScreen() {
       )}
       </div>
     </div>
-    </div>
   );
 }
 
