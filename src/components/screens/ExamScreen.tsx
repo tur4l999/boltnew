@@ -36,51 +36,90 @@ export function ExamScreen() {
   };
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
-      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    <div className={`p-4 pb-24 min-h-screen transition-all duration-300 relative overflow-hidden ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-emerald-50'
     }`}>
-      <div className={`mb-2 text-sm font-bold text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-        {t.tests}
-      </div>
-      <div className={`rounded-xl overflow-hidden border mb-3 transition-colors duration-200 ${
-        isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-      }`}>
-        <div className="grid grid-cols-3">
-          <button
-            onClick={() => setActiveTab('byTickets')}
-            className={`py-2 text-sm font-bold ${
-              activeTab === 'byTickets'
-                ? 'text-emerald-600 border-b-2 border-emerald-600'
-                : 'text-gray-500'
-            }`}
-          >
-            {t.byTickets ?? 'Biletlər üzrə'}
-          </button>
-          <button
-            onClick={() => setActiveTab('byTopics')}
-            className={`py-2 text-sm font-bold ${
-              activeTab === 'byTopics'
-                ? 'text-emerald-600 border-b-2 border-emerald-600'
-                : 'text-gray-500'
-            }`}
-          >
-            {t.byTopics ?? 'Mövzular üzrə'}
-          </button>
-          <button
-            onClick={() => setActiveTab('exam')}
-            className={`py-2 text-sm font-bold ${
-              activeTab === 'exam'
-                ? 'text-emerald-600 border-b-2 border-emerald-600'
-                : 'text-gray-500'
-            }`}
-          >
-            {t.exam}
-          </button>
-        </div>
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className={`absolute top-10 right-10 w-32 h-32 rounded-full blur-3xl animate-pulse ${
+          isDarkMode ? 'bg-purple-500/5' : 'bg-purple-400/10'
+        }`}></div>
+        <div className={`absolute bottom-20 left-10 w-24 h-24 rounded-full blur-2xl animate-pulse ${
+          isDarkMode ? 'bg-blue-500/5' : 'bg-blue-400/10'
+        }`} style={{ animationDelay: '2s' }}></div>
       </div>
 
+      <div className="relative z-10">
+        <div className={`mb-6 text-center ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+          <h1 className="text-2xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            {t.tests}
+          </h1>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Bilet və mövzu üzrə testlərlə hazırlaşın
+          </p>
+        </div>
+
+        <div className={`rounded-2xl overflow-hidden border-2 mb-6 transition-all duration-300 backdrop-blur-sm ${
+          isDarkMode 
+            ? 'border-gray-700/50 bg-gray-800/80 shadow-xl' 
+            : 'border-gray-200/50 bg-white/80 shadow-xl'
+        }`}>
+          <div className="grid grid-cols-3">
+            <button
+              onClick={() => setActiveTab('byTickets')}
+              className={`py-4 px-2 text-sm font-bold transition-all duration-300 relative group ${
+                activeTab === 'byTickets'
+                  ? 'text-emerald-600'
+                  : isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {activeTab === 'byTickets' && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+              )}
+              <div className="relative z-10">
+                <div className="text-lg mb-1">🎫</div>
+                {t.byTickets ?? 'Biletlər üzrə'}
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('byTopics')}
+              className={`py-4 px-2 text-sm font-bold transition-all duration-300 relative group ${
+                activeTab === 'byTopics'
+                  ? 'text-emerald-600'
+                  : isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {activeTab === 'byTopics' && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+              )}
+              <div className="relative z-10">
+                <div className="text-lg mb-1">📚</div>
+                {t.byTopics ?? 'Mövzular üzrə'}
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('exam')}
+              className={`py-4 px-2 text-sm font-bold transition-all duration-300 relative group ${
+                activeTab === 'exam'
+                  ? 'text-emerald-600'
+                  : isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              {activeTab === 'exam' && (
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
+              )}
+              <div className="relative z-10">
+                <div className="text-lg mb-1">🧪</div>
+                {t.exam}
+              </div>
+            </button>
+          </div>
+        </div>
+
       {activeTab === 'byTickets' && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {Array.from({ length: 20 }, (_, idx) => {
             const unlocked = hasActivePackage() || idx < 5;
             return (
@@ -90,17 +129,56 @@ export function ExamScreen() {
                   if (!unlocked) { setShowPurchasePopup(true); return; }
                   navigate('QuickTest', { ticket: idx + 1 });
                 }}
-                className={`w-full text-left rounded-lg border p-3 text-sm flex items-center justify-between transition-colors duration-200 ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                } ${!unlocked ? 'opacity-60 cursor-pointer' : 'hover:bg-gray-700/20'} `}
+                className={`w-full text-left rounded-2xl border-2 p-4 text-sm flex items-center justify-between transition-all duration-300 transform hover:scale-[1.02] group ${
+                  isDarkMode 
+                    ? 'bg-gray-800/80 border-gray-700/50 backdrop-blur-sm' 
+                    : 'bg-white/80 border-gray-200/50 backdrop-blur-sm'
+                } ${
+                  !unlocked 
+                    ? 'opacity-60 cursor-pointer' 
+                    : 'hover:shadow-lg hover:border-emerald-500/50'
+                }`}
               >
-                <div className="font-bold flex items-center gap-2">
-                  {!unlocked && (
-                    <span className="text-gray-400 text-base animate-pulse">🔒</span>
-                  )}
-                  <span>Bilet {idx + 1}</span>
+                <div className="font-bold flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg transition-all duration-300 ${
+                    unlocked 
+                      ? 'bg-gradient-to-br from-emerald-500 to-green-500 text-white group-hover:scale-110' 
+                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                  }`}>
+                    {!unlocked ? (
+                      <span className="text-gray-400 animate-pulse">🔒</span>
+                    ) : (
+                      <span className="font-black">{idx + 1}</span>
+                    )}
+                  </div>
+                  <div>
+                    <div className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      Bilet {idx + 1}
+                    </div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      20 sual
+                    </div>
+                  </div>
                 </div>
-                <div className="text-gray-500">{unlocked ? '0/20' : 'Kilidli'}</div>
+                <div className={`flex items-center gap-2 ${
+                  unlocked 
+                    ? isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    : 'text-gray-500'
+                }`}>
+                  <div className="text-right">
+                    <div className="text-sm font-medium">
+                      {unlocked ? '0/20' : 'Kilidli'}
+                    </div>
+                    {unlocked && (
+                      <div className="text-xs opacity-75">
+                        0% tamamlandı
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-lg">
+                    {unlocked ? '→' : '🔒'}
+                  </div>
+                </div>
               </button>
             );
           })}
@@ -108,7 +186,7 @@ export function ExamScreen() {
       )}
 
       {activeTab === 'byTopics' && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {topics.map((topic) => {
             const hasSub = !!topic.subtopics && topic.subtopics.length > 0;
             const unlocked = hasActivePackage() || topic.id === 8 || topic.id === 11;
@@ -116,9 +194,11 @@ export function ExamScreen() {
             return (
               <div
                 key={topic.id}
-                className={`rounded-lg border transition-colors duration-200 ${
-                  isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-                } ${!unlocked ? 'opacity-60' : ''}`}
+                className={`rounded-2xl border-2 transition-all duration-300 backdrop-blur-sm ${
+                  isDarkMode 
+                    ? 'bg-gray-800/80 border-gray-700/50' 
+                    : 'bg-white/80 border-gray-200/50'
+                } ${!unlocked ? 'opacity-60' : 'hover:shadow-lg hover:border-emerald-500/50'}`}
               >
                 <button
                   type="button"
@@ -126,24 +206,52 @@ export function ExamScreen() {
                     if (!unlocked) { setShowPurchasePopup(true); return; }
                     if (hasSub) { toggleTopic(topic.id); }
                   }}
-                  className="w-full p-3 text-sm flex items-center justify-between"
+                  className="w-full p-4 text-sm flex items-center justify-between group"
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    {hasSub && (
-                      <span
-                        className={`text-xs transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`}
-                      >
-                        ▸
-                      </span>
-                    )}
-                    <div className="font-bold truncate flex items-center gap-2">
-                      {!unlocked && (
-                        <span className="text-gray-400 text-base animate-pulse">🔒</span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-lg transition-all duration-300 ${
+                      unlocked 
+                        ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white group-hover:scale-110' 
+                        : isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                    }`}>
+                      {!unlocked ? (
+                        <span className="text-gray-400 animate-pulse">🔒</span>
+                      ) : hasSub ? (
+                        <span className={`transition-transform duration-200 ${expanded ? 'rotate-90' : ''}`}>
+                          📁
+                        </span>
+                      ) : (
+                        '📄'
                       )}
-                      <span className="truncate">{topic.title}</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className={`font-bold truncate ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {topic.title}
+                      </div>
+                      <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {topic.questionCount} sual{hasSub ? ' • Alt mövzular var' : ''}
+                      </div>
                     </div>
                   </div>
-                  <div className="text-gray-500">{unlocked ? `0/${topic.questionCount}` : 'Kilidli'}</div>
+                  <div className={`flex items-center gap-2 ${
+                    unlocked 
+                      ? isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      : 'text-gray-500'
+                  }`}>
+                    <div className="text-right">
+                      <div className="text-sm font-medium">
+                        {unlocked ? `0/${topic.questionCount}` : 'Kilidli'}
+                      </div>
+                      {unlocked && (
+                        <div className="text-xs opacity-75">
+                          0% tamamlandı
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-lg">
+                      {!unlocked ? '🔒' : hasSub ? (expanded ? '▼' : '▶') : '→'}
+                    </div>
+                  </div>
                 </button>
                 {hasSub && (
                   <div
@@ -176,62 +284,118 @@ export function ExamScreen() {
       )}
 
       {activeTab === 'exam' && (
-        <div className={`rounded-xl border p-4 text-sm transition-colors duration-200 ${
-          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-        }`}>
-          <div className="text-xs text-gray-500 mb-3">{t.examSimulator}</div>
-          <div className="space-y-3">
-            <Button 
-              onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
-              className="w-full"
-            >
-              🧪 İmtahan simulyatoru
-            </Button>
-            <Button 
-              onClick={() => navigate('ExamConfig', { mode: 'final' })}
-              className="w-full"
-              variant="secondary"
-            >
-              📋 Yekun imtahan
-            </Button>
+        <div className="space-y-4">
+          <div className={`rounded-2xl border-2 p-6 text-sm transition-all duration-300 backdrop-blur-sm ${
+            isDarkMode 
+              ? 'bg-gray-800/80 border-gray-700/50 shadow-xl' 
+              : 'bg-white/80 border-gray-200/50 shadow-xl'
+          }`}>
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-3">🧪</div>
+              <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {t.examSimulator}
+              </h3>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Real imtahan şəraitində özünüzü sınayın
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <Button 
+                onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
+                fullWidth
+                size="lg"
+                icon="🧪"
+                variant="primary"
+              >
+                İmtahan simulyatoru
+              </Button>
+              <Button 
+                onClick={() => navigate('ExamConfig', { mode: 'final' })}
+                fullWidth
+                size="lg"
+                icon="📋"
+                variant="secondary"
+              >
+                Yekun imtahan
+              </Button>
+            </div>
+            
+            <div className={`mt-6 p-4 rounded-xl ${
+              isDarkMode ? 'bg-blue-900/20 border border-blue-700/50' : 'bg-blue-50 border border-blue-200/50'
+            }`}>
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">💡</div>
+                <div>
+                  <div className={`text-sm font-semibold mb-1 ${isDarkMode ? 'text-blue-200' : 'text-blue-900'}`}>
+                    Məsləhət
+                  </div>
+                  <div className={`text-xs ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                    İmtahan simulyatoru real imtahan şəraitini tam təqlid edir. Əvvəlcə bütün mövzuları öyrənin.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {showPurchasePopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setShowPurchasePopup(false)} />
-          <div className={`relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowPurchasePopup(false)} />
+          <div className={`relative z-10 w-full max-w-sm rounded-3xl p-6 shadow-2xl border-2 backdrop-blur-xl animate-scale-in ${
+            isDarkMode 
+              ? 'bg-gray-800/90 border-gray-700/50' 
+              : 'bg-white/90 border-gray-200/50'
           }`}>
-            <div className={`text-base font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Məzmun kilidlidir
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-2xl">
+                🔒
+              </div>
+              <div className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Məzmun kilidlidir
+              </div>
+              <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-sm leading-relaxed`}>
+                Bu bölməni açmaq üçün paket tələb olunur. Premium funksiyalara çıxış əldə edin.
+              </div>
             </div>
-            <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-sm mb-4`}>
-              Bu bölməni açmaq üçün paket tələb olunur. Paket almaq istəyirsiniz?
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => setShowPurchasePopup(false)}
-                className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Bağla
-              </button>
-              <button
+            
+            <div className="space-y-3">
+              <Button
                 onClick={() => {
                   setShowPurchasePopup(false);
                   navigate('Packages');
                 }}
-                className="px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white"
+                fullWidth
+                size="lg"
+                icon="🛍️"
+                variant="primary"
               >
                 Paket al
-              </button>
+              </Button>
+              <Button
+                onClick={() => setShowPurchasePopup(false)}
+                fullWidth
+                variant="ghost"
+              >
+                Bağla
+              </Button>
+            </div>
+            
+            <div className={`mt-4 p-3 rounded-xl ${
+              isDarkMode ? 'bg-emerald-900/20 border border-emerald-700/50' : 'bg-emerald-50 border border-emerald-200/50'
+            }`}>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">✨</span>
+                <div className={`text-xs ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
+                  Premium üzvlər bütün testlərə çıxış əldə edirlər
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
