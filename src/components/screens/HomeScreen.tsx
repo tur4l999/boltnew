@@ -12,24 +12,24 @@ export function HomeScreen() {
   
   const gridItems = [
     // Əsas bölmələr (8 ədəd):
-    { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
-    { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
-    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👨‍🏫' },
-    { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
-    { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📊' },
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
-    { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
-    { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
+    { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎥' },
+    { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '⚡' },
+    { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👩‍🏫' },
+    { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '📝' },
+    { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📈' },
+    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📋' },
+    { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📄' },
+    { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💳' },
 
     // Əlavə bölmələr (secondary):
-    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
-    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
-    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
-    { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
-    { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
+    { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '🎁' },
+    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🏆' },
+    { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🚗' },
+    { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '⚖️' },
+    { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📖' },
 
     // Bölmə sonu: Yekun imtahan
-    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
+    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '🎯' },
   ];
   
   const primaryItems = gridItems.slice(0, 8);

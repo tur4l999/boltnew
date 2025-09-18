@@ -246,13 +246,13 @@ export function StoreScreen() {
           isDarkMode ? 'text-gray-500' : 'text-gray-500'
         }`}>
           <span className="flex items-center gap-1">
-            🔒 Təhlükəsiz ödəniş
+            🔐 Təhlükəsiz ödəniş
           </span>
           <span className="flex items-center gap-1">
             ⚡ Ani çatdırılma
           </span>
           <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
+            🔄 7/24 dəstək
           </span>
         </div>
       </div>

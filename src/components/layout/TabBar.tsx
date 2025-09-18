@@ -5,10 +5,10 @@ export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
   
   const tabs = [
-    { key: 'Home', label: t.home, emoji: '🏠', gradient: 'from-emerald-500 to-green-500' },
-    { key: 'Topics', label: 'Mövzular', emoji: '📚', gradient: 'from-blue-500 to-cyan-500' },
-    { key: 'Exam', label: t.exam, emoji: '🧪', gradient: 'from-purple-500 to-pink-500' },
-    { key: 'Store', label: t.store, emoji: '🛍️', gradient: 'from-orange-500 to-red-500' },
+    { key: 'Home', label: t.home, emoji: '🏡', gradient: 'from-emerald-500 to-green-500' },
+    { key: 'Topics', label: 'Mövzular', emoji: '📖', gradient: 'from-blue-500 to-cyan-500' },
+    { key: 'Exam', label: t.exam, emoji: '🎯', gradient: 'from-purple-500 to-pink-500' },
+    { key: 'Store', label: t.store, emoji: '🛒', gradient: 'from-orange-500 to-red-500' },
   ];
 
   // Hide TabBar on Quick Test screen
@@ -92,7 +92,7 @@ export function TabBar() {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-600 to-gray-700 opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300"></div>
             )}
             
-            <span className="text-lg relative z-10">➕</span>
+            <span className="text-lg relative z-10">⋯</span>
           </div>
           
           <div className={`text-xs font-bold transition-all duration-200 ${

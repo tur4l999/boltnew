@@ -111,7 +111,7 @@ export function RulesScreen() {
           <div className={`flex items-center gap-2 flex-1 px-3 py-2 rounded-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
-            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔎</span>
+            <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔍</span>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -123,7 +123,7 @@ export function RulesScreen() {
                 aria-label="Təmizlə"
                 onClick={() => setQuery('')}
                 className={`${isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
-              >✕</button>
+              >✖</button>
             )}
           </div>
         </div>
@@ -134,7 +134,7 @@ export function RulesScreen() {
           <div className="grid grid-cols-1 gap-2">
             <button onClick={() => { setView('signs'); setSignsStage('categories'); setSelectedCategory(null); }} className={`w-full p-4 rounded-xl border flex items-center justify-between ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}>
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>🛑</div>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>⛔</div>
                 <div className="text-left">
                   <div className="font-bold text-sm">Nişanlar</div>
                   <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Qadağan, üstünlük, xəbərdarlıq və s.</div>
@@ -154,7 +154,7 @@ export function RulesScreen() {
             </button>
             <button onClick={() => setView('vertical')} className={`w-full p-4 rounded-xl border flex items-center justify-between ${isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-100' : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-900'}`}>
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>📶</div>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>📊</div>
                 <div className="text-left">
                   <div className="font-bold text-sm">Vertikal nişanlar</div>
                   <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Dayaq sütunları, əks etdiricilər</div>

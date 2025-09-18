@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('🎨 Generating tokens...');
+console.log('🔧 Generating tokens...');
 
 // Read design tokens
 function readTokens() {

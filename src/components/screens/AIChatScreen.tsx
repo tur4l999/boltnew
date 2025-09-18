@@ -243,7 +243,7 @@ export function AIChatScreen() {
                   ? 'bg-emerald-600 text-white order-1 ml-2' 
                   : 'bg-gray-200 text-gray-600 order-2 mr-2'
               }`}>
-                {message.isUser ? '👤' : '🤖'}
+                {message.isUser ? '👨‍💼' : '🤖'}
               </div>
             </div>
           ))}

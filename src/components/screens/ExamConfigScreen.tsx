@@ -188,7 +188,7 @@ export function ExamConfigScreen() {
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
                       }`}
                     />
-                    <Button size="md" onClick={applyPromo} icon="✨">
+                    <Button size="md" onClick={applyPromo} icon="🌟">
                       Tətbiq et
                     </Button>
                   </div>
@@ -208,7 +208,7 @@ export function ExamConfigScreen() {
                 onClick={() => navigate('ExamIntro')} 
                 fullWidth 
                 size="xl"
-                icon="🚀"
+                icon="🎯"
                 variant="primary"
               >
                 İmtahana başla

@@ -5,17 +5,17 @@ export function MoreScreen() {
   const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
   
   const moreItems = [
-    { key: 'rules', label: 'Qaydalar', emoji: '📘', action: () => navigate('Rules') },
-    { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
-    { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
-    { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
-    { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },
-    { key: 'mistakes', label: 'Səhvlərim', emoji: '⚠️', action: () => navigate('Mistakes') },
-    { key: 'qa', label: 'Sual-cavab', emoji: '❓', action: () => alert('Sual-cavab (demo)') },
-    { key: 'appeal', label: 'Apellyasiyalarım', emoji: '📝', action: () => alert('Apellyasiya (demo)') },
-    { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => navigate('Settings') },
+    { key: 'rules', label: 'Qaydalar', emoji: '📜', action: () => navigate('Rules') },
+    { key: 'packages', label: 'Təlim paketləri', emoji: '🎁', action: () => navigate('Packages') },
+    { key: 'balance', label: 'Daxili balans', emoji: '💳', action: () => navigate('Transactions') },
+    { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏅', action: () => alert('Şəhadətnamə almaq (demo)') },
+    { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚙', action: () => alert('Praktiki təcrübə (demo)') },
+    { key: 'mistakes', label: 'Səhvlərim', emoji: '❌', action: () => navigate('Mistakes') },
+    { key: 'qa', label: 'Sual-cavab', emoji: '❔', action: () => alert('Sual-cavab (demo)') },
+    { key: 'appeal', label: 'Apellyasiyalarım', emoji: '⚖️', action: () => alert('Apellyasiya (demo)') },
+    { key: 'notifications', label: 'Bildirişlər', emoji: '🔕', action: () => navigate('Settings') },
     { key: 'settings', label: 'Parametrlər', emoji: '⚙️', action: () => navigate('Settings') },
-    { key: 'help', label: 'Dəstək', emoji: '🆘', action: () => alert('Köməkçi (demo)') },
+    { key: 'help', label: 'Dəstək', emoji: '🔄', action: () => alert('Köməkçi (demo)') },
   ];
 
   return (

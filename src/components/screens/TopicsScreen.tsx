@@ -41,7 +41,7 @@ export function TopicsScreen() {
           }`}>
             <span className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-blue-300' : 'text-blue-600'
-            }`}>📦</span>
+            }`}>🎁</span>
           </div>
           <div className="flex-1">
             <div className={`text-xs font-medium transition-colors duration-200 ${
@@ -66,7 +66,7 @@ export function TopicsScreen() {
       {hasActivePackage() && (
         <div className="mb-3 p-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200 rounded-lg flex items-center gap-3">
           <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-            <span className="text-emerald-600 text-xs">🔓</span>
+            <span className="text-emerald-600 text-xs">✅</span>
           </div>
           <div className="flex-1">
             <div className="text-emerald-900 text-xs font-medium">
@@ -77,7 +77,7 @@ export function TopicsScreen() {
             </div>
           </div>
           <div className="text-emerald-600 text-sm">
-            ✨
+            🌟
           </div>
         </div>
       )}
@@ -107,7 +107,7 @@ export function TopicsScreen() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   {!unlocked && (
-                    <span className="text-gray-400 text-lg animate-pulse">🔒</span>
+                    <span className="text-gray-400 text-lg animate-pulse">🔐</span>
                   )}
                   <div>
                   <div className={`font-bold text-sm transition-colors duration-200 ${

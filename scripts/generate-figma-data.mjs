@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('🎨 Figma üçün design data yaradılır...');
+console.log('🔧 Figma üçün design data yaradılır...');
 
 // Design tokens oxu
 const tokensPath = path.join(process.cwd(), 'design/tokens.json');
@@ -146,11 +146,11 @@ function generateScreens() {
 function generateAssets() {
   return {
     icons: [
-      { name: 'home', emoji: '🏠', usage: 'Navigation tab' },
-      { name: 'topics', emoji: '📚', usage: 'Topics tab' },
-      { name: 'exam', emoji: '🧪', usage: 'Exam tab' },
-      { name: 'store', emoji: '🛍️', usage: 'Store tab' },
-      { name: 'more', emoji: '➕', usage: 'More menu' }
+      { name: 'home', emoji: '🏡', usage: 'Navigation tab' },
+      { name: 'topics', emoji: '📖', usage: 'Topics tab' },
+      { name: 'exam', emoji: '🎯', usage: 'Exam tab' },
+      { name: 'store', emoji: '🛒', usage: 'Store tab' },
+      { name: 'more', emoji: '⋯', usage: 'More menu' }
     ],
     images: [
       { name: 'logo', usage: 'App logo' },
@@ -175,10 +175,10 @@ fs.writeFileSync(outputPath, JSON.stringify(figmaData, null, 2));
 console.log('✅ Figma design data yaradıldı!');
 console.log('📁 Fayl: figma-design-data.json');
 console.log('');
-console.log('📊 Statistika:');
+console.log('📈 Statistika:');
 console.log(`   🎨 Rənglər: ${Object.keys(figmaData.designSystem.colors).length}`);
-console.log(`   📝 Typography: ${Object.keys(figmaData.designSystem.typography).length}`);
+console.log(`   🔤 Typography: ${Object.keys(figmaData.designSystem.typography).length}`);
 console.log(`   🧩 Komponentlər: ${Object.keys(figmaData.components).length}`);
-console.log(`   📱 Ekranlar: ${figmaData.screens.length}`);
+console.log(`   📲 Ekranlar: ${figmaData.screens.length}`);
 console.log('');
-console.log('🔄 Növbəti addım: Bu faylı Figmaya import edin');
+console.log('🔁 Növbəti addım: Bu faylı Figmaya import edin');

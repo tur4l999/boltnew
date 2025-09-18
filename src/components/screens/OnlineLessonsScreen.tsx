@@ -84,12 +84,12 @@ export function OnlineLessonsScreen() {
 
   const getLessonEmoji = (moduleId: string): string => {
     const emojiMap: { [key: string]: string } = {
-      'M1': '📚', 'M2': '🔍', 'M3': '🧮', 'M4': '📊', 
+      'M1': '📖', 'M2': '🔍', 'M3': '🧮', 'M4': '📊', 
       'M5': '🎯', 'M6': '💡', 'M7': '🔬', 'M8': '🎨',
-      'M9': '🏗️', 'M10': '📈', 'M11': '🌟', 'M12': '🏆',
-      'M13': '🚀', 'M14': '💼', 'M15': '🌐', 'QA': '❓'
+      'M9': '🏗️', 'M10': '📈', 'M11': '⭐', 'M12': '🏅',
+      'M13': '🚀', 'M14': '💼', 'M15': '🌍', 'QA': '❓'
     };
-    return emojiMap[moduleId] || '📖';
+    return emojiMap[moduleId] || '📚';
   };
 
   const formatDateTime = (d: Date): string => {
