@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { StatusBar } from './components/layout/StatusBar';
@@ -8,6 +7,7 @@ import { TabBar } from './components/layout/TabBar';
 import { ScreenRenderer } from './components/navigation/ScreenRenderer';
 import { InspectPage } from './pages/inspect';
 import { LoginScreen } from './components/screens/LoginScreen';
+import { OnboardingScreen } from './components/screens/OnboardingScreen';
 import { PageTransition } from './components/navigation/PageTransition';
 
 export default function App() {
@@ -32,7 +32,7 @@ export default function App() {
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { currentScreen, isDarkMode } = useApp();
+  const { currentScreen, isDarkMode, hasCompletedOnboarding, completeOnboarding } = useApp();
 
   const isAIChat = currentScreen.screen === 'AIChat';
   const hideHeader = currentScreen.screen !== 'Home';
@@ -54,7 +54,11 @@ function AppContent() {
           <StatusBar />
         </div>
 
-        {isLoggedIn ? (
+        {!hasCompletedOnboarding ? (
+          <PageTransition transitionKey="onboarding">
+            <OnboardingScreen onComplete={completeOnboarding} />
+          </PageTransition>
+        ) : isLoggedIn ? (
           isAIChat ? (
             <ScreenRenderer />
           ) : (
