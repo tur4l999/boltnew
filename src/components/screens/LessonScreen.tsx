@@ -142,7 +142,7 @@ export function LessonScreen() {
 
       case 'video3d':
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Modern Video Card */}
             <div className={`rounded-3xl overflow-hidden shadow-2xl ${
               isDarkMode 
@@ -475,7 +475,7 @@ export function LessonScreen() {
       {renderTabContent()}
 
         {/* Modern Action Buttons */}
-        <div className="mt-8 space-y-4">
+        <div className="mt-4 space-y-4">
           {/* Primary Actions */}
           <div className="grid grid-cols-1 gap-4">
             <button
