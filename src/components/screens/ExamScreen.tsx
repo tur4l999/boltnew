@@ -312,6 +312,23 @@ export function ExamScreen() {
                 İmtahan simulyatoru
               </Button>
             </div>
+
+            {/* İpucu */}
+            <div className={`mt-6 p-4 rounded-xl ${
+              isDarkMode ? 'bg-blue-900/20 border border-blue-700/50' : 'bg-blue-50 border border-blue-200/50'
+            }`}>
+              <div className="flex items-start gap-3">
+                <div className="text-2xl"><EmojiIcon emoji="💡" size={20} /></div>
+                <div>
+                  <div className={`text-sm font-semibold mb-1 ${isDarkMode ? 'text-blue-200' : 'text-blue-900'}`}>
+                    Məsləhət
+                  </div>
+                  <div className={`text-xs ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                    İmtahan simulyatoru real imtahan şəraitini tam təqlid edir. Əvvəlcə bütün mövzuları öyrənin.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Yekun İmtahan */}
