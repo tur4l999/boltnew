@@ -43,7 +43,7 @@ export function TabBar() {
             >
               {/* Active indicator */}
               {isActive && (
-                <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r ${tab.gradient} animate-pulse`}></div>
+                <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r ${tab.gradient} animate-pulse`}></div>
               )}
               
               <div className={`relative p-2 rounded-2xl transition-all duration-300 transform ${
@@ -78,7 +78,7 @@ export function TabBar() {
         >
           {/* Active indicator */}
           {currentTab === 'More' && (
-            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 animate-pulse"></div>
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 animate-pulse"></div>
           )}
           
           <div className={`relative p-2 rounded-2xl transition-all duration-300 transform ${
