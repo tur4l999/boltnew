@@ -565,7 +565,7 @@ export function LessonScreen() {
             >
               <div className="flex items-center justify-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-2xl">📝</span>
+                  <span className="text-2xl">❓</span>
                 </div>
                 <div className="text-left">
                   <div className="text-lg font-bold">Sualları Həll Et</div>
@@ -592,7 +592,7 @@ export function LessonScreen() {
             >
               <div className="flex items-center justify-center gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-2xl">🧪</span>
+                  <span className="text-2xl">📋</span>
                 </div>
                 <div className="text-left">
                   <div className="text-lg font-bold">İmtahana Başla</div>
