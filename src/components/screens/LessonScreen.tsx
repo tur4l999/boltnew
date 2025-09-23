@@ -611,29 +611,29 @@ export function LessonScreen() {
           </div>
 
           {/* Secondary Actions */}
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-2 justify-center">
             <button
               onClick={() => alert('Favorilərə əlavə edildi')}
-              className={`group flex items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 ${
+              className={`group flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 ${
                 isDarkMode
                   ? 'bg-gray-800/50 border border-gray-700/50 text-gray-200 hover:bg-gray-700/50 backdrop-blur-sm'
                   : 'bg-white/50 border border-gray-200/50 text-gray-700 hover:bg-gray-100/50 shadow-lg backdrop-blur-sm'
               }`}
             >
-              <span className="text-lg group-hover:scale-110 transition-transform duration-200">⭐</span>
-              <span className="text-sm font-bold">Favorilər</span>
+              <span className="text-base group-hover:scale-110 transition-transform duration-200">⭐</span>
+              <span className="text-xs font-bold">Favorilər</span>
             </button>
             
             <button
               onClick={() => alert('Paylaş seçimləri')}
-              className={`group flex items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 transform hover:scale-105 ${
+              className={`group flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 ${
                 isDarkMode
                   ? 'bg-gray-800/50 border border-gray-700/50 text-gray-200 hover:bg-gray-700/50 backdrop-blur-sm'
                   : 'bg-white/50 border border-gray-200/50 text-gray-700 hover:bg-gray-100/50 shadow-lg backdrop-blur-sm'
               }`}
             >
-              <span className="text-lg group-hover:scale-110 transition-transform duration-200">📤</span>
-              <span className="text-sm font-bold">Paylaş</span>
+              <span className="text-base group-hover:scale-110 transition-transform duration-200">📤</span>
+              <span className="text-xs font-bold">Paylaş</span>
             </button>
           </div>
         </div>
