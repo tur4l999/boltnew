@@ -219,3 +219,48 @@ html {
 .truncate-fade.fade-red::after {
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(239,68,68,0.15));
 }
+
+/* Grid pattern background */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Scrollbar hiding utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Modern focus styles */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: all 0.2s ease;
+}
+
+.focus-ring:focus {
+  outline: 2px solid rgba(34, 197, 94, 0.5);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+}
