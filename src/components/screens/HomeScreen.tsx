@@ -84,7 +84,7 @@ export function HomeScreen() {
               <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
                 isDarkMode ? 'text-blue-200' : 'text-blue-900'
               }`}>
-                Aktiv paketiniz yoxdur
+                Paket yoxdur
               </div>
               <div className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-blue-300/80' : 'text-blue-700/80'
