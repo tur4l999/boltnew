@@ -556,26 +556,31 @@ const TrophyIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<
 
 const CarIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    {/* Təkərlər */}
+    <circle cx="7" cy="17" r="2" stroke={color} strokeWidth="2.5" fill="none" />
+    <circle cx="17" cy="17" r="2" stroke={color} strokeWidth="2.5" fill="none" />
+    
+    {/* Maşın kuzovu - yandan görünüş */}
     <path
-      d="M8 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM20 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
-      fill={color}
-    />
-    <path
-      d="M6 16H2a1 1 0 0 1-1-1V9l3-6h12l3 6v6a1 1 0 0 1-1 1h-4"
+      d="M3 12h2l2-4h8l3 4h2v3a1 1 0 0 1-1 1h-1a3 3 0 0 0-6 0H9a3 3 0 0 0-6 0H2a1 1 0 0 1-1-1v-3z"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+    
+    {/* Pəncərələr */}
     <path
-      d="M4 8h16"
+      d="M7 8h6l2 2H9l-2-2z"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+    
+    {/* Qapı xətti */}
     <path
-      d="M8 5h8"
+      d="M12 8v4"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
@@ -626,13 +631,25 @@ const MenuIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<Ic
 
 const MedalIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-    <circle cx="12" cy="9" r="5" stroke={color} strokeWidth="2.5" fill="none" />
-    <circle cx="12" cy="9" r="2" fill={color} />
-    <path d="m8 14 2 8 2-2 2 2 2-8" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="m16 14 2 8-2-2-2 2-2-8" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12 4v1" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-    <path d="M16.24 6.76l-.7.7" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
-    <path d="M7.76 6.76l.7.7" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    {/* Medal dairəsi */}
+    <circle cx="12" cy="8" r="4" stroke={color} strokeWidth="2.5" fill="none" />
+    <circle cx="12" cy="8" r="1.5" fill={color} />
+    
+    {/* Medal lentləri */}
+    <path
+      d="M9 12v8l3-2 3 2v-8"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    
+    {/* Ulduz */}
+    <path
+      d="M12 6l.5 1.5h1.5l-1.2.9.5 1.5L12 9l-1.3.9.5-1.5-1.2-.9h1.5L12 6z"
+      fill={color}
+    />
   </svg>
 );
 
