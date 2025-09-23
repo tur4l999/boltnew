@@ -79,8 +79,8 @@ export function ExamScreen() {
               {activeTab === 'byTickets' && (
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
               )}
-              <div className="relative z-10">
-                <div className="text-lg mb-1">🎫</div>
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="text-lg mb-1"><EmojiIcon emoji="📄" size={18} className="text-blue-600" /></div>
                 {t.byTickets ?? 'Biletlər üzrə'}
               </div>
             </button>
@@ -95,8 +95,8 @@ export function ExamScreen() {
               {activeTab === 'byTopics' && (
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
               )}
-              <div className="relative z-10">
-                <div className="text-lg mb-1">📚</div>
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="text-lg mb-1"><EmojiIcon emoji="📚" size={18} className="text-purple-600" /></div>
                 {t.byTopics ?? 'Mövzular üzrə'}
               </div>
             </button>
@@ -111,8 +111,8 @@ export function ExamScreen() {
               {activeTab === 'exam' && (
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
               )}
-              <div className="relative z-10">
-                <div className="text-lg mb-1"><EmojiIcon emoji="🧪" size={18} /></div>
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="text-lg mb-1"><EmojiIcon emoji="🧪" size={18} className="text-emerald-600" /></div>
                 {t.exam}
               </div>
             </button>
