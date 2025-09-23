@@ -199,57 +199,139 @@ export function LessonScreen() {
 
       case 'materials':
         return (
-          <Card>
-            <div className={`font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Konspekt</div>
-            {moduleId === 'M25' || moduleId === 'M8' ? (
-              <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                <div className="space-y-3">
-                  <div>
-                    <div className="font-semibold mb-1">I.</div>
-                    <p>
-                      Velosipedlər və mopedlər yalnız yolun sağ kənar zolağında, yol nişanları və ya yol nişanlanmasının tələblərinə riayət etməklə, mümkün qədər sağ tərəfdə bir cərgə ilə hərəkət etməlidirlər. Piyadalar üçün maneə yaratmamaq şərti ilə velosipedlərin yol çiyini ilə hərəkətinə icazə verilir. Velosiped dəstələri yolun hərəkət hissəsi ilə getdikləri vaxt hərəsi 10 velosipedçidən çox olmayan qruplardan ibarət olmalıdırlar. Nəqliyyat vasitələrinin ötməsini asanlaşdırmaq üçün dəstələrin arasındakı məsafə 80—100 metr olmalıdır.
-                    </p>
-                  </div>
+          <div className="space-y-4">
+            <Card>
+              <div className={`font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Konspekt</div>
+              {moduleId === 'M25' || moduleId === 'M8' ? (
+                <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="font-semibold mb-1">I.</div>
+                      <p>
+                        Velosipedlər və mopedlər yalnız yolun sağ kənar zolağında, yol nişanları və ya yol nişanlanmasının tələblərinə riayət etməklə, mümkün qədər sağ tərəfdə bir cərgə ilə hərəkət etməlidirlər. Piyadalar üçün maneə yaratmamaq şərti ilə velosipedlərin yol çiyini ilə hərəkətinə icazə verilir. Velosiped dəstələri yolun hərəkət hissəsi ilə getdikləri vaxt hərəsi 10 velosipedçidən çox olmayan qruplardan ibarət olmalıdırlar. Nəqliyyat vasitələrinin ötməsini asanlaşdırmaq üçün dəstələrin arasındakı məsafə 80—100 metr olmalıdır.
+                      </p>
+                    </div>
 
-                  <div className="my-3 flex justify-center">
-                    <img
-                      src="/unnamed.jpg"
-                      alt="Velosiped və moped qaydaları"
-                      className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
-                      onError={handleKonspektImgError}
-                    />
-                  </div>
+                    <div className="my-3 flex justify-center">
+                      <img
+                        src="/unnamed.jpg"
+                        alt="Velosiped və moped qaydaları"
+                        className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
+                        onError={handleKonspektImgError}
+                      />
+                    </div>
 
-                  <div>
-                    <div className="font-semibold mb-1">II. Velosiped və moped sürücülərinə:</div>
-                    <ol className="list-decimal pl-5 space-y-1">
-                      <li>
-                        sükanı tutmadan və ya təhlükəsizlik dəbilqələrindən istifadə qaydalarını pozmaqla hərəkət etmək;
-                      </li>
-                      <li>
-                        velosipedin və mopedin uzunu və ya eni üzrə qabaritlərindən 0,5 metrdən artıq kənara çıxan və ya velosipedi, mopedi idarə etməyə mane olan yük aparmaq;
-                      </li>
-                      <li>
-                        velosiped yolu olduğu halda, onun yanındakı yolla hərəkət etmək (yalnız velosipedçilərə şamil edilir);
-                      </li>
-                      <li>
-                        tramvay hərəkəti olan yollarda və həmin istiqamətdə hərəkət üçün birdən artıq zolağı olan yollarda sola və ya geriyə dönmək;
-                      </li>
-                      <li> sərnişin daşımaq; </li>
-                      <li> nasaz velosipeddən istifadə etmək; </li>
-                      <li>
-                        velosiped və ya mopedlə birgə istismar üçün nəzərdə tutulan qoşqunun yedəyə alınması istisna olmaqla, velosipedləri və mopedləri, eləcə də velosipedlərlə və mopedlərlə yedəyə almaq qadağandır.
-                      </li>
-                    </ol>
+                    <div>
+                      <div className="font-semibold mb-1">II. Velosiped və moped sürücülərinə:</div>
+                      <ol className="list-decimal pl-5 space-y-1">
+                        <li>
+                          sükanı tutmadan və ya təhlükəsizlik dəbilqələrindən istifadə qaydalarını pozmaqla hərəkət etmək;
+                        </li>
+                        <li>
+                          velosipedin və mopedin uzunu və ya eni üzrə qabaritlərindən 0,5 metrdən artıq kənara çıxan və ya velosipedi, mopedi idarə etməyə mane olan yük aparmaq;
+                        </li>
+                        <li>
+                          velosiped yolu olduğu halda, onun yanındakı yolla hərəkət etmək (yalnız velosipedçilərə şamil edilir);
+                        </li>
+                        <li>
+                          tramvay hərəkəti olan yollarda və həmin istiqamətdə hərəkət üçün birdən artıq zolağı olan yollarda sola və ya geriyə dönmək;
+                        </li>
+                        <li> sərnişin daşımaq; </li>
+                        <li> nasaz velosipeddən istifadə etmək; </li>
+                        <li>
+                          velosiped və ya mopedlə birgə istismar üçün nəzərdə tutulan qoşqunun yedəyə alınması istisna olmaqla, velosipedləri və mopedləri, eləcə də velosipedlərlə və mopedlərlə yedəyə almaq qadağandır.
+                        </li>
+                      </ol>
+                    </div>
                   </div>
                 </div>
+              ) : (
+                <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
+                </div>
+              )}
+            </Card>
+
+            {/* Cərimələr Button */}
+            <div className={`rounded-3xl overflow-hidden shadow-2xl ${
+              isDarkMode 
+                ? 'bg-gradient-to-br from-red-900 to-red-800 border border-red-700/50' 
+                : 'bg-gradient-to-br from-red-50 to-orange-50 border border-red-200/50'
+            }`}>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center shadow-lg">
+                      <span className="text-white text-2xl">⚖️</span>
+                    </div>
+                    <div>
+                      <h3 className={`text-xl font-bold ${isDarkMode ? 'text-red-100' : 'text-red-900'}`}>
+                        Cərimələr
+                      </h3>
+                      <p className={`text-sm ${isDarkMode ? 'text-red-300' : 'text-red-700'}`}>
+                        Yol hərəkəti qaydalarının pozulmasına görə cərimələr və videolar
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="px-3 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-full text-xs font-bold">
+                      YENİ
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`mb-4 p-4 rounded-2xl ${
+                  isDarkMode 
+                    ? 'bg-red-800/30 border border-red-700/50' 
+                    : 'bg-red-100/50 border border-red-200/50'
+                }`}>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center">
+                      <span className="text-white text-sm">📋</span>
+                    </div>
+                    <span className={`text-sm font-bold ${isDarkMode ? 'text-red-100' : 'text-red-900'}`}>
+                      İnzibati Xətalar Məcəlləsi
+                    </span>
+                  </div>
+                  
+                  <ul className={`text-sm space-y-1 ml-11 ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <li>• Sürət həddinin pozulması</li>
+                    <li>• İşıqfor siqnallarının pozulması</li>
+                    <li>• Sənədlərlə bağlı pozuntular</li>
+                    <li>• Piyadaların hüquqlarının pozulması</li>
+                    <li>• Və digər pozuntular</li>
+                  </ul>
+                </div>
+
+                <button
+                  onClick={() => navigate('Fines')}
+                  className={`group relative overflow-hidden w-full p-4 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl ${
+                    isDarkMode
+                      ? 'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-red-500/25'
+                      : 'bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white shadow-red-500/25'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                        <span className="text-xl">🎥</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-base font-bold">Cərimələri İzlə</div>
+                        <div className="text-sm text-white/80">Video və mətn materialları</div>
+                      </div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                      <span className="text-white text-lg">→</span>
+                    </div>
+                  </div>
+                  
+                  {/* Hover effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
               </div>
-            ) : (
-              <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                Dərs konspekti və əlavə materiallar buraya düşəcək. (Demo)
-              </div>
-            )}
-          </Card>
+            </div>
+          </div>
         );
 
       case 'video3d':
