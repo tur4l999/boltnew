@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { EmojiIcon } from '../ui/Icon';
+import { Sparkles, Rocket } from 'lucide-react';
 
 export function ExamConfigScreen() {
   const { t, navigate, isDarkMode, currentScreen } = useApp();
@@ -188,7 +190,7 @@ export function ExamConfigScreen() {
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
                       }`}
                     />
-                    <Button size="md" onClick={applyPromo} icon="✨">
+                    <Button size="md" onClick={applyPromo} icon={<Sparkles size={16} strokeWidth={2} />}>
                       Tətbiq et
                     </Button>
                   </div>
@@ -208,7 +210,7 @@ export function ExamConfigScreen() {
                 onClick={() => navigate('ExamIntro')} 
                 fullWidth 
                 size="xl"
-                icon="🚀"
+                icon={<Rocket size={20} strokeWidth={2} />}
                 variant="primary"
               >
                 İmtahana başla

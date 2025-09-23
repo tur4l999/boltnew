@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/Icon';
+import { Eye, EyeOff, Sparkles } from 'lucide-react';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -51,13 +53,13 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         
         {/* Traffic Signs with enhanced styling */}
         <div className="absolute top-20 right-20 w-12 h-12 bg-gradient-to-br from-emerald-400/20 to-green-500/20 rounded-2xl flex items-center justify-center text-xl backdrop-blur-sm border border-white/10 animate-bounce-subtle">
-          🚗
+          <EmojiIcon emoji="🚗" size="md" />
         </div>
         <div className="absolute bottom-40 left-16 w-10 h-10 bg-gradient-to-br from-blue-400/20 to-blue-500/20 rounded-xl flex items-center justify-center text-lg backdrop-blur-sm border border-white/10 animate-bounce-subtle" style={{ animationDelay: '0.5s' }}>
-          🚦
+          <EmojiIcon emoji="🚦" size="md" />
         </div>
         <div className="absolute top-1/3 left-8 w-8 h-8 bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-lg flex items-center justify-center text-sm backdrop-blur-sm border border-white/10 animate-bounce-subtle" style={{ animationDelay: '1.5s' }}>
-          📚
+          <EmojiIcon emoji="📚" size="sm" />
         </div>
         
         {/* Geometric shapes */}
@@ -160,7 +162,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                       : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
                 </button>
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </div>
@@ -266,7 +268,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                     : 'text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200'
                 }`}
               >
-                <span>✨</span>
+                <Sparkles size={16} strokeWidth={2} />
                 Demo hesabı ilə daxil ol
               </button>
             </div>

@@ -25,7 +25,7 @@ export function Button({
   fullWidth = false
 }: ButtonProps) {
   const { isDarkMode } = useApp();
-  const baseClasses = 'font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group';
+  const baseClasses = 'font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group transform hover:scale-[1.02] active:scale-[0.98] disabled:transform-none disabled:hover:scale-100';
   
   const sizeClasses = {
     sm: 'px-4 py-2 text-sm min-h-[36px]',
@@ -74,8 +74,6 @@ export function Button({
       disabled={isDisabled}
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} ${
         fullWidth ? 'w-full' : ''
-      } ${
-        !isDisabled ? 'transform hover:scale-[1.02] active:scale-[0.98]' : ''
       } ${isDarkMode ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-white'}`}
     >
       {/* Hover overlay effect */}
