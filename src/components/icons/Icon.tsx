@@ -557,28 +557,25 @@ const TrophyIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<
 const CarIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path
-      d="M7 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0zM13 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0z"
+      d="M8 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM20 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
+      fill={color}
+    />
+    <path
+      d="M6 16H2a1 1 0 0 1-1-1V9l3-6h12l3 6v6a1 1 0 0 1-1 1h-4"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M5 17H3v-6l2-5h9l4 5v6h-2"
+      d="M4 8h16"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M7 10h6"
-      stroke={color}
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M9 6h2"
+      d="M8 5h8"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
@@ -629,11 +626,13 @@ const MenuIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<Ic
 
 const MedalIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-    <circle cx="12" cy="8" r="5" stroke={color} strokeWidth="2.5" />
-    <path d="m9 13 5 5 5-5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="m9 13 5 5-5 5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="m15 13-5 5 5 5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="12" cy="8" r="2" fill={color} />
+    <circle cx="12" cy="9" r="5" stroke={color} strokeWidth="2.5" fill="none" />
+    <circle cx="12" cy="9" r="2" fill={color} />
+    <path d="m8 14 2 8 2-2 2 2 2-8" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="m16 14 2 8-2-2-2 2-2-8" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 4v1" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M16.24 6.76l-.7.7" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M7.76 6.76l.7.7" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
   </svg>
 );
 
