@@ -1,5 +1,7 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/Icon';
+import { Star, Bell, Globe, Hand } from 'lucide-react';
 import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
 
@@ -24,7 +26,7 @@ export function Header() {
             </button>
             {useApp().hasActivePackage() && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
-                <span className="font-bold">★</span>
+                <Star size={16} className="fill-current" strokeWidth={0} />
               </div>
             )}
             
@@ -41,7 +43,7 @@ export function Header() {
             <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName.split(' ')[0]} 👋
+              {t.hello}, {userName.split(' ')[0]} <Hand size={16} className="inline ml-1" />
             </div>
           </div>
           
@@ -52,7 +54,7 @@ export function Header() {
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
               <span className="relative">
-                🔔
+                <Bell size={18} strokeWidth={2} />
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
               </span>
             </IconButton>
@@ -62,7 +64,7 @@ export function Header() {
               label={t.assistant}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
-              🤖
+              <EmojiIcon emoji="🤖" size="sm" />
             </IconButton>
             
             <IconButton 
@@ -70,7 +72,7 @@ export function Header() {
               label={t.language}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
-              🌐
+              <Globe size={18} strokeWidth={2} />
             </IconButton>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { EmojiIcon } from '../ui/Icon';
+import { Sun, Moon, Smartphone, Star, DollarSign, Crown, LogOut } from 'lucide-react';
 
 export function SettingsScreen() {
   const { goBack, language, setLanguage, theme, setTheme, balance, activePackage, isDarkMode } = useApp();
@@ -8,9 +10,9 @@ export function SettingsScreen() {
   const userEmail = "tural.qarayev@example.com";
 
   const themeOptions = [
-    { value: 'light', label: '☀️ Gündüz', description: 'Açıq tema' },
-    { value: 'dark', label: '🌙 Gecə', description: 'Qaranlıq tema' },
-    { value: 'system', label: '📱 Cihaza uyğun', description: 'Sistem ayarına görə' }
+    { value: 'light', label: 'Gündüz', description: 'Açıq tema', icon: Sun },
+    { value: 'dark', label: 'Gecə', description: 'Qaranlıq tema', icon: Moon },
+    { value: 'system', label: 'Cihaza uyğun', description: 'Sistem ayarına görə', icon: Smartphone }
   ];
 
   const languageOptions = [
@@ -97,7 +99,7 @@ export function SettingsScreen() {
               </div>
               {activePackage && (
                 <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-xs leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
-                  <span className="font-bold">★</span>
+                  <Star size={14} className="fill-current" strokeWidth={0} />
                 </div>
               )}
               {/* Subtle glow effect */}
@@ -117,7 +119,7 @@ export function SettingsScreen() {
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50'
                 }`}>
-                  💰 {balance} AZN
+                  <DollarSign size={16} className="inline mr-1" strokeWidth={2.5} /> {balance} AZN
                 </div>
                 {activePackage && (
                   <div className={`px-3 py-1 rounded-full text-xs font-bold transition-colors duration-200 ${
@@ -125,7 +127,7 @@ export function SettingsScreen() {
                       ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-700/50' 
                       : 'bg-yellow-100 text-yellow-700 border border-yellow-200/50'
                   }`}>
-                    👑 {activePackage.name}
+                    <Crown size={16} className="inline mr-1" strokeWidth={2.5} /> {activePackage.name}
                   </div>
                 )}
               </div>
@@ -172,13 +174,18 @@ export function SettingsScreen() {
                   onChange={(e) => setTheme(e.target.value as any)}
                   className="sr-only"
                 />
-                <div className="flex-1">
-                  <div className={`font-bold mb-1 transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                  }`}>{option.label}</div>
-                  <div className={`text-sm transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                  }`}>{option.description}</div>
+                <div className="flex items-center gap-3 flex-1">
+                  <option.icon size={20} className={`${
+                    theme === option.value ? 'text-emerald-500' : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  }`} strokeWidth={2} />
+                  <div>
+                    <div className={`font-bold mb-1 transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-900'
+                    }`}>{option.label}</div>
+                    <div className={`text-sm transition-colors duration-200 ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>{option.description}</div>
+                  </div>
                 </div>
               </label>
             ))}
@@ -236,7 +243,7 @@ export function SettingsScreen() {
         {settingsItems.map((section) => (
           <div key={section.section} className="mb-6">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="text-lg">⚙️</div>
+              <Settings size={20} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} strokeWidth={2} />
               <h3 className={`font-black text-lg transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-200' : 'text-gray-800'
               }`}>{section.section}</h3>
@@ -253,17 +260,19 @@ export function SettingsScreen() {
                         : 'hover:bg-gray-50/80 text-gray-900'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
                       isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                     }`}>
-                      {item.emoji}
+                      <EmojiIcon emoji={item.emoji} size="lg" className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
                     </div>
                     <div className="flex-1">
                       <div className="font-bold text-base">{item.label}</div>
                     </div>
-                    <div className={`transition-all duration-300 text-xl group-hover:translate-x-1 ${
+                    <div className={`transition-all duration-300 group-hover:translate-x-1 ${
                       isDarkMode ? 'text-gray-400' : 'text-gray-400'
-                    }`}>→</div>
+                    }`}>
+                      <EmojiIcon emoji="→" size="md" />
+                    </div>
                   </button>
                 ))}
               </div>
@@ -281,8 +290,8 @@ export function SettingsScreen() {
             }}
             className="w-full p-4 flex items-center justify-center gap-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-2xl transition-all duration-300 font-bold text-lg transform hover:scale-[1.02] active:scale-[0.98] group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110">
-              🚪
+            <div className="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+              <LogOut size={20} className="text-red-600 dark:text-red-400" strokeWidth={2} />
             </div>
             Hesabdan çıx
           </button>

@@ -6,6 +6,7 @@ import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
+import { EmojiIcon } from '../ui/Icon';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
@@ -227,10 +228,10 @@ export function HomeScreen() {
                         : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-200/50 hover:border-gray-300 text-gray-900'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
                       isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                     }`}>
-                      {item.emoji}
+                      <EmojiIcon emoji={item.emoji} size="lg" className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
                     </div>
                     <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-100' : 'text-gray-800'
@@ -300,10 +301,10 @@ export function HomeScreen() {
                           : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-200/50 hover:border-gray-300 text-gray-900'
                       }`}
                     >
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
                         isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                       }`}>
-                        {item.emoji}
+                        <EmojiIcon emoji={item.emoji} size="lg" className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
                       </div>
                       <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-100' : 'text-gray-800'

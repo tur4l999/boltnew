@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/Icon';
 
 export function MoreScreen() {
   const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
@@ -60,7 +61,7 @@ export function MoreScreen() {
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl transition-colors duration-200 ${
               isDarkMode ? 'bg-green-800' : 'bg-green-100'
             }`}>
-              ✅
+              <EmojiIcon emoji="✅" size="md" />
             </div>
             <div className="flex-1">
               <div className={`font-medium text-sm transition-colors duration-200 ${
@@ -90,17 +91,19 @@ export function MoreScreen() {
                 : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-900'
             }`}
           >
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
             }`}>
-              {item.emoji}
+              <EmojiIcon emoji={item.emoji} size="md" className={isDarkMode ? 'text-gray-300' : 'text-gray-700'} />
             </div>
             <div className="flex-1">
               <div className="font-medium text-sm">{item.label}</div>
             </div>
-            <div className={`text-base transition-colors duration-200 ${
+            <div className={`transition-colors duration-200 ${
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
-            }`}>›</div>
+            }`}>
+              <EmojiIcon emoji="›" size="md" />
+            </div>
           </button>
         ))}
       </div>
