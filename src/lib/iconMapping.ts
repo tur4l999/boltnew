@@ -8,7 +8,7 @@ import {
   Bell,
   Globe,
   User,
-  Robot,
+  Bot,
   Check,
   X,
   Image,
@@ -97,7 +97,7 @@ export const emojiToIcon = {
   '🔔': Bell,
   '🌐': Globe,
   '👤': User,
-  '🤖': Robot,
+  '🤖': Bot,
   
   // Actions & Status
   '✅': Check,
