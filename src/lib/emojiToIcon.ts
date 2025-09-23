@@ -17,7 +17,7 @@ export const emojiToIconMap: Record<string, string> = {
   
   // Content emojis
   '🎬': 'video',
-  '📝': 'document',
+  '📝': 'bolt',
   '👨‍🏫': 'teacher',
   '🗒️': 'notes',
   '📊': 'chart',
@@ -26,10 +26,10 @@ export const emojiToIconMap: Record<string, string> = {
   '💸': 'money',
   '📦': 'package',
   '🎓': 'trophy',
-  '🛠️': 'settings',
+  '🛠️': 'car',
   '📮': 'contact',
-  '📰': 'document',
-  '📋': 'document',
+  '📰': 'chat',
+  '📋': 'trophy',
   
   // Action emojis
   '✅': 'check',
