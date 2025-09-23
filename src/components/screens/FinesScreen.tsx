@@ -543,40 +543,40 @@ export function FinesScreen() {
 
       {/* Main Content */}
       <div className="p-4 pb-32">
-
-      {/* Penalty Sections */}
-      <div className="space-y-3">
-        {filteredSections.map((section: PenaltySection, index: number) => (
-          <SlideTransition key={section.id} direction="right" delay={100 + (index * 50)}>
-            <>
-              <SectionItem
-                section={section}
-                isExpanded={expandedSections.has(section.id)}
-                onToggle={() => handleSectionToggle(section.id)}
-                expandedSubsections={expandedSubsections}
-                onSubsectionToggle={handleSubsectionToggle}
-              />
-            </>
-          </SlideTransition>
-        ))}
-        
-        {filteredSections.length === 0 && (
-          <FadeInUp delay={200}>
-            <>
-              <Card className="text-center py-8">
-                <>
-                  <div className="text-4xl mb-2">🔍</div>
-                  <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Heç bir nəticə tapılmadı
-                  </div>
-                  <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                    Axtarış şərtlərini dəyişib yenidən cəhd edin
-                  </div>
-                </>
-              </Card>
-            </>
-          </FadeInUp>
-        )}
+        {/* Penalty Sections */}
+        <div className="space-y-3">
+          {filteredSections.map((section: PenaltySection, index: number) => (
+            <SlideTransition key={section.id} direction="right" delay={100 + (index * 50)}>
+              <>
+                <SectionItem
+                  section={section}
+                  isExpanded={expandedSections.has(section.id)}
+                  onToggle={() => handleSectionToggle(section.id)}
+                  expandedSubsections={expandedSubsections}
+                  onSubsectionToggle={handleSubsectionToggle}
+                />
+              </>
+            </SlideTransition>
+          ))}
+          
+          {filteredSections.length === 0 && (
+            <FadeInUp delay={200}>
+              <>
+                <Card className="text-center py-8">
+                  <>
+                    <div className="text-4xl mb-2">🔍</div>
+                    <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Heç bir nəticə tapılmadı
+                    </div>
+                    <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      Axtarış şərtlərini dəyişib yenidən cəhd edin
+                    </div>
+                  </>
+                </Card>
+              </>
+            </FadeInUp>
+          )}
+        </div>
       </div>
     </div>
   );
