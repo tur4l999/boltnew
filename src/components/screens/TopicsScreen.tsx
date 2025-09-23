@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
 import { FadeIn } from '../ui/FadeIn';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function TopicsScreen() {
   const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
@@ -29,34 +30,37 @@ export function TopicsScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      {/* Package Status */}
+      {/* Enhanced Package Status */}
       {!hasActivePackage() && (
-        <div className={`mb-3 p-3 rounded-lg border flex items-center gap-3 transition-colors duration-200 ${
+        <div
+          className={`mb-4 p-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 cursor-pointer transform hover:scale-[1.02] hover:shadow-lg group ${
           isDarkMode 
-            ? 'bg-blue-900/20 border-blue-700' 
-            : 'bg-blue-50 border-blue-200'
-        }`}>
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
-            isDarkMode ? 'bg-blue-800' : 'bg-blue-100'
+            ? 'bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border-blue-700/50 hover:border-blue-600' 
+            : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200/50 hover:border-blue-300'
+        } backdrop-blur-sm`}
+        >
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${
+            isDarkMode ? 'bg-blue-800/50' : 'bg-blue-100/80'
           }`}>
-            <span className={`text-xs transition-colors duration-200 ${
+            <EmojiIcon emoji="📦" size={24} className={`transition-colors duration-200 ${
               isDarkMode ? 'text-blue-300' : 'text-blue-600'
-            }`}>📦</span>
+            }`} />
           </div>
           <div className="flex-1">
-            <div className={`text-xs font-medium transition-colors duration-200 ${
-              isDarkMode ? 'text-blue-300' : 'text-blue-900'
+            <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
+              isDarkMode ? 'text-blue-200' : 'text-blue-900'
             }`}>
-              Paket alın və bütün təlimləri açın
+              Aktiv paketiniz yoxdur
+            </div>
+            <div className={`text-xs transition-colors duration-200 ${
+              isDarkMode ? 'text-blue-300/80' : 'text-blue-700/80'
+            }`}>
+              Öyrənməyə başlamaq üçün paket seçin
             </div>
           </div>
           <button
             onClick={() => navigate('Packages')}
-            className={`px-2 py-1 rounded text-xs font-medium transition-colors min-h-[24px] ${
-              isDarkMode 
-                ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
+            className="px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
           >
             Paket al
           </button>
