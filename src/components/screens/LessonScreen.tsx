@@ -59,7 +59,7 @@ export function LessonScreen() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                      <span className="text-white text-lg">📹</span>
+                      <span className="text-white text-lg">▶️</span>
                     </div>
                     <div>
                       <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
@@ -104,7 +104,7 @@ export function LessonScreen() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       offlineDownload ? 'bg-white/20' : isDarkMode ? 'bg-gray-600' : 'bg-gray-200'
                     }`}>
-                      <span className="text-lg">{offlineDownload ? '✅' : '📱'}</span>
+                      <span className="text-lg">{offlineDownload ? '✅' : '⬇️'}</span>
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold">
@@ -129,7 +129,7 @@ export function LessonScreen() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       isDarkMode ? 'bg-gray-600' : 'bg-gray-200'
                     }`}>
-                      <span className="text-lg">💬</span>
+                      <span className="text-lg">❓</span>
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold">Sual Ver</div>
@@ -149,7 +149,7 @@ export function LessonScreen() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                        <span className="text-white text-xs">📈</span>
+                        <span className="text-white text-xs">📊</span>
                       </div>
                       <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                         Dərs İrəliləyişi
@@ -266,7 +266,7 @@ export function LessonScreen() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 flex items-center justify-center">
-                      <span className="text-white text-lg">🎬</span>
+                      <span className="text-white text-lg">🎥</span>
                     </div>
                     <div>
                       <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
@@ -314,7 +314,7 @@ export function LessonScreen() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       offlineDownload ? 'bg-white/20' : isDarkMode ? 'bg-gray-600' : 'bg-gray-200'
                     }`}>
-                      <span className="text-lg">{offlineDownload ? '✅' : '📱'}</span>
+                      <span className="text-lg">{offlineDownload ? '✅' : '⬇️'}</span>
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold">
@@ -339,7 +339,7 @@ export function LessonScreen() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       isDarkMode ? 'bg-gray-600' : 'bg-gray-200'
                     }`}>
-                      <span className="text-lg">💬</span>
+                      <span className="text-lg">❓</span>
                     </div>
                     <div className="text-left">
                       <div className="text-sm font-bold">Sual Ver</div>
@@ -359,7 +359,7 @@ export function LessonScreen() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-gradient-to-r from-emerald-500 to-green-500 flex items-center justify-center">
-                        <span className="text-white text-xs">📈</span>
+                        <span className="text-white text-xs">📊</span>
                       </div>
                       <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                         Dərs İrəliləyişi
@@ -521,10 +521,10 @@ export function LessonScreen() {
                 >
                   <div className="flex flex-col items-center gap-1">
                     <div className={`text-xl ${isActive ? 'scale-110' : ''} transition-transform duration-300`}>
-                      {tab.key === 'article' && '📖'}
-                      {tab.key === 'video3d' && '🎬'}
-                      {tab.key === 'video' && '📹'}
-                      {tab.key === 'materials' && '📄'}
+                      {tab.key === 'article' && '📚'}
+                      {tab.key === 'video3d' && '🎥'}
+                      {tab.key === 'video' && '▶️'}
+                      {tab.key === 'materials' && '📝'}
                     </div>
                     <span className="text-xs font-bold leading-tight text-center">
                       {tab.label}
