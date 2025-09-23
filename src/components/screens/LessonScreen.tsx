@@ -363,62 +363,61 @@ export function LessonScreen() {
                 <span className="text-emerald-500">▼</span>
               </div>
             </button>
+
+            {/* Dropdown Menu */}
+            {moduleDropdownOpen && (
+              <div className={`absolute top-full left-0 right-0 mt-2 rounded-2xl shadow-2xl max-h-60 overflow-y-auto z-40 border backdrop-blur-xl ${
+                isDarkMode ? 'bg-gray-800/90 border-gray-700/50' : 'bg-white/90 border-gray-200/50'
+              }`}>
+                {modules.map((m) => {
+                  const id = m.id;
+                  const unlocked = isModuleUnlocked(id);
+                  const isActive = moduleId === id;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => {
+                        if (unlocked) {
+                          navigate('Lesson', { moduleId: id });
+                          setModuleDropdownOpen(false);
+                        } else {
+                          setRequestedModuleId(id);
+                          setShowPurchasePopup(true);
+                        }
+                      }}
+                      className={`w-full px-4 py-3 text-left border-b last:border-b-0 min-h-[44px] transition-colors ${
+                        isDarkMode ? 'border-gray-700' : 'border-gray-100'
+                      } ${
+                        unlocked
+                          ? isActive
+                            ? isDarkMode
+                              ? 'bg-emerald-900/20 text-emerald-300 font-medium'
+                              : 'bg-emerald-50 text-emerald-700 font-medium'
+                            : isDarkMode
+                              ? 'text-gray-100 hover:bg-gray-700'
+                              : 'text-gray-700 hover:bg-gray-50'
+                          : isDarkMode
+                            ? 'text-gray-500 hover:bg-gray-800'
+                            : 'text-gray-400 hover:bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="flex-1 min-w-0 truncate">{m.title}</span>
+                        {!unlocked && <span className="text-sm flex-shrink-0">🔒</span>}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="p-4 pb-32">
-        
-          {moduleDropdownOpen && (
-            <div className={`absolute top-full left-0 right-0 mt-2 rounded-2xl shadow-2xl max-h-60 overflow-y-auto z-40 border backdrop-blur-xl ${
-              isDarkMode ? 'bg-gray-800/90 border-gray-700/50' : 'bg-white/90 border-gray-200/50'
-            }`}>
-            {modules.map((m) => {
-              const id = m.id;
-              const unlocked = isModuleUnlocked(id);
-              const isActive = moduleId === id;
-              return (
-                <button
-                  key={id}
-                  onClick={() => {
-                    if (unlocked) {
-                      navigate('Lesson', { moduleId: id });
-                      setModuleDropdownOpen(false);
-                    } else {
-                      setRequestedModuleId(id);
-                      setShowPurchasePopup(true);
-                    }
-                  }}
-                  className={`w-full px-4 py-3 text-left border-b last:border-b-0 min-h-[44px] transition-colors ${
-                    isDarkMode ? 'border-gray-700' : 'border-gray-100'
-                  } ${
-                    unlocked
-                      ? isActive
-                        ? isDarkMode
-                          ? 'bg-emerald-900/20 text-emerald-300 font-medium'
-                          : 'bg-emerald-50 text-emerald-700 font-medium'
-                        : isDarkMode
-                          ? 'text-gray-100 hover:bg-gray-700'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      : isDarkMode
-                        ? 'text-gray-500 hover:bg-gray-800'
-                        : 'text-gray-400 hover:bg-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="flex-1 min-w-0 truncate">{m.title}</span>
-                    {!unlocked && <span className="text-sm flex-shrink-0">🔒</span>}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
         {/* Modern Tab Navigation */}
-        <div className={`mb-6 p-2 rounded-2xl shadow-inner ${
+        <div className={`mb-4 p-2 rounded-2xl shadow-inner ${
           isDarkMode 
             ? 'bg-gray-800/50 backdrop-blur-sm' 
             : 'bg-white/50 backdrop-blur-sm border border-gray-200/50'
@@ -471,8 +470,8 @@ export function LessonScreen() {
           </div>
         </div>
 
-      {/* Tab Content */}
-      {renderTabContent()}
+        {/* Tab Content */}
+        {renderTabContent()}
 
         {/* Modern Action Buttons */}
         <div className="mt-4 space-y-4">
@@ -572,6 +571,7 @@ export function LessonScreen() {
             </button>
           </div>
         </div>
+      </div>
     </div>
     {showPurchasePopup && (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
