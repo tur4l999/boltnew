@@ -292,57 +292,45 @@ export function PackagesScreen() {
       </div>
 
       <div className="px-4 pb-24 pt-6">
-        {/* Modern Tabs with Sliding Indicator */}
-        <div className={`relative p-1 rounded-3xl border-2 mb-6 backdrop-blur-sm transition-all duration-300 ${
-          isDarkMode 
-            ? 'bg-gray-800/50 border-gray-700/50' 
-            : 'bg-white/50 border-gray-200/50'
-        }`}>
-          <div className="grid grid-cols-2 relative">
-            {/* Sliding Background Indicator */}
-            <div 
-              className={`absolute top-0 bottom-0 rounded-2xl transition-all duration-500 ease-out ${
-                isDarkMode 
-                  ? 'bg-gradient-to-r from-emerald-600 to-green-600' 
-                  : 'bg-gradient-to-r from-emerald-500 to-green-500'
-              } shadow-lg`}
-              style={{
-                left: activeTab === 'training' ? '0%' : '50%',
-                width: '50%',
-                transform: 'translateX(0)',
-              }}
-            />
-            
+        {/* Compact Filter Buttons */}
+        <div className="flex items-center justify-between mb-6">
+          <h2 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            {activeTab === 'training' ? 'Təlim Paketləri' : 'Digər Paketlər'}
+          </h2>
+          
+          <div className={`flex items-center gap-2 p-1 rounded-2xl border transition-all duration-300 ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-gray-700/50' 
+              : 'bg-white/50 border-gray-200/50'
+          }`}>
             <button
               onClick={() => setActiveTab('training')}
-              className={`relative z-10 py-3.5 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                 activeTab === 'training'
-                  ? 'text-white'
+                  ? isDarkMode 
+                    ? 'bg-emerald-600 text-white shadow-md' 
+                    : 'bg-emerald-500 text-white shadow-md'
                   : isDarkMode
-                    ? 'text-gray-300 hover:text-gray-100'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-lg">🎓</span>
-                <span>Təlim paketləri</span>
-              </div>
+              🎓 Təlim
             </button>
             
             <button
               onClick={() => setActiveTab('other')}
-              className={`relative z-10 py-3.5 px-4 rounded-2xl text-sm font-bold transition-all duration-300 ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                 activeTab === 'other'
-                  ? 'text-white'
+                  ? isDarkMode 
+                    ? 'bg-purple-600 text-white shadow-md' 
+                    : 'bg-purple-500 text-white shadow-md'
                   : isDarkMode
-                    ? 'text-gray-300 hover:text-gray-100'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-lg">📦</span>
-                <span>Digər Paketlər</span>
-              </div>
+              📦 Digər
             </button>
           </div>
         </div>
@@ -367,7 +355,7 @@ export function PackagesScreen() {
           </div>
         )}
         {activeTab === 'training' && (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {packages.map((pkg, index) => (
               <div key={pkg.id} className="relative group">
                 {/* Modern Package Card */}
@@ -381,17 +369,6 @@ export function PackagesScreen() {
                       : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70'
                 }`}>
                   
-                  {/* Promotional Banner for Basic Package */}
-                  {pkg.id === 'basic' && (
-                    <div className="absolute top-0 left-0 right-0 z-20">
-                      <div className="bg-gradient-to-r from-red-500 via-orange-500 to-red-600 text-white text-center py-2 px-4 text-sm font-bold shadow-lg">
-                        <div className="flex items-center justify-center gap-2">
-                          <span className="animate-pulse">⏰</span>
-                          <span>10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
 
                   {/* Popular Badge */}
                   {pkg.popular && (
@@ -418,7 +395,7 @@ export function PackagesScreen() {
                   }`}></div>
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-6 ${pkg.id === 'basic' ? 'pt-12' : 'pt-6'} ${pkg.popular ? 'pt-12' : ''}`}>
+                  <div className={`relative z-10 p-6 ${pkg.popular ? 'pt-12' : 'pt-6'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-6">
@@ -448,43 +425,21 @@ export function PackagesScreen() {
                         </div>
                       </div>
 
-                      {/* Enhanced Pricing Display */}
-                      {(() => {
-                        const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
-                        return (
-                          <div className="relative">
-                            <div className="flex items-end justify-center gap-3 mb-2">
-                              <span className={`text-lg line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                                {oldPrice} AZN
-                              </span>
-                              <div className="flex items-baseline gap-1">
-                                <span className={`text-5xl font-black tracking-tighter ${
-                                  pkg.popular 
-                                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                                }`}>
-                                  {newPrice}
-                                </span>
-                                <span className={`text-xl font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                                  AZN
-                                </span>
-                              </div>
-                            </div>
-                            
-                            {/* Discount Badge */}
-                            <div className="flex justify-center">
-                              <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-black ${
-                                pkg.popular 
-                                  ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white'
-                                  : 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
-                              } shadow-lg`}>
-                                <span className="text-xs">💥</span>
-                                <span>{discountPercent}% endirim</span>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })()}
+                      {/* Simple Pricing Display */}
+                      <div className="relative">
+                        <div className="flex items-baseline justify-center gap-1 mb-4">
+                          <span className={`text-5xl font-black tracking-tighter ${
+                            pkg.popular 
+                              ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                              : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
+                            {calculatePrice(pkg.id)}
+                          </span>
+                          <span className={`text-xl font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            AZN
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Modern Day Selection */}
@@ -614,7 +569,7 @@ export function PackagesScreen() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {otherItems.map(item => {
                   const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
                   return (
@@ -638,19 +593,14 @@ export function PackagesScreen() {
                         )}
                         
                         <div className="mb-4">
-                          <div className="flex items-baseline justify-center gap-2 mb-2">
-                            <span className={`line-through text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                              {item.oldPrice} AZN
-                            </span>
+                          <div className="flex items-baseline justify-center gap-1">
                             <span className={`text-2xl font-black ${
                               isDarkMode ? 'text-purple-400' : 'text-purple-600'
                             }`}>
-                              {item.newPrice} AZN
+                              {item.newPrice}
                             </span>
-                          </div>
-                          <div className="flex justify-center">
-                            <span className="px-2 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                              -{discountPercent}% endirim
+                            <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              AZN
                             </span>
                           </div>
                         </div>
