@@ -142,26 +142,179 @@ export function LessonScreen() {
 
       case 'video3d':
         return (
-          <div className="space-y-3">
-            <VideoPlayer 
-              src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-              watermark={watermark}
-            />
-            <div className="flex gap-1 items-center">
+          <div className="space-y-6">
+            {/* Enhanced Video Player with 3D styling */}
+            <div className="relative">
+              <VideoPlayer 
+                src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                watermark={watermark}
+                heightClass="h-72 md:h-80"
+                is3D={true}
+              />
+              
+              {/* Video Info Card */}
+              <div className={`mt-4 p-4 rounded-2xl border backdrop-blur-sm ${
+                isDarkMode 
+                  ? 'bg-gray-800/50 border-gray-700/50 text-gray-100' 
+                  : 'bg-white/50 border-gray-200/50 text-gray-900'
+              }`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      3D İnteraktiv Video Dərs
+                    </h3>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      Yüksək keyfiyyətli 3D animasiya ilə hazırlanmış interaktiv dərs materialı
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="px-3 py-1 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-full text-xs font-bold">
+                      HD
+                    </div>
+                    <div className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-xs font-bold">
+                      3D
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modern Action Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={() => setOfflineDownload(!offlineDownload)}
-                className={`flex items-center gap-1 px-2 py-1 text-xs border border-gray-300 rounded-md hover:bg-gray-50 transition-colors min-h-[28px] ${
-                  offlineDownload ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white text-gray-600'
+                className={`group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-300 transform hover:scale-[1.02] ${
+                  offlineDownload 
+                    ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/25' 
+                    : isDarkMode
+                      ? 'bg-gray-800/80 border-gray-600 text-gray-200 hover:bg-gray-700/80 hover:border-gray-500'
+                      : 'bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-50/80 hover:border-gray-400 shadow-md hover:shadow-lg'
                 }`}
               >
-                📱 {t.download}
+                <div className="flex items-center justify-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    offlineDownload 
+                      ? 'bg-white/20' 
+                      : isDarkMode 
+                        ? 'bg-gray-700' 
+                        : 'bg-gray-100'
+                  }`}>
+                    <span className="text-xl">
+                      {offlineDownload ? '✅' : '📱'}
+                    </span>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-sm">
+                      {offlineDownload ? 'Yükləndi' : 'Offline Yüklə'}
+                    </div>
+                    <div className={`text-xs ${
+                      offlineDownload 
+                        ? 'text-white/80' 
+                        : isDarkMode 
+                          ? 'text-gray-400' 
+                          : 'text-gray-500'
+                    }`}>
+                      {offlineDownload ? 'İnternetsizcə baxın' : 'Sonra baxmaq üçün'}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
+
               <button
                 onClick={() => navigate('TeacherContact')}
-                className="flex items-center gap-1 px-2 py-1 text-xs bg-white border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors min-h-[28px]"
+                className={`group relative overflow-hidden px-6 py-4 rounded-2xl border transition-all duration-300 transform hover:scale-[1.02] ${
+                  isDarkMode
+                    ? 'bg-gray-800/80 border-gray-600 text-gray-200 hover:bg-gray-700/80 hover:border-gray-500'
+                    : 'bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-50/80 hover:border-gray-400 shadow-md hover:shadow-lg'
+                }`}
               >
-                💬 Sualını qeyd et
+                <div className="flex items-center justify-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                  }`}>
+                    <span className="text-xl">💬</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-sm">Sual Ver</div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Müəllimlə əlaqə
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
+            </div>
+
+            {/* Learning Progress */}
+            <div className={`p-5 rounded-2xl border ${
+              isDarkMode 
+                ? 'bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50' 
+                : 'bg-gradient-to-br from-gray-50/50 to-white/50 border-gray-200/50'
+            }`}>
+              <div className="flex items-center justify-between mb-3">
+                <h4 className={`font-bold text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Dərs İrəliləyişi
+                </h4>
+                <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  75%
+                </span>
+              </div>
+              
+              <div className={`w-full h-3 rounded-full overflow-hidden ${
+                isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+              }`}>
+                <div 
+                  className="h-full bg-gradient-to-r from-emerald-400 to-green-400 transition-all duration-500 rounded-full relative"
+                  style={{ width: '75%' }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full"></div>
+                </div>
+              </div>
+              
+              <div className="flex justify-between mt-3 text-xs">
+                <span className={`font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Başlanğıc
+                </span>
+                <span className={`font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Tamamlandı
+                </span>
+              </div>
+            </div>
+
+            {/* Features Showcase */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className={`p-4 rounded-xl border text-center ${
+                isDarkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-white/30 border-gray-200/50'
+              }`}>
+                <div className="text-2xl mb-2">🎯</div>
+                <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                  İnteraktiv
+                </div>
+                <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Əlbəttə keçidin
+                </div>
+              </div>
+              
+              <div className={`p-4 rounded-xl border text-center ${
+                isDarkMode 
+                  ? 'bg-gray-800/30 border-gray-700/50' 
+                  : 'bg-white/30 border-gray-200/50'
+              }`}>
+                <div className="text-2xl mb-2">🧠</div>
+                <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                  Asan Öyrənmə
+                </div>
+                <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Vizual yaddaş
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -173,19 +326,46 @@ export function LessonScreen() {
 
   return (
     <>
-    <div className="p-3 pb-32">
-      {/* Module Dropdown */}
-      <div className="relative mb-3">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
+    }`}>
+      <div className="p-3 pb-32 relative">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-emerald-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-40 right-10 w-24 h-24 bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-40 left-20 w-20 h-20 bg-purple-500 rounded-full blur-3xl"></div>
+        </div>
+      {/* Enhanced Module Dropdown */}
+      <div className="relative mb-6 z-20">
         <button
           onClick={() => setModuleDropdownOpen(!moduleDropdownOpen)}
-          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-left flex items-center justify-between min-h-[44px] focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className={`w-full px-6 py-4 rounded-2xl text-left flex items-center justify-between min-h-[52px] transition-all duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 shadow-lg ${
+            isDarkMode
+              ? 'bg-gray-800/80 border border-gray-700/50 text-gray-100 focus:ring-emerald-500/20 backdrop-blur-sm hover:bg-gray-700/80'
+              : 'bg-white/80 border border-gray-200/50 text-gray-900 focus:ring-emerald-500/20 backdrop-blur-sm hover:bg-gray-50/80 shadow-emerald-500/10'
+          }`}
         >
-          <span className="font-medium text-gray-900 flex-1 min-w-0 truncate">{displayTitle}</span>
-          <span className={`transform transition-transform ${moduleDropdownOpen ? 'rotate-180' : ''}`}>
-            ▼
-          </span>
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+              isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
+            }`}>
+              <span className="text-lg">📚</span>
+            </div>
+            <span className="font-bold truncate text-base">{displayTitle}</span>
+          </div>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            moduleDropdownOpen ? 'rotate-180 bg-emerald-500/20' : 'bg-gray-100'
+          } ${isDarkMode && !moduleDropdownOpen ? 'bg-gray-700' : ''}`}>
+            <span className={`text-sm ${moduleDropdownOpen ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              ▼
+            </span>
+          </div>
         </button>
-        <div className={`mt-2 px-1 text-base md:text-lg font-bold leading-snug ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        
+        <div className={`mt-3 px-2 text-lg font-black leading-tight ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
           {currentModule ? currentModule.title : ''}
         </div>
         
@@ -236,41 +416,119 @@ export function LessonScreen() {
         )}
       </div>
 
-      {/* Internal Tabs */}
-      <div className="flex gap-2 mb-3 overflow-x-auto scrollbar-hide">
-        {lessonTabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`px-3 py-2 rounded-lg text-xs font-bold border whitespace-nowrap min-h-[36px] ${
-              activeTab === tab.key
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-gray-100 text-gray-700 border-gray-300'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Enhanced Modern Tabs */}
+      <div className={`p-1 rounded-2xl mb-6 overflow-x-auto scrollbar-hide ${
+        isDarkMode 
+          ? 'bg-gray-800/50 border border-gray-700/50 backdrop-blur-sm' 
+          : 'bg-white/50 border border-gray-200/50 backdrop-blur-sm shadow-sm'
+      }`}>
+        <div className="flex gap-1">
+          {lessonTabs.map((tab) => {
+            const isActive = activeTab === tab.key;
+            const is3DTab = tab.key === 'video3d';
+            
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`relative px-4 py-3 rounded-xl text-sm font-bold whitespace-nowrap min-h-[44px] transition-all duration-300 transform hover:scale-[1.02] ${
+                  isActive
+                    ? is3DTab
+                      ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-500/25'
+                      : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/25'
+                    : isDarkMode
+                      ? 'text-gray-300 hover:text-gray-100 hover:bg-gray-700/50'
+                      : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100/50'
+                }`}
+              >
+                {/* Tab icon based on type */}
+                <div className="flex items-center gap-2">
+                  <span className="text-base">
+                    {tab.key === 'article' && '📖'}
+                    {tab.key === 'video3d' && '🎬'}
+                    {tab.key === 'video' && '📹'}
+                    {tab.key === 'materials' && '📄'}
+                  </span>
+                  <span>{tab.label}</span>
+                </div>
+                
+                {/* Active indicator */}
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-xl"></div>
+                )}
+                
+                {/* Special 3D indicator */}
+                {is3DTab && (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-pulse"></div>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Tab Content */}
       {renderTabContent()}
 
-      {/* Main Action Buttons */}
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <Button 
-          onClick={() => navigate('Practice', { moduleId })}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white"
-        >
-          📝 Suallar
-        </Button>
-        <Button 
-          onClick={() => alert('Başqa imtahan növü (demo)')}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white"
-        >
-          <EmojiIcon emoji="🧪" size={16} className="inline-block mr-2" />İmtahana başla
-        </Button>
+      {/* Enhanced Main Action Buttons */}
+      <div className="mt-8 space-y-4">
+        {/* Primary Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Button 
+            onClick={() => navigate('Practice', { moduleId })}
+            variant="primary"
+            size="lg"
+            className="group relative overflow-hidden"
+            fullWidth
+            icon={<span className="text-lg group-hover:scale-110 transition-transform duration-200">📝</span>}
+          >
+            <span className="relative z-10">Sualları Həll Et</span>
+          </Button>
+          
+          <Button 
+            onClick={() => alert('Başqa imtahan növü (demo)')}
+            variant="success"
+            size="lg"
+            className="group relative overflow-hidden"
+            fullWidth
+            icon={<span className="text-lg group-hover:scale-110 transition-transform duration-200">🧪</span>}
+          >
+            <span className="relative z-10">İmtahana Başla</span>
+          </Button>
+        </div>
+
+        {/* Secondary Actions */}
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={() => alert('Favorilərə əlavə edildi')}
+            className={`group px-4 py-3 rounded-2xl border transition-all duration-300 transform hover:scale-[1.02] ${
+              isDarkMode
+                ? 'bg-gray-800/50 border-gray-700/50 text-gray-200 hover:bg-gray-700/50'
+                : 'bg-white/50 border-gray-200/50 text-gray-700 hover:bg-gray-50/50 shadow-sm hover:shadow-md'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">⭐</span>
+              <span className="text-sm font-bold">Favorilər</span>
+            </div>
+          </button>
+          
+          <button
+            onClick={() => alert('Paylaş seçimləri')}
+            className={`group px-4 py-3 rounded-2xl border transition-all duration-300 transform hover:scale-[1.02] ${
+              isDarkMode
+                ? 'bg-gray-800/50 border-gray-700/50 text-gray-200 hover:bg-gray-700/50'
+                : 'bg-white/50 border-gray-200/50 text-gray-700 hover:bg-gray-50/50 shadow-sm hover:shadow-md'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-lg group-hover:scale-110 transition-transform duration-200">📤</span>
+              <span className="text-sm font-bold">Paylaş</span>
+            </div>
+          </button>
+        </div>
       </div>
+    </div>
     </div>
     {showPurchasePopup && (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
