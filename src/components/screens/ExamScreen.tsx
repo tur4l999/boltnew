@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Button } from '../ui/Button';
+import { EmojiIcon } from '../ui/EmojiIcon';
 import { EXAM_TOPICS } from '../../lib/data';
 
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
@@ -111,7 +112,7 @@ export function ExamScreen() {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
               )}
               <div className="relative z-10">
-                <div className="text-lg mb-1">🧪</div>
+                <div className="text-lg mb-1"><EmojiIcon emoji="🧪" size={18} /></div>
                 {t.exam}
               </div>
             </button>
@@ -291,7 +292,7 @@ export function ExamScreen() {
               : 'bg-white/80 border-gray-200/50 shadow-xl'
           }`}>
             <div className="text-center mb-6">
-              <div className="text-4xl mb-3">🧪</div>
+              <div className="text-4xl mb-3"><EmojiIcon emoji="🧪" size={32} /></div>
               <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {t.examSimulator}
               </h3>
@@ -305,7 +306,7 @@ export function ExamScreen() {
                 onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
                 fullWidth
                 size="lg"
-                icon="🧪"
+                icon={<EmojiIcon emoji="🧪" size={20} />}
                 variant="primary"
               >
                 İmtahan simulyatoru

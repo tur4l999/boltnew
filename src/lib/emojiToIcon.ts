@@ -3,7 +3,7 @@ export const emojiToIconMap: Record<string, string> = {
   // Navigation emojis
   '🏠': 'home',
   '📚': 'books',
-  '🧪': 'test-tube',
+  '🧪': 'target',
   '🛍️': 'shopping-bag',
   '➕': 'plus',
   

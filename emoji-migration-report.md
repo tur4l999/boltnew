@@ -8,7 +8,7 @@ This document details the complete migration from Unicode emojis to custom vecto
 ### Navigation Icons (5 replaced)
 - 🏠 → `home` icon (house outline)
 - 📚 → `books` icon (open book)
-- 🧪 → `test-tube` icon (laboratory flask)
+- 🧪 → `target` icon (bullseye target - exam simulator)
 - 🛍️ → `shopping-bag` icon (shopping bag)
 - ➕ → `plus` icon (plus symbol)
 
