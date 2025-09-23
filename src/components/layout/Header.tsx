@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { IconButton } from '../ui/IconButton';
 import { showToast } from '../../lib/utils';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function Header() {
   const { t, language, setLanguage, navigate, isDarkMode } = useApp();
@@ -24,7 +25,7 @@ export function Header() {
             </button>
             {useApp().hasActivePackage() && (
               <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
-                <span className="font-bold">★</span>
+                <EmojiIcon emoji="⭐" size={10} />
               </div>
             )}
             
@@ -41,7 +42,7 @@ export function Header() {
             <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName.split(' ')[0]} 👋
+              {t.hello}, {userName.split(' ')[0]} <EmojiIcon emoji="👋" size={14} className="inline-block" />
             </div>
           </div>
           
@@ -52,7 +53,7 @@ export function Header() {
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
               <span className="relative">
-                🔔
+                <EmojiIcon emoji="🔔" size={16} />
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
               </span>
             </IconButton>
@@ -62,7 +63,7 @@ export function Header() {
               label={t.assistant}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
-              🤖
+              <EmojiIcon emoji="🤖" size={16} />
             </IconButton>
             
             <IconButton 
@@ -70,7 +71,7 @@ export function Header() {
               label={t.language}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
-              🌐
+              <EmojiIcon emoji="🌐" size={16} />
             </IconButton>
           </div>
         </div>

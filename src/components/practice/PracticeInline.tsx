@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { EmojiIcon } from '../ui/EmojiIcon';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 
@@ -93,7 +94,7 @@ export function PracticeInline() {
             <div className={`flex items-center gap-2 font-bold text-sm ${
               isCorrect ? 'text-emerald-600' : 'text-red-600'
             }`}>
-              {isCorrect ? '✅ Doğru' : '❌ Səhv'}
+              <EmojiIcon emoji={isCorrect ? '✅' : '❌'} size={16} className="inline-block mr-2" />{isCorrect ? 'Doğru' : 'Səhv'}
             </div>
             <details className="ml-auto">
               <summary className={`cursor-pointer select-none text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>

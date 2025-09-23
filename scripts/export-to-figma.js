@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('🎨 DDA.az → Figma export başlayır...');
+console.log('[EXPORT] DDA.az -> Figma export başlayır...');
 
 // Design tokens oxu
 const tokensPath = path.join(__dirname, '../design/tokens.json');
@@ -138,13 +138,13 @@ function generateScreens() {
 const outputPath = path.join(__dirname, '../figma-export.json');
 fs.writeFileSync(outputPath, JSON.stringify(figmaExport, null, 2));
 
-console.log('✅ Figma export hazır!');
-console.log('📁 Fayl: figma-export.json');
+console.log('[SUCCESS] Figma export hazır!');
+console.log('[FILE] Fayl: figma-export.json');
 console.log('');
-console.log('📊 Nə yaradıldı:');
-console.log(`   🎨 Rənglər: ${Object.keys(figmaExport.designSystem.colors).length}`);
-console.log(`   📝 Typography: ${Object.keys(figmaExport.designSystem.typography).length}`);
-console.log(`   🧩 Komponentlər: ${Object.keys(figmaExport.components).length}`);
-console.log(`   📱 Ekranlar: ${figmaExport.screens.length}`);
+console.log('[CREATED] Nə yaradıldı:');
+console.log(`   [COLORS] Rənglər: ${Object.keys(figmaExport.designSystem.colors).length}`);
+console.log(`   [TYPOGRAPHY] Typography: ${Object.keys(figmaExport.designSystem.typography).length}`);
+console.log(`   [COMPONENTS] Komponentlər: ${Object.keys(figmaExport.components).length}`);
+console.log(`   [SCREENS] Ekranlar: ${figmaExport.screens.length}`);
 console.log('');
-console.log('🔄 Növbəti addım: Bu faylı Figma plugin-ə göndərin');
+console.log('[NEXT] Növbəti addım: Bu faylı Figma plugin-ə göndərin');

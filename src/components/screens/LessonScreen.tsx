@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
+import { EmojiIcon } from '../ui/EmojiIcon';
 import { PracticeInline } from '../practice/PracticeInline';
 import { MODULES } from '../../lib/data';
 
@@ -267,7 +268,7 @@ export function LessonScreen() {
           onClick={() => alert('Başqa imtahan növü (demo)')}
           className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
-          🧪 İmtahana başla
+          <EmojiIcon emoji="🧪" size={16} className="inline-block mr-2" />İmtahana başla
         </Button>
       </div>
     </div>

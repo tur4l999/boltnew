@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function MoreScreen() {
   const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
@@ -93,7 +94,7 @@ export function MoreScreen() {
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg transition-colors duration-200 ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
             }`}>
-              {item.emoji}
+              <EmojiIcon emoji={item.emoji} size={18} />
             </div>
             <div className="flex-1">
               <div className="font-medium text-sm">{item.label}</div>

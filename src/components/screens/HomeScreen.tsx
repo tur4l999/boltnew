@@ -6,6 +6,7 @@ import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
@@ -62,44 +63,6 @@ export function HomeScreen() {
         }`} style={{ animationDelay: '2s' }}></div>
       </div>
       {/* Enhanced Package Status */}
-      {!hasActivePackage() && !(activePackage && new Date() < activePackage.activationDate) && (
-        <SlideTransition direction="down" delay={100}>
-          <div
-            onClick={() => navigate('Packages')}
-            className={`mb-4 p-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 cursor-pointer transform hover:scale-[1.02] hover:shadow-lg group ${
-            isDarkMode 
-              ? 'bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border-blue-700/50 hover:border-blue-600' 
-              : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200/50 hover:border-blue-300'
-          } backdrop-blur-sm`}
-          >
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${
-              isDarkMode ? 'bg-blue-800/50' : 'bg-blue-100/80'
-            }`}>
-              <span className={`text-2xl transition-colors duration-200 ${
-                isDarkMode ? 'text-blue-300' : 'text-blue-600'
-              }`}>📦</span>
-            </div>
-            <div className="flex-1">
-              <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
-                isDarkMode ? 'text-blue-200' : 'text-blue-900'
-              }`}>
-                Aktiv paketiniz yoxdur
-              </div>
-              <div className={`text-xs transition-colors duration-200 ${
-                isDarkMode ? 'text-blue-300/80' : 'text-blue-700/80'
-              }`}>
-                Öyrənməyə başlamaq üçün paket seçin
-              </div>
-            </div>
-            <button
-              onClick={() => navigate('Packages')}
-              className="px-6 py-3 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
-            >
-              Paket al
-            </button>
-          </div>
-        </SlideTransition>
-      )}
 
       {/* Enhanced Scheduled package info */}
       {!hasActivePackage() && activePackage && new Date() < activePackage.activationDate && (
@@ -230,7 +193,7 @@ export function HomeScreen() {
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
                       isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                     }`}>
-                      {item.emoji}
+                      <EmojiIcon emoji={item.emoji} size={20} />
                     </div>
                     <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                       isDarkMode ? 'text-gray-100' : 'text-gray-800'
@@ -256,7 +219,7 @@ export function HomeScreen() {
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 relative z-10">
-              🧪
+              <EmojiIcon emoji="🧪" size={24} className="text-white" />
             </div>
             <div className="text-left font-black text-lg leading-tight relative z-10">
               {`${t.examSimulator}`}
@@ -303,7 +266,7 @@ export function HomeScreen() {
                       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
                         isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                       }`}>
-                        {item.emoji}
+                        <EmojiIcon emoji={item.emoji} size={20} />
                       </div>
                       <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-100' : 'text-gray-800'

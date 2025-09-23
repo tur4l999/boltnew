@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { IconButton } from '../ui/IconButton';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 interface VideoPlayerProps {
   src: string;
@@ -63,7 +64,7 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-56' }: VideoPlaye
           onClick={requestPictureInPicture}
           className="bg-black/50 border-white/20 text-white hover:bg-black/70"
         >
-          🖼️
+          <EmojiIcon emoji="🖼️" size={16} />
         </IconButton>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('🎨 Figma üçün design data yaradılır...');
+console.log('[DESIGN] Figma üçün design data yaradılır...');
 
 // Design tokens oxu
 const tokensPath = path.join(process.cwd(), 'design/tokens.json');
@@ -172,13 +172,13 @@ function hexToRgb(hex) {
 const outputPath = path.join(process.cwd(), 'figma-design-data.json');
 fs.writeFileSync(outputPath, JSON.stringify(figmaData, null, 2));
 
-console.log('✅ Figma design data yaradıldı!');
-console.log('📁 Fayl: figma-design-data.json');
+console.log('[SUCCESS] Figma design data yaradıldı!');
+console.log('[FILE] Fayl: figma-design-data.json');
 console.log('');
-console.log('📊 Statistika:');
-console.log(`   🎨 Rənglər: ${Object.keys(figmaData.designSystem.colors).length}`);
-console.log(`   📝 Typography: ${Object.keys(figmaData.designSystem.typography).length}`);
-console.log(`   🧩 Komponentlər: ${Object.keys(figmaData.components).length}`);
-console.log(`   📱 Ekranlar: ${figmaData.screens.length}`);
+console.log('[STATS] Statistika:');
+console.log(`   [COLORS] Rənglər: ${Object.keys(figmaData.designSystem.colors).length}`);
+console.log(`   [TYPOGRAPHY] Typography: ${Object.keys(figmaData.designSystem.typography).length}`);
+console.log(`   [COMPONENTS] Komponentlər: ${Object.keys(figmaData.components).length}`);
+console.log(`   [SCREENS] Ekranlar: ${figmaData.screens.length}`);
 console.log('');
-console.log('🔄 Növbəti addım: Bu faylı Figmaya import edin');
+console.log('[NEXT] Növbəti addım: Bu faylı Figmaya import edin');

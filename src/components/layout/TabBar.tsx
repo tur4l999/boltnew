@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
@@ -42,7 +43,7 @@ export function TabBar() {
             >
               {/* Active indicator */}
               {isActive && (
-                <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r ${tab.gradient} animate-pulse`}></div>
+                <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r ${tab.gradient} animate-pulse`}></div>
               )}
               
               <div className={`relative p-2 rounded-2xl transition-all duration-300 transform ${
@@ -57,7 +58,7 @@ export function TabBar() {
                   <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300`}></div>
                 )}
                 
-                <span className="text-lg relative z-10">{tab.emoji}</span>
+                <EmojiIcon emoji={tab.emoji} size={18} className="relative z-10" />
               </div>
               
               <div className={`text-xs font-bold transition-all duration-200 ${
@@ -77,7 +78,7 @@ export function TabBar() {
         >
           {/* Active indicator */}
           {currentTab === 'More' && (
-            <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 animate-pulse"></div>
+            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full bg-gradient-to-r from-gray-500 to-gray-600 animate-pulse"></div>
           )}
           
           <div className={`relative p-2 rounded-2xl transition-all duration-300 transform ${
@@ -92,7 +93,7 @@ export function TabBar() {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-600 to-gray-700 opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300"></div>
             )}
             
-            <span className="text-lg relative z-10">➕</span>
+            <EmojiIcon emoji="➕" size={18} className="relative z-10" />
           </div>
           
           <div className={`text-xs font-bold transition-all duration-200 ${

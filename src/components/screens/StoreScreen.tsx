@@ -4,6 +4,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { ProductCard } from '../ui/ProductCard';
 import { STORE_PRODUCTS } from '../../lib/products';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function StoreScreen() {
   const { isDarkMode, navigate, addToCart } = useApp();
@@ -212,7 +213,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">💳</div>
+            <div className="text-2xl mb-1"><EmojiIcon emoji="💳" size={24} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Kart</div>
@@ -222,7 +223,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">📱</div>
+            <div className="text-2xl mb-1"><EmojiIcon emoji="📱" size={24} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Mobil</div>
@@ -232,7 +233,7 @@ export function StoreScreen() {
               ? 'border-gray-600 hover:bg-gray-700' 
               : 'border-gray-200 hover:bg-gray-50'
           }`}>
-            <div className="text-2xl mb-1">🏦</div>
+            <div className="text-2xl mb-1"><EmojiIcon emoji="🏦" size={24} /></div>
             <div className={`text-xs transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>Bank</div>
@@ -246,13 +247,13 @@ export function StoreScreen() {
           isDarkMode ? 'text-gray-500' : 'text-gray-500'
         }`}>
           <span className="flex items-center gap-1">
-            🔒 Təhlükəsiz ödəniş
+            <EmojiIcon emoji="🔒" size={16} className="inline-block mr-2" />Təhlükəsiz ödəniş
           </span>
           <span className="flex items-center gap-1">
-            ⚡ Ani çatdırılma
+            <EmojiIcon emoji="⚡" size={16} className="inline-block mr-2" />Ani çatdırılma
           </span>
           <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
+            <EmojiIcon emoji="🎯" size={16} className="inline-block mr-2" />7/24 dəstək
           </span>
         </div>
       </div>
