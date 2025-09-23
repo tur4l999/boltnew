@@ -112,7 +112,7 @@ export function ExamScreen() {
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full"></div>
               )}
               <div className="relative z-10 flex flex-col items-center">
-                <div className="text-lg mb-1"><EmojiIcon emoji="🧪" size={18} className="text-emerald-600" /></div>
+                <div className="text-lg mb-1"><EmojiIcon emoji="🧪" size={18} className="text-orange-600" /></div>
                 {t.exam}
               </div>
             </button>
@@ -285,14 +285,15 @@ export function ExamScreen() {
       )}
 
       {activeTab === 'exam' && (
-        <div className="space-y-4">
+        <div className="space-y-6">
+          {/* İmtahan Simulyatoru */}
           <div className={`rounded-2xl border-2 p-6 text-sm transition-all duration-300 backdrop-blur-sm ${
             isDarkMode 
               ? 'bg-gray-800/80 border-gray-700/50 shadow-xl' 
               : 'bg-white/80 border-gray-200/50 shadow-xl'
           }`}>
             <div className="text-center mb-6">
-              <div className="text-4xl mb-3"><EmojiIcon emoji="🧪" size={32} /></div>
+              <div className="text-4xl mb-3"><EmojiIcon emoji="🧪" size={32} className="text-orange-600" /></div>
               <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {t.examSimulator}
               </h3>
@@ -306,36 +307,45 @@ export function ExamScreen() {
                 onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
                 fullWidth
                 size="lg"
-                icon={<EmojiIcon emoji="🧪" size={20} />}
                 variant="primary"
               >
                 İmtahan simulyatoru
               </Button>
+            </div>
+          </div>
+
+          {/* Yekun İmtahan */}
+          <div className={`rounded-2xl border-2 p-6 text-sm transition-all duration-300 backdrop-blur-sm ${
+            isDarkMode 
+              ? 'bg-gray-800/80 border-gray-700/50 shadow-xl' 
+              : 'bg-white/80 border-gray-200/50 shadow-xl'
+          }`}>
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-3"><EmojiIcon emoji="📋" size={32} className="text-emerald-600" /></div>
+              <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Yekun İmtahan
+              </h3>
+              <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Bütün mövzuları bitirdikdən sonra yekun imtahan verə bilərsiniz
+              </p>
+              <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${
+                isDarkMode ? 'bg-amber-900/30 text-amber-400 border border-amber-700/50' : 'bg-amber-50 text-amber-700 border border-amber-200'
+              }`}>
+                <EmojiIcon emoji="⏳" size={12} />
+                Tüm mövzuları tamamlayın
+              </div>
+            </div>
+            
+            <div className="space-y-4">
               <Button 
                 onClick={() => navigate('ExamConfig', { mode: 'final' })}
                 fullWidth
                 size="lg"
-                icon="📋"
                 variant="secondary"
+                disabled={true}
               >
                 Yekun imtahan
               </Button>
-            </div>
-            
-            <div className={`mt-6 p-4 rounded-xl ${
-              isDarkMode ? 'bg-blue-900/20 border border-blue-700/50' : 'bg-blue-50 border border-blue-200/50'
-            }`}>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">💡</div>
-                <div>
-                  <div className={`text-sm font-semibold mb-1 ${isDarkMode ? 'text-blue-200' : 'text-blue-900'}`}>
-                    Məsləhət
-                  </div>
-                  <div className={`text-xs ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
-                    İmtahan simulyatoru real imtahan şəraitini tam təqlid edir. Əvvəlcə bütün mövzuları öyrənin.
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
