@@ -10,7 +10,7 @@ interface VideoPlayerProps {
   is3D?: boolean;
 }
 
-export function VideoPlayer({ src, watermark, heightClass = 'h-64', is3D = false }: VideoPlayerProps) {
+export function VideoPlayer({ src, watermark, heightClass = 'h-48', is3D = false }: VideoPlayerProps) {
   const { isDarkMode } = useApp();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -89,14 +89,14 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-64', is3D = false
   };
 
   return (
-    <div className={`relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-gray-900 via-black to-gray-800 ${
-      is3D ? 'ring-2 ring-emerald-500/30 shadow-emerald-500/20' : ''
+    <div className={`relative rounded-xl overflow-hidden shadow-lg bg-gradient-to-br from-gray-900 via-black to-gray-800 ${
+      is3D ? 'ring-1 ring-emerald-500/30' : ''
     }`}>
       {/* 3D Badge */}
       {is3D && (
-        <div className="absolute top-4 left-4 z-20 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm">
+        <div className="absolute top-2 left-2 z-20 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md">
           <span className="mr-1">🎬</span>
-          3D Video Dərs
+          3D
         </div>
       )}
       
@@ -105,14 +105,14 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-64', is3D = false
         src={src}
         controls
         playsInline
-        className={`w-full ${heightClass} object-cover rounded-3xl`}
+        className={`w-full ${heightClass} object-cover rounded-xl`}
       />
       
       {/* Custom Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 rounded-b-3xl">
-        <div className="flex items-center gap-3 text-white text-sm mb-2">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 rounded-b-xl">
+        <div className="flex items-center gap-2 text-white text-xs">
           <span className="font-medium">{formatTime(currentTime)}</span>
-          <div className="flex-1 bg-white/20 rounded-full h-1.5 overflow-hidden">
+          <div className="flex-1 bg-white/20 rounded-full h-1 overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-emerald-400 to-green-400 transition-all duration-300 rounded-full"
               style={{ width: `${progress}%` }}
@@ -123,51 +123,51 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-64', is3D = false
       </div>
       
       {/* Watermark */}
-      <div className="absolute right-4 bottom-16 text-xs text-white/50 pointer-events-none select-none font-medium">
+      <div className="absolute right-2 bottom-8 text-xs text-white/50 pointer-events-none select-none">
         {watermark}
       </div>
       
       {/* Enhanced Control Buttons */}
-      <div className="absolute left-4 top-4 flex gap-2 z-10">
+      <div className="absolute left-2 top-2 flex gap-1 z-10">
         <IconButton 
           label="10 saniyə geriyə" 
           onClick={skipBackward}
-          className="bg-black/60 border-white/10 text-white hover:bg-black/80 hover:scale-110 backdrop-blur-sm shadow-lg transition-all duration-200"
+          className="bg-black/50 border-white/10 text-white hover:bg-black/70 backdrop-blur-sm shadow-md transition-all duration-200 w-8 h-8"
         >
-          <span className="text-lg">⏪</span>
+          <span className="text-sm">⏪</span>
         </IconButton>
         <IconButton 
           label="10 saniyə irəliyə" 
           onClick={skipForward}
-          className="bg-black/60 border-white/10 text-white hover:bg-black/80 hover:scale-110 backdrop-blur-sm shadow-lg transition-all duration-200"
+          className="bg-black/50 border-white/10 text-white hover:bg-black/70 backdrop-blur-sm shadow-md transition-all duration-200 w-8 h-8"
         >
-          <span className="text-lg">⏩</span>
+          <span className="text-sm">⏩</span>
         </IconButton>
       </div>
 
       {/* Right side controls */}
-      <div className="absolute right-4 top-4 flex gap-2 z-10">
+      <div className="absolute right-2 top-2 flex gap-1 z-10">
         <IconButton 
           label="Tam ekran" 
           onClick={toggleFullscreen}
-          className="bg-black/60 border-white/10 text-white hover:bg-black/80 hover:scale-110 backdrop-blur-sm shadow-lg transition-all duration-200"
+          className="bg-black/50 border-white/10 text-white hover:bg-black/70 backdrop-blur-sm shadow-md transition-all duration-200 w-8 h-8"
         >
-          <span className="text-lg">⛶</span>
+          <span className="text-sm">⛶</span>
         </IconButton>
         <IconButton 
           label="Şəkil içində şəkil" 
           onClick={requestPictureInPicture}
-          className="bg-black/60 border-white/10 text-white hover:bg-black/80 hover:scale-110 backdrop-blur-sm shadow-lg transition-all duration-200"
+          className="bg-black/50 border-white/10 text-white hover:bg-black/70 backdrop-blur-sm shadow-md transition-all duration-200 w-8 h-8"
         >
-          <EmojiIcon emoji="🖼️" size={16} />
+          <EmojiIcon emoji="🖼️" size={12} />
         </IconButton>
       </div>
 
       {/* Play/Pause overlay when video is paused */}
       {!isPlaying && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-3xl">
-          <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-2xl">
-            <span className="text-white text-3xl ml-1">▶️</span>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-xl">
+          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+            <span className="text-white text-xl ml-0.5">▶️</span>
           </div>
         </div>
       )}
