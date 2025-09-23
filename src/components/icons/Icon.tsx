@@ -557,7 +557,28 @@ const TrophyIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<
 const CarIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path
-      d="M5 17a2 2 0 104 0M15 17a2 2 0 104 0M5 17H3v-6l2-5h9l4 5v6h-2"
+      d="M7 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0zM13 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0z"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 17H3v-6l2-5h9l4 5v6h-2"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7 10h6"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9 6h2"
       stroke={color}
       strokeWidth="2.5"
       strokeLinecap="round"
@@ -603,6 +624,23 @@ const ImageIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<I
 const MenuIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path d="M3 12h18M3 6h18M3 18h18" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const MedalIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="8" r="5" stroke={color} strokeWidth="2.5" />
+    <path d="m9 13 5 5 5-5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="m9 13 5 5-5 5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="m15 13-5 5 5 5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="12" cy="8" r="2" fill={color} />
+  </svg>
+);
+
+const MailIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <polyline points="22,6 12,13 2,6" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -669,6 +707,8 @@ const iconMap = {
   wallet: WalletIcon,
   image: ImageIcon,
   menu: MenuIcon,
+  medal: MedalIcon,
+  mail: MailIcon,
 };
 
 // Main Icon component
@@ -742,4 +782,6 @@ export {
   WalletIcon,
   ImageIcon,
   MenuIcon,
+  MedalIcon,
+  MailIcon,
 };

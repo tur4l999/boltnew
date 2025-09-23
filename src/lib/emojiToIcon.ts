@@ -27,9 +27,9 @@ export const emojiToIconMap: Record<string, string> = {
   '📦': 'package',
   '🎓': 'trophy',
   '🛠️': 'car',
-  '📮': 'contact',
+  '📮': 'mail',
   '📰': 'chat',
-  '📋': 'trophy',
+  '📋': 'medal',
   
   // Action emojis
   '✅': 'check',
