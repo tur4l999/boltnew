@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
@@ -57,7 +58,7 @@ export function TabBar() {
                   <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300`}></div>
                 )}
                 
-                <span className="text-lg relative z-10">{tab.emoji}</span>
+                <EmojiIcon emoji={tab.emoji} size={18} className="relative z-10" />
               </div>
               
               <div className={`text-xs font-bold transition-all duration-200 ${
@@ -92,7 +93,7 @@ export function TabBar() {
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gray-600 to-gray-700 opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300"></div>
             )}
             
-            <span className="text-lg relative z-10">➕</span>
+            <EmojiIcon emoji="➕" size={18} className="relative z-10" />
           </div>
           
           <div className={`text-xs font-bold transition-all duration-200 ${

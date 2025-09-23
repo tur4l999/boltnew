@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('🎨 Generating tokens...');
+console.log('[DESIGN] Generating tokens...');
 
 // Read design tokens
 function readTokens() {
@@ -11,7 +11,7 @@ function readTokens() {
     const tokensPath = path.join(process.cwd(), 'design/tokens.json');
     return JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
   } catch (error) {
-    console.error('❌ Error reading tokens.json:', error.message);
+    console.error('[ERROR] Error reading tokens.json:', error.message);
     process.exit(1);
   }
 }
@@ -138,12 +138,12 @@ try {
   fs.mkdirSync('src', { recursive: true });
   fs.writeFileSync('src/theme.ts', rnTheme);
   
-  console.log('✅ Generated:');
+  console.log('[SUCCESS] Generated:');
   console.log('  - design/styles.css');
   console.log('  - public/styles.css');
   console.log('  - src/theme.ts');
   
 } catch (error) {
-  console.error('❌ Generation failed:', error.message);
+  console.error('[ERROR] Generation failed:', error.message);
   process.exit(1);
 }

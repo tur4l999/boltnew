@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Calendar } from '../ui/Calendar';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 interface Package {
   id: string;
@@ -307,10 +308,10 @@ export function PackagesScreen() {
               {pkg.popular && (
                 <>
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                    ⭐ Ən Populyar
+                    <EmojiIcon emoji="⭐" size={14} className="inline-block mr-1" />Ən Populyar
                   </div>
                   <div className="absolute top-2 right-2 text-2xl">
-                    🔥
+                    <EmojiIcon emoji="🔥" size={24} />
                   </div>
                 </>
               )}
@@ -392,7 +393,7 @@ export function PackagesScreen() {
                   className={getButtonClass(pkg)}
                   variant={pkg.popular ? 'primary' : 'secondary'}
                 >
-                  {pkg.popular ? '🚀 ' : ''}Paketi Al - {calculatePrice(pkg.id)} AZN
+                  {pkg.popular ? <><EmojiIcon emoji="🚀" size={16} className="inline-block mr-1" /></> : ''}Paketi Al - {calculatePrice(pkg.id)} AZN
                 </Button>
               </div>
             </Card>
@@ -483,10 +484,10 @@ export function PackagesScreen() {
             🔒 Təhlükəsiz ödəniş
           </span>
           <span className="flex items-center gap-1">
-            ⚡ Ani aktivləşmə
+            <EmojiIcon emoji="⚡" size={16} className="inline-block mr-2" />Ani aktivləşmə
           </span>
           <span className="flex items-center gap-1">
-            🎯 7/24 dəstək
+            <EmojiIcon emoji="🎯" size={16} className="inline-block mr-2" />7/24 dəstək
           </span>
         </div>
       </div>
@@ -513,7 +514,7 @@ export function PackagesScreen() {
                       : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                 }`}
               >
-                <span>🚀</span>
+                <EmojiIcon emoji="🚀" size={16} />
                 <span>İndi başla</span>
               </button>
               <button
@@ -742,7 +743,7 @@ export function PackagesScreen() {
 
             {otherModalStage === 'confirm' && (
               <>
-                <div className="text-2xl mb-2">🛍️</div>
+                <div className="text-2xl mb-2"><EmojiIcon emoji="🛍️" size={24} /></div>
                 <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Alışı təsdiqlə</div>
                 <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
                   Aşağıdakı məhsulu almaq istəyirsiniz?
@@ -795,7 +796,7 @@ export function PackagesScreen() {
 
             {otherModalStage === 'insufficient' && (
               <>
-                <div className="text-4xl mb-2">⚠️</div>
+                <div className="text-4xl mb-2"><EmojiIcon emoji="⚠️" size={32} /></div>
                 <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Balans kifayət etmir</div>
                 <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
                   Balansınızı artırmağınız tövsiyə olunur.
@@ -828,7 +829,7 @@ export function PackagesScreen() {
           <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
-            <div className="text-4xl mb-2">⚠️</div>
+            <div className="text-4xl mb-2"><EmojiIcon emoji="⚠️" size={32} /></div>
             <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Balans kifayət etmir</div>
             <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
               {insufficientTrainingName} ({insufficientTrainingPrice} AZN) üçün balansınız yetərli deyil.

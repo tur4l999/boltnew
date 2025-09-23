@@ -17,9 +17,9 @@ const FIGMA_API_TOKEN = process.env.FIGMA_API_TOKEN;
 const FIGMA_FILE_KEY = process.env.FIGMA_FILE_KEY;
 
 if (!FIGMA_API_TOKEN || !FIGMA_FILE_KEY) {
-  console.error('❌ FIGMA_API_TOKEN və FIGMA_FILE_KEY environment variables lazımdır');
+  console.error('[ERROR] FIGMA_API_TOKEN və FIGMA_FILE_KEY environment variables lazımdır');
   console.log('');
-  console.log('🔧 Quraşdırma:');
+  console.log('[SETUP] Quraşdırma:');
   console.log('1. Figma → Settings → Personal Access Tokens');
   console.log('2. Token yaradın və .env faylına əlavə edin');
   console.log('3. Figma faylının URL-indən key götürün');
@@ -53,7 +53,7 @@ class FigmaAPI {
 
       return response.json();
     } catch (error) {
-      console.error('❌ Figma API xətası:', error.message);
+      console.error('[ERROR] Figma API xətası:', error.message);
       throw error;
     }
   }
@@ -261,21 +261,21 @@ class ComponentGenerator {
 
 // Əsas sinxronlaşdırma funksiyası
 async function syncToFigma() {
-  console.log('🚀 DDA.az → Figma sinxronlaşdırması başlayır...');
+  console.log('[START] DDA.az -> Figma sinxronlaşdırması başlayır...');
   
   try {
     const figma = new FigmaAPI(FIGMA_API_TOKEN);
     const generator = new ComponentGenerator(tokens);
 
     // 1. Figma faylını yoxla
-    console.log('📁 Figma faylı yoxlanılır...');
+    console.log('[INFO] Figma faylı yoxlanılır...');
     const fileData = await figma.getFile(FIGMA_FILE_KEY);
-    console.log(`✅ Fayl tapıldı: ${fileData.name}`);
+    console.log(`[SUCCESS] Fayl tapıldı: ${fileData.name}`);
 
     // 2. Design system yarat
-    console.log('🎨 Design system yaradılır...');
+    console.log('[DESIGN] Design system yaradılır...');
     const designSystem = generator.generateDesignSystem();
-    console.log('✅ Design system hazırlandı');
+    console.log('[SUCCESS] Design system hazırlandı');
 
     // 3. Metadata faylını yarat
     const metadata = {
@@ -299,27 +299,27 @@ async function syncToFigma() {
     fs.writeFileSync(exportPath, JSON.stringify(metadata, null, 2));
 
     console.log('');
-    console.log('🎉 Sinxronlaşdırma tamamlandı!');
+    console.log('[COMPLETE] Sinxronlaşdırma tamamlandı!');
     console.log('');
-    console.log('📊 Statistika:');
-    console.log(`   🎨 Rənglər: ${metadata.stats.colors}`);
-    console.log(`   📝 Typography: ${metadata.stats.typography}`);
-    console.log(`   🧩 Komponentlər: ${metadata.stats.components}`);
-    console.log(`   📱 Ekranlar: ${metadata.stats.screens}`);
+    console.log('[STATS] Statistika:');
+    console.log(`   [COLORS] Rənglər: ${metadata.stats.colors}`);
+    console.log(`   [TYPOGRAPHY] Typography: ${metadata.stats.typography}`);
+    console.log(`   [COMPONENTS] Komponentlər: ${metadata.stats.components}`);
+    console.log(`   [SCREENS] Ekranlar: ${metadata.stats.screens}`);
     console.log('');
-    console.log('📁 Fayllar:');
-    console.log(`   📄 Metadata: figma-export.json`);
-    console.log(`   🔗 Figma: ${metadata.figmaFile.url}`);
+    console.log('[FILES] Fayllar:');
+    console.log(`   [FILE] Metadata: figma-export.json`);
+    console.log(`   [LINK] Figma: ${metadata.figmaFile.url}`);
     console.log('');
-    console.log('🔄 Növbəti addım: Figma plugin istifadə edin');
+    console.log('[NEXT] Növbəti addım: Figma plugin istifadə edin');
 
   } catch (error) {
-    console.error('❌ Xəta:', error.message);
+    console.error('[ERROR] Xəta:', error.message);
     
     if (error.message.includes('401')) {
-      console.log('💡 Həll: Figma token-ini yoxlayın');
+      console.log('[HINT] Həll: Figma token-ini yoxlayın');
     } else if (error.message.includes('404')) {
-      console.log('💡 Həll: Figma file key-ini yoxlayın');
+      console.log('[HINT] Həll: Figma file key-ini yoxlayın');
     }
     
     process.exit(1);

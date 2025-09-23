@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function SettingsScreen() {
   const { goBack, language, setLanguage, theme, setTheme, balance, activePackage, isDarkMode } = useApp();
@@ -8,9 +9,9 @@ export function SettingsScreen() {
   const userEmail = "tural.qarayev@example.com";
 
   const themeOptions = [
-    { value: 'light', label: '☀️ Gündüz', description: 'Açıq tema' },
-    { value: 'dark', label: '🌙 Gecə', description: 'Qaranlıq tema' },
-    { value: 'system', label: '📱 Cihaza uyğun', description: 'Sistem ayarına görə' }
+    { value: 'light', label: <><EmojiIcon emoji="☀️" size={16} className="inline-block mr-2" />Gündüz</>, description: 'Açıq tema' },
+    { value: 'dark', label: <><EmojiIcon emoji="🌙" size={16} className="inline-block mr-2" />Gecə</>, description: 'Qaranlıq tema' },
+    { value: 'system', label: <><EmojiIcon emoji="📱" size={16} className="inline-block mr-2" />Cihaza uyğun</>, description: 'Sistem ayarına görə' }
   ];
 
   const languageOptions = [
@@ -136,7 +137,7 @@ export function SettingsScreen() {
         {/* Enhanced Theme Settings */}
         <Card variant="elevated" padding="lg" className="mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="text-2xl">🎨</div>
+            <div className="text-2xl"><EmojiIcon emoji="🎨" size={24} /></div>
             <h3 className={`font-black text-lg transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>Tema</h3>
@@ -236,7 +237,7 @@ export function SettingsScreen() {
         {settingsItems.map((section) => (
           <div key={section.section} className="mb-6">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="text-lg">⚙️</div>
+              <div className="text-lg"><EmojiIcon emoji="⚙️" size={18} /></div>
               <h3 className={`font-black text-lg transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-200' : 'text-gray-800'
               }`}>{section.section}</h3>
@@ -256,7 +257,7 @@ export function SettingsScreen() {
                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
                       isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
                     }`}>
-                      {item.emoji}
+                      <EmojiIcon emoji={item.emoji} size={20} />
                     </div>
                     <div className="flex-1">
                       <div className="font-bold text-base">{item.label}</div>

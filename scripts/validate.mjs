@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 
-console.log('🔍 Validating design files...');
+console.log('[VALIDATE] Validating design files...');
 
 let hasErrors = false;
 
@@ -13,7 +13,7 @@ function validateAssets() {
     const assetsPath = path.join(process.cwd(), 'design/assets.manifest.json');
     const assets = JSON.parse(fs.readFileSync(assetsPath, 'utf8'));
     
-    console.log('📦 Validating assets.manifest.json...');
+    console.log('[VALIDATE] Validating assets.manifest.json...');
     
     // Validate icons
     if (assets.icons) {
@@ -21,7 +21,7 @@ function validateAssets() {
         const required = ['name', 'category', 'group', 'format', 'sizes'];
         required.forEach(field => {
           if (!icon[field]) {
-            console.error(`❌ icons[${index}]: Missing required field "${field}"`);
+            console.error(`[ERROR] icons[${index}]: Missing required field "${field}"`);
             hasErrors = true;
           }
         });
@@ -29,7 +29,7 @@ function validateAssets() {
         if (icon.sizes && Array.isArray(icon.sizes)) {
           icon.sizes.forEach((size, sizeIndex) => {
             if (!size.path) {
-              console.error(`❌ icons[${index}].sizes[${sizeIndex}]: Missing "path" field`);
+              console.error(`[ERROR] icons[${index}].sizes[${sizeIndex}]: Missing "path" field`);
               hasErrors = true;
             }
           });
@@ -43,7 +43,7 @@ function validateAssets() {
         const required = ['name', 'category', 'group', 'format', 'sizes'];
         required.forEach(field => {
           if (!image[field]) {
-            console.error(`❌ images[${index}]: Missing required field "${field}"`);
+            console.error(`[ERROR] images[${index}]: Missing required field "${field}"`);
             hasErrors = true;
           }
         });
@@ -51,11 +51,11 @@ function validateAssets() {
     }
     
     if (!hasErrors) {
-      console.log('✅ assets.manifest.json is valid');
+      console.log('[SUCCESS] assets.manifest.json is valid');
     }
     
   } catch (error) {
-    console.error('❌ Error validating assets.manifest.json:', error.message);
+    console.error('[ERROR] Error validating assets.manifest.json:', error.message);
     hasErrors = true;
   }
 }
@@ -63,7 +63,7 @@ function validateAssets() {
 // Validate components vs screens consistency
 function validateConsistency() {
   try {
-    console.log('🔗 Validating component consistency...');
+    console.log('[VALIDATE] Validating component consistency...');
     
     const componentsPath = path.join(process.cwd(), 'design/components.csv');
     const screensPath = path.join(process.cwd(), 'design/screens.csv');
@@ -95,7 +95,7 @@ function validateConsistency() {
         const usedComponents = screen.components.split('|').map(c => c.trim());
         usedComponents.forEach(componentName => {
           if (!componentNames.has(componentName)) {
-            console.error(`❌ screens.csv line ${index + 2}: Component "${componentName}" used in "${screen.name}" screen but not found in components.csv`);
+            console.error(`[ERROR] screens.csv line ${index + 2}: Component "${componentName}" used in "${screen.name}" screen but not found in components.csv`);
             hasErrors = true;
           }
         });
@@ -103,11 +103,11 @@ function validateConsistency() {
     });
     
     if (!hasErrors) {
-      console.log('✅ Component consistency validated');
+      console.log('[SUCCESS] Component consistency validated');
     }
     
   } catch (error) {
-    console.error('❌ Error validating consistency:', error.message);
+    console.error('[ERROR] Error validating consistency:', error.message);
     hasErrors = true;
   }
 }
@@ -115,7 +115,7 @@ function validateConsistency() {
 // Validate tokens.json structure
 function validateTokens() {
   try {
-    console.log('🎨 Validating tokens.json...');
+    console.log('[VALIDATE] Validating tokens.json...');
     
     const tokensPath = path.join(process.cwd(), 'design/tokens.json');
     const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
@@ -123,17 +123,17 @@ function validateTokens() {
     const required = ['colors', 'spacing', 'typography', 'borderRadius', 'shadows', 'breakpoints'];
     required.forEach(section => {
       if (!tokens[section]) {
-        console.error(`❌ tokens.json: Missing required section "${section}"`);
+        console.error(`[ERROR] tokens.json: Missing required section "${section}"`);
         hasErrors = true;
       }
     });
     
     if (!hasErrors) {
-      console.log('✅ tokens.json is valid');
+      console.log('[SUCCESS] tokens.json is valid');
     }
     
   } catch (error) {
-    console.error('❌ Error validating tokens.json:', error.message);
+    console.error('[ERROR] Error validating tokens.json:', error.message);
     hasErrors = true;
   }
 }
@@ -144,8 +144,8 @@ validateAssets();
 validateConsistency();
 
 if (hasErrors) {
-  console.log('\n❌ Validation failed with errors');
+  console.log('\n[FAILED] Validation failed with errors');
   process.exit(1);
 } else {
-  console.log('\n✅ All validations passed');
+  console.log('\n[SUCCESS] All validations passed');
 }

@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { EmojiIcon } from '../ui/EmojiIcon';
 import type { ExamType, StoredExamResult } from '../../lib/types';
 
 type DateFilter = 'all' | 'today' | 'thisWeek' | 'thisMonth' | 'lastMonth';
@@ -147,11 +148,11 @@ export function ResultsScreen() {
 
   const getTypeIcon = (type: ExamType) => {
     switch (type) {
-      case 'tickets': return '📄';
-      case 'topics': return '📚';
-      case 'simulator': return '🧪';
-      case 'final': return '📋';
-      default: return '📝';
+      case 'tickets': return <EmojiIcon emoji="📄" size={16} />;
+      case 'topics': return <EmojiIcon emoji="📚" size={16} />;
+      case 'simulator': return <EmojiIcon emoji="🧪" size={16} />;
+      case 'final': return <EmojiIcon emoji="📋" size={16} />;
+      default: return <EmojiIcon emoji="📝" size={16} />;
     }
   };
 
@@ -324,7 +325,7 @@ export function ResultsScreen() {
       {/* Results List */}
       {filteredResults.length === 0 ? (
         <Card className="text-center py-8">
-          <div className={`text-4xl mb-3`}>📊</div>
+          <div className={`text-4xl mb-3`}><EmojiIcon emoji="📊" size={32} /></div>
           <div className={`font-medium mb-2 transition-colors duration-200 ${
             isDarkMode ? 'text-gray-300' : 'text-gray-700'
           }`}>

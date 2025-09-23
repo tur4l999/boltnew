@@ -4,14 +4,14 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-console.log('📦 Creating handoff package...');
+console.log('[HANDOFF] Creating handoff package...');
 
 // Ensure tokens are up to date
 try {
-  console.log('🎨 Regenerating tokens...');
+  console.log('[TOKENS] Regenerating tokens...');
   execSync('npm run tokens', { stdio: 'inherit' });
 } catch (error) {
-  console.error('❌ Failed to regenerate tokens');
+  console.error('[ERROR] Failed to regenerate tokens');
   process.exit(1);
 }
 
@@ -42,12 +42,12 @@ filesToCopy.forEach(({ src, dest }) => {
     
     if (fs.existsSync(srcPath)) {
       fs.copyFileSync(srcPath, destPath);
-      console.log(`✅ Copied ${src}`);
+      console.log(`[COPIED] ${src}`);
     } else {
-      console.warn(`⚠️  File not found: ${src}`);
+      console.warn(`[WARNING] File not found: ${src}`);
     }
   } catch (error) {
-    console.error(`❌ Failed to copy ${src}:`, error.message);
+    console.error(`[ERROR] Failed to copy ${src}:`, error.message);
   }
 });
 
@@ -59,8 +59,8 @@ try {
   const archive = archiver.default('zip', { zlib: { level: 9 } });
   
   output.on('close', () => {
-    console.log(`✅ Handoff package created: ${archive.pointer()} bytes`);
-    console.log('📦 handoff/handoff.zip is ready!');
+    console.log(`[SUCCESS] Handoff package created: ${archive.pointer()} bytes`);
+    console.log('[READY] handoff/handoff.zip is ready!');
   });
   
   archive.on('error', (err) => {
@@ -80,6 +80,6 @@ try {
   archive.finalize();
   
 } catch (error) {
-  console.log('📁 ZIP creation skipped (archiver not available)');
-  console.log('✅ Files copied to handoff/ directory');
+  console.log('[INFO] ZIP creation skipped (archiver not available)');
+  console.log('[SUCCESS] Files copied to handoff/ directory');
 }

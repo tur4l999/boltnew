@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { IconButton } from '../ui/IconButton';
+import { EmojiIcon } from '../ui/EmojiIcon';
 
 interface Message {
   id: string;
@@ -197,11 +198,11 @@ export function AIChatScreen() {
                 onClick={() => setHistoryOpen(!historyOpen)}
                 className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
-                ☰
+                <EmojiIcon emoji="☰" size={16} />
               </button>
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                  <span className="text-white text-sm">🤖</span>
+                  <EmojiIcon emoji="🤖" size={14} className="text-white" />
                 </div>
                 <div>
                   <div className="font-bold text-gray-900">DDA.az AI Köməkçi</div>
@@ -243,7 +244,7 @@ export function AIChatScreen() {
                   ? 'bg-emerald-600 text-white order-1 ml-2' 
                   : 'bg-gray-200 text-gray-600 order-2 mr-2'
               }`}>
-                {message.isUser ? '👤' : '🤖'}
+                <EmojiIcon emoji={message.isUser ? '👤' : '🤖'} size={16} />
               </div>
             </div>
           ))}
@@ -252,7 +253,7 @@ export function AIChatScreen() {
             <div className="flex justify-start">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm">
-                  🤖
+                  <EmojiIcon emoji="🤖" size={16} />
                 </div>
                 <div className="bg-gray-100 p-3 rounded-2xl rounded-bl-md">
                   <div className="flex gap-1">
