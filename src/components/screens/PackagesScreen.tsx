@@ -366,9 +366,6 @@ export function PackagesScreen() {
                           </div>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 text-2xl z-20">
-                        <div className="animate-pulse">🔥</div>
-                      </div>
                     </>
                   )}
 
