@@ -90,12 +90,6 @@ export function StoreScreen() {
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="relative px-4 py-6">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 mb-4">
-              <div className={`w-2 h-2 rounded-full bg-emerald-500 animate-pulse`}></div>
-              <span className={`text-sm font-medium ${
-                isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-              }`}>Onlayn mağaza</span>
-            </div>
             <h1 className={`text-3xl md:text-4xl font-bold mb-4 transition-colors duration-200 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
