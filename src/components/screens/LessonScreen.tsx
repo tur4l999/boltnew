@@ -455,12 +455,14 @@ export function LessonScreen() {
                           Sürət həddinin pozulması (40-200 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/video 6.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/video 6.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
 
                     {/* Traffic Light Violations */}
@@ -471,12 +473,14 @@ export function LessonScreen() {
                           İşıqfor siqnallarının pozulması (100-200 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
 
                     {/* Document Violations */}
@@ -487,12 +491,14 @@ export function LessonScreen() {
                           Sənədlərlə bağlı pozuntular (100-500 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/video 6.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/video 6.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
 
                     {/* Pedestrian Violations */}
@@ -503,12 +509,14 @@ export function LessonScreen() {
                           Piyadaların hüquqlarının pozulması (50-200 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
 
                     {/* Alcohol Violations */}
@@ -519,12 +527,14 @@ export function LessonScreen() {
                           Sərxoşluq halında idarəetmə (1000-2000 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/video 6.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/video 6.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
 
                     {/* Parking Violations */}
@@ -535,12 +545,14 @@ export function LessonScreen() {
                           Qadağan yerlərdə dayanma (20-100 manat)
                         </span>
                       </div>
-                      <VideoPlayer 
-                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
-                        watermark="DDA.az"
-                        heightClass="h-56"
-                        is3D={false}
-                      />
+                      <div className="w-full aspect-video">
+                        <VideoPlayer 
+                          src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                          watermark="DDA.az"
+                          heightClass="h-full"
+                          is3D={false}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
