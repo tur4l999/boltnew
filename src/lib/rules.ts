@@ -27,7 +27,7 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
       {
         id: 'speed_violations',
         title: 'Sürət həddinin pozulması',
-        content: 'Müəyyən edilmiş sürət həddini aşmağa görə:\n• 10-20 km/saat - 40 manat\n• 21-40 km/saat - 100 manat\n• 40+ km/saat - 200 manat və hüquqların məhdudlaşdırılması',
+        content: 'Müəyyən edilmiş sürət həddini aşmağa görə:\n• 10-20 km/saat - 40 manat\n• 21-40 km/saat - 100 manat\n• 40+ km/saat - 200 manat və hüquqların məhdudlaşdırılması\n\nSürət həddinin pozulması ən çox rast gəlinən pozuntulardan biridir. Təhlükəsizlik üçün həmişə sürət həddini gözləyin.',
         videoSources: [
           '/video 6.mp4',
           '/Maddə 49 NV-nin yerləşməsi 0002.mp4',
@@ -38,13 +38,23 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
       {
         id: 'traffic_lights',
         title: 'İşıqfor siqnallarının pozulması',
-        content: 'Qırmızı işıqfor siqnalının pozulması - 100 manat cərimə. Təkrar pozuntu halında - 200 manat və hüquqların müvəqqəti məhdudlaşdırılması.',
+        content: 'İşıqfor pozuntuları:\n• Qırmızı işıqfor siqnalının pozulması - 100 manat\n• Təkrar pozuntu halında - 200 manat və hüquqların müvəqqəti məhdudlaşdırılması\n• Sarı işıq zamanı keçmə - 40 manat\n\nİşıqfor siqnalları yol təhlükəsizliyinin əsasıdır.',
         videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
       },
       {
         id: 'wrong_parking',
         title: 'Qadağan edilmiş yerlərdə dayanma',
-        content: 'Dayanma qadağası olan yerlərdə avtomobilin saxlanması:\n• Adi hallar - 20 manat\n• Əlil yerləri - 100 manat\n• İctimai nəqliyyat dayanacaqları - 50 manat'
+        content: 'Dayanma qadağası olan yerlərdə avtomobilin saxlanması:\n• Adi hallar - 20 manat\n• Əlil yerləri - 100 manat\n• İctimai nəqliyyat dayanacaqları - 50 manat\n• Piyada keçidi yaxınlığında - 40 manat\n• İkinci sırada dayanma - 30 manat',
+        videoSrc: '/video 6.mp4'
+      },
+      {
+        id: 'overtaking_violations',
+        title: 'Ötmə qaydalarının pozulması',
+        content: 'Ötmə pozuntuları:\n• Qadağan edilmiş yerlərdə ötmə - 150 manat\n• Qarşıdan gələnə mane olmaq - 200 manat\n• Sağdan ötmə - 100 manat\n\nÖtmə zamanı həmişə təhlükəsizlik qaydalarını gözləyin.',
+        videoSources: [
+          '/video 6.mp4',
+          '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+        ]
       }
     ]
   },
@@ -56,12 +66,20 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
       {
         id: 'no_license',
         title: 'Sürücülük vəsiqəsinin olmaması',
-        content: 'Sürücülük vəsiqəsi olmadan avtomobil idarə etmək - 200 manat cərimə və nəqliyyat vasitəsinin saxlanması.'
+        content: 'Sürücülük vəsiqəsi olmadan avtomobil idarə etmək:\n• Birinci dəfə - 200 manat cərimə və nəqliyyat vasitəsinin saxlanması\n• Təkrar hal - 300 manat və daha uzun müddətə saxlama\n\nSürücülük vəsiqəsi həmişə yanınızda olmalıdır.',
+        videoSrc: '/video 6.mp4'
       },
       {
         id: 'expired_documents',
         title: 'Vaxtı keçmiş sənədlər',
-        content: 'Vaxtı keçmiş sürücülük vəsiqəsi ilə idarə etmə - 100 manat cərimə.'
+        content: 'Vaxtı keçmiş sənədlərlə idarə etmə:\n• Vaxtı keçmiş sürücülük vəsiqəsi - 100 manat\n• Vaxtı keçmiş sığorta - 80 manat\n• Vaxtı keçmiş texniki baxış - 60 manat\n\nSənədlərinizin vaxtını vaxtında yeniləyin.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+      },
+      {
+        id: 'fake_documents',
+        title: 'Saxta sənədlər',
+        content: 'Saxta və ya dəyişdirilmiş sənədlərdən istifadə:\n• Saxta sürücülük vəsiqəsi - 500 manat və cinayət işi\n• Dəyişdirilmiş sənədlər - 300 manat\n\nSaxta sənədlər ciddi hüquqi nəticələrə səbəb olur.',
+        videoSrc: '/video 6.mp4'
       }
     ]
   },
@@ -69,8 +87,16 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
     id: 'alcohol_violations',
     title: 'Sərxoşluq halında idarəetmə',
     description: 'Spirtli içkilər və ya narkotik maddələrin təsiri altında avtomobil idarə etmə',
-    content: 'Sərxoş halda avtomobil idarə etmə:\n• Birinci dəfə - 1000 manat cərimə və 1 il hüquqların məhdudlaşdırılması\n• Təkrar pozuntu - 2000 manat və 3 il hüquqların məhdudlaşdırılması\n• Qəza törətmə halında - cinayət məsuliyyəti',
-    videoSrc: '/video 6.mp4'
+    content: 'Sərxoş halda avtomobil idarə etmə:\n• Birinci dəfə - 1000 manat cərimə və 1 il hüquqların məhdudlaşdırılması\n• Təkrar pozuntu - 2000 manat və 3 il hüquqların məhdudlaşdırılması\n• Qəza törətmə halında - cinayət məsuliyyəti\n• Yoxlamadan imtina - 1500 manat\n\nAlkohol və narkotik maddələr yol təhlükəsizliyinin ən böyük düşmənlərindəndir.',
+    videoSrc: '/video 6.mp4',
+    subsections: [
+      {
+        id: 'alcohol_testing',
+        title: 'Alkohol yoxlamasından imtina',
+        content: 'Alkohol yoxlamasından imtina etmə:\n• İlk imtina - 1500 manat və 2 il hüquq məhdudiyyəti\n• Təkrar imtina - 2500 manat və 4 il hüquq məhdudiyyəti\n\nYoxlamadan imtina etmək sərxoşluqla bərabər sayılır.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+      }
+    ]
   },
   {
     id: 'pedestrian_violations',
@@ -80,12 +106,57 @@ export const PENALTY_SECTIONS: PenaltySection[] = [
       {
         id: 'crosswalk_violations',
         title: 'Piyada keçidində pozuntular',
-        content: 'Piyada keçidində piyadaya yol verməmək - 100 manat cərimə. Piyadanın yaralanması halında əlavə məsuliyyət.'
+        content: 'Piyada keçidi pozuntuları:\n• Piyada keçidində piyadaya yol verməmək - 100 manat\n• Piyada keçidində dayanma - 80 manat\n• Piyadanın yaralanması halında - əlavə məsuliyyət və kompensasiya\n\nPiyadalar yolun ən zəif iştirakçılarıdır, onlara hörmət göstərin.',
+        videoSrc: '/video 6.mp4'
       },
       {
         id: 'sidewalk_driving',
         title: 'Səkidə hərəkət',
-        content: 'Səki və piyada yolları ilə hərəkət - 50 manat cərimə.'
+        content: 'Səki və piyada sahələrində hərəkət:\n• Səkidə hərəkət - 50 manat\n• Piyada zonalarında hərəkət - 100 manat\n• Parkda hərəkət - 80 manat\n\nSəkilər və piyada sahələri yalnız piyadalar üçündür.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+      },
+      {
+        id: 'school_zone_violations',
+        title: 'Məktəb zonalarında pozuntular',
+        content: 'Məktəb və uşaq bağçası yaxınlığında pozuntular:\n• Məktəb zonasında sürət aşımı - 150 manat\n• Uşaq keçidi yaxınlığında səhlənkarlıq - 200 manat\n• Məktəb saatlarında dayanma qadağasının pozulması - 100 manat\n\nUşaqların təhlükəsizliyi prioritetdir.',
+        videoSources: [
+          '/video 6.mp4',
+          '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'technical_violations',
+    title: 'Texniki pozuntular',
+    description: 'Avtomobilin texniki vəziyyəti ilə bağlı pozuntular',
+    subsections: [
+      {
+        id: 'lights_violations',
+        title: 'İşıq cihazları pozuntuları',
+        content: 'İşıq cihazlarının nasazlığı:\n• Fara nasazlığı - 40 manat\n• Stop siqnalının işləməməsi - 30 manat\n• Göstərici işıqların nasazlığı - 25 manat\n\nİşıq cihazları təhlükəsizlik üçün vacibdir.',
+        videoSrc: '/video 6.mp4'
+      },
+      {
+        id: 'tires_violations',
+        title: 'Təkər pozuntuları',
+        content: 'Təkərlərlə bağlı pozuntular:\n• Köhnə təkərlərlə hərəkət - 60 manat\n• Fərqli təkər növləri - 40 manat\n• Zəncirlərin düzgün quraşdırılmaması - 30 manat\n\nTəkərlər yolda ilk təmas nöqtəsidir.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
+      }
+    ]
+  },
+  {
+    id: 'environmental_violations',
+    title: 'Ekoloji pozuntular',
+    description: 'Ətraf mühitə zərər verən hərəkətlər',
+    content: 'Ekoloji pozuntular:\n• Həddindən artıq tüstü buraxma - 80 manat\n• Səs-küy həddinin aşılması - 60 manat\n• Yolda zibil atma - 40 manat\n• Yanacaq sızması - 100 manat\n\nƏtraf mühiti qoruyaq, gələcək nəsillərimiz üçün.',
+    videoSrc: '/video 6.mp4',
+    subsections: [
+      {
+        id: 'noise_violations',
+        title: 'Səs-küy pozuntuları',
+        content: 'Səs-küy pozuntuları:\n• Gecə saatlarında həddindən artıq səs - 100 manat\n• Yaşayış zonalarında siqnal istifadəsi - 50 manat\n• Modifikasiya edilmiş susturucular - 80 manat\n\nDigər insanların rahatlığını təmin edin.',
+        videoSrc: '/Maddə 49 NV-nin yerləşməsi 0002.mp4'
       }
     ]
   }

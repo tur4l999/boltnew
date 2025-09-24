@@ -105,7 +105,7 @@ export function VideoPlayer({ src, watermark, heightClass = 'h-48', is3D = false
         src={src}
         controls
         playsInline
-        className={`w-full ${heightClass} object-cover rounded-xl`}
+        className={`w-full ${heightClass} object-contain rounded-xl bg-black`}
       />
       
       {/* Custom Progress Bar */}
