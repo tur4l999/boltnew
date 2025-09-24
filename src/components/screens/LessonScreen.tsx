@@ -446,99 +446,99 @@ export function LessonScreen() {
                     </span>
                   </div>
                   
-                  <div className="space-y-4 ml-11">
+                  <div className="space-y-4 ml-6">
                     {/* Speed Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">🚗💨</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">🚗💨</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           Sürət həddinin pozulması (40-200 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/video 6.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
 
                     {/* Traffic Light Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">🚦</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">🚦</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           İşıqfor siqnallarının pozulması (100-200 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
 
                     {/* Document Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">📄</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">📄</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           Sənədlərlə bağlı pozuntular (100-500 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/video 6.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
 
                     {/* Pedestrian Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">🚶</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">🚶</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           Piyadaların hüquqlarının pozulması (50-200 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
 
                     {/* Alcohol Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">🍷</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">🍷</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           Sərxoşluq halında idarəetmə (1000-2000 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/video 6.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
 
                     {/* Parking Violations */}
-                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm">🅿️</span>
-                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                    <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-lg">🅿️</span>
+                        <span className={`text-base font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
                           Qadağan yerlərdə dayanma (20-100 manat)
                         </span>
                       </div>
                       <VideoPlayer 
                         src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
                         watermark="DDA.az"
-                        heightClass="h-32"
+                        heightClass="h-56"
                         is3D={false}
                       />
                     </div>
