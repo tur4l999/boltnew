@@ -88,7 +88,7 @@ export function StoreScreen() {
           : 'bg-gradient-to-br from-emerald-50 via-white to-emerald-100'
       }`}>
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="relative px-4 py-8">
+        <div className="relative px-4 py-6">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 mb-4">
               <div className={`w-2 h-2 rounded-full bg-emerald-500 animate-pulse`}></div>
@@ -102,14 +102,9 @@ export function StoreScreen() {
               Keyfiyyətli kitablar və <br />
               <span className="text-emerald-500">öyrənmə materialları</span>
             </h1>
-            <p className={`text-lg mb-6 max-w-md mx-auto ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              Sürücülük testləri və təhsil materialları üçün etibarlı mənbə
-            </p>
             
             {/* Promotional Banner */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg mt-2">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
               </svg>
