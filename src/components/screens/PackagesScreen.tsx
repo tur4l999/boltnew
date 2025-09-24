@@ -351,19 +351,23 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Popular Badge */}
+                  {/* Improved Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-6 py-2 rounded-full text-sm font-black shadow-xl border-2 border-white/20">
-                          <div className="flex items-center gap-2">
-                            <span className="text-yellow-300">⭐</span>
-                            <span>Ən Populyar</span>
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-4 py-1.5 rounded-full text-xs font-bold shadow-lg border transition-all duration-300 ${
+                          isDarkMode 
+                            ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
+                            : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
+                        }`}>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-yellow-300 text-sm">⭐</span>
+                            <span className="whitespace-nowrap">Ən Populyar</span>
                           </div>
                         </div>
                       </div>
-                      <div className="absolute top-4 right-4 text-3xl z-20 animate-bounce">
-                        🔥
+                      <div className="absolute top-3 right-3 text-2xl z-20">
+                        <div className="animate-pulse">🔥</div>
                       </div>
                     </>
                   )}
@@ -376,7 +380,7 @@ export function PackagesScreen() {
                   }`}></div>
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-10' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
@@ -406,20 +410,39 @@ export function PackagesScreen() {
                         </div>
                       </div>
 
-                      {/* Simple Pricing Display */}
+                      {/* Pricing with Compact Discount */}
                       <div className="relative">
-                        <div className="flex items-baseline justify-center gap-1 mb-3">
-                          <span className={`text-3xl font-black tracking-tighter ${
-                            pkg.popular 
-                              ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                              : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                          }`}>
-                            {calculatePrice(pkg.id)}
-                          </span>
-                          <span className={`text-lg font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            AZN
-                          </span>
-                        </div>
+                        {(() => {
+                          const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
+                          return (
+                            <div className="text-center">
+                              <div className="flex items-center justify-center gap-2 mb-2">
+                                <span className={`text-sm line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                  {oldPrice} AZN
+                                </span>
+                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                  pkg.popular 
+                                    ? 'bg-emerald-500 text-white'
+                                    : 'bg-red-500 text-white'
+                                }`}>
+                                  -{discountPercent}%
+                                </span>
+                              </div>
+                              <div className="flex items-baseline justify-center gap-1">
+                                <span className={`text-3xl font-black tracking-tighter ${
+                                  pkg.popular 
+                                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                                }`}>
+                                  {newPrice}
+                                </span>
+                                <span className={`text-lg font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  AZN
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
 
@@ -541,16 +564,31 @@ export function PackagesScreen() {
                     )}
                     
                     <div className="mb-3">
-                      <div className="flex items-baseline justify-center gap-1">
-                        <span className={`text-xl font-black ${
-                          isDarkMode ? 'text-purple-400' : 'text-purple-600'
-                        }`}>
-                          {item.newPrice}
-                        </span>
-                        <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                          AZN
-                        </span>
-                      </div>
+                      {(() => {
+                        const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
+                        return (
+                          <div className="text-center">
+                            <div className="flex items-center justify-center gap-1 mb-1">
+                              <span className={`text-xs line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                {item.oldPrice} AZN
+                              </span>
+                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500 text-white">
+                                -{discountPercent}%
+                              </span>
+                            </div>
+                            <div className="flex items-baseline justify-center gap-1">
+                              <span className={`text-xl font-black ${
+                                isDarkMode ? 'text-purple-400' : 'text-purple-600'
+                              }`}>
+                                {item.newPrice}
+                              </span>
+                              <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                AZN
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                     
                     <button 
