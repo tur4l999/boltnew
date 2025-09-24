@@ -37,7 +37,7 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
   return (
     <div
       onClick={onClick}
-      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 cursor-pointer transform hover:scale-[1.02] hover:shadow-xl ${
+      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 cursor-pointer transform hover:scale-[1.02] hover:shadow-xl h-full flex flex-col ${
         isDarkMode 
           ? 'bg-gray-800 border-gray-700 hover:border-gray-600' 
           : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-lg'
@@ -88,7 +88,7 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
         </div>
       </div>
       {/* Content */}
-      <div className="p-3 sm:p-4 flex flex-col h-full">
+      <div className="p-3 sm:p-4 flex flex-col flex-1">
         {/* Price */}
         <div className={`flex items-center justify-between mb-2 ${isOutOfStock ? 'opacity-50' : ''}`}>
           <div className="flex items-baseline gap-1 sm:gap-2">
