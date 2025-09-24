@@ -82,32 +82,32 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
             ref={imgRef}
             src={product.images[0]}
             alt={product.title}
-            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-32 sm:h-40 object-cover transition-transform duration-300 group-hover:scale-110"
           />
           <div className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
         </div>
       </div>
       {/* Content */}
-      <div className="p-4 flex flex-col h-full">
+      <div className="p-3 sm:p-4 flex flex-col h-full">
         {/* Price */}
         <div className={`flex items-center justify-between mb-2 ${isOutOfStock ? 'opacity-50' : ''}`}>
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+          <div className="flex items-baseline gap-1 sm:gap-2">
+            <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
               {hasDiscount ? discounted : product.price} ₼
             </span>
             {hasDiscount && (
-              <span className="text-sm line-through text-gray-400">{product.price} ₼</span>
+              <span className="text-xs sm:text-sm line-through text-gray-400">{product.price} ₼</span>
             )}
           </div>
           {isOutOfStock && (
-            <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-red-500 bg-red-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
               Stokda yox
             </span>
           )}
         </div>
 
         {/* Title */}
-        <h3 className={`font-semibold text-base leading-tight mb-2 line-clamp-2 min-h-[2.5rem] ${
+        <h3 className={`font-semibold text-sm sm:text-base leading-tight mb-2 line-clamp-2 min-h-[2.5rem] ${
           isDarkMode ? 'text-gray-100' : 'text-gray-900'
         }`}>
           {product.title}
@@ -115,12 +115,12 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
 
         {/* Rating and Reviews */}
         {!isOutOfStock && (
-          <div className="flex items-center gap-1 mb-3">
+          <div className="flex items-center gap-1 mb-2 sm:mb-3">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <span 
                   key={i} 
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm ${
                     i < Math.round(product.rating ?? 4) 
                       ? 'text-yellow-400' 
                       : isDarkMode ? 'text-gray-600' : 'text-gray-300'
@@ -144,13 +144,13 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
               e.stopPropagation();
               onAddToCart?.(imgRef.current);
             }}
-            className={`w-full py-2.5 px-4 rounded-xl font-medium text-sm transition-all duration-200 ${
+            className={`w-full py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 ${
               isOutOfStock
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transform hover:scale-[1.02]'
             }`}
           >
-            {isOutOfStock ? '❌ Stokda yoxdur' : '🛒 Səbətə əlavə et'}
+            {isOutOfStock ? '❌ Stokda yox' : '🛒 Səbətə at'}
           </button>
         </div>
       </div>

@@ -155,67 +155,37 @@ export function StoreScreen() {
               )}
             </div>
 
-            {/* Filter Controls */}
-            <div className="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-3">
-              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 sm:pb-0">
-                {/* Quick Filter Chips */}
-                <button
-                  onClick={() => setInStockOnly(!inStockOnly)}
-                  className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] sm:min-h-auto ${
-                    inStockOnly
-                      ? 'bg-emerald-500 text-white shadow-md'
-                      : isDarkMode
-                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  📦 Stokda var
-                </button>
-                <button
-                  onClick={() => setDiscountOnly(!discountOnly)}
-                  className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 min-h-[44px] sm:min-h-auto ${
-                    discountOnly
-                      ? 'bg-pink-500 text-white shadow-md'
-                      : isDarkMode
-                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  🏷️ Endirimli
-                </button>
-              </div>
+            {/* Search Controls */}
+            <div className="flex items-center gap-2">
+              <select
+                value={sort}
+                onChange={e=>setSort(e.target.value as any)}
+                className={`flex-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
+              >
+                <option value="relevance">Sırala</option>
+                <option value="priceAsc">Qiymət: Artan</option>
+                <option value="priceDesc">Qiymət: Azalan</option>
+                <option value="titleAsc">Ad: A-Z</option>
+                <option value="titleDesc">Ad: Z-A</option>
+                <option value="ratingDesc">Ən yaxşı reytinq</option>
+              </select>
               
-              <div className="flex items-center gap-2">
-                <select
-                  value={sort}
-                  onChange={e=>setSort(e.target.value as any)}
-                  className={`flex-1 sm:flex-none px-3 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors min-h-[44px] sm:min-h-auto ${
-                    isDarkMode 
-                      ? 'bg-gray-700 border-gray-600 text-gray-100' 
-                      : 'bg-white border-gray-300 text-gray-900'
-                  }`}
-                >
-                  <option value="relevance">Sırala</option>
-                  <option value="priceAsc">Qiymət: Artan</option>
-                  <option value="priceDesc">Qiymət: Azalan</option>
-                  <option value="titleAsc">Ad: A-Z</option>
-                  <option value="titleDesc">Ad: Z-A</option>
-                  <option value="ratingDesc">Ən yaxşı reytinq</option>
-                </select>
-                
-                <button
-                  onClick={() => setShowAdvanced(v => !v)}
-                  className={`p-2 rounded-lg border transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                    showAdvanced
-                      ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
-                      : isDarkMode
-                      ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
-                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <SlidersHorizontal size={16} />
-                </button>
-              </div>
+              <button
+                onClick={() => setShowAdvanced(v => !v)}
+                className={`p-3 rounded-lg border transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  showAdvanced
+                    ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
+                    : isDarkMode
+                    ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <SlidersHorizontal size={18} />
+              </button>
             </div>
           </div>
         </div>
@@ -243,6 +213,39 @@ export function StoreScreen() {
             </div>
           
             <div className="space-y-4">
+              {/* Quick Filter Chips */}
+              <div>
+                <label className={`block text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  🔍 Sürətli filterlər
+                </label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => setInStockOnly(!inStockOnly)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      inStockOnly
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    📦 Stokda var
+                  </button>
+                  <button
+                    onClick={() => setDiscountOnly(!discountOnly)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      discountOnly
+                        ? 'bg-pink-500 text-white shadow-md'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    🏷️ Endirimli
+                  </button>
+                </div>
+              </div>
+
               {/* Price Range */}
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -353,7 +356,7 @@ export function StoreScreen() {
         )}
 
         {/* Modern Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-8">
           {filtered.map((p, idx) => (
             <ProductCard
               key={p.id}
