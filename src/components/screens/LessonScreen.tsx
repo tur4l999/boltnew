@@ -446,14 +446,103 @@ export function LessonScreen() {
                     </span>
                   </div>
                   
-                  <ul className={`text-sm space-y-2 ml-11 ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
-                    <li>• Sürət həddinin pozulması (40-200 manat)</li>
-                    <li>• İşıqfor siqnallarının pozulması (100-200 manat)</li>
-                    <li>• Sənədlərlə bağlı pozuntular (100-500 manat)</li>
-                    <li>• Piyadaların hüquqlarının pozulması (50-200 manat)</li>
-                    <li>• Sərxoşluq halında idarəetmə (1000-2000 manat)</li>
-                    <li>• Qadağan yerlərdə dayanma (20-100 manat)</li>
-                  </ul>
+                  <div className="space-y-4 ml-11">
+                    {/* Speed Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">🚗💨</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          Sürət həddinin pozulması (40-200 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/video 6.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+
+                    {/* Traffic Light Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">🚦</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          İşıqfor siqnallarının pozulması (100-200 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+
+                    {/* Document Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">📄</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          Sənədlərlə bağlı pozuntular (100-500 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/video 6.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+
+                    {/* Pedestrian Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">🚶</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          Piyadaların hüquqlarının pozulması (50-200 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+
+                    {/* Alcohol Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">🍷</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          Sərxoşluq halında idarəetmə (1000-2000 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/video 6.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+
+                    {/* Parking Violations */}
+                    <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-red-900/20' : 'bg-red-100/30'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm">🅿️</span>
+                        <span className={`text-sm font-medium ${isDarkMode ? 'text-red-200' : 'text-red-800'}`}>
+                          Qadağan yerlərdə dayanma (20-100 manat)
+                        </span>
+                      </div>
+                      <VideoPlayer 
+                        src="/Maddə 49 NV-nin yerləşməsi 0002.mp4"
+                        watermark="DDA.az"
+                        heightClass="h-32"
+                        is3D={false}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -486,46 +575,6 @@ export function LessonScreen() {
                   <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
 
-                {/* Progress Section for Penalties */}
-                <div className={`mt-4 p-4 rounded-2xl ${
-                  isDarkMode 
-                    ? 'bg-red-800/20 border border-red-700/30' 
-                    : 'bg-red-50/50 border border-red-200/30'
-                }`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center">
-                        <span className="text-white text-xs">📊</span>
-                      </div>
-                      <span className={`text-sm font-bold ${isDarkMode ? 'text-red-100' : 'text-red-900'}`}>
-                        Cərimə Bilgisi
-                      </span>
-                    </div>
-                    <span className={`text-sm font-bold text-red-500`}>
-                      6 bölmə
-                    </span>
-                  </div>
-                  
-                  <div className={`w-full h-3 rounded-full overflow-hidden ${
-                    isDarkMode ? 'bg-red-900/50' : 'bg-red-200/50'
-                  }`}>
-                    <div 
-                      className="h-full bg-gradient-to-r from-red-400 via-orange-400 to-red-500 rounded-full relative overflow-hidden"
-                      style={{ width: '100%' }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent animate-pulse"></div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between mt-2 text-xs">
-                    <span className={isDarkMode ? 'text-red-300' : 'text-red-700'}>
-                      Hazır
-                    </span>
-                    <span className={isDarkMode ? 'text-red-300' : 'text-red-700'}>
-                      Tam Məlumat
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -696,66 +745,67 @@ export function LessonScreen() {
         {/* Tab Content */}
         {renderTabContent()}
 
-        {/* Modern Action Buttons */}
-        <div className="mt-4 space-y-4">
-          {/* Primary Actions */}
-          <div className="grid grid-cols-1 gap-4">
-            <button
-              onClick={() => navigate('Practice', { moduleId })}
-              className={`group relative overflow-hidden p-6 rounded-3xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl ${
-                isDarkMode
-                  ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-emerald-500/25'
-                  : 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-emerald-500/25'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-2xl">❓</span>
-                </div>
-                <div className="text-left">
-                  <div className="text-lg font-bold">Sualları Həll Et</div>
-                  <div className="text-sm text-white/80">Test və tapşırıqlar</div>
-                </div>
-                <div className="ml-auto">
-                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                    <span className="text-white">→</span>
+        {/* Modern Action Buttons - Hide in penalties tab */}
+        {activeTab !== 'penalties' && (
+          <div className="mt-4 space-y-4">
+            {/* Primary Actions */}
+            <div className="grid grid-cols-1 gap-4">
+              <button
+                onClick={() => navigate('Practice', { moduleId })}
+                className={`group relative overflow-hidden p-6 rounded-3xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl ${
+                  isDarkMode
+                    ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-emerald-500/25'
+                    : 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-emerald-500/25'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <span className="text-2xl">❓</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-lg font-bold">Sualları Həll Et</div>
+                    <div className="text-sm text-white/80">Test və tapşırıqlar</div>
+                  </div>
+                  <div className="ml-auto">
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <span className="text-white">→</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+                
+                {/* Hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
 
-            <button
-              onClick={() => alert('Başqa imtahan növü (demo)')}
-              className={`group relative overflow-hidden p-6 rounded-3xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl ${
-                isDarkMode
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-blue-500/25'
-                  : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-blue-500/25'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-2xl">📋</span>
-                </div>
-                <div className="text-left">
-                  <div className="text-lg font-bold">İmtahana Başla</div>
-                  <div className="text-sm text-white/80">Biliklərinizi yoxlayın</div>
-                </div>
-                <div className="ml-auto">
-                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                    <span className="text-white">→</span>
+              <button
+                onClick={() => alert('Başqa imtahan növü (demo)')}
+                className={`group relative overflow-hidden p-6 rounded-3xl transition-all duration-300 transform hover:scale-[1.02] shadow-xl ${
+                  isDarkMode
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-blue-500/25'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-blue-500/25'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <span className="text-2xl">📋</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-lg font-bold">İmtahana Başla</div>
+                    <div className="text-sm text-white/80">Biliklərinizi yoxlayın</div>
+                  </div>
+                  <div className="ml-auto">
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                      <span className="text-white">→</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+                
+                {/* Hover effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
           </div>
-
-        </div>
+        )}
       </div>
     </div>
     {showPurchasePopup && (
