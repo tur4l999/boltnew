@@ -366,6 +366,9 @@ export function PackagesScreen() {
                           </div>
                         </div>
                       </div>
+                      <div className="absolute top-3 right-3 text-2xl z-20">
+                        <div className="animate-pulse">🔥</div>
+                      </div>
                     </>
                   )}
 
@@ -391,7 +394,7 @@ export function PackagesScreen() {
                               ? 'bg-gray-700/50 border border-gray-600/30'
                               : 'bg-gray-100 border border-gray-200/50'
                         }`}>
-                          {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '🚀' : '👑'}
+{pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </div>
                         <div>
                           <h3 className={`text-lg font-bold tracking-tight ${
@@ -522,7 +525,7 @@ export function PackagesScreen() {
                     >
                       <div className="relative flex items-center justify-center gap-2">
                         <span className="text-lg">
-                          {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '🚀' : '👑'}
+{pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </span>
                         <span>Paketi Al - {calculatePrice(pkg.id)} AZN</span>
                       </div>
