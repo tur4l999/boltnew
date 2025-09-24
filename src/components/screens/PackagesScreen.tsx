@@ -339,72 +339,93 @@ export function PackagesScreen() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {packages.map((pkg, index) => (
               <div key={pkg.id} className="relative group">
-                {/* Modern Package Card */}
-                <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl ${
+                {/* Enhanced Package Card */}
+                <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 group-hover:scale-[1.03] ${
                   pkg.popular 
                     ? isDarkMode 
-                      ? 'bg-gradient-to-br from-emerald-900/40 via-green-900/30 to-emerald-800/40 border-emerald-500/50 shadow-emerald-500/20 shadow-lg'
-                      : 'bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-100 border-emerald-300/50 shadow-emerald-500/20 shadow-lg'
+                      ? 'bg-gradient-to-br from-emerald-900/50 via-green-900/40 to-teal-900/50 border-emerald-400/60 shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-400/40 hover:border-emerald-300/80'
+                      : 'bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 border-emerald-400/60 shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-400/50 hover:border-emerald-500/80'
                     : isDarkMode
-                      ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600/70'
-                      : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70'
+                      ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600/70 hover:shadow-lg'
+                      : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70 hover:shadow-lg'
                 }`}>
                   
 
-                  {/* Improved Popular Badge */}
+                  {/* Premium Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-4 py-1.5 rounded-full text-xs font-bold shadow-lg border transition-all duration-300 ${
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`relative px-5 py-2 rounded-full text-sm font-black shadow-xl border-2 transition-all duration-500 hover:scale-105 ${
                           isDarkMode 
-                            ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
-                            : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
+                            ? 'bg-gradient-to-r from-emerald-600 via-green-500 to-teal-600 text-white border-yellow-400/50'
+                            : 'bg-gradient-to-r from-emerald-500 via-green-400 to-teal-500 text-white border-yellow-400/60'
                         }`}>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-yellow-300 text-sm">⭐</span>
-                            <span className="whitespace-nowrap">Ən Populyar</span>
+                          {/* Glow effect */}
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400/20 to-orange-400/20 blur-md animate-pulse"></div>
+                          
+                          <div className="relative flex items-center gap-2">
+                            <span className="text-yellow-300 animate-spin-slow">⭐</span>
+                            <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
+                            <span className="text-yellow-300 animate-spin-slow">⭐</span>
                           </div>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 text-2xl z-20">
-                        <div className="animate-pulse">🔥</div>
+                      
+                      {/* Floating Elements */}
+                      <div className="absolute top-2 right-2 text-2xl z-20">
+                        <div className="animate-bounce">🚀</div>
+                      </div>
+                      <div className="absolute top-6 right-6 text-lg z-20">
+                        <div className="animate-pulse opacity-80">💎</div>
                       </div>
                     </>
                   )}
 
-                  {/* Decorative Elements */}
+                  {/* Enhanced Decorative Elements */}
                   <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-all duration-700 group-hover:scale-150 ${
                     pkg.popular 
-                      ? 'bg-gradient-to-br from-emerald-400/30 to-green-400/30'
+                      ? 'bg-gradient-to-br from-emerald-400/40 to-green-400/40 group-hover:from-emerald-300/50 group-hover:to-green-300/50'
                       : 'bg-gradient-to-br from-blue-400/20 to-purple-400/20'
                   }`}></div>
                   
+                  {/* Additional glow for popular package */}
+                  {pkg.popular && (
+                    <>
+                      <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl translate-y-12 -translate-x-12 bg-gradient-to-tr from-teal-400/20 to-emerald-400/20 transition-all duration-700 group-hover:scale-125"></div>
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </>
+                  )}
+                  
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-10' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
                       <div className="flex items-center justify-center gap-2 mb-2">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-300 ${
                           pkg.popular 
                             ? isDarkMode 
-                              ? 'bg-emerald-500/20 border border-emerald-400/30'
-                              : 'bg-emerald-100 border border-emerald-300/50'
+                              ? 'bg-gradient-to-br from-emerald-500/30 to-green-500/30 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-400/40'
+                              : 'bg-gradient-to-br from-emerald-200 to-green-200 border-2 border-emerald-400/60 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-400/40'
                             : isDarkMode
                               ? 'bg-gray-700/50 border border-gray-600/30'
                               : 'bg-gray-100 border border-gray-200/50'
-                        }`}>
+                        } ${pkg.popular ? 'hover:scale-110' : ''}`}>
                           {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '🚀' : '👑'}
                         </div>
                         <div>
-                          <h3 className={`text-lg font-bold tracking-tight ${
+                          <h3 className={`font-black tracking-tight transition-all duration-300 ${
                             pkg.popular 
-                              ? (isDarkMode ? 'text-emerald-300' : 'text-emerald-700') 
-                              : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                              ? (isDarkMode ? 'text-xl text-emerald-300 drop-shadow-sm' : 'text-xl text-emerald-700 drop-shadow-sm') 
+                              : isDarkMode ? 'text-lg text-gray-100' : 'text-lg text-gray-900'
                           }`}>
                             {pkg.name}
                           </h3>
-                          <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          <p className={`text-xs font-medium ${
+                            pkg.popular 
+                              ? isDarkMode ? 'text-emerald-400/80' : 'text-emerald-600/80'
+                              : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
                             {selectedDays[pkg.id]} gün müddətinə
                           </p>
                         </div>
@@ -420,23 +441,31 @@ export function PackagesScreen() {
                                 <span className={`text-sm line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                                   {oldPrice} AZN
                                 </span>
-                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-lg transition-all duration-300 hover:scale-105 ${
                                   pkg.popular 
-                                    ? 'bg-emerald-500 text-white'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white animate-pulse'
                                     : 'bg-red-500 text-white'
                                 }`}>
-                                  -{discountPercent}%
+                                  -{discountPercent}% ENDİRİM
                                 </span>
                               </div>
                               <div className="flex items-baseline justify-center gap-1">
-                                <span className={`text-3xl font-black tracking-tighter ${
+                                <span className={`font-black tracking-tighter transition-all duration-300 ${
                                   pkg.popular 
-                                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                                    ? isDarkMode 
+                                      ? 'text-4xl text-emerald-400 drop-shadow-lg'
+                                      : 'text-4xl text-emerald-600 drop-shadow-lg'
+                                    : isDarkMode 
+                                      ? 'text-3xl text-gray-100' 
+                                      : 'text-3xl text-gray-900'
                                 }`}>
                                   {newPrice}
                                 </span>
-                                <span className={`text-lg font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                <span className={`font-bold ${
+                                  pkg.popular 
+                                    ? isDarkMode ? 'text-xl text-emerald-300' : 'text-xl text-emerald-700'
+                                    : isDarkMode ? 'text-lg text-gray-300' : 'text-lg text-gray-700'
+                                }`}>
                                   AZN
                                 </span>
                               </div>
@@ -512,22 +541,35 @@ export function PackagesScreen() {
                       </div>
                     </div>
 
-                    {/* Compact CTA Button */}
+                    {/* Enhanced CTA Button */}
                     <button
                       onClick={() => handlePurchasePackage(pkg.id)}
-                      className={`w-full relative overflow-hidden rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 group hover:scale-[1.02] active:scale-[0.98] ${
+                      className={`w-full relative overflow-hidden rounded-2xl py-4 px-6 font-black text-sm transition-all duration-300 group active:scale-[0.98] ${
                         pkg.popular 
-                          ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-md'
+                          ? 'bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-600 hover:via-green-600 hover:to-teal-600 text-white shadow-xl shadow-emerald-500/30 hover:shadow-emerald-400/50 hover:scale-[1.05] animate-glow'
                           : isDarkMode
-                            ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white shadow-md'
-                            : 'bg-gradient-to-r from-gray-100 to-white hover:from-gray-200 hover:to-gray-50 text-gray-900 border border-gray-300 shadow-md'
+                            ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white shadow-md hover:scale-[1.02]'
+                            : 'bg-gradient-to-r from-gray-100 to-white hover:from-gray-200 hover:to-gray-50 text-gray-900 border border-gray-300 shadow-md hover:scale-[1.02]'
                       }`}
                     >
-                      <div className="relative flex items-center justify-center gap-2">
-                        <span className="text-lg">
+                      {/* Enhanced Button Effects */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      {pkg.popular && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-orange-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      )}
+                      
+                      <div className="relative flex items-center justify-center gap-3">
+                        <span className={`text-xl transition-transform duration-300 group-hover:scale-110 ${pkg.popular ? 'animate-bounce' : ''}`}>
                           {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '🚀' : '👑'}
                         </span>
-                        <span>Paketi Al - {calculatePrice(pkg.id)} AZN</span>
+                        <div className="flex flex-col">
+                          <span className={`text-xs ${pkg.popular ? 'text-yellow-100' : ''}`}>
+                            {pkg.popular ? 'MÜKƏMMəL SEÇİM' : 'Paketi Al'}
+                          </span>
+                          <span className="text-lg font-black">
+                            {calculatePrice(pkg.id)} AZN
+                          </span>
+                        </div>
                       </div>
                     </button>
                   </div>
