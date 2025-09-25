@@ -55,24 +55,26 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
           </svg>
         </button>
 
-        {/* Badges */}
-        {(hasDiscount || isBestseller) && (
+        {/* Discount and Time Badges */}
+        {hasDiscount && (
           <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
-            {hasDiscount && (
-              <div className="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
-                -{product.discountPercent}%
-              </div>
-            )}
-            {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
-              <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg animate-pulse">
+            <div className="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg w-fit">
+              -{product.discountPercent}%
+            </div>
+            {typeof hoursLeft === 'number' && hoursLeft > 0 && (
+              <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse w-fit">
                 ⏰ {hoursLeft}s
               </div>
             )}
-            {isBestseller && (
-              <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
-                🏆 Bestseller
-              </div>
-            )}
+          </div>
+        )}
+
+        {/* Bestseller Badge - Bottom of Image */}
+        {isBestseller && (
+          <div className="absolute bottom-2 left-3 z-10">
+            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg w-fit">
+              🏆 Bestseller
+            </div>
           </div>
         )}
 
