@@ -387,113 +387,55 @@ export function StoreScreen() {
           </div>
         )}
 
-        {/* Modern Payment Methods & Trust Section */}
-        <div className={`mt-8 rounded-3xl border shadow-xl overflow-hidden ${
+        {/* Compact Payment & Services Section */}
+        <div className={`mt-6 rounded-2xl border shadow-lg overflow-hidden ${
           isDarkMode 
-            ? 'bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700' 
-            : 'bg-gradient-to-br from-white to-gray-50 border-gray-200'
+            ? 'bg-gray-800/90 border-gray-700' 
+            : 'bg-white border-gray-200'
         }`}>
-          <div className="p-6">
-            <h3 className={`text-xl font-bold text-center mb-6 ${
-              isDarkMode ? 'text-gray-100' : 'text-gray-900'
-            }`}>
-              Ödəniş və xidmətlər
-            </h3>
-          
-            {/* Payment Methods */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <div className={`group p-3 sm:p-4 rounded-2xl text-center transition-all duration-300 cursor-pointer transform hover:scale-105 min-h-[80px] flex flex-col justify-center ${
-              isDarkMode 
-                ? 'bg-gray-700/50 hover:bg-gray-700 border border-gray-600' 
-                : 'bg-white hover:bg-gray-50 border border-gray-200 shadow-sm hover:shadow-md'
-            }`}>
-              <div className="text-2xl sm:text-3xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform">💳</div>
-              <div className={`text-sm font-medium ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Bank kartı</div>
-              <div className={`text-xs mt-1 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}>Visa, Mastercard</div>
-            </div>
-            
-            <div className={`group p-3 sm:p-4 rounded-2xl text-center transition-all duration-300 cursor-pointer transform hover:scale-105 min-h-[80px] flex flex-col justify-center ${
-              isDarkMode 
-                ? 'bg-gray-700/50 hover:bg-gray-700 border border-gray-600' 
-                : 'bg-white hover:bg-gray-50 border border-gray-200 shadow-sm hover:shadow-md'
-            }`}>
-              <div className="text-2xl sm:text-3xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform">📱</div>
-              <div className={`text-sm font-medium ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Mobil ödəniş</div>
-              <div className={`text-xs mt-1 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}>Kapital, Express</div>
-            </div>
-            
-            <div className={`group p-3 sm:p-4 rounded-2xl text-center transition-all duration-300 cursor-pointer transform hover:scale-105 min-h-[80px] flex flex-col justify-center ${
-              isDarkMode 
-                ? 'bg-gray-700/50 hover:bg-gray-700 border border-gray-600' 
-                : 'bg-white hover:bg-gray-50 border border-gray-200 shadow-sm hover:shadow-md'
-            }`}>
-              <div className="text-2xl sm:text-3xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform">🏦</div>
-              <div className={`text-sm font-medium ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>Bank köçürməsi</div>
-              <div className={`text-xs mt-1 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}>Bütün banklar</div>
-            </div>
-          </div>
+          <div className="p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+              {/* Payment Methods - Horizontal */}
+              <div className="flex items-center gap-3 sm:gap-4">
+                <h3 className={`text-sm font-semibold ${
+                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                }`}>
+                  Ödəniş:
+                </h3>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-1">
+                    <span className="text-base sm:text-lg">💳</span>
+                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Kart</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base sm:text-lg">📱</span>
+                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Mobil</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-base sm:text-lg">🏦</span>
+                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Bank</span>
+                  </div>
+                </div>
+              </div>
 
-          {/* Trust Indicators */}
-          <div className={`border-t pt-6 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <span className="text-emerald-600 text-lg">🔒</span>
+              {/* Trust Indicators - Horizontal */}
+              <div className="flex items-center gap-2 sm:gap-4">
+                <div className="flex items-center gap-1">
+                  <span className="text-emerald-500 text-sm">🔒</span>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Təhlükəsiz</span>
                 </div>
-                <div className="text-left">
-                  <div className={`font-medium text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Təhlükəsiz ödəniş
-                  </div>
-                  <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    256-bit şifrələmə
-                  </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-500 text-sm">⚡</span>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Sürətli</span>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-blue-600 text-lg">⚡</span>
-                </div>
-                <div className="text-left">
-                  <div className={`font-medium text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Sürətli çatdırılma
-                  </div>
-                  <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    1-2 iş günü
-                  </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-purple-500 text-sm">🎯</span>
+                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>7/24</span>
                 </div>
               </div>
-              
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                  <span className="text-purple-600 text-lg">🎯</span>
-                </div>
-                <div className="text-left">
-                  <div className={`font-medium text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    7/24 dəstək
-                  </div>
-                  <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Həmişə yanınızdayıq
-                  </div>
-                </div>
-              </div>
-            </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }
