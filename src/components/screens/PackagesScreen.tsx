@@ -339,105 +339,68 @@ export function PackagesScreen() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
             {packages.map((pkg, index) => (
               <div key={pkg.id} className="relative group">
-                {/* Modern Package Card */}
-                <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 group-hover:scale-[1.03] group-hover:shadow-3xl group-hover:-translate-y-2 ${
+                {/* Simple Package Card */}
+                <div className={`relative overflow-hidden rounded-2xl border transition-all duration-200 hover:shadow-lg ${
                   pkg.popular 
                     ? isDarkMode 
-                      ? 'bg-gradient-to-br from-emerald-900/50 via-green-900/40 to-emerald-800/50 border-emerald-400/60 shadow-emerald-500/30 shadow-2xl ring-1 ring-emerald-400/20'
-                      : 'bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-100 border-emerald-400/60 shadow-emerald-500/30 shadow-2xl ring-1 ring-emerald-400/30'
+                      ? 'bg-emerald-900/20 border-emerald-500/50 shadow-emerald-500/20'
+                      : 'bg-emerald-50 border-emerald-300 shadow-emerald-500/20'
                     : pkg.id === 'basic'
                       ? isDarkMode
-                        ? 'bg-gradient-to-br from-red-900/30 via-orange-900/20 to-red-800/30 border-red-500/40 hover:border-red-400/60 shadow-red-500/20 shadow-lg'
-                        : 'bg-gradient-to-br from-red-50 via-orange-50 to-red-100 border-red-300/50 hover:border-red-400/60 shadow-red-500/20 shadow-lg'
+                        ? 'bg-red-900/20 border-red-500/50 shadow-red-500/20'
+                        : 'bg-red-50 border-red-300 shadow-red-500/20'
                       : isDarkMode
-                        ? 'bg-gradient-to-br from-gray-800/70 via-gray-900/50 to-gray-800/70 border-gray-600/50 hover:border-gray-500/70 shadow-gray-900/30 shadow-lg'
-                        : 'bg-gradient-to-br from-white via-gray-50 to-white border-gray-300/50 hover:border-gray-400/70 shadow-gray-500/10 shadow-lg'
+                        ? 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                        : 'bg-white border-gray-200 hover:border-gray-300'
                 }`}>
                   
 
-                  {/* Enhanced Popular Badge */}
+                  {/* Simple Popular Badge */}
                   {pkg.popular && (
-                    <>
-                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`relative px-8 py-3 rounded-full backdrop-blur-md border-2 shadow-2xl transition-all duration-300 ${
-                          isDarkMode 
-                            ? 'bg-emerald-500/90 border-emerald-300/60 text-white shadow-emerald-500/30'
-                            : 'bg-emerald-500/95 border-emerald-300/70 text-white shadow-emerald-500/40'
-                        }`}>
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-transparent to-green-400/20 rounded-full"></div>
-                          <div className="relative flex items-center gap-2">
-                            <span className="text-lg animate-pulse">⭐</span>
-                            <span className="text-sm font-black tracking-widest whitespace-nowrap">ƏN POPULYAR</span>
-                          </div>
-                        </div>
+                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-30">
+                      <div className={`px-4 py-1.5 rounded-full text-xs font-bold shadow-lg ${
+                        isDarkMode 
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-emerald-500 text-white'
+                      }`}>
+                        ƏN POPULYAR
                       </div>
-                      <div className="absolute top-2 right-2 text-xl z-20">
-                        <div className="animate-bounce">🔥</div>
-                      </div>
-                    </>
+                    </div>
                   )}
                   
-                  {/* Improved Discount for Basic Package */}
+                  {/* Simple Discount for Basic Package */}
                   {pkg.id === 'basic' && (
-                    <div className="absolute -top-2 left-3 right-3 z-20">
-                      <div className="bg-gradient-to-r from-red-500 via-orange-500 to-red-600 text-white text-center py-2 px-3 text-sm font-bold rounded-2xl shadow-lg border-2 border-red-400/50 backdrop-blur-sm">
-                        <div className="flex items-center justify-center gap-1.5">
-                          <span className="animate-pulse text-base">⏰</span>
-                          <span className="text-xs leading-tight">MƏHDUD FÜRSƏT</span>
-                        </div>
-                        <div className="text-xs mt-0.5 opacity-90">
-                          Bitəcək: {formatRemaining(promoEndsAt - nowTs)}
-                        </div>
+                    <div className="absolute top-2 right-2 z-20">
+                      <div className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">
+                        ⏰ Endirim
                       </div>
                     </div>
                   )}
 
-                  {/* Enhanced Decorative Elements */}
-                  <div className={`absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl -translate-y-20 translate-x-20 transition-all duration-700 group-hover:scale-150 ${
-                    pkg.popular 
-                      ? 'bg-gradient-to-br from-emerald-400/40 via-green-400/30 to-emerald-500/40'
-                      : pkg.id === 'basic'
-                        ? 'bg-gradient-to-br from-red-400/35 via-orange-400/25 to-red-500/35 group-hover:from-red-300/45 group-hover:to-orange-300/45'
-                        : 'bg-gradient-to-br from-blue-400/25 via-purple-400/20 to-blue-500/25'
-                  }`}></div>
-                  
-                  {/* Additional glow effects */}
-                  <div className={`absolute bottom-0 left-0 w-32 h-32 rounded-full blur-2xl translate-y-16 -translate-x-16 transition-all duration-700 group-hover:scale-125 ${
-                    pkg.popular 
-                      ? 'bg-gradient-to-tr from-green-400/20 via-emerald-400/15 to-green-500/20'
-                      : pkg.id === 'basic'
-                        ? 'bg-gradient-to-tr from-orange-400/20 via-red-400/15 to-orange-500/20'
-                        : 'bg-gradient-to-tr from-purple-400/15 via-blue-400/10 to-purple-500/15'
-                  }`}></div>
-                  
-                  {/* Center glow for premium package */}
-                  {pkg.id === 'pro' && (
-                    <div className="absolute top-1/2 left-1/2 w-28 h-28 rounded-full blur-2xl -translate-x-14 -translate-y-14 bg-gradient-to-r from-blue-500/15 via-purple-500/20 to-blue-600/15 transition-all duration-700 group-hover:scale-150"></div>
-                  )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 sm:p-6 ${pkg.popular ? 'pt-8 sm:pt-10' : pkg.id === 'basic' ? 'pt-12 sm:pt-14' : 'pt-4 sm:pt-6'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : 'pt-4'}`}>
                     
                     {/* Package Header */}
-                    <div className="text-center mb-6">
-                      <div className="flex flex-col items-center gap-3 mb-4">
-                        <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl backdrop-blur-sm border-2 transition-all duration-300 group-hover:scale-110 ${
+                    <div className="text-center mb-4">
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg ${
                           pkg.popular 
                             ? isDarkMode 
-                              ? 'bg-emerald-500/30 border-emerald-400/50 shadow-emerald-500/20'
-                              : 'bg-emerald-200/60 border-emerald-400/60 shadow-emerald-500/30'
+                              ? 'bg-emerald-500/20 text-emerald-300'
+                              : 'bg-emerald-100 text-emerald-700'
                             : pkg.id === 'basic'
                               ? isDarkMode
-                                ? 'bg-red-500/20 border-red-400/40 shadow-red-500/20'
-                                : 'bg-red-200/50 border-red-400/50 shadow-red-500/20'
+                                ? 'bg-red-500/20 text-red-300'
+                                : 'bg-red-100 text-red-700'
                               : isDarkMode
-                                ? 'bg-gray-700/60 border-gray-600/40 shadow-gray-500/20'
-                                : 'bg-gray-200/60 border-gray-400/40 shadow-gray-500/20'
-                        } shadow-lg`}>
+                                ? 'bg-gray-700/50 text-gray-300'
+                                : 'bg-gray-100 text-gray-700'
+                        }`}>
                           {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </div>
                         <div>
-                          <h3 className={`text-lg sm:text-xl font-black tracking-tight mb-1 ${
+                          <h3 className={`text-base font-bold ${
                             pkg.popular 
                               ? (isDarkMode ? 'text-emerald-200' : 'text-emerald-800') 
                               : pkg.id === 'basic'
@@ -446,71 +409,57 @@ export function PackagesScreen() {
                           }`}>
                             {pkg.name}
                           </h3>
-                          <p className={`text-sm font-medium ${
+                          <p className={`text-xs ${
                             pkg.popular 
                               ? (isDarkMode ? 'text-emerald-400' : 'text-emerald-600') 
                               : pkg.id === 'basic'
                                 ? (isDarkMode ? 'text-red-400' : 'text-red-600')
                                 : isDarkMode ? 'text-gray-400' : 'text-gray-600'
                           }`}>
-                            {selectedDays[pkg.id]} gün müddətinə
+                            {selectedDays[pkg.id]} gün
                           </p>
                         </div>
                       </div>
 
-                      {/* Enhanced Pricing Display */}
-                      <div className="relative mb-4">
+                      {/* Compact Pricing Display */}
+                      <div className="mb-3">
                         {(() => {
                           const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
                           return (
                             <div className="text-center">
-                              <div className="flex items-center justify-center gap-3 mb-3">
-                                <span className={`text-lg line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                              <div className="flex items-center justify-center gap-2 mb-2">
+                                <span className={`text-sm line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                                   {oldPrice} AZN
                                 </span>
-                                <span className={`px-3 py-1.5 rounded-full text-sm font-black shadow-lg backdrop-blur-sm border ${
+                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                                   pkg.popular 
-                                    ? 'bg-emerald-500/90 text-white border-emerald-400/50 shadow-emerald-500/30'
+                                    ? 'bg-emerald-500 text-white'
                                     : pkg.id === 'basic'
-                                      ? 'bg-red-500/90 text-white border-red-400/50 shadow-red-500/30'
-                                      : 'bg-blue-500/90 text-white border-blue-400/50 shadow-blue-500/30'
+                                      ? 'bg-red-500 text-white'
+                                      : 'bg-blue-500 text-white'
                                 }`}>
                                   -{discountPercent}%
                                 </span>
                               </div>
-                              <div className={`p-4 rounded-2xl backdrop-blur-sm border-2 ${
-                                pkg.popular 
-                                  ? isDarkMode 
-                                    ? 'bg-emerald-500/10 border-emerald-400/30'
-                                    : 'bg-emerald-100/60 border-emerald-400/40'
-                                  : pkg.id === 'basic'
-                                    ? isDarkMode
-                                      ? 'bg-red-500/10 border-red-400/30'
-                                      : 'bg-red-100/60 border-red-400/40'
-                                    : isDarkMode
-                                      ? 'bg-gray-700/20 border-gray-600/30'
-                                      : 'bg-gray-100/60 border-gray-400/40'
-                              }`}>
-                                <div className="flex items-baseline justify-center gap-2">
-                                  <span className={`text-3xl sm:text-4xl font-black tracking-tighter ${
-                                    pkg.popular 
-                                      ? isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                                      : pkg.id === 'basic'
-                                        ? isDarkMode ? 'text-red-300' : 'text-red-700'
-                                        : isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                                  }`}>
-                                    {newPrice}
-                                  </span>
-                                  <span className={`text-lg sm:text-xl font-bold ${
-                                    pkg.popular 
-                                      ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                                      : pkg.id === 'basic'
-                                        ? isDarkMode ? 'text-red-400' : 'text-red-600'
-                                        : isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                                  }`}>
-                                    AZN
-                                  </span>
-                                </div>
+                              <div className="flex items-baseline justify-center gap-1">
+                                <span className={`text-2xl font-black ${
+                                  pkg.popular 
+                                    ? isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                                    : pkg.id === 'basic'
+                                      ? isDarkMode ? 'text-red-300' : 'text-red-700'
+                                      : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                                }`}>
+                                  {newPrice}
+                                </span>
+                                <span className={`text-sm font-bold ${
+                                  pkg.popular 
+                                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                                    : pkg.id === 'basic'
+                                      ? isDarkMode ? 'text-red-400' : 'text-red-600'
+                                      : isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                                }`}>
+                                  AZN
+                                </span>
                               </div>
                             </div>
                           );
@@ -518,46 +467,32 @@ export function PackagesScreen() {
                       </div>
                     </div>
 
-                    {/* Enhanced Day Selection */}
-                    <div className="mb-6">
-                      <h4 className={`font-bold text-center mb-4 text-base ${
-                        pkg.popular 
-                          ? (isDarkMode ? 'text-emerald-300' : 'text-emerald-700') 
-                          : pkg.id === 'basic'
-                            ? (isDarkMode ? 'text-red-300' : 'text-red-700')
-                            : isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                      }`}>
-                        Müddət seçin
+                    {/* Day Selection */}
+                    <div className="mb-4">
+                      <h4 className={`font-medium text-center mb-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Müddət
                       </h4>
                       {(() => {
                         const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
                         return (
-                          <div className={`grid ${options.length === 1 ? 'grid-cols-1' : 'grid-cols-3'} gap-3`}>
+                          <div className={`grid ${options.length === 1 ? 'grid-cols-1' : 'grid-cols-3'} gap-2`}>
                             {options.map((option) => (
                               <button
                                 key={option.days}
                                 onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
-                                className={`relative p-3 rounded-2xl border-2 font-bold text-sm transition-all duration-300 backdrop-blur-sm ${
+                                className={`p-2 rounded-lg border font-medium text-xs transition-all duration-200 ${
                                   selectedDays[pkg.id] === option.days
                                     ? pkg.popular
-                                      ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-400/70 shadow-lg shadow-emerald-500/30 ring-2 ring-emerald-300/50'
+                                      ? 'bg-emerald-500 text-white border-emerald-400'
                                       : pkg.id === 'basic'
-                                        ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-red-400/70 shadow-lg shadow-red-500/30 ring-2 ring-red-300/50'
-                                        : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-400/70 shadow-lg shadow-blue-500/30 ring-2 ring-blue-300/50'
+                                        ? 'bg-red-500 text-white border-red-400'
+                                        : 'bg-blue-500 text-white border-blue-400'
                                     : isDarkMode
-                                      ? 'bg-gray-800/60 border-gray-600/60 text-gray-300 hover:bg-gray-700/60 hover:border-gray-500/80 hover:shadow-lg'
-                                      : 'bg-white/70 border-gray-300/60 text-gray-700 hover:bg-gray-50/80 hover:border-gray-400/80 hover:shadow-lg'
-                                } hover:scale-110 active:scale-95 transform`}
+                                      ? 'bg-gray-800/50 border-gray-600/50 text-gray-300 hover:bg-gray-700/50'
+                                      : 'bg-white/50 border-gray-300/50 text-gray-700 hover:bg-gray-50'
+                                }`}
                               >
-                                <div className="flex flex-col items-center gap-1">
-                                  <span className="text-lg font-black">{option.days}</span>
-                                  <span className="text-xs opacity-90">gün</span>
-                                </div>
-                                {selectedDays[pkg.id] === option.days && (
-                                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
-                                    <span className="text-xs font-black">✓</span>
-                                  </div>
-                                )}
+                                {option.days} gün
                               </button>
                             ))}
                           </div>
@@ -565,101 +500,55 @@ export function PackagesScreen() {
                       })()}
                     </div>
 
-                    {/* Enhanced Features List */}
-                    <div className="mb-6">
-                      <h4 className={`font-bold text-center mb-4 text-base ${
-                        pkg.popular 
-                          ? (isDarkMode ? 'text-emerald-300' : 'text-emerald-700') 
-                          : pkg.id === 'basic'
-                            ? (isDarkMode ? 'text-red-300' : 'text-red-700')
-                            : isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                      }`}>
-                        Daxil olan xidmətlər
+                    {/* Features List */}
+                    <div className="mb-4">
+                      <h4 className={`font-medium text-center mb-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        Xidmətlər
                       </h4>
-                      <div className={`p-4 rounded-2xl backdrop-blur-sm border-2 ${
-                        pkg.popular 
-                          ? isDarkMode 
-                            ? 'bg-emerald-500/5 border-emerald-400/20'
-                            : 'bg-emerald-50/80 border-emerald-300/30'
-                          : pkg.id === 'basic'
-                            ? isDarkMode
-                              ? 'bg-red-500/5 border-red-400/20'
-                              : 'bg-red-50/80 border-red-300/30'
-                            : isDarkMode
-                              ? 'bg-gray-700/10 border-gray-600/20'
-                              : 'bg-gray-50/80 border-gray-300/30'
-                      }`}>
-                        <div className="space-y-3">
-                          {pkg.features.slice(0, 4).map((feature, index) => (
-                            <div key={index} className={`flex items-start gap-3 text-sm ${
-                              isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                            }`}>
-                              <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md ${
-                                pkg.popular 
-                                  ? 'bg-gradient-to-r from-emerald-500 to-green-500'
-                                  : pkg.id === 'basic'
-                                    ? 'bg-gradient-to-r from-red-500 to-orange-500'
-                                    : 'bg-gradient-to-r from-blue-500 to-purple-500'
-                              }`}>
-                                ✓
-                              </div>
-                              <span className="font-medium leading-relaxed">{feature}</span>
-                            </div>
-                          ))}
-                          {pkg.features.length > 4 && (
-                            <div className={`text-sm text-center mt-4 pt-3 border-t ${
+                      <div className="space-y-2">
+                        {pkg.features.slice(0, 3).map((feature, index) => (
+                          <div key={index} className={`flex items-center gap-2 text-xs ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                          }`}>
+                            <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-white text-[10px] ${
                               pkg.popular 
-                                ? (isDarkMode ? 'text-emerald-400 border-emerald-500/20' : 'text-emerald-600 border-emerald-300/30') 
+                                ? 'bg-emerald-500'
                                 : pkg.id === 'basic'
-                                  ? (isDarkMode ? 'text-red-400 border-red-500/20' : 'text-red-600 border-red-300/30')
-                                  : isDarkMode ? 'text-gray-400 border-gray-600/20' : 'text-gray-600 border-gray-300/30'
-                            } font-medium`}>
-                              +{pkg.features.length - 4} digər xidmət
+                                  ? 'bg-red-500'
+                                  : 'bg-blue-500'
+                            }`}>
+                              ✓
                             </div>
-                          )}
-                        </div>
+                            <span className="font-medium">{feature}</span>
+                          </div>
+                        ))}
+                        {pkg.features.length > 3 && (
+                          <div className={`text-xs text-center pt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            +{pkg.features.length - 3} digər
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Premium CTA Button */}
+                    {/* Simple CTA Button */}
                     <button
                       onClick={() => handlePurchasePackage(pkg.id)}
-                      className={`w-full relative overflow-hidden rounded-2xl py-3 sm:py-4 px-4 sm:px-6 font-black text-sm sm:text-base transition-all duration-300 group hover:scale-[1.05] active:scale-[0.98] shadow-xl border-2 ${
+                      className={`w-full py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 ${
                         pkg.popular 
-                          ? 'bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 hover:from-emerald-600 hover:via-green-600 hover:to-emerald-700 text-white shadow-emerald-500/40 border-emerald-400/50 ring-2 ring-emerald-300/30'
+                          ? 'bg-emerald-500 hover:bg-emerald-600 text-white'
                           : pkg.id === 'basic'
-                            ? isDarkMode
-                              ? 'bg-gradient-to-r from-red-600 via-orange-600 to-red-700 hover:from-red-700 hover:via-orange-700 hover:to-red-800 text-white shadow-red-500/40 border-red-400/50 ring-2 ring-red-300/30'
-                              : 'bg-gradient-to-r from-red-500 via-orange-500 to-red-600 hover:from-red-600 hover:via-orange-600 hover:to-red-700 text-white shadow-red-500/40 border-red-400/50 ring-2 ring-red-300/30'
+                            ? 'bg-red-500 hover:bg-red-600 text-white'
                             : isDarkMode
-                              ? 'bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 hover:from-gray-600 hover:via-gray-700 hover:to-gray-800 text-white shadow-gray-800/40 border-gray-600/50'
-                              : 'bg-gradient-to-r from-gray-200 via-white to-gray-100 hover:from-gray-300 hover:via-gray-100 hover:to-gray-200 text-gray-900 border-gray-400/50 shadow-gray-400/30'
+                              ? 'bg-gray-700 hover:bg-gray-600 text-white'
+                              : 'bg-gray-800 hover:bg-gray-900 text-white'
                       }`}
                     >
-                      {/* Animated overlay effects */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -skew-x-12 group-hover:animate-pulse"></div>
-                      
-                      {/* Special glow for basic package */}
-                      {pkg.id === 'basic' && (
-                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
-                      )}
-                      
-                      <div className="relative flex items-center justify-center gap-2 sm:gap-3">
-                        <span className="text-xl sm:text-2xl animate-bounce group-hover:scale-110 transition-transform duration-300">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-lg">
                           {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </span>
-                        <div className="flex flex-col items-center">
-                          <span className={`text-xs sm:text-sm font-bold tracking-wider ${
-                            pkg.id === 'basic' ? 'text-yellow-100 drop-shadow-md' : 'opacity-90'
-                          }`}>
-                            {pkg.id === 'basic' ? 'MƏHDUD FÜRSƏT' : 'PAKETİ AL'}
-                          </span>
-                          <span className="text-lg sm:text-xl font-black tracking-tight mt-1">
-                            {calculatePrice(pkg.id)} AZN
-                          </span>
-                        </div>
-                        <span className="text-base sm:text-lg opacity-75 group-hover:opacity-100 transition-opacity">
-                          →
+                        <span>
+                          {pkg.id === 'basic' ? 'Məhdud fürsət' : 'Paketi al'} • {calculatePrice(pkg.id)} AZN
                         </span>
                       </div>
                     </button>
