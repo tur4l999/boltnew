@@ -406,7 +406,7 @@ export function StoreScreen() {
               </div>
 
               {/* Enhanced Trust Badges */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-6">
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-50'
@@ -416,9 +416,6 @@ export function StoreScreen() {
                   <div>
                     <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                       Təhlükəsiz ödəniş
-                    </div>
-                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      SSL şifrələmə
                     </div>
                   </div>
                 </div>
@@ -433,13 +430,10 @@ export function StoreScreen() {
                     <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                       Sürətli çatdırılma
                     </div>
-                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      1-2 iş günü
-                    </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-purple-500/20' : 'bg-purple-50'
                   }`}>
@@ -448,9 +442,6 @@ export function StoreScreen() {
                   <div>
                     <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                       24/7 dəstək
-                    </div>
-                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      Həmişə əlçatan
                     </div>
                   </div>
                 </div>
