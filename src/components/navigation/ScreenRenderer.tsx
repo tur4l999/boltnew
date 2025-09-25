@@ -23,6 +23,7 @@ import { ActivationScheduledScreen } from '../screens/ActivationScheduledScreen'
 import { OnlineLessonsScreen } from '../screens/OnlineLessonsScreen';
 import { ProductDetailScreen } from '../screens/ProductDetailScreen';
 import { RulesScreen } from '../screens/RulesScreen';
+import { SignsScreen } from '../screens/SignsScreen';
 import { CartScreen } from '../screens/CartScreen';
 import { QuickTestScreen } from '../screens/QuickTestScreen';
 import { BlogsScreen } from '../screens/BlogsScreen';
@@ -69,12 +70,13 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Settings' && <SettingsScreen />}
       {currentScreen.screen === 'ProductDetail' && <ProductDetailScreen />}
       {currentScreen.screen === 'Rules' && <RulesScreen />}
+      {currentScreen.screen === 'Signs' && <SignsScreen />}
       {currentScreen.screen === 'Cart' && <CartScreen />}
       {currentScreen.screen === 'Fines' && <FinesScreen />}
       {currentScreen.screen === 'Blogs' && <BlogsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
