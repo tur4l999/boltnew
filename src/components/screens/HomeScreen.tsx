@@ -15,10 +15,10 @@ export function HomeScreen() {
     // Əsas bölmələr (8 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
     { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
+    { key: 'tickets', label: t.tests, action: () => navigate('Exam', { defaultTab: 'byTickets' }), emoji: '📄' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👨‍🏫' },
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📊' },
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
 
