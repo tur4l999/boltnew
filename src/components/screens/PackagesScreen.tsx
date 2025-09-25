@@ -351,16 +351,19 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Popular Badge */}
+                  {/* Enhanced Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                        <div className="flex items-center gap-1">
-                          <span>⭐</span>
-                          <span>Ən Populyar</span>
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-6 py-2.5 rounded-full text-base font-black shadow-xl border-2 transition-all duration-300 ${
+                          isDarkMode 
+                            ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
+                            : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
+                        }`}>
+                          <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
-                      <div className="absolute top-2 right-2 text-2xl">
+                      <div className="absolute top-3 right-3 text-2xl z-20">
                         <div className="animate-pulse">🔥</div>
                       </div>
                     </>
@@ -369,9 +372,9 @@ export function PackagesScreen() {
                   {/* Simple Discount for Basic Package */}
                   {pkg.id === 'basic' && (
                     <div className="absolute top-0 left-0 right-0 z-20">
-                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-3 px-4 text-base font-bold rounded-t-3xl">
+                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-4 px-4 text-lg font-bold rounded-t-3xl">
                         <div className="flex items-center justify-center gap-2">
-                          <span className="animate-pulse text-lg">⏰</span>
+                          <span className="animate-pulse text-xl">⏰</span>
                           <span>10 günlük endirim! Bitəcək: {formatRemaining(promoEndsAt - nowTs)}</span>
                         </div>
                       </div>
@@ -393,7 +396,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-16' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-20' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
