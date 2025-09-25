@@ -351,7 +351,7 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Improved Popular Badge */}
+                  {/* Package Badges */}
                   {pkg.popular && (
                     <>
                       <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-30">
@@ -368,16 +368,55 @@ export function PackagesScreen() {
                       </div>
                     </>
                   )}
+                  
+                  {/* Discount Badge for Basic Package */}
+                  {pkg.id === 'basic' && (
+                    <>
+                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-5 py-2 rounded-full text-sm font-black shadow-xl border-2 transition-all duration-300 hover:scale-105 ${
+                          isDarkMode 
+                            ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white border-orange-400/50'
+                            : 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-orange-300/50'
+                        }`}>
+                          <span className="whitespace-nowrap tracking-wide animate-pulse">⚡ MƏHDUD VAXTLı ENDİRİM ⚡</span>
+                        </div>
+                      </div>
+                      <div className="absolute top-3 right-3 text-xl z-20">
+                        <div className="animate-bounce">💥</div>
+                      </div>
+                      
+                      {/* Timer badge */}
+                      <div className="absolute top-2 left-2 z-20">
+                        <div className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                          isDarkMode 
+                            ? 'bg-red-900/80 text-red-200 border border-red-600/50'
+                            : 'bg-red-100 text-red-700 border border-red-300/50'
+                        }`}>
+                          <div className="flex items-center gap-1">
+                            <span className="animate-pulse">⏰</span>
+                            <span>10 GÜN</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
 
-                  {/* Decorative Elements */}
+                  {/* Enhanced Decorative Elements */}
                   <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -translate-y-16 translate-x-16 transition-all duration-700 group-hover:scale-150 ${
                     pkg.popular 
                       ? 'bg-gradient-to-br from-emerald-400/30 to-green-400/30'
-                      : 'bg-gradient-to-br from-blue-400/20 to-purple-400/20'
+                      : pkg.id === 'basic'
+                        ? 'bg-gradient-to-br from-red-400/25 to-orange-400/25 group-hover:from-red-300/35 group-hover:to-orange-300/35'
+                        : 'bg-gradient-to-br from-blue-400/20 to-purple-400/20'
                   }`}></div>
                   
+                  {/* Additional glow for discounted basic package */}
+                  {pkg.id === 'basic' && (
+                    <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl translate-y-12 -translate-x-12 bg-gradient-to-tr from-orange-400/15 to-red-400/15 transition-all duration-700 group-hover:scale-125"></div>
+                  )}
+                  
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-6' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
@@ -509,22 +548,38 @@ export function PackagesScreen() {
                       </div>
                     </div>
 
-                    {/* Compact CTA Button */}
+                    {/* Enhanced CTA Button */}
                     <button
                       onClick={() => handlePurchasePackage(pkg.id)}
                       className={`w-full relative overflow-hidden rounded-xl py-3 px-4 font-bold text-sm transition-all duration-300 group hover:scale-[1.02] active:scale-[0.98] ${
                         pkg.popular 
                           ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-md'
-                          : isDarkMode
-                            ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white shadow-md'
-                            : 'bg-gradient-to-r from-gray-100 to-white hover:from-gray-200 hover:to-gray-50 text-gray-900 border border-gray-300 shadow-md'
+                          : pkg.id === 'basic'
+                            ? isDarkMode
+                              ? 'bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-md shadow-red-500/20'
+                              : 'bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white shadow-md shadow-red-500/20'
+                            : isDarkMode
+                              ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white shadow-md'
+                              : 'bg-gradient-to-r from-gray-100 to-white hover:from-gray-200 hover:to-gray-50 text-gray-900 border border-gray-300 shadow-md'
                       }`}
                     >
+                      {/* Special overlay for basic package */}
+                      {pkg.id === 'basic' && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      )}
+                      
                       <div className="relative flex items-center justify-center gap-2">
                         <span className="text-lg">
-{pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
+                          {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </span>
-                        <span>Paketi Al - {calculatePrice(pkg.id)} AZN</span>
+                        <div className="flex flex-col items-center">
+                          <span className={`text-xs ${pkg.id === 'basic' ? 'text-yellow-100' : ''}`}>
+                            {pkg.id === 'basic' ? 'MƏHDUD FÜRSƏT' : 'Paketi Al'}
+                          </span>
+                          <span className="text-base font-black">
+                            {calculatePrice(pkg.id)} AZN
+                          </span>
+                        </div>
                       </div>
                     </button>
                   </div>
