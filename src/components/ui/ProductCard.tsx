@@ -101,7 +101,7 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
           </div>
           {isOutOfStock && (
             <span className="text-xs font-medium text-red-500 bg-red-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
-              Stokda yox
+              Stokda yoxdur
             </span>
           )}
         </div>
@@ -150,7 +150,7 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
                 : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transform hover:scale-[1.02]'
             }`}
           >
-            {isOutOfStock ? '❌ Stokda yox' : '🛒 Səbətə at'}
+            {isOutOfStock ? '❌ Stokda yoxdur' : '🛒 Səbətə at'}
           </button>
         </div>
       </div>
