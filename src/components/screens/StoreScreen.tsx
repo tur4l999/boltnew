@@ -395,45 +395,64 @@ export function StoreScreen() {
         }`}>
           <div className="px-4 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-              {/* Payment Method */}
-              <div className="flex items-center gap-3">
-                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${
-                  isDarkMode 
-                    ? 'bg-gray-700/50 border-gray-600 text-gray-200' 
-                    : 'bg-white border-gray-300 text-gray-700'
+              {/* Compact Payment Method */}
+              <div className="flex items-center gap-2">
+                <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Ödəniş:</span>
+                <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${
+                  isDarkMode ? 'bg-gray-700/30 text-gray-300' : 'bg-gray-100 text-gray-600'
                 }`}>
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                    <rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" strokeWidth="1.5"/>
-                    <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
-                    <path d="M7 14h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                  <span className="text-sm font-medium">Kartla ödəniş</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png" alt="Visa" className="h-4 opacity-70" />
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/120px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 opacity-70" />
+                  💳 Kart
                 </div>
               </div>
 
-              {/* Trust Badges */}
-              <div className="flex items-center gap-3 sm:gap-4">
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-2 h-2 rounded-full bg-emerald-500`}></div>
-                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Təhlükəsiz
-                  </span>
+              {/* Enhanced Trust Badges */}
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-6">
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-50'
+                  }`}>
+                    <span className="text-emerald-500 text-sm">🔒</span>
+                  </div>
+                  <div>
+                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      Təhlükəsiz ödəniş
+                    </div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      SSL şifrələmə
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-2 h-2 rounded-full bg-blue-500`}></div>
-                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    Sürətli
-                  </span>
+                
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-blue-500/20' : 'bg-blue-50'
+                  }`}>
+                    <span className="text-blue-500 text-sm">⚡</span>
+                  </div>
+                  <div>
+                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      Sürətli çatdırılma
+                    </div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      1-2 iş günü
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-2 h-2 rounded-full bg-purple-500`}></div>
-                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                    24/7 dəstək
-                  </span>
+                
+                <div className="flex items-center gap-2">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-purple-500/20' : 'bg-purple-50'
+                  }`}>
+                    <span className="text-purple-500 text-sm">🎯</span>
+                  </div>
+                  <div>
+                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      24/7 dəstək
+                    </div>
+                    <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Həmişə əlçatan
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
