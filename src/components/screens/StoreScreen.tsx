@@ -394,55 +394,43 @@ export function StoreScreen() {
             : 'bg-gray-50/80 border-gray-200/50'
         }`}>
           <div className="px-4 py-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-              {/* Compact Payment Method */}
+            {/* Trust Badges Only */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-between gap-4 sm:gap-6">
               <div className="flex items-center gap-2">
-                <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Ödəniş:</span>
-                <div className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${
-                  isDarkMode ? 'bg-gray-700/30 text-gray-300' : 'bg-gray-100 text-gray-600'
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-50'
                 }`}>
-                  💳 Kart
+                  <span className="text-emerald-500 text-sm">🔒</span>
+                </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Təhlükəsiz ödəniş
+                  </div>
                 </div>
               </div>
-
-              {/* Enhanced Trust Badges */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6">
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-50'
-                  }`}>
-                    <span className="text-emerald-500 text-sm">🔒</span>
-                  </div>
-                  <div>
-                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                      Təhlükəsiz ödəniş
-                    </div>
+              
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-blue-500/20' : 'bg-blue-50'
+                }`}>
+                  <span className="text-blue-500 text-sm">⚡</span>
+                </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Sürətli çatdırılma
                   </div>
                 </div>
-                
-                <div className="flex items-center gap-2">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-blue-500/20' : 'bg-blue-50'
-                  }`}>
-                    <span className="text-blue-500 text-sm">⚡</span>
-                  </div>
-                  <div>
-                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                      Sürətli çatdırılma
-                    </div>
-                  </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-purple-500/20' : 'bg-purple-50'
+                }`}>
+                  <span className="text-purple-500 text-sm">🎯</span>
                 </div>
-                
-                <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-purple-500/20' : 'bg-purple-50'
-                  }`}>
-                    <span className="text-purple-500 text-sm">🎯</span>
-                  </div>
-                  <div>
-                    <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                      24/7 dəstək
-                    </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    24/7 dəstək
                   </div>
                 </div>
               </div>
