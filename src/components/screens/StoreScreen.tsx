@@ -242,13 +242,14 @@ export function StoreScreen() {
                 </label>
                 <div className="flex items-center gap-2">
                   <div className="relative flex-1">
+                    <span className={`absolute left-2 top-1/2 -translate-y-1/2 text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Min</span>
                     <input 
                       type="number" 
                       min={0} 
                       value={minPrice} 
                       onChange={e=>setMinPrice(e.target.value)} 
                       placeholder="0" 
-                      className={`w-full px-2 py-2 pr-8 text-center rounded-lg border transition-colors text-sm ${
+                      className={`w-full pl-10 pr-8 py-2 text-center rounded-lg border transition-colors text-sm ${
                         isDarkMode 
                           ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
                           : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
@@ -262,13 +263,14 @@ export function StoreScreen() {
                   </div>
                   
                   <div className="relative flex-1">
+                    <span className={`absolute left-2 top-1/2 -translate-y-1/2 text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Max</span>
                     <input 
                       type="number" 
                       min={0} 
                       value={maxPrice} 
                       onChange={e=>setMaxPrice(e.target.value)} 
                       placeholder="∞" 
-                      className={`w-full px-2 py-2 pr-8 text-center rounded-lg border transition-colors text-sm ${
+                      className={`w-full pl-10 pr-8 py-2 text-center rounded-lg border transition-colors text-sm ${
                         isDarkMode 
                           ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
                           : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
