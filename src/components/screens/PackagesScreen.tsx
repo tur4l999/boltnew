@@ -351,20 +351,16 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Top Positioned Popular Badge */}
+                  {/* Improved Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-4 py-2 rounded-full text-sm font-bold shadow-xl border-2 transition-all duration-300 ${
+                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-6 py-2.5 rounded-full text-base font-black shadow-xl border-2 transition-all duration-300 ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
                             : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
                         }`}>
-                          <div className="flex items-center gap-2">
-                            <span className="text-yellow-300">⭐</span>
-                            <span className="whitespace-nowrap font-black">ƏN POPULYAR</span>
-                            <span className="text-yellow-300">⭐</span>
-                          </div>
+                          <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
                       <div className="absolute top-3 right-3 text-2xl z-20">
@@ -381,7 +377,7 @@ export function PackagesScreen() {
                   }`}></div>
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
