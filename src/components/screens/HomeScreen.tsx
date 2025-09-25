@@ -18,7 +18,7 @@ export function HomeScreen() {
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👨‍🏫' },
     { key: 'notes', label: t.notes, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'materials' }), emoji: '🗒️' },
     { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📊' },
-    { key: 'tests', label: t.tests, action: () => navigate('Practice'), emoji: '📄' },
+    { key: 'tests', label: t.tests, action: () => navigate('Exam', { defaultTab: 'byTickets' }), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
 

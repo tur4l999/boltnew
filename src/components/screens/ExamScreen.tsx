@@ -7,8 +7,10 @@ import { EXAM_TOPICS } from '../../lib/data';
 type ExamTabKey = 'byTickets' | 'byTopics' | 'exam';
 
 export function ExamScreen() {
-  const { isDarkMode, t, navigate, hasActivePackage } = useApp();
-  const [activeTab, setActiveTab] = useState<ExamTabKey>('byTickets');
+  const { isDarkMode, t, navigate, hasActivePackage, currentScreen } = useApp();
+  const [activeTab, setActiveTab] = useState<ExamTabKey>(
+    (currentScreen.params?.defaultTab as ExamTabKey) || 'byTickets'
+  );
   const [expandedTopics, setExpandedTopics] = useState<Record<number, boolean>>({});
   const [showPurchasePopup, setShowPurchasePopup] = useState(false);
 
