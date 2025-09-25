@@ -369,10 +369,10 @@ export function PackagesScreen() {
                   {/* Simple Discount for Basic Package */}
                   {pkg.id === 'basic' && (
                     <div className="absolute top-0 left-0 right-0 z-20">
-                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-2 px-4 text-sm font-bold rounded-t-3xl">
+                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-3 px-4 text-base font-bold rounded-t-3xl">
                         <div className="flex items-center justify-center gap-2">
-                          <span className="animate-pulse">⏰</span>
-                          <span>10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}</span>
+                          <span className="animate-pulse text-lg">⏰</span>
+                          <span>10 günlük endirim! Bitəcək: {formatRemaining(promoEndsAt - nowTs)}</span>
                         </div>
                       </div>
                     </div>
