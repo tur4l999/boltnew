@@ -436,6 +436,7 @@ export function StoreScreen() {
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 }
