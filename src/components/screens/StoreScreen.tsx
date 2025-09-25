@@ -78,183 +78,364 @@ export function StoreScreen() {
   }, [q, inStockOnly, discountOnly, minRating, language, minPrice, maxPrice, sort]);
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
+    <div className={`min-h-screen transition-colors duration-300 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      <div className="mb-3 text-center">
-        <h1 className={`text-2xl font-bold mb-2 transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Onlayn mağaza</h1>
-        <div className="mt-1 rounded-md px-3 py-1 inline-block text-xs font-semibold text-white bg-red-600 whitespace-nowrap">
-          20 manatdan yuxarı çatdırılma pulsuzdur
+      {/* Modern Hero Section */}
+      <div className={`relative overflow-hidden ${
+        isDarkMode 
+          ? 'bg-gradient-to-br from-gray-800 via-gray-900 to-emerald-900' 
+          : 'bg-gradient-to-br from-emerald-50 via-white to-emerald-100'
+      }`}>
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div className="relative px-4 py-6">
+          <div className="text-center">
+            <h1 className={`text-3xl md:text-4xl font-bold mb-4 transition-colors duration-200 ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>
+              Keyfiyyətli kitablar və <br />
+              <span className="text-emerald-500">öyrənmə materialları</span>
+            </h1>
+            
+            {/* Promotional Banner */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg mt-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-semibold">20₼+ sifarişlər üçün pulsuz çatdırılma</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Compact top bar: animated search, sort select, advanced toggle */}
-      <div className={`flex items-center justify-between gap-2 rounded-xl border shadow-sm px-2 py-2 ${isDarkMode ? 'bg-gray-800/80 border-gray-700' : 'bg-white/80 border-gray-200'} backdrop-blur`}>
-        <div className="flex items-center gap-2 min-w-0">
-          <button
-            aria-label="Axtarış"
-            onClick={() => setIsSearchOpen(v => !v)}
-            aria-expanded={isSearchOpen}
-            className={`h-9 w-9 rounded-full flex items-center justify-center border transition-all duration-500 ease-out ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'} ${isSearchOpen ? 'order-2 rotate-0' : 'order-1 rotate-0'}`}
-          >
-            <Search size={16} />
-          </button>
-          <input
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            placeholder="Axtarış..."
-            className={`${isDarkMode ? 'bg-gray-900 text-gray-100 border-gray-700' : 'bg-white text-gray-900 border-gray-300'} rounded-md border outline-none transition-all duration-500 ease-out overflow-hidden ${isSearchOpen ? 'order-1 w-40 opacity-100 px-3 py-2' : 'order-2 w-0 opacity-0 px-0 py-0 border-transparent'}`}
-          />
-        </div>
-        <div className="flex items-center gap-2 ml-auto">
-          <select
-            value={sort}
-            onChange={e=>setSort(e.target.value as any)}
-            className={`${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 text-sm`}
-          >
-            <option value="relevance">Filter</option>
-            <option value="priceAsc">Qiymət ↑</option>
-            <option value="priceDesc">Qiymət ↓</option>
-            <option value="titleAsc">A-Z</option>
-            <option value="titleDesc">Z-A</option>
-            <option value="ratingDesc">Reytinq</option>
-          </select>
-          <button
-            onClick={() => setShowAdvanced(v => !v)}
-            aria-label="Əlavə filter"
-            className={`h-9 w-9 rounded-full flex items-center justify-center border transition-colors ${isDarkMode ? 'bg-emerald-700 border-emerald-600 text-white hover:bg-emerald-600' : 'bg-emerald-500 border-emerald-500 text-white hover:bg-emerald-600'}`}
-          >
-            <SlidersHorizontal size={16} />
-          </button>
-        </div>
-      </div>
+      <div className="px-4 pb-24">
+        {/* Modern Search and Filter Section */}
+        <div className="mb-6 -mt-8 relative z-10 px-1">
+          <div className={`backdrop-blur-xl rounded-2xl border shadow-xl p-3 sm:p-4 ${
+            isDarkMode 
+              ? 'bg-gray-800/90 border-gray-700/50' 
+              : 'bg-white/90 border-gray-200/50'
+          }`}>
+            {/* Search Bar */}
+            <div className="relative mb-4">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className={`h-5 w-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+              </div>
+              <input
+                type="text"
+                value={q}
+                onChange={e => setQ(e.target.value)}
+                placeholder="Kitab, müəllif və ya açar söz axtar..."
+                className={`w-full pl-10 pr-4 py-3 rounded-xl border-2 transition-all duration-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 ${
+                  isDarkMode 
+                    ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
+                    : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                }`}
+              />
+              {q && (
+                <button
+                  onClick={() => setQ('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
 
-      {showAdvanced && (
-        <Card className={`mt-2 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-          <div className="mb-2 flex items-center justify-between">
-            <div className="font-medium">Əlavə filterlər</div>
+            {/* Search Controls */}
+            <div className="flex items-center gap-2">
+              <select
+                value={sort}
+                onChange={e=>setSort(e.target.value as any)}
+                className={`flex-1 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-gray-100' 
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
+              >
+                <option value="relevance">Sırala</option>
+                <option value="priceAsc">Qiymət: Artan</option>
+                <option value="priceDesc">Qiymət: Azalan</option>
+                <option value="titleAsc">Ad: A-Z</option>
+                <option value="titleDesc">Ad: Z-A</option>
+                <option value="ratingDesc">Ən yaxşı reytinq</option>
+              </select>
+              
+              <button
+                onClick={() => setShowAdvanced(v => !v)}
+                className={`p-3 rounded-lg border transition-all duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                  showAdvanced
+                    ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
+                    : isDarkMode
+                    ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <SlidersHorizontal size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {showAdvanced && (
+          <div className={`mb-6 backdrop-blur-xl rounded-2xl border shadow-xl p-4 transition-all duration-300 ${
+            isDarkMode 
+              ? 'bg-gray-800/90 border-gray-700/50' 
+              : 'bg-white/90 border-gray-200/50'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`font-semibold text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Ətraflı filterlər
+              </h3>
+              <button
+                onClick={() => { setQ(''); setMinPrice(''); setMaxPrice(''); setInStockOnly(false); setDiscountOnly(false); setMinRating(0); setLanguage(''); setSort('relevance'); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isDarkMode 
+                    ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' 
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                🔄 Hamısını sıfırla
+              </button>
+            </div>
+          
+            <div className="space-y-4">
+              {/* Quick Filter Chips */}
+              <div>
+                <label className={`block text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  🔍 Sürətli filterlər
+                </label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => setInStockOnly(!inStockOnly)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      inStockOnly
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    📦 Stokda var
+                  </button>
+                  <button
+                    onClick={() => setDiscountOnly(!discountOnly)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      discountOnly
+                        ? 'bg-pink-500 text-white shadow-md'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    🏷️ Endirimli
+                  </button>
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div>
+                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  💰 Qiymət aralığı
+                </label>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <span className={`absolute left-2 top-1/2 -translate-y-1/2 text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Min</span>
+                    <input 
+                      type="number" 
+                      min={0} 
+                      value={minPrice} 
+                      onChange={e=>setMinPrice(e.target.value)} 
+                      placeholder="0" 
+                      className={`w-full pl-10 pr-8 py-2 text-center rounded-lg border transition-colors text-sm ${
+                        isDarkMode 
+                          ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
+                          : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                      }`} 
+                    />
+                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>₼</span>
+                  </div>
+                  
+                  <div className={`px-2 py-1 rounded text-xs font-medium ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>
+                    ilə
+                  </div>
+                  
+                  <div className="relative flex-1">
+                    <span className={`absolute left-2 top-1/2 -translate-y-1/2 text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Max</span>
+                    <input 
+                      type="number" 
+                      min={0} 
+                      value={maxPrice} 
+                      onChange={e=>setMaxPrice(e.target.value)} 
+                      placeholder="∞" 
+                      className={`w-full pl-10 pr-8 py-2 text-center rounded-lg border transition-colors text-sm ${
+                        isDarkMode 
+                          ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
+                          : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                      }`} 
+                    />
+                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>₼</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rating and Language */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    ⭐ Minimum reytinq
+                  </label>
+                  <select 
+                    value={minRating} 
+                    onChange={e=>setMinRating(Number(e.target.value))} 
+                    className={`w-full px-3 py-2 rounded-lg border transition-colors ${
+                      isDarkMode 
+                        ? 'bg-gray-900/50 border-gray-600 text-gray-100' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900'
+                    }`}
+                  >
+                    <option value={0}>Hamısı</option>
+                    <option value={3}>3★ və yuxarı</option>
+                    <option value={4}>4★ və yuxarı</option>
+                    <option value={5}>Yalnız 5★</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    🌐 Dil
+                  </label>
+                  <select 
+                    value={language} 
+                    onChange={e=>setLanguage(e.target.value as any)} 
+                    className={`w-full px-3 py-2 rounded-lg border transition-colors ${
+                      isDarkMode 
+                        ? 'bg-gray-900/50 border-gray-600 text-gray-100' 
+                        : 'bg-gray-50 border-gray-200 text-gray-900'
+                    }`}
+                  >
+                    <option value="">Bütün dillər</option>
+                    <option value="AZ">Azərbaycan dili</option>
+                    <option value="RU">Rus dili</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modern Floating Cart button */}
+        <button
+          onClick={() => navigate('Cart')}
+          ref={cartBtnRef}
+          className="fixed z-40 group bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-2xl rounded-2xl px-4 py-3 flex items-center gap-2 transition-all duration-300 transform hover:scale-105"
+          style={{
+            right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
+            bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+          }}
+        >
+          <div className="relative">
+            <ShoppingCart size={20} className="transition-transform group-hover:scale-110" />
+            <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              3
+            </div>
+          </div>
+          <span className="font-medium">Səbət</span>
+        </button>
+
+        {/* Results Summary */}
+        {filtered.length > 0 && (
+          <div className="mb-4">
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <span className="font-medium text-emerald-500">{filtered.length}</span> məhsul tapıldı
+              {q && <span> "<span className="font-medium">{q}</span>" üçün</span>}
+            </p>
+          </div>
+        )}
+
+        {/* Modern Product Grid */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-8">
+          {filtered.map((p, idx) => (
+            <ProductCard
+              key={p.id}
+              product={p}
+              isBestseller={idx === 0}
+              onClick={() => navigate('ProductDetail', { id: p.id })}
+              onAddToCart={(el) => { addToCart(p.id, 1); flyToCart(el); }}
+            />
+          ))}
+        </div>
+
+        {/* Empty State */}
+        {filtered.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">📚</div>
+            <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Heç bir məhsul tapılmadı
+            </h3>
+            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-4`}>
+              Axtarış kriteriyalarınızı dəyişdirməyi cəhd edin
+            </p>
             <button
               onClick={() => { setQ(''); setMinPrice(''); setMaxPrice(''); setInStockOnly(false); setDiscountOnly(false); setMinRating(0); setLanguage(''); setSort('relevance'); }}
-              className={`${isDarkMode ? 'bg-gray-700 text-gray-100 hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'} rounded-md px-3 py-1.5 text-xs`}
+              className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors"
             >
-              Sıfırla
+              Filterləri sıfırla
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center gap-2">
-              <input type="number" min={0} value={minPrice} onChange={e=>setMinPrice(e.target.value)} placeholder="Min ₼" className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 outline-none w-full`} />
-              <input type="number" min={0} value={maxPrice} onChange={e=>setMaxPrice(e.target.value)} placeholder="Max ₼" className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-3 py-2 outline-none w-full`} />
-            </div>
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-1">
-                <input type="checkbox" checked={inStockOnly} onChange={e=>setInStockOnly(e.target.checked)} />
-                <span>Stokda</span>
-              </label>
-              <label className="flex items-center gap-1">
-                <input type="checkbox" checked={discountOnly} onChange={e=>setDiscountOnly(e.target.checked)} />
-                <span>Endirimli</span>
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <select value={minRating} onChange={e=>setMinRating(Number(e.target.value))} className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 w-full`}>
-                <option value={0}>Reytinq: hamısı</option>
-                <option value={3}>3★+</option>
-                <option value={4}>4★+</option>
-                <option value={5}>5★</option>
-              </select>
-              <select value={language} onChange={e=>setLanguage(e.target.value as any)} className={`${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'} rounded-md border px-2 py-2 w-full`}>
-                <option value="">Dil: hamısı</option>
-                <option value="AZ">AZ</option>
-                <option value="RU">RU</option>
-              </select>
-            </div>
-          </div>
-        </Card>
-      )}
+        )}
 
-      {/* Floating Cart button */}
-      <button
-        onClick={() => navigate('Cart')}
-        ref={cartBtnRef}
-        className="fixed z-40 rounded-full bg-emerald-600 text-white shadow-lg px-4 py-2 flex items-center gap-2"
-        style={{
-          right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-          bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
-        }}
-      >
-        <ShoppingCart size={18} />
-        <span>Səbətə bax</span>
-      </button>
-
-      <div className="grid grid-cols-2 gap-3 mt-3">
-        {filtered.map((p, idx) => (
-          <ProductCard
-            key={p.id}
-            product={p}
-            isBestseller={idx === 0}
-            onClick={() => navigate('ProductDetail', { id: p.id })}
-            onAddToCart={(el) => { addToCart(p.id, 1); flyToCart(el); }}
-          />
-        ))}
-      </div>
-
-      {/* Payment Methods */}
-      <Card className={`mt-6 transition-colors duration-200 ${
-        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-      }`}>
-        <h3 className={`font-bold mb-3 text-center transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>Ödəniş üsulları</h3>
-        <div className="grid grid-cols-3 gap-3">
-          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
-            isDarkMode 
-              ? 'border-gray-600 hover:bg-gray-700' 
-              : 'border-gray-200 hover:bg-gray-50'
-          }`}>
-            <div className="text-2xl mb-1"><EmojiIcon emoji="💳" size={24} /></div>
-            <div className={`text-xs transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>Kart</div>
-          </div>
-          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
-            isDarkMode 
-              ? 'border-gray-600 hover:bg-gray-700' 
-              : 'border-gray-200 hover:bg-gray-50'
-          }`}>
-            <div className="text-2xl mb-1"><EmojiIcon emoji="📱" size={24} /></div>
-            <div className={`text-xs transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>Mobil</div>
-          </div>
-          <div className={`p-3 border rounded-lg text-center transition-colors duration-200 ${
-            isDarkMode 
-              ? 'border-gray-600 hover:bg-gray-700' 
-              : 'border-gray-200 hover:bg-gray-50'
-          }`}>
-            <div className="text-2xl mb-1"><EmojiIcon emoji="🏦" size={24} /></div>
-            <div className={`text-xs transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>Bank</div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Trust Indicators */}
-      <div className="mt-4 text-center">
-        <div className={`flex items-center justify-center gap-4 text-xs transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-500' : 'text-gray-500'
+        {/* Professional Payment & Trust Section */}
+        <div className={`mt-6 rounded-xl border shadow-sm ${
+          isDarkMode 
+            ? 'bg-gray-800/50 border-gray-700/50' 
+            : 'bg-gray-50/80 border-gray-200/50'
         }`}>
-          <span className="flex items-center gap-1">
-            <EmojiIcon emoji="🔒" size={16} className="inline-block mr-2" />Təhlükəsiz ödəniş
-          </span>
-          <span className="flex items-center gap-1">
-            <EmojiIcon emoji="⚡" size={16} className="inline-block mr-2" />Ani çatdırılma
-          </span>
-          <span className="flex items-center gap-1">
-            <EmojiIcon emoji="🎯" size={16} className="inline-block mr-2" />7/24 dəstək
-          </span>
+          <div className="px-4 py-3">
+            {/* Trust Badges Only */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-between gap-4 sm:gap-6">
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-50'
+                }`}>
+                  <span className="text-emerald-500 text-sm">🔒</span>
+                </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Təhlükəsiz ödəniş
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-blue-500/20' : 'bg-blue-50'
+                }`}>
+                  <span className="text-blue-500 text-sm">⚡</span>
+                </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Sürətli çatdırılma
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  isDarkMode ? 'bg-purple-500/20' : 'bg-purple-50'
+                }`}>
+                  <span className="text-purple-500 text-sm">🎯</span>
+                </div>
+                <div>
+                  <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    24/7 dəstək
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

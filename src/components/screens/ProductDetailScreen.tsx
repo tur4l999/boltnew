@@ -248,7 +248,7 @@ function DetailBestsellerBadge({ hasDiscount }: { hasDiscount: boolean }) {
 }
 
 function RecommendedCarousel({ currentId }: { currentId: string }) {
-  const { isDarkMode, navigate } = useApp();
+  const { isDarkMode, navigate, addToCart } = useApp();
   const items = STORE_PRODUCTS.filter(p => p.id !== currentId);
   const [offset, setOffset] = useState(0); // item index offset
 
@@ -275,16 +275,39 @@ function RecommendedCarousel({ currentId }: { currentId: string }) {
           if (Math.abs(delta) > 30) onSwipe(delta < 0 ? 'left' : 'right');
         }}
       >
-        {visible.map(p => (
-          <div key={p.id} className="min-w-0 basis-1/2">
-            <Card className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3`}>
-              <img src={p.images[0]} alt={p.title} className="w-full h-24 object-cover rounded-md" />
-              <div className="mt-2 text-sm font-medium line-clamp-2">{p.title}</div>
-              <div className="text-pink-600 font-bold">{getDiscountedPrice(p)} ₼</div>
-              <button className="text-xs opacity-70 mt-1" onClick={() => navigate('ProductDetail', { id: p.id })}>Bax</button>
-            </Card>
-          </div>
-        ))}
+        {visible.map(p => {
+          const isOutOfStock = p.stock !== undefined && p.stock <= 0;
+          return (
+            <div key={p.id} className="min-w-0 basis-1/2">
+              <Card className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3 relative`}>
+                <div onClick={() => navigate('ProductDetail', { id: p.id })} className="cursor-pointer">
+                  <img src={p.images[0]} alt={p.title} className="w-full h-24 object-cover rounded-md" />
+                  <div className="mt-2 text-sm font-medium line-clamp-2">{p.title}</div>
+                  <div className="text-pink-600 font-bold">{getDiscountedPrice(p)} ₼</div>
+                </div>
+                
+                {/* Add to Cart Button - Bottom Right */}
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isOutOfStock) {
+                      addToCart(p.id, 1);
+                    }
+                  }}
+                  disabled={isOutOfStock}
+                  className={`absolute bottom-2 right-2 p-1.5 rounded-full transition-all duration-200 ${
+                    isOutOfStock
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md hover:shadow-lg hover:scale-110'
+                  }`}
+                  title={isOutOfStock ? 'Stokda yoxdur' : 'Səbətə əlavə et'}
+                >
+                  <ShoppingCart size={14} />
+                </button>
+              </Card>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

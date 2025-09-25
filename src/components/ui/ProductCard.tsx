@@ -35,79 +35,128 @@ export function ProductCard({ product, onClick, onAddToCart, isBestseller }: Pro
   }, []);
 
   return (
-    <Card
+    <div
       onClick={onClick}
-      className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} p-3 h-full flex flex-col`}
+      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 cursor-pointer transform hover:scale-[1.02] hover:shadow-xl h-full flex flex-col ${
+        isDarkMode 
+          ? 'bg-gray-800 border-gray-700 hover:border-gray-600' 
+          : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-lg'
+      }`}
     >
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* Wishlist heart */}
         <button
           aria-label="Sevimlilərə əlavə et"
-          className="absolute top-1.5 right-1.5 z-10 h-7 w-7 rounded-full bg-white/90 border border-gray-300 flex items-center justify-center shadow-sm"
+          className="absolute top-3 right-3 z-20 h-8 w-8 rounded-full bg-white/90 backdrop-blur border border-gray-300 flex items-center justify-center shadow-lg transition-all duration-200 hover:bg-white hover:scale-110"
           onClick={(e) => e.stopPropagation()}
         >
-          <svg viewBox="0 0 24 24" className="h-4 w-4 text-gray-900">
+          <svg viewBox="0 0 24 24" className="h-4 w-4 text-gray-700 hover:text-red-500 transition-colors">
             <path fill="none" stroke="currentColor" strokeWidth="2" d="M12.1 8.64l-.1.1l-.11-.11a3.5 3.5 0 0 0-4.95 0a3.5 3.5 0 0 0 0 4.95l5.06 5.06l5.06-5.06a3.5 3.5 0 1 0-4.95-4.95Z"/>
           </svg>
         </button>
-        {(hasDiscount || isBestseller) && (
-          <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">
-            {hasDiscount && (
-              <span className="bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-                -{product.discountPercent}%
-              </span>
-            )}
-            {hasDiscount && typeof hoursLeft === 'number' && hoursLeft > 0 && (
-              <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow animate-pulse">
-                {hoursLeft} saat
-              </span>
-            )}
-            {isBestseller && (
-              <span className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
-                Bestseller
-              </span>
+
+        {/* Discount and Time Badges */}
+        {hasDiscount && (
+          <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+            <div className="bg-gradient-to-r from-pink-500 to-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg w-fit">
+              -{product.discountPercent}%
+            </div>
+            {typeof hoursLeft === 'number' && hoursLeft > 0 && (
+              <div className="bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg animate-pulse w-fit">
+                ⏰ {hoursLeft}s
+              </div>
             )}
           </div>
         )}
-        <img
-          ref={imgRef}
-          src={product.images[0]}
-          alt={product.title}
-          className="w-full h-28 object-cover rounded-lg mb-3"
-        />
+
+        {/* Bestseller Badge - Bottom of Image */}
+        {isBestseller && (
+          <div className="absolute bottom-2 left-3 z-10">
+            <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-lg w-fit">
+              🏆 Bestseller
+            </div>
+          </div>
+        )}
+
+        {/* Image with overlay */}
+        <div className="relative overflow-hidden">
+          <img
+            ref={imgRef}
+            src={product.images[0]}
+            alt={product.title}
+            className="w-full h-32 sm:h-40 object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div className={`absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+        </div>
       </div>
-      <div className="space-y-2 flex flex-col min-h-[150px]">
-        <div className={`flex items-baseline gap-2 h-5 ${isOutOfStock ? 'invisible' : ''}`}>
-          <span className="text-lg font-bold text-pink-600">{hasDiscount ? discounted : product.price} ₼</span>
-          {hasDiscount && (
-            <span className="text-xs line-through opacity-60">{product.price} ₼</span>
+      {/* Content */}
+      <div className="p-3 sm:p-4 flex flex-col flex-1">
+        {/* Price */}
+        <div className={`flex items-center justify-between mb-2 ${isOutOfStock ? 'opacity-50' : ''}`}>
+          <div className="flex items-baseline gap-1 sm:gap-2">
+            <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
+              {hasDiscount ? discounted : product.price} ₼
+            </span>
+            {hasDiscount && (
+              <span className="text-xs sm:text-sm line-through text-gray-400">{product.price} ₼</span>
+            )}
+          </div>
+          {isOutOfStock && (
+            <span className="text-xs font-medium text-red-500 bg-red-50 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
+              Stokda yoxdur
+            </span>
           )}
         </div>
-        <h3 className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} font-bold text-sm leading-tight line-clamp-2`}>
+
+        {/* Title */}
+        <h3 className={`font-semibold text-sm sm:text-base leading-tight mb-2 line-clamp-2 min-h-[2.5rem] ${
+          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+        }`}>
           {product.title}
         </h3>
-        <div className={`flex items-center gap-1 text-[10px] text-amber-500 h-4 ${isOutOfStock ? 'invisible' : ''}`}>
-          {'★'.repeat(Math.round(product.rating ?? 4))}
-          <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} ml-1`}>
-            {(product.reviewsCount ?? 0)} rəylər
-          </span>
-        </div>
-        <div className="mt-auto pt-2 pb-1 flex items-center justify-between">
-          <span />
-          <Button
-            size="sm"
-            className="text-xs px-3 py-1"
+
+        {/* Rating and Reviews */}
+        {!isOutOfStock && (
+          <div className="flex items-center gap-1 mb-2 sm:mb-3">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <span 
+                  key={i} 
+                  className={`text-xs sm:text-sm ${
+                    i < Math.round(product.rating ?? 4) 
+                      ? 'text-yellow-400' 
+                      : isDarkMode ? 'text-gray-600' : 'text-gray-300'
+                  }`}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <span className={`text-xs ml-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              ({product.reviewsCount ?? 0})
+            </span>
+          </div>
+        )}
+
+        {/* Add to Cart Button */}
+        <div className="mt-auto">
+          <button
             disabled={isOutOfStock}
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart?.(imgRef.current);
             }}
+            className={`w-full py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl font-medium text-xs sm:text-sm transition-all duration-200 ${
+              isOutOfStock
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg transform hover:scale-[1.02]'
+            }`}
           >
-            {isOutOfStock ? 'Stokda yoxdur' : 'Səbətə at'}
-          </Button>
+            {isOutOfStock ? '❌ Stokda yoxdur' : '🛒 Səbətə at'}
+          </button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 
