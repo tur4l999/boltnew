@@ -387,50 +387,53 @@ export function StoreScreen() {
           </div>
         )}
 
-        {/* Compact Payment & Services Section */}
-        <div className={`mt-6 rounded-2xl border shadow-lg overflow-hidden ${
+        {/* Professional Payment & Trust Section */}
+        <div className={`mt-6 rounded-xl border shadow-sm ${
           isDarkMode 
-            ? 'bg-gray-800/90 border-gray-700' 
-            : 'bg-white border-gray-200'
+            ? 'bg-gray-800/50 border-gray-700/50' 
+            : 'bg-gray-50/80 border-gray-200/50'
         }`}>
-          <div className="p-4">
+          <div className="px-4 py-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-              {/* Payment Methods - Horizontal */}
-              <div className="flex items-center gap-3 sm:gap-4">
-                <h3 className={`text-sm font-semibold ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
+              {/* Payment Method */}
+              <div className="flex items-center gap-3">
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${
+                  isDarkMode 
+                    ? 'bg-gray-700/50 border-gray-600 text-gray-200' 
+                    : 'bg-white border-gray-300 text-gray-700'
                 }`}>
-                  Ödəniş:
-                </h3>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="flex items-center gap-1">
-                    <span className="text-base sm:text-lg">💳</span>
-                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Kart</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base sm:text-lg">📱</span>
-                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Mobil</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-base sm:text-lg">🏦</span>
-                    <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Bank</span>
-                  </div>
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="6" width="20" height="12" rx="3" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M2 10h20" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M7 14h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                  <span className="text-sm font-medium">Kartla ödəniş</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/120px-Visa_Inc._logo.svg.png" alt="Visa" className="h-4 opacity-70" />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/120px-Mastercard-logo.svg.png" alt="Mastercard" className="h-4 opacity-70" />
                 </div>
               </div>
 
-              {/* Trust Indicators - Horizontal */}
-              <div className="flex items-center gap-2 sm:gap-4">
-                <div className="flex items-center gap-1">
-                  <span className="text-emerald-500 text-sm">🔒</span>
-                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Təhlükəsiz</span>
+              {/* Trust Badges */}
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-2 h-2 rounded-full bg-emerald-500`}></div>
+                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Təhlükəsiz
+                  </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-blue-500 text-sm">⚡</span>
-                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Sürətli</span>
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-2 h-2 rounded-full bg-blue-500`}></div>
+                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Sürətli
+                  </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-purple-500 text-sm">🎯</span>
-                  <span className={`text-xs ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>7/24</span>
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-2 h-2 rounded-full bg-purple-500`}></div>
+                  <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    24/7 dəstək
+                  </span>
                 </div>
               </div>
             </div>
