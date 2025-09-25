@@ -369,32 +369,35 @@ export function PackagesScreen() {
                     </>
                   )}
                   
-                  {/* Discount Badge for Basic Package */}
+                  {/* Smart Discount Design for Basic Package */}
                   {pkg.id === 'basic' && (
                     <>
-                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-5 py-2 rounded-full text-sm font-black shadow-xl border-2 transition-all duration-300 hover:scale-105 ${
+                      {/* Top ribbon style discount */}
+                      <div className="absolute top-0 right-0 z-30">
+                        <div className={`px-4 py-2 rounded-bl-2xl shadow-lg ${
                           isDarkMode 
-                            ? 'bg-gradient-to-r from-red-600 to-orange-600 text-white border-orange-400/50'
-                            : 'bg-gradient-to-r from-red-500 to-orange-500 text-white border-orange-300/50'
+                            ? 'bg-gradient-to-l from-red-600 to-orange-600 text-white'
+                            : 'bg-gradient-to-l from-red-500 to-orange-500 text-white'
                         }`}>
-                          <span className="whitespace-nowrap tracking-wide animate-pulse">⚡ MƏHDUD VAXTLı ENDİRİM ⚡</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="animate-pulse">⚡</span>
+                            <span className="text-xs font-bold">ENDİRİM</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 text-xl z-20">
-                        <div className="animate-bounce">💥</div>
-                      </div>
                       
-                      {/* Timer badge */}
-                      <div className="absolute top-2 left-2 z-20">
-                        <div className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                      {/* Timer at bottom left */}
+                      <div className="absolute bottom-4 left-4 z-20">
+                        <div className={`px-3 py-2 rounded-xl shadow-lg border transition-all duration-300 ${
                           isDarkMode 
-                            ? 'bg-red-900/80 text-red-200 border border-red-600/50'
-                            : 'bg-red-100 text-red-700 border border-red-300/50'
+                            ? 'bg-red-900/90 text-red-200 border-red-600/50'
+                            : 'bg-red-50 text-red-700 border-red-300/50'
                         }`}>
-                          <div className="flex items-center gap-1">
-                            <span className="animate-pulse">⏰</span>
-                            <span>10 GÜN</span>
+                          <div className="text-center">
+                            <div className="text-xs font-medium mb-1">Endirim bitir</div>
+                            <div className="text-lg font-black">
+                              {formatRemaining(promoEndsAt - nowTs)}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -416,7 +419,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-6' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-4 pb-20' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
