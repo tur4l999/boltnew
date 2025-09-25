@@ -351,57 +351,31 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Package Badges */}
+                  {/* Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-6 py-2.5 rounded-full text-base font-black shadow-xl border-2 transition-all duration-300 ${
-                          isDarkMode 
-                            ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
-                            : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
-                        }`}>
-                          <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                        <div className="flex items-center gap-1">
+                          <span>⭐</span>
+                          <span>Ən Populyar</span>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 text-2xl z-20">
+                      <div className="absolute top-2 right-2 text-2xl">
                         <div className="animate-pulse">🔥</div>
                       </div>
                     </>
                   )}
                   
-                  {/* Smart Discount Design for Basic Package */}
+                  {/* Simple Discount for Basic Package */}
                   {pkg.id === 'basic' && (
-                    <>
-                      {/* Top ribbon style discount */}
-                      <div className="absolute top-0 right-0 z-30">
-                        <div className={`px-4 py-2 rounded-bl-2xl shadow-lg ${
-                          isDarkMode 
-                            ? 'bg-gradient-to-l from-red-600 to-orange-600 text-white'
-                            : 'bg-gradient-to-l from-red-500 to-orange-500 text-white'
-                        }`}>
-                          <div className="flex items-center gap-1.5">
-                            <span className="animate-pulse">⚡</span>
-                            <span className="text-xs font-bold">ENDİRİM</span>
-                          </div>
+                    <div className="absolute top-0 left-0 right-0 z-20">
+                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-2 px-4 text-sm font-bold rounded-t-3xl">
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="animate-pulse">⏰</span>
+                          <span>10 günlük endirim! Bitməyə qalıb: {formatRemaining(promoEndsAt - nowTs)}</span>
                         </div>
                       </div>
-                      
-                      {/* Timer at bottom left */}
-                      <div className="absolute bottom-4 left-4 z-20">
-                        <div className={`px-3 py-2 rounded-xl shadow-lg border transition-all duration-300 ${
-                          isDarkMode 
-                            ? 'bg-red-900/90 text-red-200 border-red-600/50'
-                            : 'bg-red-50 text-red-700 border-red-300/50'
-                        }`}>
-                          <div className="text-center">
-                            <div className="text-xs font-medium mb-1">Endirim bitir</div>
-                            <div className="text-lg font-black">
-                              {formatRemaining(promoEndsAt - nowTs)}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
+                    </div>
                   )}
 
                   {/* Enhanced Decorative Elements */}
@@ -419,7 +393,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-4 pb-20' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-12' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
