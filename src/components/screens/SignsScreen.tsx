@@ -305,84 +305,69 @@ export function SignsScreen() {
         </div>
       </div>
 
-      <div className="px-4 pb-24 pt-6">
+      <div className="px-3 pb-24 pt-4">
         {view === 'home' ? (
-          <div className="space-y-8">
-            {/* Hero Section */}
-            <div className="text-center space-y-4">
-              <div className={`inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br transition-all duration-300 ${
+          <div className="space-y-6">
+            {/* Compact Hero Section */}
+            <div className="text-center space-y-2">
+              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br transition-all duration-300 ${
                 isDarkMode 
-                  ? 'from-blue-500/20 to-indigo-600/20 shadow-lg shadow-blue-500/10' 
-                  : 'from-blue-500/10 to-indigo-600/10 shadow-lg shadow-blue-500/5'
+                  ? 'from-blue-500/20 to-indigo-600/20' 
+                  : 'from-blue-500/10 to-indigo-600/10'
               }`}>
-                <EmojiIcon emoji="🛑" size={32} />
+                <EmojiIcon emoji="🛑" size={20} />
               </div>
               <div>
-                <h1 className={`text-3xl font-bold transition-colors duration-300 ${
+                <h1 className={`text-xl font-bold transition-colors duration-300 ${
                   isDarkMode ? 'text-white' : 'text-gray-900'
                 }`}>
                   Yol nişanları
                 </h1>
-                <p className={`text-lg mt-2 transition-colors duration-300 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                <p className={`text-sm mt-1 transition-colors duration-300 ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
-                  Azərbaycan yol hərəkəti nişanları və işarələri
+                  Nişanlar və işarələr
                 </p>
               </div>
             </div>
 
             {/* Main Categories Grid */}
-            <div className="grid grid-cols-1 gap-6">
+            <div className="grid grid-cols-1 gap-3">
               {/* Traffic Signs Card */}
               <Card 
                 variant="glass" 
-                padding="lg"
+                padding="md"
                 onClick={() => { setView('signs'); setSignsStage('categories'); setSelectedCategory(null); }}
                 className={`group overflow-hidden border-0 ${
                   isDarkMode 
                     ? 'bg-gradient-to-br from-red-500/10 via-amber-500/10 to-emerald-500/10 hover:from-red-500/15 hover:via-amber-500/15 hover:to-emerald-500/15' 
                     : 'bg-gradient-to-br from-red-50/50 via-amber-50/50 to-emerald-50/50 hover:from-red-100/50 hover:via-amber-100/50 hover:to-emerald-100/50'
-                } transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]`}
+                } transition-all duration-300 hover:shadow-lg`}
               >
-                <div className="flex items-center gap-6">
-                  <div className={`flex-shrink-0 w-20 h-20 rounded-3xl flex items-center justify-center ${
+                <div className="flex items-center gap-4">
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${
                     isDarkMode 
-                      ? 'bg-gradient-to-br from-gray-700/50 to-gray-800/50' 
-                      : 'bg-gradient-to-br from-white/50 to-gray-50/50'
-                  } shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <EmojiIcon emoji="🛑" size={32} />
+                      ? 'bg-gray-700/50' 
+                      : 'bg-white/50'
+                  } shadow-sm`}>
+                    <EmojiIcon emoji="🛑" size={20} />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                    <h3 className={`text-base font-bold mb-1 transition-colors duration-300 ${
                       isDarkMode ? 'text-white' : 'text-gray-900'
                     }`}>
                       Yol nişanları
                     </h3>
-                    <p className={`text-base transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    <p className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
                     }`}>
-                      Qadağan, üstünlük, xəbərdarlıq, məcburi və məlumat nişanları
+                      5 kateqoriyada nişanlar
                     </p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {['🚫', '⭐', '⚠️', '✅', 'ℹ️'].map((emoji, idx) => (
-                        <div 
-                          key={idx}
-                          className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                            isDarkMode 
-                              ? 'bg-gray-700/30 group-hover:bg-gray-600/50' 
-                              : 'bg-white/50 group-hover:bg-gray-100/70'
-                          }`}
-                          style={{ animationDelay: `${idx * 100}ms` }}
-                        >
-                          <EmojiIcon emoji={emoji} size={14} />
-                        </div>
-                      ))}
-                    </div>
                   </div>
-                  <div className={`flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 ${
+                  <div className={`flex-shrink-0 transition-all duration-300 ${
                     isDarkMode ? 'text-gray-400' : 'text-gray-500'
                   }`}>
-                    <EmojiIcon emoji="›" size={24} />
+                    <EmojiIcon emoji="›" size={16} />
                   </div>
                 </div>
               </Card>
@@ -390,38 +375,38 @@ export function SignsScreen() {
               {/* Road Markings Card */}
               <Card 
                 variant="glass" 
-                padding="lg"
+                padding="md"
                 onClick={() => setView('markings')}
                 className={`group overflow-hidden border-0 ${
                   isDarkMode 
                     ? 'bg-gradient-to-br from-blue-500/10 to-indigo-500/10 hover:from-blue-500/15 hover:to-indigo-500/15' 
                     : 'bg-gradient-to-br from-blue-50/50 to-indigo-50/50 hover:from-blue-100/50 hover:to-indigo-100/50'
-                } transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]`}
+                } transition-all duration-300 hover:shadow-lg`}
               >
-                <div className="flex items-center gap-6">
-                  <div className={`flex-shrink-0 w-20 h-20 rounded-3xl flex items-center justify-center ${
+                <div className="flex items-center gap-4">
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${
                     isDarkMode 
-                      ? 'bg-gradient-to-br from-gray-700/50 to-gray-800/50' 
-                      : 'bg-gradient-to-br from-white/50 to-gray-50/50'
-                  } shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <EmojiIcon emoji="〰️" size={32} />
+                      ? 'bg-gray-700/50' 
+                      : 'bg-white/50'
+                  } shadow-sm`}>
+                    <EmojiIcon emoji="〰️" size={20} />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                    <h3 className={`text-base font-bold mb-1 transition-colors duration-300 ${
                       isDarkMode ? 'text-white' : 'text-gray-900'
                     }`}>
                       Nişanlanma xəttləri
                     </h3>
-                    <p className={`text-base transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    <p className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
                     }`}>
-                      Yol üzərində çəkilən üfüqi nişanlanmalar və onların mənası
+                      Üfüqi nişanlanmalar
                     </p>
                   </div>
-                  <div className={`flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 ${
+                  <div className={`flex-shrink-0 transition-all duration-300 ${
                     isDarkMode ? 'text-gray-400' : 'text-gray-500'
                   }`}>
-                    <EmojiIcon emoji="›" size={24} />
+                    <EmojiIcon emoji="›" size={16} />
                   </div>
                 </div>
               </Card>
@@ -429,64 +414,64 @@ export function SignsScreen() {
               {/* Vertical Signs Card */}
               <Card 
                 variant="glass" 
-                padding="lg"
+                padding="md"
                 onClick={() => setView('vertical')}
                 className={`group overflow-hidden border-0 ${
                   isDarkMode 
                     ? 'bg-gradient-to-br from-purple-500/10 to-pink-500/10 hover:from-purple-500/15 hover:to-pink-500/15' 
                     : 'bg-gradient-to-br from-purple-50/50 to-pink-50/50 hover:from-purple-100/50 hover:to-pink-100/50'
-                } transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]`}
+                } transition-all duration-300 hover:shadow-lg`}
               >
-                <div className="flex items-center gap-6">
-                  <div className={`flex-shrink-0 w-20 h-20 rounded-3xl flex items-center justify-center ${
+                <div className="flex items-center gap-4">
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${
                     isDarkMode 
-                      ? 'bg-gradient-to-br from-gray-700/50 to-gray-800/50' 
-                      : 'bg-gradient-to-br from-white/50 to-gray-50/50'
-                  } shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <EmojiIcon emoji="📶" size={32} />
+                      ? 'bg-gray-700/50' 
+                      : 'bg-white/50'
+                  } shadow-sm`}>
+                    <EmojiIcon emoji="📶" size={20} />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                    <h3 className={`text-base font-bold mb-1 transition-colors duration-300 ${
                       isDarkMode ? 'text-white' : 'text-gray-900'
                     }`}>
                       Vertikal nişanlar
                     </h3>
-                    <p className={`text-base transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                    <p className={`text-xs transition-colors duration-300 ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
                     }`}>
-                      Dayaq sütunları, əks etdiricilər və yol kənarı nişanlar
+                      Dayaq sütunları və əks etdiricilər
                     </p>
                   </div>
-                  <div className={`flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 ${
+                  <div className={`flex-shrink-0 transition-all duration-300 ${
                     isDarkMode ? 'text-gray-400' : 'text-gray-500'
                   }`}>
-                    <EmojiIcon emoji="›" size={24} />
+                    <EmojiIcon emoji="›" size={16} />
                   </div>
                 </div>
               </Card>
             </div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Section Header */}
             <div className="flex items-center justify-between">
               <button 
                 onClick={() => setView('home')} 
-                className={`group flex items-center gap-3 px-4 py-2 rounded-xl transition-all duration-300 ${
+                className={`group flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 ${
                   isDarkMode 
                     ? 'bg-gray-800/50 hover:bg-gray-700/50 text-gray-200 border border-gray-700/50' 
                     : 'bg-white/70 hover:bg-gray-50 text-gray-700 border border-gray-200/50'
-                } backdrop-blur-sm hover:scale-105 hover:shadow-lg`}
+                } backdrop-blur-sm`}
               >
-                <EmojiIcon emoji="←" size={16} />
-                <span className="font-medium">Ana səhifə</span>
+                <EmojiIcon emoji="←" size={14} />
+                <span className="font-medium text-sm">Geri</span>
               </button>
               
-              <div className={`text-right ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                <div className="text-sm uppercase tracking-wider font-semibold">
+              <div className={`text-right ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className="text-xs uppercase tracking-wider font-semibold">
                   {view === 'signs' && (signsStage === 'categories' ? 'Nişanlar' : (SIGN_CATEGORIES.find(c => c.key === selectedCategory)?.title || 'Nişanlar'))}
-                  {view === 'markings' && 'Nişanlanma xəttləri'}
-                  {view === 'vertical' && 'Vertikal nişanlar'}
+                  {view === 'markings' && 'Xətlər'}
+                  {view === 'vertical' && 'Vertikal'}
                 </div>
               </div>
             </div>
@@ -494,12 +479,12 @@ export function SignsScreen() {
             {view === 'signs' && (
               <div className="space-y-6">
                 {signsStage === 'categories' ? (
-                  <div className="grid grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 gap-3">
                     {SIGN_CATEGORIES.map((cat, index) => (
-                      <SlideTransition key={cat.key} direction="right" delay={index * 100}>
+                      <SlideTransition key={cat.key} direction="right" delay={index * 50}>
                         <Card
                           variant="glass"
-                          padding="lg"
+                          padding="md"
                           onClick={() => { 
                             setSelectedCategory(cat.key); 
                             setActiveSignCategory(cat.key); 
@@ -509,33 +494,33 @@ export function SignsScreen() {
                           className={`group overflow-hidden border-0 ${
                             isDarkMode 
                               ? `bg-gradient-to-br from-gray-800/50 to-gray-700/30 hover:from-gray-700/60 hover:to-gray-600/40` 
-                              : `bg-gradient-to-br ${cat.bgGradient} hover:shadow-xl`
-                          } transition-all duration-500 hover:scale-[1.02]`}
+                              : `bg-gradient-to-br ${cat.bgGradient} hover:shadow-lg`
+                          } transition-all duration-300`}
                         >
-                          <div className="flex items-center gap-6">
-                            <div className={`flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center ${
+                          <div className="flex items-center gap-4">
+                            <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${
                               isDarkMode 
                                 ? 'bg-gray-700/50' 
                                 : 'bg-white/70'
-                            } shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                              <EmojiIcon emoji={cat.emoji} size={28} />
+                            } shadow-sm`}>
+                              <EmojiIcon emoji={cat.emoji} size={18} />
                             </div>
                             <div className="flex-1">
-                              <h3 className={`text-xl font-bold mb-2 transition-colors duration-300 ${
+                              <h3 className={`text-sm font-bold mb-1 transition-colors duration-300 ${
                                 isDarkMode ? 'text-white' : cat.color
                               }`}>
                                 {cat.title}
                               </h3>
-                              <p className={`text-sm transition-colors duration-300 ${
-                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                              <p className={`text-xs transition-colors duration-300 ${
+                                isDarkMode ? 'text-gray-400' : 'text-gray-600'
                               }`}>
                                 {cat.description}
                               </p>
                             </div>
-                            <div className={`flex-shrink-0 transition-all duration-300 group-hover:translate-x-1 ${
+                            <div className={`flex-shrink-0 transition-all duration-300 ${
                               isDarkMode ? 'text-gray-400' : 'text-gray-500'
                             }`}>
-                              <EmojiIcon emoji="›" size={20} />
+                              <EmojiIcon emoji="›" size={16} />
                             </div>
                           </div>
                         </Card>

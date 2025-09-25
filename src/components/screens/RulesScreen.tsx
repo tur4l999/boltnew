@@ -97,79 +97,79 @@ export function RulesScreen() {
         </div>
       </div>
 
-      <div className="px-4 pb-24 pt-6">
-        {/* Hero Section */}
-        <div className="text-center space-y-4 mb-8">
-          <div className={`inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br transition-all duration-300 ${
+      <div className="px-3 pb-24 pt-4">
+        {/* Compact Hero Section */}
+        <div className="text-center space-y-2 mb-6">
+          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br transition-all duration-300 ${
             isDarkMode 
-              ? 'from-emerald-500/20 to-green-600/20 shadow-lg shadow-emerald-500/10' 
-              : 'from-emerald-500/10 to-green-600/10 shadow-lg shadow-emerald-500/5'
+              ? 'from-emerald-500/20 to-green-600/20' 
+              : 'from-emerald-500/10 to-green-600/10'
           }`}>
-            <EmojiIcon emoji="📚" size={32} />
+            <EmojiIcon emoji="📚" size={20} />
           </div>
           <div>
-            <h1 className={`text-3xl font-bold transition-colors duration-300 ${
+            <h1 className={`text-xl font-bold transition-colors duration-300 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
               Yol hərəkəti qaydaları
             </h1>
-            <p className={`text-lg mt-2 transition-colors duration-300 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            <p className={`text-sm mt-1 transition-colors duration-300 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              Azərbaycan Respublikasının yol hərəkəti qaydaları
+              Azərbaycan qaydaları
             </p>
           </div>
         </div>
 
         {/* Rules Section */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-4">
-            <div className={`flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center ${
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center ${
               isDarkMode 
-                ? 'bg-gradient-to-br from-emerald-500/20 to-green-600/20' 
-                : 'bg-gradient-to-br from-emerald-500/10 to-green-600/10'
+                ? 'bg-emerald-500/20' 
+                : 'bg-emerald-500/10'
             }`}>
-              <EmojiIcon emoji="📋" size={20} />
+              <EmojiIcon emoji="📋" size={16} />
             </div>
             <div>
-              <h2 className={`text-2xl font-bold transition-colors duration-300 ${
+              <h2 className={`text-lg font-bold transition-colors duration-300 ${
                 isDarkMode ? 'text-white' : 'text-gray-900'
               }`}>
-                Azərbaycan yol hərəkəti qaydaları
+                Qaydalar
               </h2>
-              <p className={`text-sm transition-colors duration-300 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              <p className={`text-xs transition-colors duration-300 ${
+                isDarkMode ? 'text-gray-500' : 'text-gray-600'
               }`}>
-                {filteredRules.length} maddə tapıldı
+                {filteredRules.length} maddə
               </p>
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {filteredRules.map((r, index) => (
-              <SlideTransition key={r.id} direction="up" delay={index * 50}>
+              <SlideTransition key={r.id} direction="up" delay={index * 30}>
                 <Card 
                   variant="glass"
-                  padding="lg"
+                  padding="md"
                   onClick={() => setSelectedRuleId(prev => prev === r.id ? null : r.id)}
                   className={`group border-0 ${
                     isDarkMode 
                       ? 'bg-gray-800/50 hover:bg-gray-700/60' 
                       : 'bg-white/70 hover:bg-gray-50/80'
-                  } transition-all duration-500 hover:shadow-xl ${
-                    selectedRule?.id === r.id ? 'scale-[1.02] shadow-xl' : 'hover:scale-[1.01]'
+                  } transition-all duration-300 hover:shadow-lg ${
+                    selectedRule?.id === r.id ? 'shadow-lg' : ''
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold ${
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
                         isDarkMode 
                           ? 'bg-emerald-500/20 text-emerald-400' 
                           : 'bg-emerald-50 text-emerald-600'
                       }`}>
                         {index + 1}
                       </div>
-                      <h4 className={`font-bold text-lg transition-colors duration-300 ${
+                      <h4 className={`font-semibold text-sm transition-colors duration-300 ${
                         isDarkMode ? 'text-white' : 'text-gray-900'
                       }`}>
                         {r.title}
@@ -180,15 +180,15 @@ export function RulesScreen() {
                         ? 'rotate-90 text-emerald-500' 
                         : 'group-hover:translate-x-1'
                     } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      <EmojiIcon emoji={selectedRule?.id === r.id ? '▾' : '▸'} size={18} />
+                      <EmojiIcon emoji={selectedRule?.id === r.id ? '▾' : '▸'} size={14} />
                     </div>
                   </div>
                   
                   {selectedRule?.id === r.id && (
-                    <div className={`mt-6 pt-6 border-t transition-all duration-500 ${
+                    <div className={`mt-4 pt-4 border-t transition-all duration-500 ${
                       isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
                     }`}>
-                      <div className={`text-base leading-relaxed transition-colors duration-300 ${
+                      <div className={`text-sm leading-relaxed transition-colors duration-300 ${
                         isDarkMode ? 'text-gray-300' : 'text-gray-700'
                       }`}>
                         {r.content}
@@ -200,21 +200,21 @@ export function RulesScreen() {
             ))}
             
             {filteredRules.length === 0 && (
-              <div className="text-center py-12">
-                <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+              <div className="text-center py-8">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
                   isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100/50'
                 }`}>
-                  <EmojiIcon emoji="🔍" size={32} />
+                  <EmojiIcon emoji="🔍" size={20} />
                 </div>
-                <div className={`text-lg font-medium mb-2 ${
+                <div className={`text-sm font-medium mb-1 ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}>
                   Heç nə tapılmadı
                 </div>
-                <div className={`text-sm ${
+                <div className={`text-xs ${
                   isDarkMode ? 'text-gray-500' : 'text-gray-500'
                 }`}>
-                  Axtarış şərtlərini dəyişdirərək yenidən cəhd edin
+                  Axtarış şərtlərini dəyişin
                 </div>
               </div>
             )}
