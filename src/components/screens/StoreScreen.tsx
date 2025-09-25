@@ -240,33 +240,42 @@ export function StoreScreen() {
                 <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   💰 Qiymət aralığı
                 </label>
-                <div className="flex items-center gap-3">
-                  <input 
-                    type="number" 
-                    min={0} 
-                    value={minPrice} 
-                    onChange={e=>setMinPrice(e.target.value)} 
-                    placeholder="Min" 
-                    className={`flex-1 px-3 py-2 rounded-lg border transition-colors ${
-                      isDarkMode 
-                        ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
-                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-                    }`} 
-                  />
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>-</span>
-                  <input 
-                    type="number" 
-                    min={0} 
-                    value={maxPrice} 
-                    onChange={e=>setMaxPrice(e.target.value)} 
-                    placeholder="Max" 
-                    className={`flex-1 px-3 py-2 rounded-lg border transition-colors ${
-                      isDarkMode 
-                        ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
-                        : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
-                    }`} 
-                  />
-                  <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>₼</span>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <input 
+                      type="number" 
+                      min={0} 
+                      value={minPrice} 
+                      onChange={e=>setMinPrice(e.target.value)} 
+                      placeholder="0" 
+                      className={`w-full px-2 py-2 pr-8 text-center rounded-lg border transition-colors text-sm ${
+                        isDarkMode 
+                          ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
+                          : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                      }`} 
+                    />
+                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>₼</span>
+                  </div>
+                  
+                  <div className={`px-2 py-1 rounded text-xs font-medium ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>
+                    ilə
+                  </div>
+                  
+                  <div className="relative flex-1">
+                    <input 
+                      type="number" 
+                      min={0} 
+                      value={maxPrice} 
+                      onChange={e=>setMaxPrice(e.target.value)} 
+                      placeholder="∞" 
+                      className={`w-full px-2 py-2 pr-8 text-center rounded-lg border transition-colors text-sm ${
+                        isDarkMode 
+                          ? 'bg-gray-900/50 border-gray-600 text-gray-100 placeholder-gray-400' 
+                          : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500'
+                      }`} 
+                    />
+                    <span className={`absolute right-2 top-1/2 -translate-y-1/2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>₼</span>
+                  </div>
                 </div>
               </div>
 
