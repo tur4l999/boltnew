@@ -50,13 +50,13 @@ export function Progress({
   };
   
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {showPercentage && (
         <div className="flex justify-between items-center">
-          <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <span className="text-xs font-medium text-comfort-secondary">
             Progress
           </span>
-          <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+          <span className="text-xs font-bold text-comfort-primary">
             {Math.round(percentage)}%
           </span>
         </div>
@@ -64,20 +64,25 @@ export function Progress({
       
       <div className={`w-full rounded-full overflow-hidden backdrop-blur-sm transition-all duration-300 relative ${sizeClasses[size]} ${
         isDarkMode 
-          ? 'bg-gray-700/50 border border-gray-600/50' 
-          : 'bg-gray-200/50 border border-gray-300/50'
-      } ${className}`}>
+          ? 'bg-gray-700/40 border border-gray-600/30' 
+          : 'bg-gray-200/60 border border-gray-300/40'
+      } ${className} shadow-sm`}>
         <div 
           className={getProgressClasses()}
           style={{ 
             width: `${percentage}%`,
-            boxShadow: variant === 'animated' ? `0 0 10px rgba(34, 197, 94, 0.4)` : 'none'
+            boxShadow: variant === 'animated' ? `0 0 12px rgba(34, 197, 94, 0.5)` : '0 2px 4px rgba(34, 197, 94, 0.2)'
           }}
         />
         
-        {/* Shimmer effect for animated variant */}
+        {/* Enhanced shimmer effect */}
         {variant === 'animated' && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
+        )}
+        
+        {/* Gentle glow for completion */}
+        {percentage > 80 && (
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-green-400/20 animate-pulse-soft rounded-full"></div>
         )}
       </div>
     </div>

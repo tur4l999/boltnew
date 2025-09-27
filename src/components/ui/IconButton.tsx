@@ -15,11 +15,11 @@ export function IconButton({ children, onClick, label, className = '' }: IconBut
     <button
       onClick={onClick}
       aria-label={label}
-      className={`w-9 h-9 rounded-lg border flex items-center justify-center text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors duration-200 ${
+      className={`w-10 h-10 rounded-xl border flex items-center justify-center text-base button-press comfort-hover focus-ring transition-all duration-200 ${
         isDarkMode 
-          ? 'border-gray-600 bg-gray-700 hover:bg-gray-600 text-gray-200' 
-          : 'border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-700'
-      } ${className}`}
+          ? 'border-gray-600/40 bg-gray-700/30 hover:bg-gray-600/40 text-gray-200 hover:border-gray-500/60' 
+          : 'border-gray-300/40 bg-gray-50/30 hover:bg-gray-100/40 text-gray-700 hover:border-gray-400/60'
+      } ${className} backdrop-blur-sm shadow-sm hover:shadow-md`}
     >
       {children}
     </button>

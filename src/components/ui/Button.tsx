@@ -25,13 +25,13 @@ export function Button({
   fullWidth = false
 }: ButtonProps) {
   const { isDarkMode } = useApp();
-  const baseClasses = 'font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group';
+  const baseClasses = 'font-semibold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group button-press comfort-hover high-contrast-text';
   
   const sizeClasses = {
-    sm: 'px-4 py-2 text-sm min-h-[36px]',
-    md: 'px-6 py-3 text-sm min-h-[44px]',
-    lg: 'px-8 py-4 text-base min-h-[52px]',
-    xl: 'px-10 py-5 text-lg min-h-[60px]'
+    sm: 'px-4 py-2.5 text-sm min-h-[40px]',
+    md: 'px-6 py-3.5 text-sm min-h-[48px]',
+    lg: 'px-8 py-4 text-base min-h-[56px]',
+    xl: 'px-10 py-5 text-lg min-h-[64px]'
   };
   
   const variantClasses = {

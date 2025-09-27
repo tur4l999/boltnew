@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useApp } from "../../contexts/AppContext";
 
 type Theme = "dark" | "light";
 
@@ -134,9 +135,11 @@ function StatusBar15Pro({
 }
 
 export function StatusBar() {
+  const { isDarkMode } = useApp();
+  
   return (
     <StatusBar15Pro
-      theme="light"   // şəkil açıq temadır
+      theme={isDarkMode ? "dark" : "light"}
       battery={83}
       charging={false}
       signal={4}
