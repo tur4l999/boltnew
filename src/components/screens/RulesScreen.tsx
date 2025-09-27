@@ -98,32 +98,9 @@ export function RulesScreen() {
       </div>
 
       <div className="px-3 pb-24 pt-4">
-        {/* Compact Hero Section */}
-        <div className="text-center space-y-2 mb-6">
-          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br transition-all duration-300 ${
-            isDarkMode 
-              ? 'from-emerald-500/20 to-green-600/20' 
-              : 'from-emerald-500/10 to-green-600/10'
-          }`}>
-            <EmojiIcon emoji="📚" size={20} />
-          </div>
-          <div>
-            <h1 className={`text-xl font-bold transition-colors duration-300 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Yol hərəkəti qaydaları
-            </h1>
-            <p className={`text-sm mt-1 transition-colors duration-300 ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Azərbaycan qaydaları
-            </p>
-          </div>
-        </div>
-
         {/* Rules Section */}
         <div className="space-y-4">
-          <div>
+          <div className="text-center">
             <h2 className={`text-lg font-bold transition-colors duration-300 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
