@@ -25,7 +25,7 @@ export function HomeScreen() {
 
     // Əlavə bölmələr (secondary):
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
-    { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
+    { key: 'certificate', label: 'Şəhadətnamə', action: () => navigate('CertificateApplication'), emoji: '🎓' },
     { key: 'practiceLab', label: 'Praktiki təcrübə', action: () => alert('Praktiki təcrübə (demo)'), emoji: '🛠️' },
     { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
     { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
