@@ -1,3 +1,6 @@
+/* Import redesigned system first */
+@import './styles/redesigned.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
