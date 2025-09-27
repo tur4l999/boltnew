@@ -14,6 +14,9 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
   const [formData, setFormData] = useState<AppealFormData>({
     questionId: '',
     questionText: '',
+    questionImageUrl: undefined,
+    questionSource: 'ticket',
+    questionSourceId: undefined,
     userComment: ''
   });
   const [errors, setErrors] = useState<Partial<AppealFormData>>({});
@@ -22,14 +25,62 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
 
   // Mock questions for demo purposes
   const mockQuestions = [
-    { id: 'q1', text: 'Yol nişanları nə vaxt tətbiq edilir?' },
-    { id: 'q2', text: 'Sürət məhdudiyyəti necə təyin edilir?' },
-    { id: 'q3', text: 'Park etmək qadağandır nişanı nə deməkdir?' },
-    { id: 'q4', text: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?' },
-    { id: 'q5', text: 'Dönüş nişanları necə istifadə edilir?' },
-    { id: 'q6', text: 'Yol hərəkət qaydaları nə vaxt tətbiq edilir?' },
-    { id: 'q7', text: 'Trafik işıqları necə işləyir?' },
-    { id: 'q8', text: 'Yol xəttləri nə üçün lazımdır?' }
+    { 
+      id: 'q1', 
+      text: 'Yol nişanları nə vaxt tətbiq edilir?', 
+      source: 'ticket' as const, 
+      sourceId: '5',
+      imageUrl: undefined 
+    },
+    { 
+      id: 'q2', 
+      text: 'Bu nişan nə deməkdir?', 
+      source: 'ticket' as const, 
+      sourceId: '12',
+      imageUrl: '/public/image.png' 
+    },
+    { 
+      id: 'q3', 
+      text: 'Park etmək qadağandır nişanı nə deməkdir?', 
+      source: 'topic' as const, 
+      sourceId: 'M8',
+      imageUrl: undefined 
+    },
+    { 
+      id: 'q4', 
+      text: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?', 
+      source: 'simulator' as const, 
+      sourceId: undefined,
+      imageUrl: '/public/image copy.png' 
+    },
+    { 
+      id: 'q5', 
+      text: 'Bu yol nişanı nə mənasını verir?', 
+      source: 'topic' as const, 
+      sourceId: 'M15',
+      imageUrl: '/public/book-1.svg' 
+    },
+    { 
+      id: 'q6', 
+      text: 'Dönüş nişanları necə istifadə edilir?', 
+      source: 'ticket' as const, 
+      sourceId: '8',
+      imageUrl: undefined 
+    },
+    { 
+      id: 'q7', 
+      text: 'Trafik işıqları necə işləyir?', 
+      source: 'topic' as const, 
+      sourceId: 'M3',
+      imageUrl: '/public/book-2.svg' 
+    },
+    { 
+      id: 'q8', 
+      text: 'Yol xəttləri nə üçün lazımdır?', 
+      source: 'simulator' as const, 
+      sourceId: undefined,
+      imageUrl: undefined 
+    }
   ];
 
   const validateForm = (): boolean => {
@@ -84,7 +135,10 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
     setFormData(prev => ({
       ...prev,
       questionId,
-      questionText: question?.text || ''
+      questionText: question?.text || '',
+      questionImageUrl: question?.imageUrl,
+      questionSource: question?.source || 'ticket',
+      questionSourceId: question?.sourceId
     }));
     if (errors.questionId) {
       setErrors(prev => ({ ...prev, questionId: undefined }));
@@ -95,6 +149,32 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
     setFormData(prev => ({ ...prev, userComment: value }));
     if (errors.userComment) {
       setErrors(prev => ({ ...prev, userComment: undefined }));
+    }
+  };
+
+  const getSourceLabel = (source: string, sourceId?: string) => {
+    switch (source) {
+      case 'ticket':
+        return `${t.fromTicket} ${sourceId ? `#${sourceId}` : ''}`;
+      case 'topic':
+        return `${t.fromTopic} ${sourceId || ''}`;
+      case 'simulator':
+        return t.fromSimulator;
+      default:
+        return source;
+    }
+  };
+
+  const getSourceIcon = (source: string) => {
+    switch (source) {
+      case 'ticket':
+        return '🎫';
+      case 'topic':
+        return '📚';
+      case 'simulator':
+        return '🎮';
+      default:
+        return '❓';
     }
   };
 
@@ -139,7 +219,7 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
               <label className="block text-sm font-medium text-gray-900 dark:text-white mb-3">
                 {t.selectQuestion}
               </label>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {mockQuestions.map((question) => (
                   <button
                     key={question.id}
@@ -155,19 +235,47 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 ${
-                        formData.questionId === question.id
-                          ? 'border-white bg-white'
-                          : isDarkMode
-                            ? 'border-gray-500'
-                            : 'border-gray-400'
-                      }`}>
-                        {formData.questionId === question.id && (
-                          <div className="w-full h-full rounded-full bg-emerald-600"></div>
-                        )}
+                    <div className="space-y-3">
+                      {/* Question Header */}
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border-2 ${
+                          formData.questionId === question.id
+                            ? 'border-white bg-white'
+                            : isDarkMode
+                              ? 'border-gray-500'
+                              : 'border-gray-400'
+                        }`}>
+                          {formData.questionId === question.id && (
+                            <div className="w-full h-full rounded-full bg-emerald-600"></div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs">{getSourceIcon(question.source)}</span>
+                            <span className="text-xs opacity-75">
+                              {getSourceLabel(question.source, question.sourceId)}
+                            </span>
+                          </div>
+                          <span className="text-sm font-medium">{question.text}</span>
+                        </div>
                       </div>
-                      <span className="text-sm">{question.text}</span>
+
+                      {/* Question Image Preview */}
+                      {question.imageUrl && (
+                        <div className="relative ml-7">
+                          <img
+                            src={question.imageUrl}
+                            alt={t.questionImage}
+                            className="w-full h-20 object-cover rounded-lg"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                          <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                            {t.questionHasImage}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </button>
                 ))}

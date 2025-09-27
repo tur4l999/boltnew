@@ -47,6 +47,32 @@ export function AppealList({ appeals }: AppealListProps) {
     }
   };
 
+  const getSourceLabel = (source: string, sourceId?: string) => {
+    switch (source) {
+      case 'ticket':
+        return `${t.fromTicket} ${sourceId ? `#${sourceId}` : ''}`;
+      case 'topic':
+        return `${t.fromTopic} ${sourceId || ''}`;
+      case 'simulator':
+        return t.fromSimulator;
+      default:
+        return source;
+    }
+  };
+
+  const getSourceIcon = (source: string) => {
+    switch (source) {
+      case 'ticket':
+        return '🎫';
+      case 'topic':
+        return '📚';
+      case 'simulator':
+        return '🎮';
+      default:
+        return '❓';
+    }
+  };
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('az-AZ', {
       year: 'numeric',
@@ -89,6 +115,12 @@ export function AppealList({ appeals }: AppealListProps) {
               {/* Header */}
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs">{getSourceIcon(appeal.questionSource)}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {getSourceLabel(appeal.questionSource, appeal.questionSourceId)}
+                    </span>
+                  </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2">
                     {appeal.questionText}
                   </h4>
@@ -101,6 +133,23 @@ export function AppealList({ appeals }: AppealListProps) {
                   <span>{t.appealStatuses[appeal.status as keyof typeof t.appealStatuses]}</span>
                 </div>
               </div>
+
+              {/* Question Image */}
+              {appeal.questionImageUrl && (
+                <div className="relative">
+                  <img
+                    src={appeal.questionImageUrl}
+                    alt={t.questionImage}
+                    className="w-full h-32 object-cover rounded-xl"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                    {t.questionHasImage}
+                  </div>
+                </div>
+              )}
 
               {/* Comment Preview */}
               <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
@@ -176,6 +225,19 @@ export function AppealList({ appeals }: AppealListProps) {
 
               {/* Content */}
               <div className="space-y-6">
+                {/* Question Source */}
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                    {t.questionSource}
+                  </h3>
+                  <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                    <span className="text-lg">{getSourceIcon(selectedAppeal.questionSource)}</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {getSourceLabel(selectedAppeal.questionSource, selectedAppeal.questionSourceId)}
+                    </span>
+                  </div>
+                </div>
+
                 {/* Question */}
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
@@ -185,6 +247,28 @@ export function AppealList({ appeals }: AppealListProps) {
                     {selectedAppeal.questionText}
                   </p>
                 </div>
+
+                {/* Question Image */}
+                {selectedAppeal.questionImageUrl && (
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                      {t.questionImage}
+                    </h3>
+                    <div className="relative">
+                      <img
+                        src={selectedAppeal.questionImageUrl}
+                        alt={t.questionImage}
+                        className="w-full max-h-64 object-cover rounded-xl"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                        {t.viewQuestionImage}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* User Comment */}
                 <div>

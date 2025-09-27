@@ -144,6 +144,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: '1',
       questionId: 'q1',
       questionText: 'Yol nişanları nə vaxt tətbiq edilir?',
+      questionSource: 'ticket',
+      questionSourceId: '5',
       userComment: 'Bu sualda bəzi nişanların tətbiq vaxtı dəqiq göstərilməyib. Daha aydın olmalıdır.',
       status: 'accepted',
       submittedDate: new Date('2025-01-15T10:30:00'),
@@ -155,7 +157,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     {
       id: '2',
       questionId: 'q2',
-      questionText: 'Sürət məhdudiyyəti necə təyin edilir?',
+      questionText: 'Bu nişan nə deməkdir?',
+      questionImageUrl: '/public/image.png',
+      questionSource: 'ticket',
+      questionSourceId: '12',
       userComment: 'Bu sualda şəhər daxilində sürət məhdudiyyəti haqqında məlumat natamamdır.',
       status: 'under_review',
       submittedDate: new Date('2025-01-14T16:45:00'),
@@ -165,6 +170,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: '3',
       questionId: 'q3',
       questionText: 'Park etmək qadağandır nişanı nə deməkdir?',
+      questionSource: 'topic',
+      questionSourceId: 'M8',
       userComment: 'Bu sualda park etmək qadağandır nişanının tətbiq sahəsi dəqiq göstərilməyib.',
       status: 'rejected',
       submittedDate: new Date('2025-01-13T09:15:00'),
@@ -177,10 +184,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: '4',
       questionId: 'q4',
       questionText: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?',
+      questionImageUrl: '/public/image copy.png',
+      questionSource: 'simulator',
       userComment: 'Bu sualda piyadaların yol keçidində olması halında dayanma vaxtı dəqiq göstərilməyib.',
       status: 'pending',
       submittedDate: new Date('2025-01-12T14:20:00'),
       isResolved: false
+    },
+    {
+      id: '5',
+      questionId: 'q5',
+      questionText: 'Bu yol nişanı nə mənasını verir?',
+      questionImageUrl: '/public/book-1.svg',
+      questionSource: 'topic',
+      questionSourceId: 'M15',
+      userComment: 'Bu nişanın mənası dəqiq göstərilməyib. Daha aydın izah olmalıdır.',
+      status: 'accepted',
+      submittedDate: new Date('2025-01-11T08:30:00'),
+      reviewedDate: new Date('2025-01-11T15:45:00'),
+      adminResponse: 'Nişanın mənası əlavə edildi və daha aydın şəkildə izah edildi.',
+      adminName: 'Admin Rəşad',
+      isResolved: true
     }
   ]);
   

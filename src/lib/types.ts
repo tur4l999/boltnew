@@ -73,6 +73,9 @@ export interface Appeal {
   id: string;
   questionId: string;
   questionText: string;
+  questionImageUrl?: string;
+  questionSource: 'ticket' | 'topic' | 'simulator';
+  questionSourceId?: string; // ticket number or topic/module ID
   userComment: string;
   status: AppealStatus;
   submittedDate: Date;
@@ -85,5 +88,8 @@ export interface Appeal {
 export interface AppealFormData {
   questionId: string;
   questionText: string;
+  questionImageUrl?: string;
+  questionSource: 'ticket' | 'topic' | 'simulator';
+  questionSourceId?: string;
   userComment: string;
 }
