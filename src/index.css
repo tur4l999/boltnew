@@ -1,9 +1,9 @@
-/* Import redesigned system first */
-@import './styles/redesigned.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Import beautiful design system */
+@import './styles/beautiful-design.css';
 
 @layer base {
   :root {
