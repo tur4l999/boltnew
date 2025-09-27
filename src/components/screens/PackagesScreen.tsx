@@ -542,31 +542,26 @@ export function PackagesScreen() {
                       })()}
                     </div>
 
-                    {/* Compact Features List */}
+                    {/* Compact Features List - 2 Column Layout */}
                     <div className="mb-4">
                       <h4 className={`font-medium text-center mb-3 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                         Daxil olan xidmətlər
                       </h4>
-                      <div className="space-y-2">
-                        {pkg.features.slice(0, 4).map((feature, index) => (
-                          <div key={index} className={`flex items-center gap-2 text-xs ${
+                      <div className="grid grid-cols-2 gap-2">
+                        {pkg.features.map((feature, index) => (
+                          <div key={index} className={`flex items-start gap-2 text-xs ${
                             isDarkMode ? 'text-gray-300' : 'text-gray-700'
                           }`}>
-                            <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-white text-[10px] ${
+                            <div className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-white text-[10px] mt-0.5 ${
                               pkg.popular 
                                 ? 'bg-emerald-500'
                                 : 'bg-blue-500'
                             }`}>
                               ✓
                             </div>
-                            <span className="font-medium">{feature}</span>
+                            <span className="font-medium leading-tight">{feature}</span>
                           </div>
                         ))}
-                        {pkg.features.length > 4 && (
-                          <div className={`text-xs text-center mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            +{pkg.features.length - 4} digər xidmət
-                          </div>
-                        )}
                       </div>
                     </div>
 
