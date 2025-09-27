@@ -42,31 +42,35 @@ function AppContent() {
         ? 'bg-gray-900 text-gray-100' 
         : 'bg-gray-50 text-gray-900'
     }`}>
-      <div className={`max-w-md mx-auto h-screen relative transition-colors duration-200 ${
-        isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-      } overflow-y-auto`}
-      id="app-scroll-container"
-      >
-        {/* Sticky iPhone-like status bar inside the scroll container */}
-        <div className="sticky top-0 z-40">
-          <StatusBar />
-        </div>
+      <div className="max-w-md mx-auto h-screen relative">
+        <div className={`h-full transition-colors duration-200 ${
+          isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+        } overflow-y-auto ${!hideTabBar ? 'pb-20' : ''}`}
+        id="app-scroll-container"
+        >
+          {/* Sticky iPhone-like status bar inside the scroll container */}
+          <div className="sticky top-0 z-40">
+            <StatusBar />
+          </div>
 
-        {isLoggedIn ? (
-          isAIChat ? (
-            <ScreenRenderer />
-          ) : (
-            <>
-              {!hideHeader && <Header />}
+          {isLoggedIn ? (
+            isAIChat ? (
               <ScreenRenderer />
-              {!hideTabBar && <TabBar />}
-            </>
-          )
-        ) : (
-          <PageTransition transitionKey="login">
-            <LoginScreen onLogin={() => setIsLoggedIn(true)} />
-          </PageTransition>
-        )}
+            ) : (
+              <>
+                {!hideHeader && <Header />}
+                <ScreenRenderer />
+              </>
+            )
+          ) : (
+            <PageTransition transitionKey="login">
+              <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+            </PageTransition>
+          )}
+        </div>
+        
+        {/* TabBar fixed outside the scrollable container */}
+        {isLoggedIn && !isAIChat && !hideTabBar && <TabBar />}
       </div>
     </div>
   );

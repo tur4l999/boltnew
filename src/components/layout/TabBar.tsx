@@ -18,7 +18,7 @@ export function TabBar() {
   }
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-xl border-t-2 transition-all duration-300 ${
+    <div className={`absolute bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t-2 ${
       isDarkMode 
         ? 'bg-gray-800/95 border-gray-700/50 shadow-2xl' 
         : 'bg-white/95 border-gray-200/50 shadow-2xl'
