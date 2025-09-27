@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:github": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
+    "preview:github": "vite preview --base /boltnew/",
     "tokens": "node scripts/generate-tokens.mjs",
     "validate": "node scripts/validate.mjs",
     "handoff": "npm run tokens && node scripts/make-handoff.mjs",
