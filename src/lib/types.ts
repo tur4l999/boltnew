@@ -66,3 +66,24 @@ export interface Product {
   image?: string;
   description?: string;
 }
+
+export type AppealStatus = 'pending' | 'under_review' | 'accepted' | 'rejected' | 'resolved';
+
+export interface Appeal {
+  id: string;
+  questionId: string;
+  questionText: string;
+  userComment: string;
+  status: AppealStatus;
+  submittedDate: Date;
+  reviewedDate?: Date;
+  adminResponse?: string;
+  adminName?: string;
+  isResolved: boolean;
+}
+
+export interface AppealFormData {
+  questionId: string;
+  questionText: string;
+  userComment: string;
+}
