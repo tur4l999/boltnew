@@ -351,11 +351,11 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Enhanced Popular Badge */}
+                  {/* Enhanced Popular Badge - bigger and properly positioned */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-6 py-2.5 rounded-full text-base font-black shadow-xl border-2 transition-all duration-300 ${
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-8 py-3 rounded-full text-lg font-black shadow-xl border-2 transition-all duration-300 ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
                             : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
@@ -363,19 +363,19 @@ export function PackagesScreen() {
                           <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
-                      <div className="absolute top-3 right-3 text-2xl z-20">
+                      <div className="absolute top-2 right-2 text-3xl z-20">
                         <div className="animate-pulse">🔥</div>
                       </div>
                     </>
                   )}
                   
-                  {/* Simple Discount for Basic Package */}
+                  {/* Simple Discount for Basic Package - positioned to not overlap title */}
                   {pkg.id === 'basic' && (
-                    <div className="absolute top-0 left-0 right-0 z-20">
-                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-4 px-4 text-lg font-bold rounded-t-3xl">
+                    <div className="absolute top-4 left-4 right-4 z-20">
+                      <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-2 px-3 text-sm font-bold rounded-xl shadow-lg">
                         <div className="flex items-center justify-center gap-2">
-                          <span className="animate-pulse text-xl">⏰</span>
-                          <span>10 günlük endirim! Bitəcək: {formatRemaining(promoEndsAt - nowTs)}</span>
+                          <span className="animate-pulse text-lg">⏰</span>
+                          <span className="text-xs">Endirim! Bitəcək: {formatRemaining(promoEndsAt - nowTs)}</span>
                         </div>
                       </div>
                     </div>
@@ -396,7 +396,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-6' : pkg.id === 'basic' ? 'pt-20' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : pkg.id === 'basic' ? 'pt-20' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
