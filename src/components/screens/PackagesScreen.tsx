@@ -358,7 +358,7 @@ export function PackagesScreen() {
                   {/* Enhanced Popular Badge - INVERTED design with bottom rounded */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-30">
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-30">
                         <div className={`px-6 py-2 rounded-t-none rounded-b-2xl text-sm font-black shadow-xl border-2 border-t-0 transition-all duration-300 ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
