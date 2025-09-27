@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -58,6 +58,9 @@ interface AppContextType {
   checkoutByCard: (deliveryAddress: string, method: DeliveryMethod) => boolean;
   examResults: StoredExamResult[];
   addExamResult: (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details?: any) => void;
+  appeals: Appeal[];
+  submitAppeal: (formData: AppealFormData) => boolean;
+  getAppealsByStatus: (status?: string) => Appeal[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -132,6 +135,76 @@ export function AppProvider({ children }: { children: ReactNode }) {
       date: new Date('2025-09-03T11:30:00'),
       passed: false,
       details: { moduleId: '15ci' }
+    }
+  ]);
+  
+  const [appeals, setAppeals] = useState<Appeal[]>([
+    // Demo appeals data
+    {
+      id: '1',
+      questionId: 'q1',
+      questionText: 'Yol nişanları nə vaxt tətbiq edilir?',
+      questionSource: 'ticket',
+      questionSourceId: '5',
+      userComment: 'Bu sualda bəzi nişanların tətbiq vaxtı dəqiq göstərilməyib. Daha aydın olmalıdır.',
+      status: 'accepted',
+      submittedDate: new Date('2025-01-15T10:30:00'),
+      reviewedDate: new Date('2025-01-16T14:20:00'),
+      adminResponse: 'Sual yenidən nəzərdən keçirildi və daha aydın şəkildə yenidən yazıldı. Təşəkkürlər.',
+      adminName: 'Admin Əli',
+      isResolved: true
+    },
+    {
+      id: '2',
+      questionId: 'q2',
+      questionText: 'Bu nişan nə deməkdir?',
+      questionImageUrl: '/public/image.png',
+      questionSource: 'ticket',
+      questionSourceId: '12',
+      userComment: 'Bu sualda şəhər daxilində sürət məhdudiyyəti haqqında məlumat natamamdır.',
+      status: 'under_review',
+      submittedDate: new Date('2025-01-14T16:45:00'),
+      isResolved: false
+    },
+    {
+      id: '3',
+      questionId: 'q3',
+      questionText: 'Park etmək qadağandır nişanı nə deməkdir?',
+      questionSource: 'topic',
+      questionSourceId: 'M8',
+      userComment: 'Bu sualda park etmək qadağandır nişanının tətbiq sahəsi dəqiq göstərilməyib.',
+      status: 'rejected',
+      submittedDate: new Date('2025-01-13T09:15:00'),
+      reviewedDate: new Date('2025-01-13T11:30:00'),
+      adminResponse: 'Sual düzgündür və qaydalara uyğundur. Əlavə dəyişiklik tələb olunmur.',
+      adminName: 'Admin Leyla',
+      isResolved: true
+    },
+    {
+      id: '4',
+      questionId: 'q4',
+      questionText: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?',
+      questionImageUrl: '/public/image copy.png',
+      questionSource: 'simulator',
+      userComment: 'Bu sualda piyadaların yol keçidində olması halında dayanma vaxtı dəqiq göstərilməyib.',
+      status: 'pending',
+      submittedDate: new Date('2025-01-12T14:20:00'),
+      isResolved: false
+    },
+    {
+      id: '5',
+      questionId: 'q5',
+      questionText: 'Bu yol nişanı nə mənasını verir?',
+      questionImageUrl: '/public/book-1.svg',
+      questionSource: 'topic',
+      questionSourceId: 'M15',
+      userComment: 'Bu nişanın mənası dəqiq göstərilməyib. Daha aydın izah olmalıdır.',
+      status: 'accepted',
+      submittedDate: new Date('2025-01-11T08:30:00'),
+      reviewedDate: new Date('2025-01-11T15:45:00'),
+      adminResponse: 'Nişanın mənası əlavə edildi və daha aydın şəkildə izah edildi.',
+      adminName: 'Admin Rəşad',
+      isResolved: true
     }
   ]);
   
@@ -271,6 +344,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setExamResults(prev => [newResult, ...prev]);
   };
+
+  const submitAppeal = (formData: AppealFormData): boolean => {
+    try {
+      const newAppeal: Appeal = {
+        id: Date.now().toString(),
+        questionId: formData.questionId,
+        questionText: formData.questionText,
+        userComment: formData.userComment,
+        status: 'pending',
+        submittedDate: new Date(),
+        isResolved: false
+      };
+      setAppeals(prev => [newAppeal, ...prev]);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const getAppealsByStatus = (status?: string): Appeal[] => {
+    if (!status) return appeals;
+    return appeals.filter(appeal => appeal.status === status);
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -391,6 +487,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , checkoutByCard
       , deliveryMethod, setDeliveryMethod
       , examResults, addExamResult
+      , appeals, submitAppeal, getAppealsByStatus
     }}>
       {children}
     </AppContext.Provider>
