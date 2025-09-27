@@ -20,6 +20,7 @@ export function HomeScreen() {
     { key: 'results', label: t.myResults, action: () => navigate('Results'), emoji: '📊' },
     { key: 'tests', label: t.tests, action: () => navigate('Exam', { defaultTab: 'byTickets' }), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
+    { key: 'signs', label: 'Nişanlar', action: () => navigate('Signs'), emoji: '🛑' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
 
     // Əlavə bölmələr (secondary):
