@@ -355,15 +355,15 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Enhanced Popular Badge - positioned lower to not overlap package name */}
+                  {/* Enhanced Popular Badge - VERY TOP with only top half visible */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-8 py-3 rounded-full text-lg font-black shadow-xl border-2 transition-all duration-300 ${
+                      <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-30 overflow-hidden" style={{ height: '22px' }}>
+                        <div className={`w-full h-11 px-8 rounded-full text-sm font-bold shadow-xl border-2 transition-all duration-300 flex items-end justify-center ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
                             : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
-                        }`}>
+                        }`} style={{ paddingBottom: '8px' }}>
                           <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
@@ -395,7 +395,7 @@ export function PackagesScreen() {
                       <div className="absolute top-16 left-4 right-4 z-20">
                         <div className="bg-gradient-to-r from-gray-900/90 to-black/90 text-white text-center py-2 px-3 rounded-xl shadow-2xl border border-red-400/50">
                           <div className="flex items-center justify-center gap-1">
-                            <span className="text-xs font-bold text-red-300">⏰ QALIR:</span>
+                            <span className="text-xs font-bold text-red-300">⏰ BİTİR:</span>
                             <span className="text-sm font-black text-yellow-300 animate-pulse">
                               {formatRemaining(promoEndsAt - nowTs)}
                             </span>
@@ -438,7 +438,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-10' : pkg.id === 'basic' ? 'pt-36' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : pkg.id === 'basic' ? 'pt-36' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
