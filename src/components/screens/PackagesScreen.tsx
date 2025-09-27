@@ -355,15 +355,15 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Enhanced Popular Badge - VERY TOP with only top half visible, text positioned in visible area */}
+                  {/* Enhanced Popular Badge - TOP with visible text */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-30 overflow-hidden" style={{ height: '24px' }}>
-                        <div className={`w-full h-11 px-8 rounded-full text-sm font-bold shadow-xl border-2 transition-all duration-300 flex items-center justify-center ${
+                      <div className="absolute -top-0 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className={`px-6 py-2 rounded-b-none rounded-t-2xl text-sm font-black shadow-xl border-2 border-b-0 transition-all duration-300 ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
                             : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
-                        }`} style={{ marginTop: '-8px' }}>
+                        }`}>
                           <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
@@ -438,7 +438,7 @@ export function PackagesScreen() {
                   )}
                   
                   {/* Card Content */}
-                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-8' : pkg.id === 'basic' ? 'pt-36' : 'pt-4'}`}>
+                  <div className={`relative z-10 p-4 ${pkg.popular ? 'pt-12' : pkg.id === 'basic' ? 'pt-36' : 'pt-4'}`}>
                     
                     {/* Package Header */}
                     <div className="text-center mb-4">
