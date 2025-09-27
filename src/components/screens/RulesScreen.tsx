@@ -123,26 +123,12 @@ export function RulesScreen() {
 
         {/* Rules Section */}
         <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center ${
-              isDarkMode 
-                ? 'bg-emerald-500/20' 
-                : 'bg-emerald-500/10'
+          <div>
+            <h2 className={`text-lg font-bold transition-colors duration-300 ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
             }`}>
-              <EmojiIcon emoji="📋" size={16} />
-            </div>
-            <div>
-              <h2 className={`text-lg font-bold transition-colors duration-300 ${
-                isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}>
-                Qaydalar
-              </h2>
-              <p className={`text-xs transition-colors duration-300 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-600'
-              }`}>
-                {filteredRules.length} maddə
-              </p>
-            </div>
+              Maddələr
+            </h2>
           </div>
 
           <div className="space-y-2">
