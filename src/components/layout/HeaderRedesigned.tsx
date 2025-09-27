@@ -17,10 +17,10 @@ export function HeaderRedesigned() {
       }`}>
         
         {/* Main Header Content */}
-        <div className="content-padding py-4">
+        <div className="content-padding py-3">
           
           {/* Top Row - Brand & Actions */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-green-600 flex items-center justify-center text-white text-sm font-black shadow-md">
                 D
@@ -76,7 +76,7 @@ export function HeaderRedesigned() {
         </div>
         
         {/* Dynamic Sub-header */}
-        <div className={`px-4 py-3 border-t ${
+        <div className={`px-4 py-2 border-t ${
           isDarkMode ? 'border-gray-700/30 bg-gray-800/20' : 'border-gray-200/30 bg-gray-50/20'
         } backdrop-blur-sm`}>
           <div className="flex items-center justify-between">
@@ -90,12 +90,22 @@ export function HeaderRedesigned() {
               </div>
             </div>
             
-            <button
-              onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')}
-              className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-gray-100/50 to-gray-200/50 text-comfort-secondary text-xs font-medium button-press hover:from-emerald-100/50 hover:to-green-100/50 hover:text-emerald-600 transition-all duration-200 focus-ring"
-            >
-              {language.toUpperCase()}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => navigate('AIChat')}
+                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-600 text-xs font-medium button-press hover:from-indigo-500/30 hover:to-purple-500/30 transition-all duration-200 focus-ring flex items-center gap-1.5"
+              >
+                <EmojiIcon emoji="✨" size={12} />
+                AI
+              </button>
+              
+              <button
+                onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')}
+                className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-gray-100/50 to-gray-200/50 text-comfort-secondary text-xs font-medium button-press hover:from-emerald-100/50 hover:to-green-100/50 hover:text-emerald-600 transition-all duration-200 focus-ring"
+              >
+                {language.toUpperCase()}
+              </button>
+            </div>
           </div>
         </div>
         

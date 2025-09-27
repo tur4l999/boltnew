@@ -67,9 +67,12 @@
   --animation-slow: 0.5s;
   
   /* Layout */
-  --header-height: 120px;
-  --tabbar-height: 88px;
+  --header-height: 100px;
+  --tabbar-height: 76px;
   --content-max-width: 448px;
+  
+  /* Safe Areas */
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 8px);
 }
 
 /* ===== Modern Animation System ===== */
@@ -380,6 +383,35 @@
   }
 }
 
+/* Stable TabBar Utilities */
+.tabbar-stable {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: none !important;
+  animation: none !important;
+}
+
+.h-safe-area-inset-bottom {
+  height: var(--safe-area-inset-bottom);
+}
+
+/* Tab Button Stabilization */
+.tab-button-stable {
+  transform: none;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab-button-stable:hover {
+  transform: none;
+}
+
+.tab-button-stable:active {
+  transform: scale(0.98);
+  transition-duration: 0.1s;
+}
+
 /* Touch Optimizations */
 @media (hover: none) and (pointer: coarse) {
   .interactive-modern:hover,
@@ -396,5 +428,11 @@
   /* Larger touch targets */
   .button-modern {
     min-height: 52px;
+  }
+  
+  /* Stable tab interactions on touch */
+  .tab-button-stable:hover {
+    transform: none;
+    box-shadow: none;
   }
 }

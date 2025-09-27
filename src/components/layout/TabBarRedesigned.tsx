@@ -45,18 +45,16 @@ export function TabBarRedesigned() {
   }
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-30 backdrop-blur-xl transition-all duration-300 ${
-      isDarkMode ? 'bg-gray-900/95' : 'bg-white/95'
-    }`}>
+    <div className={`tabbar-stable z-30 border-t transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gray-900/98 border-gray-700/40 shadow-2xl' 
+        : 'bg-white/98 border-gray-200/40 shadow-2xl'
+    } backdrop-blur-xl`}>
       <div className="max-w-md mx-auto">
         
-        {/* Modern Tab Container */}
-        <div className="content-padding py-3">
-          <div className={`grid grid-cols-4 gap-2 p-2 rounded-3xl ${
-            isDarkMode 
-              ? 'bg-gray-800/60 border border-gray-700/40' 
-              : 'bg-gray-100/60 border border-gray-200/40'
-          } backdrop-blur-lg shadow-xl`}>
+        {/* Stable Tab Container */}
+        <div className="px-4 py-2">
+          <div className="grid grid-cols-4 gap-1">
             
             {tabs.map((tab) => {
               const isActive = currentScreen.screen === tab.key;
@@ -64,37 +62,37 @@ export function TabBarRedesigned() {
                 <button
                   key={tab.key}
                   onClick={tab.action}
-                  className={`relative p-3 rounded-2xl transition-all duration-300 button-press group ${
+                  className={`tab-button-stable relative px-2 py-3 rounded-2xl group min-h-[56px] flex flex-col items-center justify-center ${
                     isActive 
-                      ? `bg-gradient-to-br ${tab.gradient} text-white shadow-lg scale-105` 
+                      ? `bg-gradient-to-br ${tab.gradient} text-white shadow-md` 
                       : isDarkMode 
-                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/40' 
-                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/40'
+                        ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/50' 
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100/50'
                   }`}
                   aria-label={tab.label}
                 >
                   
-                  {/* Background glow for active tab */}
+                  {/* Subtle glow for active tab */}
                   {isActive && (
-                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} opacity-20 blur-lg scale-125 group-hover:opacity-30 transition-all duration-300`}></div>
+                    <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} opacity-15 blur-md transition-all duration-300`}></div>
                   )}
                   
-                  <div className="relative z-10 flex flex-col items-center gap-2">
-                    <div className={`transition-all duration-300 ${
-                      isActive ? 'scale-110' : 'group-hover:scale-110'
+                  <div className="relative z-10 gap-2">
+                    <div className={`transition-all duration-200 ${
+                      isActive ? '' : 'group-hover:scale-105'
                     }`}>
                       <EmojiIcon emoji={tab.emoji} size={20} />
                     </div>
-                    <div className={`text-xs font-semibold transition-all duration-200 ${
-                      isActive ? 'scale-105' : ''
+                    <div className={`text-xs font-semibold mt-1 transition-all duration-200 ${
+                      isActive ? 'font-bold' : ''
                     }`}>
                       {tab.label}
                     </div>
                   </div>
                   
-                  {/* Active indicator line */}
+                  {/* Active indicator dot */}
                   {isActive && (
-                    <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-1 rounded-full bg-white/50 animate-pulse`}></div>
+                    <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white/80 shadow-sm"></div>
                   )}
                   
                 </button>
@@ -103,25 +101,8 @@ export function TabBarRedesigned() {
           </div>
         </div>
 
-        {/* Floating Action Button */}
-        <div className="absolute -top-8 right-6">
-          <button
-            onClick={() => navigate('AIChat')}
-            className="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-2xl hover:shadow-3xl button-press comfort-hover focus-ring group relative overflow-hidden"
-            aria-label="AI Köməkçisi"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative z-10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
-              <EmojiIcon emoji="✨" size={24} />
-            </div>
-            
-            {/* Pulse ring */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 opacity-30 animate-ping"></div>
-          </button>
-        </div>
-
         {/* Safe area for iPhone home indicator */}
-        <div className="h-2"></div>
+        <div className="h-safe-area-inset-bottom"></div>
         
       </div>
     </div>
