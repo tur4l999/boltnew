@@ -28,29 +28,37 @@ export function Card({
   };
   
   const variantClasses = {
-    default: isDarkMode 
-      ? 'bg-gray-800/80 border-gray-700/50 text-gray-100' 
-      : 'bg-white/80 border-gray-200/50 text-gray-900',
+    default: `comfort-surface text-comfort-primary ${
+      isDarkMode 
+        ? 'shadow-xl' 
+        : 'shadow-lg'
+    }`,
     elevated: isDarkMode
-      ? 'bg-gray-800 border-gray-700 text-gray-100 shadow-xl'
-      : 'bg-white border-gray-200 text-gray-900 shadow-xl',
+      ? 'bg-gray-800/90 border-gray-700/30 text-gray-100 shadow-2xl'
+      : 'bg-white border-gray-200/30 text-gray-900 shadow-2xl',
     outlined: isDarkMode
-      ? 'bg-transparent border-2 border-gray-600 text-gray-100'
-      : 'bg-transparent border-2 border-gray-300 text-gray-900',
-    glass: isDarkMode
-      ? 'bg-gray-800/30 border-gray-600/50 text-gray-100 backdrop-blur-xl'
-      : 'bg-white/30 border-gray-200/50 text-gray-900 backdrop-blur-xl'
+      ? 'bg-transparent border-2 border-gray-600/60 text-gray-100 hover:border-gray-500'
+      : 'bg-transparent border-2 border-gray-300/60 text-gray-900 hover:border-gray-400',
+    glass: 'glass-comfort text-comfort-primary'
   };
   
   const hoverClasses = hover ? (onClick ? 
-    'hover:shadow-lg hover:scale-[1.02] cursor-pointer transform' : 
-    'hover:shadow-md hover:scale-[1.01] transform'
+    'comfort-hover cursor-pointer transform focus-ring' : 
+    'comfort-hover transform'
   ) : '';
   
   return (
     <div 
       onClick={onClick} 
       className={`rounded-2xl border transition-all duration-300 group relative ${paddingClasses[padding]} ${variantClasses[variant]} ${hoverClasses} ${className}`}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      } : undefined}
     >
       {/* Subtle hover effect overlay */}
       {hover && (

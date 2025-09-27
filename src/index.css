@@ -1,3 +1,6 @@
+/* Import redesigned system first */
+@import './styles/redesigned.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,14 +9,63 @@
   :root {
     --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif;
     --font-heading: 'DM Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif;
+    
+    /* Enhanced color psychology variables */
+    --color-comfort-bg: #fafbfc;
+    --color-comfort-surface: #ffffff;
+    --color-warm-gray: #6b7688;
+    --color-soft-emerald: #059669;
+    --color-calm-blue: #0ea5e9;
+    
+    /* Dark mode comfort colors */
+    --color-dark-comfort-bg: #0f1419;
+    --color-dark-comfort-surface: #1a1f2e;
+    --color-dark-warm-gray: #8892a6;
+    
+    /* Spacing for comfortable reading */
+    --reading-measure: 65ch;
+    --content-padding: clamp(1rem, 4vw, 2rem);
+    
+    /* Enhanced shadows for depth perception */
+    --shadow-comfort: 0 2px 8px -2px rgba(0, 0, 0, 0.08), 0 4px 16px -8px rgba(0, 0, 0, 0.12);
+    --shadow-comfort-hover: 0 4px 16px -4px rgba(0, 0, 0, 0.12), 0 8px 32px -16px rgba(0, 0, 0, 0.16);
+    --shadow-dark-comfort: 0 2px 8px -2px rgba(0, 0, 0, 0.3), 0 4px 16px -8px rgba(0, 0, 0, 0.4);
   }
 
   html {
     font-family: var(--font-sans);
+    /* Better text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
+  }
+
+  body {
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Better line height for readability */
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    /* Better spacing for headings */
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  /* Better focus management */
+  *:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  /* Improved button and interactive element defaults */
+  button, a, [role="button"] {
+    /* Larger touch targets for mobile */
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -186,12 +238,43 @@ html {
   .animate-shimmer,
   .animate-float,
   .animate-scale-in,
-  .animate-gradient {
+  .animate-gradient,
+  .animate-pulse-soft,
+  .animate-float-gentle {
     animation: none;
   }
   
-  .hover-lift:hover {
+  .hover-lift:hover,
+  .comfort-hover:hover,
+  .button-press:active {
     transform: none;
+  }
+  
+  /* Reduce all transition durations */
+  * {
+    transition-duration: 0.1s !important;
+    animation-duration: 0.1s !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .comfort-surface {
+    border-width: 2px;
+  }
+  
+  .glass-comfort {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .dark .glass-comfort {
+    background: rgba(26, 31, 46, 0.95);
+  }
+  
+  .focus-ring:focus {
+    outline: 3px solid rgba(34, 197, 94, 0.8);
+    outline-offset: 3px;
   }
 }
 
@@ -260,7 +343,193 @@ html {
 }
 
 .focus-ring:focus {
-  outline: 2px solid rgba(34, 197, 94, 0.5);
+  outline: 2px solid rgba(34, 197, 94, 0.6);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+/* Psychological comfort utilities */
+.comfort-surface {
+  background: var(--color-comfort-surface);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  box-shadow: var(--shadow-comfort);
+}
+
+.dark .comfort-surface {
+  background: var(--color-dark-comfort-surface);
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  box-shadow: var(--shadow-dark-comfort);
+}
+
+.comfort-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.comfort-hover:hover {
+  box-shadow: var(--shadow-comfort-hover);
+  transform: translateY(-1px);
+}
+
+/* Better spacing utilities */
+.content-padding {
+  padding: var(--content-padding);
+}
+
+.reading-width {
+  max-width: var(--reading-measure);
+}
+
+/* Enhanced glassmorphism effects */
+.glass-comfort {
+  backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.dark .glass-comfort {
+  background: rgba(26, 31, 46, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Comfortable text colors */
+.text-comfort-primary {
+  color: #1a2332;
+}
+
+.dark .text-comfort-primary {
+  color: #f1f3f7;
+}
+
+.text-comfort-secondary {
+  color: var(--color-warm-gray);
+}
+
+.dark .text-comfort-secondary {
+  color: var(--color-dark-warm-gray);
+}
+
+/* Better button press feedback */
+.button-press {
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-press:active {
+  transform: scale(0.98) translateY(1px);
+}
+
+/* Comfortable card spacing */
+.card-comfortable {
+  padding: clamp(1rem, 3vw, 1.5rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+}
+
+/* Better visual hierarchy */
+.visual-hierarchy-1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.visual-hierarchy-2 {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.visual-hierarchy-3 {
+  font-size: clamp(1rem, 2.5vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Improved loading states */
+.loading-shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .loading-shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0) 100%);
+}
+
+/* Comfortable spacing system */
+.space-comfortable > * + * {
+  margin-top: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+.space-comfortable-lg > * + * {
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* Better contrast and readability */
+.high-contrast-text {
+  font-weight: 500;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .high-contrast-text {
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Touch-friendly optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .comfort-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Larger touch targets on mobile */
+  button, .button, [role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  /* Better tap feedback */
+  .button-press:active {
+    transform: scale(0.95);
+    transition-duration: 0.1s;
+  }
+}
+
+/* Small screen optimizations */
+@media (max-width: 375px) {
+  .content-padding {
+    padding: clamp(0.75rem, 3vw, 1rem);
+  }
+  
+  .card-comfortable {
+    padding: clamp(0.75rem, 2.5vw, 1rem);
+  }
+  
+  .visual-hierarchy-1 {
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+  }
+  
+  .visual-hierarchy-2 {
+    font-size: clamp(1.125rem, 2.75vw, 1.25rem);
+  }
+}
+
+/* Extra large screen adaptations */
+@media (min-width: 480px) {
+  .max-w-md {
+    border-left: 1px solid rgba(229, 231, 235, 0.3);
+    border-right: 1px solid rgba(229, 231, 235, 0.3);
+  }
+  
+  .dark .max-w-md {
+    border-left: 1px solid rgba(75, 85, 99, 0.2);
+    border-right: 1px solid rgba(75, 85, 99, 0.2);
+  }
 }

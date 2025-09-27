@@ -49,10 +49,10 @@ export function HomeScreen() {
   const secondaryRows = useMemo(() => toRows(secondaryItems), [secondaryItems]);
 
   return (
-    <div className={`p-4 pb-24 min-h-screen transition-all duration-300 relative overflow-hidden ${
+    <div className={`content-padding pb-24 min-h-screen transition-all duration-300 relative overflow-hidden space-comfortable ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
-        : 'bg-gradient-to-br from-gray-50 via-white to-emerald-50'
+        ? 'bg-gradient-to-br from-slate-900/50 via-gray-900/50 to-slate-800/50' 
+        : 'bg-gradient-to-br from-gray-50/50 via-white/50 to-emerald-50/30'
     }`}>
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
@@ -141,40 +141,40 @@ export function HomeScreen() {
 
       {/* Enhanced Progress Card */}
       <FadeInUp delay={200}>
-        <Card className={`mb-4 p-5 transition-all duration-300 hover:shadow-lg group ${
-          isDarkMode 
-            ? 'bg-gradient-to-r from-gray-800/80 to-slate-800/80 border-gray-700/50' 
-            : 'bg-gradient-to-r from-white/80 to-gray-50/80 border-gray-200/50'
-        } backdrop-blur-sm`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+        <Card 
+          variant="glass" 
+          padding="lg"
+          className="card-comfortable group hover:scale-[1.01] transition-all duration-300"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="visual-hierarchy-3 text-comfort-primary">
               {t.progress}
             </div>
-            <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-              isDarkMode ? 'bg-emerald-900/50 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
+            <div className={`text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm ${
+              isDarkMode ? 'bg-emerald-900/40 text-emerald-300 border border-emerald-700/30' : 'bg-emerald-50 text-emerald-700 border border-emerald-200/50'
             }`}>
               42%
             </div>
           </div>
-          <Progress value={42} className="h-2 mb-3" />
-          <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {t.continue} → <span className={`font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>M8: Yol nişanları</span>
+          <Progress value={42} className="h-3 mb-4" />
+          <div className="text-sm font-medium text-comfort-secondary">
+            {t.continue} → <span className={`font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} high-contrast-text`}>M8: Yol nişanları</span>
           </div>
         </Card>
       </FadeInUp>
 
       {/* Enhanced Primary Section */}
-      <Card className={`mb-4 transition-all duration-300 hover:shadow-lg ${
-        isDarkMode 
-          ? 'bg-gray-800/80 border-gray-700/50' 
-          : 'bg-white/80 border-gray-200/50'
-      } backdrop-blur-sm`}>
-        <div className="flex items-center justify-between mb-4 p-1">
-          <div className={`text-sm uppercase tracking-wider font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+      <Card 
+        variant="glass" 
+        padding="lg"
+        className="card-comfortable group hover:scale-[1.005] transition-all duration-300"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div className="visual-hierarchy-2 text-comfort-primary">
             Əsas bölmələr
           </div>
           <div className={`h-px flex-1 ml-4 bg-gradient-to-r ${
-            isDarkMode ? 'from-gray-700 to-transparent' : 'from-gray-300 to-transparent'
+            isDarkMode ? 'from-gray-600/50 to-transparent' : 'from-gray-300/50 to-transparent'
           }`} />
         </div>
         <div className="space-y-3">
@@ -185,20 +185,19 @@ export function HomeScreen() {
                   <button
                     key={item.key}
                     onClick={item.action}
-                    className={`rounded-2xl border-2 shadow-sm p-4 flex items-center gap-3 transition-all duration-300 min-h-[60px] transform hover:scale-[1.02] hover:shadow-lg group ${
+                    className={`rounded-2xl border comfort-surface p-4 flex items-center gap-3 transition-all duration-300 min-h-[68px] button-press comfort-hover focus-ring group ${
                       isDarkMode
-                        ? 'bg-gradient-to-br from-gray-800/50 to-slate-800/50 border-gray-700/50 hover:border-gray-600 text-gray-100'
-                        : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-200/50 hover:border-gray-300 text-gray-900'
+                        ? 'hover:border-gray-600/60 text-gray-100'
+                        : 'hover:border-gray-300/60 text-gray-900'
                     }`}
+                    aria-label={item.label}
                   >
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
-                      isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
-                    }`}>
-                      <EmojiIcon emoji={item.emoji} size={20} />
+                    <div className={`w-13 h-13 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${
+                      isDarkMode ? 'bg-gray-700/40 group-hover:bg-gray-600/50' : 'bg-gray-100/70 group-hover:bg-gray-200/80'
+                    } shadow-sm`}>
+                      <EmojiIcon emoji={item.emoji} size={22} />
                     </div>
-                    <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-100' : 'text-gray-800'
-                    }`}>
+                    <div className="text-left visual-hierarchy-3 leading-tight text-comfort-primary flex-1">
                       {item.label}
                     </div>
                   </button>
@@ -211,25 +210,29 @@ export function HomeScreen() {
 
       {/* Enhanced CTA */}
       <ScaleIn delay={500}>
-        <div className="mt-4">
+        <div className="mt-6">
           <button
             onClick={() => navigate('ExamConfig', { mode: 'simulator' })}
-            className="w-full rounded-3xl p-5 flex items-center gap-4 min-h-[70px] bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 hover:from-emerald-700 hover:via-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden"
+            className="w-full rounded-3xl p-6 flex items-center gap-5 min-h-[80px] bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 hover:from-emerald-700 hover:via-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 button-press comfort-hover focus-ring group relative overflow-hidden"
+            aria-label="Sınaq imtahanına başla"
           >
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 relative z-10">
-              <EmojiIcon emoji="🧪" size={24} className="text-white" />
+            <div className="w-16 h-16 rounded-2xl bg-white/25 backdrop-blur-sm flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 relative z-10 shadow-lg">
+              <EmojiIcon emoji="🧪" size={26} className="text-white" />
             </div>
-            <div className="text-left font-black text-lg leading-tight relative z-10">
-              {`${t.examSimulator}`}
-              <div className="text-sm font-medium opacity-90">Sınaq imtahanı</div>
+            <div className="text-left font-black leading-tight relative z-10 flex-1">
+              <div className="visual-hierarchy-2 text-white mb-1">
+                {`${t.examSimulator}`}
+              </div>
+              <div className="text-sm font-medium opacity-85">Sınaq imtahanı</div>
             </div>
-            <div className="ml-auto">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm transition-transform duration-300 group-hover:translate-x-1">
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center text-lg transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110 shadow-md">
                 →
               </div>
+              <div className="text-xs font-medium opacity-75">Başla</div>
             </div>
           </button>
         </div>
@@ -237,17 +240,17 @@ export function HomeScreen() {
 
       {/* Enhanced Secondary Section */}
       {secondaryRows.length > 0 && (
-        <Card className={`mt-4 transition-all duration-300 hover:shadow-lg ${
-          isDarkMode 
-            ? 'bg-gray-800/80 border-gray-700/50' 
-            : 'bg-white/80 border-gray-200/50'
-        } backdrop-blur-sm`}>
-          <div className="flex items-center justify-between mb-4 p-1">
-            <div className={`text-sm uppercase tracking-wider font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+        <Card 
+          variant="glass" 
+          padding="lg"
+          className="card-comfortable group hover:scale-[1.005] transition-all duration-300"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <div className="visual-hierarchy-2 text-comfort-primary">
               Əlavə bölmələr
             </div>
             <div className={`h-px flex-1 ml-4 bg-gradient-to-r ${
-              isDarkMode ? 'from-gray-700 to-transparent' : 'from-gray-300 to-transparent'
+              isDarkMode ? 'from-gray-600/50 to-transparent' : 'from-gray-300/50 to-transparent'
             }`} />
           </div>
           <div className="space-y-3">
@@ -258,20 +261,19 @@ export function HomeScreen() {
                     <button
                       key={item.key}
                       onClick={item.action}
-                      className={`rounded-2xl border-2 shadow-sm p-4 flex items-center gap-3 transition-all duration-300 min-h-[60px] transform hover:scale-[1.02] hover:shadow-lg group ${
+                      className={`rounded-2xl border comfort-surface p-4 flex items-center gap-3 transition-all duration-300 min-h-[68px] button-press comfort-hover focus-ring group ${
                         isDarkMode
-                          ? 'bg-gradient-to-br from-gray-800/50 to-slate-800/50 border-gray-700/50 hover:border-gray-600 text-gray-100'
-                          : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-200/50 hover:border-gray-300 text-gray-900'
+                          ? 'hover:border-gray-600/60 text-gray-100'
+                          : 'hover:border-gray-300/60 text-gray-900'
                       }`}
+                      aria-label={item.label}
                     >
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 ${
-                        isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
-                      }`}>
-                        <EmojiIcon emoji={item.emoji} size={20} />
+                      <div className={`w-13 h-13 rounded-2xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${
+                        isDarkMode ? 'bg-gray-700/40 group-hover:bg-gray-600/50' : 'bg-gray-100/70 group-hover:bg-gray-200/80'
+                      } shadow-sm`}>
+                        <EmojiIcon emoji={item.emoji} size={22} />
                       </div>
-                      <div className={`text-left font-bold text-sm leading-tight transition-colors duration-200 ${
-                        isDarkMode ? 'text-gray-100' : 'text-gray-800'
-                      }`}>
+                      <div className="text-left visual-hierarchy-3 leading-tight text-comfort-primary flex-1">
                         {item.label}
                       </div>
                     </button>
@@ -289,7 +291,8 @@ export function HomeScreen() {
       <ScaleIn delay={600}>
         <button
           onClick={() => alert("Tətbiqdən Necə İstifadə Edilir")}
-          className="w-full h-44 rounded-3xl p-6 flex flex-col justify-between mt-6 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 hover:from-emerald-700 hover:via-green-600 hover:to-emerald-800 text-white font-black relative overflow-hidden transform hover:scale-[1.02] transition-all duration-300 shadow-xl hover:shadow-2xl group"
+          className="w-full h-48 rounded-3xl p-6 flex flex-col justify-between mt-6 bg-gradient-to-br from-emerald-600 via-green-500 to-emerald-700 hover:from-emerald-700 hover:via-green-600 hover:to-emerald-800 text-white font-black relative overflow-hidden button-press comfort-hover focus-ring shadow-xl hover:shadow-2xl group"
+          aria-label="Video dərslik: Tətbiqdən necə istifadə edilir"
         >
           {/* Background pattern */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -298,19 +301,19 @@ export function HomeScreen() {
           <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"></div>
           <div className="absolute bottom-4 left-4 w-8 h-8 rounded-full bg-white/20"></div>
           
-          <div className="flex items-center gap-4 relative z-10">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-              <span className="text-white text-2xl">▶</span>
+          <div className="flex items-center gap-5 relative z-10">
+            <div className="w-16 h-16 rounded-2xl bg-white/25 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
+              <span className="text-white text-3xl">▶</span>
             </div>
-            <div className="text-left">
-              <div className="text-sm font-medium opacity-90">Video dərslik</div>
-              <div className="text-lg font-black">Necə İstifadə Edilir</div>
+            <div className="text-left flex-1">
+              <div className="text-sm font-medium opacity-85 mb-1">Video dərslik</div>
+              <div className="visual-hierarchy-2 text-white leading-tight">Necə İstifadə Edilir</div>
             </div>
           </div>
           
           <div className="flex items-center justify-between relative z-10">
             <div className="text-sm font-medium opacity-80">5 dəqiqəlik təlimat</div>
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg transition-transform duration-300 group-hover:translate-x-2">
+            <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center text-xl transition-transform duration-300 group-hover:translate-x-3 group-hover:scale-110 shadow-md">
               →
             </div>
           </div>
