@@ -21,10 +21,13 @@ export function DrivingPracticeScreen() {
   const [activeTab, setActiveTab] = useState<'book' | 'history'>('book');
   const [selectedTransmission, setSelectedTransmission] = useState<'manual' | 'automatic' | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState<'car' | 'motorcycle' | 'truck' | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [selectedInstructor, setSelectedInstructor] = useState<string>('');
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [showTruckAlert, setShowTruckAlert] = useState(false);
+  const [showRegionAlert, setShowRegionAlert] = useState(false);
 
   // Sample data
   const instructors = [
@@ -35,6 +38,19 @@ export function DrivingPracticeScreen() {
 
   const timeSlots = [
     '09:00', '10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '17:00', '18:00'
+  ];
+
+  const regions = [
+    { id: 'baku', name: t.baku, available: true },
+    { id: 'ganja', name: t.ganja, available: false },
+    { id: 'sumgayit', name: t.sumgayit, available: false },
+    { id: 'mingechevir', name: t.mingechevir, available: false },
+    { id: 'lankaran', name: t.lankaran, available: false },
+    { id: 'shirvan', name: t.shirvan, available: false },
+    { id: 'nakhchivan', name: t.nakhchivan, available: false },
+    { id: 'gabala', name: t.gabala, available: false },
+    { id: 'shaki', name: t.shaki, available: false },
+    { id: 'shusha', name: t.shusha, available: false },
   ];
 
   const practiceHistory: PracticeBooking[] = [
@@ -62,8 +78,25 @@ export function DrivingPracticeScreen() {
     }
   ];
 
+  const handleVehicleSelect = (vehicle: 'car' | 'motorcycle' | 'truck') => {
+    if (vehicle === 'truck') {
+      setShowTruckAlert(true);
+      return;
+    }
+    setSelectedVehicle(vehicle);
+  };
+
+  const handleRegionSelect = (regionId: string) => {
+    const region = regions.find(r => r.id === regionId);
+    if (!region?.available) {
+      setShowRegionAlert(true);
+      return;
+    }
+    setSelectedRegion(regionId);
+  };
+
   const handleBookPractice = () => {
-    if (selectedTransmission && selectedVehicle && selectedDate && selectedTime && selectedInstructor) {
+    if (selectedTransmission && selectedVehicle && selectedRegion && selectedDate && selectedTime && selectedInstructor) {
       setShowBookingForm(true);
     }
   };
@@ -178,23 +211,69 @@ export function DrivingPracticeScreen() {
               {[
                 { id: 'car', label: t.car, icon: '🚗' },
                 { id: 'motorcycle', label: t.motorcycle, icon: '🏍️' },
-                { id: 'truck', label: t.truck, icon: '🚛' }
+                { id: 'truck', label: t.truck, icon: '🚛', disabled: true }
               ].map((vehicle) => (
                 <button
                   key={vehicle.id}
-                  onClick={() => setSelectedVehicle(vehicle.id as 'car' | 'motorcycle' | 'truck')}
+                  onClick={() => handleVehicleSelect(vehicle.id as 'car' | 'motorcycle' | 'truck')}
+                  disabled={vehicle.disabled}
                   className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                    selectedVehicle === vehicle.id
-                      ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                      : isDarkMode
-                        ? 'border-gray-600 bg-gray-700 hover:border-gray-500'
-                        : 'border-gray-300 bg-white hover:border-gray-400'
+                    vehicle.disabled
+                      ? 'border-gray-300 bg-gray-100 dark:bg-gray-800 dark:border-gray-600 opacity-50 cursor-not-allowed'
+                      : selectedVehicle === vehicle.id
+                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                        : isDarkMode
+                          ? 'border-gray-600 bg-gray-700 hover:border-gray-500'
+                          : 'border-gray-300 bg-white hover:border-gray-400'
                   }`}
                 >
-                  <div className="text-2xl mb-2">{vehicle.icon}</div>
-                  <div className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  <div className={`text-2xl mb-2 ${vehicle.disabled ? 'grayscale' : ''}`}>{vehicle.icon}</div>
+                  <div className={`text-sm font-medium ${
+                    vehicle.disabled 
+                      ? isDarkMode ? 'text-gray-500' : 'text-gray-400'
+                      : isDarkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
                     {vehicle.label}
                   </div>
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          {/* Region Selection */}
+          <Card>
+            <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              {t.selectRegion}
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              {regions.map((region) => (
+                <button
+                  key={region.id}
+                  onClick={() => handleRegionSelect(region.id)}
+                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    !region.available
+                      ? 'border-gray-300 bg-gray-100 dark:bg-gray-800 dark:border-gray-600 opacity-60 cursor-not-allowed'
+                      : selectedRegion === region.id
+                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                        : isDarkMode
+                          ? 'border-gray-600 bg-gray-700 hover:border-gray-500'
+                          : 'border-gray-300 bg-white hover:border-gray-400'
+                  }`}
+                >
+                  <div className={`text-sm font-medium ${
+                    !region.available 
+                      ? isDarkMode ? 'text-gray-500' : 'text-gray-400'
+                      : isDarkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
+                    {region.name}
+                  </div>
+                  {region.available && (
+                    <div className={`text-xs mt-1 ${
+                      isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                    }`}>
+                      Mövcud
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
@@ -281,7 +360,7 @@ export function DrivingPracticeScreen() {
           )}
 
           {/* Book Button */}
-          {selectedTransmission && selectedVehicle && selectedDate && selectedTime && selectedInstructor && (
+          {selectedTransmission && selectedVehicle && selectedRegion && selectedDate && selectedTime && selectedInstructor && (
             <Button
               onClick={handleBookPractice}
               className="w-full py-4 text-lg font-semibold"
@@ -398,6 +477,14 @@ export function DrivingPracticeScreen() {
                 </div>
                 <div className="flex justify-between">
                   <span className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {t.region}:
+                  </span>
+                  <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {regions.find(r => r.id === selectedRegion)?.name}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                     {t.instructor}:
                   </span>
                   <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -428,6 +515,52 @@ export function DrivingPracticeScreen() {
                 className="flex-1"
               >
                 Təsdiq et
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Truck Unavailable Alert */}
+      {showTruckAlert && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <div className="text-center">
+              <div className="text-6xl mb-4">🚛</div>
+              <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                {t.currentlyUnavailable}
+              </h3>
+              <p className={`text-sm mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Hal-hazırda yük maşını üçün praktiki təcrübə mövcud deyil. Zəhmət olmasa maşın və ya motosikl seçin.
+              </p>
+              <Button
+                onClick={() => setShowTruckAlert(false)}
+                className="w-full"
+              >
+                Bağla
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Region Coming Soon Alert */}
+      {showRegionAlert && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <div className="text-center">
+              <div className="text-6xl mb-4">🏙️</div>
+              <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                {t.comingSoon}
+              </h3>
+              <p className={`text-sm mb-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Bu region üçün xidmət tezliklə başlayacaq. Hal-hazırda yalnız Bakıda praktiki təcrübə mövcuddur.
+              </p>
+              <Button
+                onClick={() => setShowRegionAlert(false)}
+                className="w-full"
+              >
+                Bağla
               </Button>
             </div>
           </Card>
