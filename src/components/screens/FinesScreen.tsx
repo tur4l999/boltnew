@@ -310,12 +310,12 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
         onClick={onToggle}
         className="w-full text-left p-6 transition-all duration-300"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-4 flex-1">
             <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${getSectionAccentColor(section.id)} flex items-center justify-center shadow-lg`}>
               <span className="text-white text-2xl">{getSectionIcon(section.id)}</span>
             </div>
-            <div className="flex-1 text-right pr-4">
+            <div className="flex-1">
               <h3 className={`font-bold text-lg mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {section.title}
               </h3>
@@ -327,10 +327,10 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
             </div>
           </div>
           
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex flex-col items-end gap-1">
             {section.subsections && (
-              <div className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${getSectionAccentColor(section.id)} text-white shadow-md`}>
-                {section.subsections.length} alt bölmə
+              <div className={`px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getSectionAccentColor(section.id)} text-white shadow-sm`}>
+                {section.subsections.length}
               </div>
             )}
             <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 hover:scale-110 ${
