@@ -219,12 +219,12 @@ function SubsectionItem({ subsection, isExpanded, onToggle }: {
               {subsection.title}
             </h4>
           </div>
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 hover:scale-110 ${
             isExpanded 
-              ? isDarkMode ? 'bg-blue-600 text-white rotate-180' : 'bg-blue-500 text-white rotate-180'
-              : isDarkMode ? 'bg-gray-600 text-gray-300' : 'bg-gray-200 text-gray-600'
+              ? isDarkMode ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white rotate-180' : 'bg-gradient-to-r from-blue-500 to-blue-400 text-white rotate-180'
+              : isDarkMode ? 'bg-gray-700/80 text-gray-300 hover:bg-gray-600' : 'bg-gray-200/80 text-gray-600 hover:bg-gray-300'
           }`}>
-            <span className="text-xs">▼</span>
+            <span className="text-sm font-bold">▼</span>
           </div>
         </div>
       </button>
@@ -232,9 +232,7 @@ function SubsectionItem({ subsection, isExpanded, onToggle }: {
       {isExpanded && (
         <FadeInUp>
           <>
-            <div className={`px-4 pb-4 border-t ${
-              isDarkMode ? 'border-gray-600/50 bg-black/10' : 'border-gray-200/50 bg-white/20'
-            }`}>
+            <div className="px-4 pb-4">
               {subsection.content && <PenaltyContent content={subsection.content} />}
               {subsection.videoSources && subsection.videoSources.length > 1 ? (
                 <MultipleVideos sources={subsection.videoSources} />
@@ -312,7 +310,7 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
         onClick={onToggle}
         className="w-full text-left p-6 transition-all duration-300"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-4 flex-1">
             <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${getSectionAccentColor(section.id)} flex items-center justify-center shadow-lg`}>
               <span className="text-white text-2xl">{getSectionIcon(section.id)}</span>
@@ -322,25 +320,25 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
                 {section.title}
               </h3>
               {section.description && (
-                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                   {section.description}
                 </p>
               )}
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end gap-1">
             {section.subsections && (
-              <div className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${getSectionAccentColor(section.id)} text-white shadow-md`}>
-                {section.subsections.length} alt bölmə
+              <div className={`px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getSectionAccentColor(section.id)} text-white shadow-sm`}>
+                {section.subsections.length}
               </div>
             )}
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 hover:scale-110 ${
               isExpanded 
                 ? `bg-gradient-to-r ${getSectionAccentColor(section.id)} text-white rotate-180` 
-                : isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'
+                : isDarkMode ? 'bg-gray-700/80 text-gray-300 hover:bg-gray-600' : 'bg-gray-200/80 text-gray-600 hover:bg-gray-300'
             }`}>
-              <span className="text-lg">▼</span>
+              <span className="text-sm font-bold">▼</span>
             </div>
           </div>
         </div>
@@ -350,27 +348,27 @@ function SectionItem({ section, isExpanded, onToggle, expandedSubsections, onSub
         <FadeInUp>
           <>
             <div className="px-6 pb-6">
-              <div className={`rounded-2xl p-4 mb-4 ${
-                isDarkMode ? 'bg-black/20 border border-gray-600/30' : 'bg-white/50 border border-white/50'
-              }`}>
-                {section.content && <PenaltyContent content={section.content} />}
-                {section.videoSources && section.videoSources.length > 1 ? (
+              {section.content && (
+                <div className="mb-4">
+                  <PenaltyContent content={section.content} />
+                </div>
+              )}
+              {section.videoSources && section.videoSources.length > 1 ? (
+                <div className="mb-4">
                   <MultipleVideos sources={section.videoSources} />
-                ) : section.videoSrc ? (
+                </div>
+              ) : section.videoSrc ? (
+                <div className="mb-4">
                   <PenaltyVideo src={section.videoSrc} />
-                ) : section.videoSources && section.videoSources.length === 1 ? (
+                </div>
+              ) : section.videoSources && section.videoSources.length === 1 ? (
+                <div className="mb-4">
                   <PenaltyVideo src={section.videoSources[0]} />
-                ) : null}
-              </div>
+                </div>
+              ) : null}
               
               {section.subsections && (
                 <div className="space-y-3">
-                  <div className={`flex items-center gap-2 mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                    <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${getSectionAccentColor(section.id)} flex items-center justify-center`}>
-                      <span className="text-white text-sm">📋</span>
-                    </div>
-                    <span className="text-sm font-bold">Alt bölmələr</span>
-                  </div>
                   {section.subsections.map(subsection => (
                     <SubsectionItem
                       key={subsection.id}
