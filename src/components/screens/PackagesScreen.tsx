@@ -336,7 +336,7 @@ export function PackagesScreen() {
         </div>
 
         {activeTab === 'training' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {packages.map((pkg, index) => (
               <div key={pkg.id} className="relative group">
                 {/* Modern Package Card - Enhanced for Basic Package */}
