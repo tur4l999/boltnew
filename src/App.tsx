@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { StatusBar } from './components/layout/StatusBar';
 import { Header } from './components/layout/Header';
@@ -13,19 +13,17 @@ import { PageTransition } from './components/navigation/PageTransition';
 export default function App() {
   return (
     <AppProvider>
-      <Router>
-        <Routes>
-          <Route
-            path="/inspect"
-            element={
-              <PageTransition transitionKey="inspect">
-                <InspectPage />
-              </PageTransition>
-            }
-          />
-          <Route path="/*" element={<AppContent />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route
+          path="/inspect"
+          element={
+            <PageTransition transitionKey="inspect">
+              <InspectPage />
+            </PageTransition>
+          }
+        />
+        <Route path="/*" element={<AppContent />} />
+      </Routes>
     </AppProvider>
   );
 }

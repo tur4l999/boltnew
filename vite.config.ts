@@ -3,8 +3,12 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/boltnew/',            // project name
+  base: './',
   optimizeDeps: {
-    exclude: ['lucide-react'],  // səndə vardısa, qalsın; yoxdursa problem deyil
+    exclude: ['lucide-react'],
   },
+  server: {
+    port: 3000,
+    host: true
+  }
 })
