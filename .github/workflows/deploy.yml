@@ -30,7 +30,12 @@ jobs:
         run: npm run build:github
 
       - name: Copy .nojekyll
-        run: cp public/.nojekyll dist/
+        run: |
+          if [ -f "public/.nojekyll" ]; then
+            cp public/.nojekyll dist/
+          else
+            touch dist/.nojekyll
+          fi
 
       - name: Upload artifact (dist)
         uses: actions/upload-pages-artifact@v3

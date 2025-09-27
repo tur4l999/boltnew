@@ -34,7 +34,11 @@ fi
 
 # Copy .nojekyll file to dist
 echo "📄 Copying .nojekyll file..."
-cp public/.nojekyll dist/
+if [ -f "public/.nojekyll" ]; then
+    cp public/.nojekyll dist/
+else
+    touch dist/.nojekyll
+fi
 
 # Add all changes
 echo "📝 Adding changes to git..."
