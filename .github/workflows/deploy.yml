@@ -27,7 +27,10 @@ jobs:
         run: npm ci
 
       - name: Build for GitHub Pages
-        run: npm run build
+        run: npm run build:github
+
+      - name: Copy .nojekyll
+        run: cp public/.nojekyll dist/
 
       - name: Upload artifact (dist)
         uses: actions/upload-pages-artifact@v3
