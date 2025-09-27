@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 
@@ -6,83 +6,351 @@ type BlogItem = {
   id: string;
   title: string;
   excerpt: string;
+  content: string;
   date: string;
+  readTime: string;
+  tags: string[];
   image?: string;
-  url?: string;
+  author: string;
 };
 
 const SAMPLE_BLOGS: BlogItem[] = [
   {
     id: 'b1',
     title: 'Yol hərəkəti qaydalarında edilən son dəyişikliklər',
-    excerpt: 'Yeni qaydalar və sürücülərin bilməli olduğu vacib nüanslar.',
+    excerpt: 'Yeni qaydalar və sürücülərin bilməli olduğu vacib nüanslar haqda ətraflı məlumat.',
+    content: `2025-ci ildə yol hərəkəti qaydalarında vacib dəyişikliklər edilmişdir. Bu dəyişikliklər sürücülərin təhlükəsizliyini artırmaq və müasir standartlara uyğunlaşmaq məqsədi ilə həyata keçirilmişdir.
+
+**Əsas dəyişikliklər:**
+
+1. **Sürət limitləri** - Şəhər daxilində maksimum sürət 50 km/s-dan 60 km/s-a qaldırılmışdır.
+
+2. **Telefon istifadəsi** - Sürmə zamanı əl ilə telefon istifadəsinə görə cərimə məbləği artırılmışdır.
+
+3. **Təhlükəsizlik kəmərləri** - Arxa oturacaqda da təhlükəsizlik kəməri taxmaq məcburi edilmişdir.
+
+4. **Elektromobillər** - Elektromobillər üçün xüsusi parking yerləri ayrılmışdır və onların pozulmasına görə ciddi cərimələr tətbiq edilir.
+
+Bu qaydalar artıq qüvvədədir və bütün sürücülər onlara riayət etməlidirlər. Qaydaları pozanlara münasibətdə ciddi tədbirlər görüləcəkdir.`,
     date: '2025-01-15',
+    readTime: '3 dəq',
+    tags: ['Qaydalar', 'Dəyişiklik', 'Təhlükəsizlik'],
     image: '/image.png',
-    url: 'https://dda.az/blogs',
+    author: 'DDA Ekspert Qrupu',
   },
   {
     id: 'b2',
     title: 'İmtahana hazırlıq üçün 5 effektiv üsul',
-    excerpt: 'Qısa müddətdə daha səmərəli hazırlıq aparmağın yolları.',
+    excerpt: 'Qısa müddətdə daha səmərəli hazırlıq aparmağın yolları və məşq üsulları.',
+    content: `Sürücülük imtahanına hazırlıq çətin proses ola bilər, lakin doğru üsullarla bu prosesi asanlaşdırmaq mümkündür.
+
+**5 Effektiv Hazırlıq Üsulu:**
+
+**1. Düzenli məşq rejimi**
+Hər gün ən azı 30 dəqiqə test həll edin. Sabit məşq yaddasda saxlanmanı gücləndirir.
+
+**2. Səhvləri təhlil edin**
+Hər səhvli cavabın səbəbini araşdırın və doğru variantı başa düşün.
+
+**3. Müxtəlif test formalarını istifadə edin**
+Yalnız mobil tətbiqdən deyil, müxtəlif mənbələrdən test həll edin.
+
+**4. Praktiki bilik əldə edin**
+Nəzəri bilikləri praktiki vəziyyətlərlə əlaqələndirin.
+
+**5. Stres idarəetməsi**
+İmtahan stresini azaltmaq üçün dərin nəfəs alma texnikalarını öyrənin.
+
+Bu üsulları tətbiq etməklə imtahanda uğur qazanma şansınız əhəmiyyətli dərəcədə artacaq. Unutmayın ki, səbir və düzenli məşq uğurun açarıdır.`,
     date: '2025-01-05',
+    readTime: '4 dəq',
+    tags: ['İmtahan', 'Hazırlıq', 'Məşq'],
     image: '/image copy.png',
-    url: 'https://dda.az/blogs',
+    author: 'Orxan Məmmədov',
   },
   {
     id: 'b3',
     title: 'Sürücülər üçün qış mövsümünə hazırlaşma tövsiyələri',
-    excerpt: 'Avtomobilin texniki baxışı, təkərlər və təhlükəsizlik qaydaları.',
+    excerpt: 'Avtomobilin texniki baxışı, təkərlər və təhlükəsizlik qaydaları haqqında məlumat.',
+    content: `Qış mövsümü sürücülər üçün xüsusi hazırlıq tələb edir. Təhlükəsiz sürmə üçün avtomobilinizi və özünüzü bu mövsümə hazırlayın.
+
+**Texniki Hazırlıq:**
+
+**Təkərlər və Şinlər**
+- Qış şinlərinin derinliyi minimum 4 mm olmalıdır
+- Şin təzyiqini yoxlayın (soyuqda təzyiq azalır)
+- Zəncir və digər qış aksesuarlarını hazır saxlayın
+
+**Mühərrik və Sistemlər**
+- Antifriz səviyyəsini yoxlayın (-25°C-ə qədər davamlı olmalıdır)
+- Akkumulyatoru test edin (soyuqda gücü azalır)
+- Fərən və arxa şüşə isitmələrini yoxlayın
+
+**Təhlükəsizlik Təchizatları**
+- Buz kazıyıcı və qar fırçası
+- İlk yardım çantası və fənər
+- Ehtiyat battaniye və isti geyim
+
+**Sürmə Texnikası:**
+- Yavaş başlayın və tormoz basın
+- Məsafəni 2 dəfə artırın
+- Kəskin manevrlərdən çəkinin
+
+Bu hazırlıqları etməklə qış mövsümündə təhlükəsiz və rahat sürə bilərsiniz.`,
     date: '2024-12-20',
+    readTime: '5 dəq',
+    tags: ['Qış', 'Təhlükəsizlik', 'Təchizat'],
     image: '/DDA_logo.png',
-    url: 'https://dda.az/blogs',
+    author: 'Səbinə Əliyeva',
   },
 ];
 
 export function BlogsScreen() {
   const { isDarkMode } = useApp();
+  const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter blogs based on search term
+  const filteredBlogs = SAMPLE_BLOGS.filter(blog =>
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const toggleBlogExpansion = (blogId: string) => {
+    setExpandedBlog(expandedBlog === blogId ? null : blogId);
+  };
+
+  const formatContent = (content: string) => {
+    return content
+      .split('\n\n')
+      .map((paragraph, index) => {
+        if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+          return (
+            <h3 key={index} className={`font-bold text-lg mt-4 mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              {paragraph.replace(/\*\*/g, '')}
+            </h3>
+          );
+        }
+        if (paragraph.includes('**')) {
+          const parts = paragraph.split(/(\*\*.*?\*\*)/);
+          return (
+            <p key={index} className={`mb-3 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              {parts.map((part, partIndex) => {
+                if (part.startsWith('**') && part.endsWith('**')) {
+                  return <strong key={partIndex} className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{part.replace(/\*\*/g, '')}</strong>;
+                }
+                return part;
+              })}
+            </p>
+          );
+        }
+        return (
+          <p key={index} className={`mb-3 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            {paragraph}
+          </p>
+        );
+      });
+  };
 
   return (
-    <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
-      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    <div className={`min-h-screen pb-24 transition-colors duration-300 ${
+      isDarkMode ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800' : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
     }`}>
-      <div className="mb-3">
-        <h1 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Bloglar</h1>
-        <div className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Yekun imtahandan öncə gələcək məqalələr
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        {SAMPLE_BLOGS.map((b) => (
-          <a
-            key={b.id}
-            href={b.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            className={`block rounded-xl border overflow-hidden transition-colors ${
-              isDarkMode ? 'bg-gray-800 border-gray-700 hover:bg-gray-700' : 'bg-white border-gray-200 hover:bg-gray-50'
-            }`}
-          >
-            <div className="flex gap-3 p-3">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                <img src={b.image || '/DDA_logo.png'} alt={b.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className={`font-bold text-sm line-clamp-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{b.title}</div>
-                <div className={`text-xs mt-1 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{b.excerpt}</div>
-                <div className={`text-[11px] mt-2 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>{new Date(b.date).toLocaleDateString('az-AZ')}</div>
-              </div>
-              <div className={`self-center text-lg ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>›</div>
+      {/* Modern Header with Glassmorphism */}
+      <div className={`sticky top-0 z-20 ${
+        isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
+      } backdrop-blur-xl border-b ${
+        isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+      }`}>
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'} animate-fade-in-up`}>
+                📰 Bloglar
+              </h1>
+              <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} animate-fade-in-up`} style={{animationDelay: '0.1s'}}>
+                Yekun imtahandan öncə gələcək məqalələr
+              </p>
             </div>
-          </a>
-        ))}
+            <div className={`px-3 py-2 rounded-full text-xs font-medium ${
+              isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+            } animate-scale-in`}>
+              {filteredBlogs.length} məqalə
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative animate-slide-in-right">
+            <input
+              type="text"
+              placeholder="Bloglərdə axtar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={`w-full px-4 py-3 pl-12 rounded-2xl border focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-800/50 border-gray-700 text-gray-100 placeholder-gray-500' 
+                  : 'bg-white/50 border-gray-200 text-gray-900 placeholder-gray-500'
+              }`}
+            />
+            <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-lg ${
+              isDarkMode ? 'text-gray-500' : 'text-gray-400'
+            }`}>
+              🔍
+            </div>
+          </div>
+        </div>
       </div>
 
-      <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-        <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Daha çox məqaləni saytımızda oxuya bilərsiniz: dda.az/blogs
+      {/* Blog Cards Container */}
+      <div className="p-4">
+        <div className="space-y-6">
+          {filteredBlogs.map((blog, index) => (
+            <Card
+              key={blog.id}
+              variant="glass"
+              className={`overflow-hidden hover-lift cursor-pointer transition-all duration-500 animate-fade-in-up ${
+                expandedBlog === blog.id ? 'ring-2 ring-emerald-500/50' : ''
+              }`}
+              style={{animationDelay: `${index * 0.1}s`}}
+              onClick={() => toggleBlogExpansion(blog.id)}
+            >
+              {/* Blog Header */}
+              <div className="flex gap-4 mb-4">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-emerald-500/20 hover-glow">
+                  <img 
+                    src={blog.image || '/DDA_logo.png'} 
+                    alt={blog.title} 
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" 
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className={`font-bold text-lg mb-2 line-clamp-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    {blog.title}
+                  </h2>
+                  <p className={`text-sm mb-3 line-clamp-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {blog.excerpt}
+                  </p>
+                  
+                  {/* Meta Info */}
+                  <div className="flex items-center gap-4 text-xs">
+                    <span className={`flex items-center gap-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      📅 {new Date(blog.date).toLocaleDateString('az-AZ')}
+                    </span>
+                    <span className={`flex items-center gap-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      ⏱️ {blog.readTime}
+                    </span>
+                    <span className={`flex items-center gap-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                      👤 {blog.author}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Expand/Collapse Button */}
+                <div className={`self-start p-2 rounded-xl transition-all duration-300 ${
+                  expandedBlog === blog.id 
+                    ? isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+                    : isDarkMode ? 'text-gray-500 hover:bg-gray-700/50' : 'text-gray-400 hover:bg-gray-100'
+                } ${expandedBlog === blog.id ? 'rotate-180' : ''}`}>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {blog.tags.map((tag, tagIndex) => (
+                  <span
+                    key={tagIndex}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:scale-105 ${
+                      isDarkMode 
+                        ? 'bg-gray-700/50 text-gray-300 hover:bg-emerald-500/20 hover:text-emerald-400' 
+                        : 'bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600'
+                    }`}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Expanded Content */}
+              {expandedBlog === blog.id && (
+                <div className="animate-fade-in-up">
+                  <div className={`border-t pt-6 ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
+                    <div className="prose prose-sm max-w-none">
+                      {formatContent(blog.content)}
+                    </div>
+                    
+                    {/* Reading Actions */}
+                    <div className={`mt-6 pt-4 border-t flex items-center justify-between ${
+                      isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+                    }`}>
+                      <div className="flex gap-3">
+                        <button className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                          isDarkMode 
+                            ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' 
+                            : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                        }`}>
+                          ❤️ Bəyən
+                        </button>
+                        <button className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                          isDarkMode 
+                            ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' 
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}>
+                          📤 Paylaş
+                        </button>
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedBlog(null);
+                        }}
+                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                          isDarkMode 
+                            ? 'bg-gray-700/50 text-gray-400 hover:bg-gray-600/50' 
+                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                        }`}
+                      >
+                        ✕ Bağla
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Card>
+          ))}
         </div>
-      </Card>
+
+        {/* No Results */}
+        {filteredBlogs.length === 0 && (
+          <Card variant="glass" className="text-center py-12 animate-fade-in-up">
+            <div>
+              <div className="text-6xl mb-4">📭</div>
+              <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Heç bir məqalə tapılmadı
+              </h3>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Axtarış termini dəyişdirərək yenidən cəhd edin
+              </p>
+            </div>
+          </Card>
+        )}
+
+        {/* Footer Info */}
+        <Card variant="glass" className="mt-8 text-center animate-fade-in-up">
+          <div>
+            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              💡 <strong>Məsləhət:</strong> Daha çox məqalə və güncel məlumatlar üçün{' '}
+              <span className={`font-semibold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                dda.az/blogs
+              </span>{' '}
+              səhifəsini ziyarət edin
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
