@@ -355,15 +355,15 @@ export function PackagesScreen() {
                 }`}>
                   
 
-                  {/* Enhanced Popular Badge - VERY TOP with only top half visible */}
+                  {/* Enhanced Popular Badge - VERY TOP with only top half visible, text positioned in visible area */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-30 overflow-hidden" style={{ height: '22px' }}>
-                        <div className={`w-full h-11 px-8 rounded-full text-sm font-bold shadow-xl border-2 transition-all duration-300 flex items-end justify-center ${
+                      <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-30 overflow-hidden" style={{ height: '24px' }}>
+                        <div className={`w-full h-11 px-8 rounded-full text-sm font-bold shadow-xl border-2 transition-all duration-300 flex items-center justify-center ${
                           isDarkMode 
                             ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
                             : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
-                        }`} style={{ paddingBottom: '8px' }}>
+                        }`} style={{ marginTop: '-8px' }}>
                           <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
                         </div>
                       </div>
