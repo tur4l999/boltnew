@@ -27,7 +27,7 @@ export function HomeScreen() {
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
     { key: 'certificate', label: 'Şəhadətnamə', action: () => alert('Şəhadətnamə (demo)'), emoji: '🎓' },
     { key: 'practiceLab', label: t.drivingPractice, action: () => navigate('DrivingPractice'), emoji: '🚗' },
-    { key: 'appeals', label: 'Appeliyasiya', action: () => alert('Appeliyasiyalarım (demo)'), emoji: '📮' },
+    { key: 'appeals', label: 'Apellyasiyalar', action: () => navigate('Appeals'), emoji: '📮' },
     { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
 
     // Bölmə sonu: Yekun imtahan
