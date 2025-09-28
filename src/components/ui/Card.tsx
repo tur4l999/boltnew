@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, CSSProperties } from 'react';
 import { useApp } from '../../contexts/AppContext';
 
 interface CardProps {
@@ -8,6 +8,7 @@ interface CardProps {
   variant?: 'default' | 'elevated' | 'outlined' | 'glass';
   padding?: 'sm' | 'md' | 'lg' | 'xl';
   hover?: boolean;
+  style?: CSSProperties;
 }
 
 export function Card({ 
@@ -16,7 +17,8 @@ export function Card({
   onClick,
   variant = 'default',
   padding = 'md',
-  hover = true 
+  hover = true,
+  style 
 }: CardProps) {
   const { isDarkMode } = useApp();
   
@@ -50,6 +52,7 @@ export function Card({
   return (
     <div 
       onClick={onClick} 
+      style={style}
       className={`rounded-2xl border transition-all duration-300 group relative ${paddingClasses[padding]} ${variantClasses[variant]} ${hoverClasses} ${className}`}
     >
       {/* Subtle hover effect overlay */}

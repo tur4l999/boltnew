@@ -38,6 +38,7 @@ interface AppContextType {
   moreSheetVisible: boolean;
   setMoreSheetVisible: (visible: boolean) => void;
   balance: number;
+  simulatorBalance: number;
   activePackage: UserPackage | null;
   transactions: Transaction[];
   purchasePackage: (packageId: string, packageName: string, price: number, days: number, activationDate?: Date) => boolean;
@@ -74,6 +75,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   ]);
   const [moreSheetVisible, setMoreSheetVisible] = useState(false);
   const [balance, setBalance] = useState(100); // Demo account starts with 100 AZN
+  const [simulatorBalance, setSimulatorBalance] = useState(5); // Demo starts with 5 simulator tickets
   const [tickets, setTickets] = useState(3); // Demo starts with 3 tickets
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -514,6 +516,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       moreSheetVisible,
       setMoreSheetVisible,
       balance,
+      simulatorBalance,
       tickets,
       activePackage,
       transactions,
