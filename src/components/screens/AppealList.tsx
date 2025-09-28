@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { FadeIn } from '../ui/FadeIn';
+import { QuestionViewModal } from './QuestionViewModal';
 import type { Appeal } from '../../lib/types';
 
 interface AppealListProps {
@@ -12,6 +13,7 @@ interface AppealListProps {
 export function AppealList({ appeals }: AppealListProps) {
   const { t, isDarkMode } = useApp();
   const [selectedAppeal, setSelectedAppeal] = useState<Appeal | null>(null);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -111,22 +113,22 @@ export function AppealList({ appeals }: AppealListProps) {
             onClick={() => setSelectedAppeal(appeal)}
             className="cursor-pointer"
           >
-            <div className="space-y-3">
-              {/* Header */}
+            <div className="space-y-4">
+              {/* Header with Source and Status */}
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs">{getSourceIcon(appeal.questionSource)}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm">{getSourceIcon(appeal.questionSource)}</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {getSourceLabel(appeal.questionSource, appeal.questionSourceId)}
                     </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      • ID: {appeal.questionId}
+                    </span>
                   </div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2">
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 mb-2">
                     {appeal.questionText}
                   </h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {formatDate(appeal.submittedDate)}
-                  </p>
                 </div>
                 <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ml-3 ${getStatusColor(appeal.status)}`}>
                   <span>{getStatusIcon(appeal.status)}</span>
@@ -134,50 +136,65 @@ export function AppealList({ appeals }: AppealListProps) {
                 </div>
               </div>
 
-              {/* Question Display - Combined text and image */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 mb-2">
+              {/* Question Preview with View Button */}
+              <div className={`p-4 rounded-xl ${
+                isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+              }`}>
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Ünvanladığınız sual:
                   </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedAppeal(appeal);
+                      setShowQuestionModal(true);
+                    }}
+                    className="text-xs"
+                  >
+                    {t.viewQuestion}
+                  </Button>
                 </div>
-                <div className={`p-4 rounded-xl ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}>
-                  <p className="text-sm text-gray-800 dark:text-gray-200 mb-3">
-                    {appeal.questionText}
-                  </p>
-                  {appeal.questionImageUrl && (
-                    <div className="relative">
-                      <img
-                        src={appeal.questionImageUrl}
-                        alt={t.questionImage}
-                        className="w-full h-32 object-cover rounded-lg"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                        {t.questionHasImage}
-                      </div>
+                <p className="text-sm text-gray-800 dark:text-gray-200 mb-3 line-clamp-2">
+                  {appeal.questionText}
+                </p>
+                {appeal.questionImageUrl && (
+                  <div className="relative">
+                    <img
+                      src={appeal.questionImageUrl}
+                      alt={t.questionImage}
+                      className="w-full h-24 object-cover rounded-lg"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                      {t.questionHasImage}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
-              {/* Comment Preview */}
-              <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                {appeal.userComment}
-              </p>
+              {/* Your Appeal */}
+              <div>
+                <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.yourAppeal}:
+                </h5>
+                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                  {appeal.userComment}
+                </p>
+              </div>
 
-              {/* Admin Response Preview */}
+              {/* Teacher Response Preview */}
               {appeal.adminResponse && (
                 <div className={`p-3 rounded-xl ${
                   isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'
                 }`}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                      {t.adminResponse}
+                      {t.teacherResponse}
                     </span>
                     {appeal.adminName && (
                       <span className="text-xs text-gray-400 dark:text-gray-500">
@@ -191,11 +208,14 @@ export function AppealList({ appeals }: AppealListProps) {
                 </div>
               )}
 
-              {/* Footer */}
+              {/* Footer with Dates */}
               <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  ID: {appeal.id.slice(-8)}
-                </span>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div>{t.submitDate}: {formatDate(appeal.submittedDate)}</div>
+                  {appeal.reviewedDate && (
+                    <div>{t.answerDate}: {formatDate(appeal.reviewedDate)}</div>
+                  )}
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -252,11 +272,22 @@ export function AppealList({ appeals }: AppealListProps) {
                   </div>
                 </div>
 
-                {/* Question - Combined text and image */}
+                {/* Question with View Button */}
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    Ünvanladığınız sual:
-                  </h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      Ünvanladığınız sual:
+                    </h3>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => {
+                        setShowQuestionModal(true);
+                      }}
+                    >
+                      {t.viewQuestion}
+                    </Button>
+                  </div>
                   <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
                     <p className="text-gray-700 dark:text-gray-300 mb-3">
                       {selectedAppeal.questionText}
@@ -266,7 +297,7 @@ export function AppealList({ appeals }: AppealListProps) {
                         <img
                           src={selectedAppeal.questionImageUrl}
                           alt={t.questionImage}
-                          className="w-full max-h-64 object-cover rounded-lg"
+                          className="w-full max-h-32 object-cover rounded-lg"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
@@ -349,6 +380,15 @@ export function AppealList({ appeals }: AppealListProps) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Question View Modal */}
+      {selectedAppeal && (
+        <QuestionViewModal
+          isOpen={showQuestionModal}
+          onClose={() => setShowQuestionModal(false)}
+          appeal={selectedAppeal}
+        />
       )}
     </div>
   );

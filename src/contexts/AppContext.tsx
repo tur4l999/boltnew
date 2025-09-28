@@ -144,6 +144,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: '1',
       questionId: 'q1',
       questionText: 'Yol nişanları nə vaxt tətbiq edilir?',
+      questionOptions: [
+        { id: 'a1', text: 'Həmişə' },
+        { id: 'a2', text: 'Yalnız gecə' },
+        { id: 'a3', text: 'Yalnız gündüz' },
+        { id: 'a4', text: 'Yol şəraitindən asılı olaraq' }
+      ],
+      questionCorrectOptionId: 'a4',
+      questionExplanation: 'Yol nişanları yol şəraitindən asılı olaraq müxtəlif vaxtlarda tətbiq edilir. Bəzi nişanlar həmişə, bəziləri isə müəyyən şəraitdə tətbiq edilir.',
       questionSource: 'ticket',
       questionSourceId: '5',
       userComment: 'Bu sualda bəzi nişanların tətbiq vaxtı dəqiq göstərilməyib. Daha aydın olmalıdır.',
@@ -159,6 +167,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       questionId: 'q2',
       questionText: 'Bu nişan nə deməkdir?',
       questionImageUrl: '/public/image.png',
+      questionOptions: [
+        { id: 'b1', text: 'Sürət məhdudiyyəti' },
+        { id: 'b2', text: 'Dayanma qadağandır' },
+        { id: 'b3', text: 'Sağa dönmək qadağandır' },
+        { id: 'b4', text: 'Sol dönmək qadağandır' }
+      ],
+      questionCorrectOptionId: 'b1',
+      questionExplanation: 'Bu nişan sürət məhdudiyyətini göstərir. Sürücü bu nişanı gördükdə sürətini məhdudlaşdırmalıdır.',
       questionSource: 'ticket',
       questionSourceId: '12',
       userComment: 'Bu sualda şəhər daxilində sürət məhdudiyyəti haqqında məlumat natamamdır.',
@@ -170,6 +186,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       id: '3',
       questionId: 'q3',
       questionText: 'Park etmək qadağandır nişanı nə deməkdir?',
+      questionOptions: [
+        { id: 'c1', text: 'Park etmək icazə verilir' },
+        { id: 'c2', text: 'Park etmək qadağandır' },
+        { id: 'c3', text: 'Yalnız yük maşınları park edə bilər' },
+        { id: 'c4', text: 'Yalnız avtobuslar park edə bilər' }
+      ],
+      questionCorrectOptionId: 'c2',
+      questionExplanation: 'Park etmək qadağandır nişanı o sahədə avtomobil park etməyin qadağan olduğunu göstərir.',
       questionSource: 'topic',
       questionSourceId: 'M8',
       userComment: 'Bu sualda park etmək qadağandır nişanının tətbiq sahəsi dəqiq göstərilməyib.',
@@ -185,6 +209,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       questionId: 'q4',
       questionText: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?',
       questionImageUrl: '/public/image copy.png',
+      questionOptions: [
+        { id: 'd1', text: 'Həmişə' },
+        { id: 'd2', text: 'Piyadalar yol keçidində olduqda' },
+        { id: 'd3', text: 'Yalnız qırmızı işıqda' },
+        { id: 'd4', text: 'Heç vaxt' }
+      ],
+      questionCorrectOptionId: 'b2',
+      questionExplanation: 'Sürücü piyadaların yol keçidində olduğunu gördükdə dayanmalıdır və onların keçməsini gözləməlidir.',
       questionSource: 'simulator',
       userComment: 'Bu sualda piyadaların yol keçidində olması halında dayanma vaxtı dəqiq göstərilməyib.',
       status: 'pending',
@@ -196,6 +228,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       questionId: 'q5',
       questionText: 'Bu yol nişanı nə mənasını verir?',
       questionImageUrl: '/public/book-1.svg',
+      questionOptions: [
+        { id: 'e1', text: 'Sağa dönmək icazə verilir' },
+        { id: 'e2', text: 'Sola dönmək icazə verilir' },
+        { id: 'e3', text: 'Düz getmək icazə verilir' },
+        { id: 'e4', text: 'Geri dönmək icazə verilir' }
+      ],
+      questionCorrectOptionId: 'e1',
+      questionExplanation: 'Bu nişan sağa dönməyin icazə verildiyini göstərir. Sürücü bu nişanı gördükdə sağa dönə bilər.',
       questionSource: 'topic',
       questionSourceId: 'M15',
       userComment: 'Bu nişanın mənası dəqiq göstərilməyib. Daha aydın izah olmalıdır.',

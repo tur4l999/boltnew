@@ -74,6 +74,9 @@ export interface Appeal {
   questionId: string;
   questionText: string;
   questionImageUrl?: string;
+  questionOptions: QuestionOption[];
+  questionCorrectOptionId: string;
+  questionExplanation: string;
   questionSource: 'ticket' | 'topic' | 'simulator';
   questionSourceId?: string; // ticket number or topic/module ID
   userComment: string;
