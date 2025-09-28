@@ -167,27 +167,21 @@ export function AppealSubmitModal({ isOpen, onClose, question }: AppealSubmitMod
                   </div>
                 </div>
 
-                {/* Question Text */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    {t.questionText}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
+              {/* Question with Image */}
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  {t.questionText}
+                </h3>
+                <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
+                  <p className="text-gray-700 dark:text-gray-300 mb-3">
                     {question.text}
                   </p>
-                </div>
-
-                {/* Question Image */}
-                {question.imageUrl && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                      {t.questionImage}
-                    </h3>
+                  {question.imageUrl && (
                     <div className="relative">
                       <img
                         src={question.imageUrl}
                         alt={t.questionImage}
-                        className="w-full max-h-48 object-cover rounded-xl"
+                        className="w-full max-h-48 object-cover rounded-lg"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
@@ -196,14 +190,15 @@ export function AppealSubmitModal({ isOpen, onClose, question }: AppealSubmitMod
                         {t.viewQuestionImage}
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
+              </div>
               </div>
 
               {/* Comment Input */}
               <div>
                 <label className="block text-sm font-medium text-gray-900 dark:text-white mb-3">
-                  {t.writeYourComment}
+                  Ünvanladığınız sual:
                 </label>
                 <textarea
                   value={userComment}
@@ -211,7 +206,7 @@ export function AppealSubmitModal({ isOpen, onClose, question }: AppealSubmitMod
                     setUserComment(e.target.value);
                     setError('');
                   }}
-                  placeholder={t.writeYourComment}
+                  placeholder="Sualınızı yazın..."
                   rows={4}
                   className={`w-full p-4 rounded-xl border-2 transition-colors duration-200 resize-none ${
                     error

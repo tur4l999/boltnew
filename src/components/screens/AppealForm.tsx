@@ -288,12 +288,12 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
             {/* Comment Input */}
             <div>
               <label className="block text-sm font-medium text-gray-900 dark:text-white mb-3">
-                {t.writeYourComment}
+                Ünvanladığınız sual:
               </label>
               <textarea
                 value={formData.userComment}
                 onChange={(e) => handleCommentChange(e.target.value)}
-                placeholder={t.writeYourComment}
+                placeholder="Sualınızı yazın..."
                 rows={6}
                 className={`w-full p-4 rounded-xl border-2 transition-colors duration-200 resize-none ${
                   errors.userComment
