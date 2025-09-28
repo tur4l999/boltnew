@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
+import { Input } from '../ui/Input';
 import { useApp } from '../../contexts/AppContext';
+import { RegistrationScreen } from './RegistrationScreen';
+import { ForgotPasswordScreen } from './ForgotPasswordScreen';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -13,6 +16,9 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   const { isDarkMode } = useApp();
 
   const handleLogin = async () => {
@@ -29,6 +35,31 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
     setPassword('demo123');
     setTimeout(handleLogin, 100);
   };
+
+  // Handle different screen states
+  if (showRegister) {
+    return (
+      <RegistrationScreen 
+        onBack={() => setShowRegister(false)}
+        onRegister={() => {
+          setShowRegister(false);
+          alert('Qeydiyyat tamamlandı! İndi hesabınıza daxil ola bilərsiniz.');
+        }}
+      />
+    );
+  }
+
+  if (showForgotPassword) {
+    return (
+      <ForgotPasswordScreen 
+        onBack={() => setShowForgotPassword(false)}
+        onSuccess={() => {
+          setShowForgotPassword(false);
+          alert('Şifrəniz uğurla yeniləndi! İndi yeni şifrə ilə daxil ola bilərsiniz.');
+        }}
+      />
+    );
+  }
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden transition-all duration-300 ${
@@ -70,36 +101,61 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
       </div>
       
       <div className="w-full max-w-md relative z-10 animate-fade-in-up">
-        {/* Enhanced Logo Section */}
+        {/* Enhanced Logo Section with Digital Driving Academy Branding */}
         <div className="text-center mb-8">
-          <div className={`w-28 h-28 mx-auto mb-6 rounded-3xl shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${
+          <div className={`w-32 h-32 mx-auto mb-6 rounded-3xl shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${
             isDarkMode 
               ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600/50' 
               : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
-          } backdrop-blur-sm`}>
+          } backdrop-blur-sm relative overflow-hidden`}>
+            {/* Driving themed background pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute top-2 left-3 text-2xl">🚗</div>
+              <div className="absolute bottom-3 right-2 text-lg">🚦</div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl opacity-20">📚</div>
+            </div>
+            
             <img 
               src="/DDA_logo.png" 
-              alt="DDA.az Logo" 
-              className="w-18 h-18 object-contain transition-transform duration-300 hover:scale-110"
+              alt="Digital Driving Academy Logo" 
+              className="w-20 h-20 object-contain transition-transform duration-300 hover:scale-110 relative z-10"
               onError={(e) => {
-                // Fallback to text logo if image fails
+                // Fallback to styled DDA text logo
                 (e.target as HTMLImageElement).style.display = 'none';
                 const parent = (e.target as HTMLImageElement).parentElement;
                 if (parent) {
-                  parent.innerHTML = `<div class="text-3xl font-black bg-gradient-to-r ${isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'} bg-clip-text text-transparent">DDA</div>`;
+                  parent.innerHTML = `
+                    <div class="relative z-10 text-center">
+                      <div class="text-3xl font-black bg-gradient-to-r ${isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'} bg-clip-text text-transparent">DDA</div>
+                      <div class="text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} mt-1">ACADEMY</div>
+                    </div>
+                  `;
                 }
               }}
             />
           </div>
-          <h1 className={`text-4xl font-black mb-3 transition-all duration-300 bg-gradient-to-r ${
-            isDarkMode 
-              ? 'from-white via-gray-100 to-gray-200' 
-              : 'from-gray-900 via-gray-800 to-gray-700'
-          } bg-clip-text text-transparent`}>DDA.az</h1>
-          <p className={`text-lg font-medium transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-600'
-          }`}>Sürücülük vəsiqəsi üçün hazırlıq</p>
-          <div className={`w-16 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r ${
+          
+          <div className="space-y-2">
+            <h1 className={`text-2xl font-black transition-all duration-300 bg-gradient-to-r ${
+              isDarkMode 
+                ? 'from-emerald-400 via-green-400 to-emerald-500' 
+                : 'from-emerald-600 via-green-600 to-emerald-700'
+            } bg-clip-text text-transparent`}>
+              Digital Driving Academy
+            </h1>
+            <p className={`text-base font-semibold transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
+              Rəqəmsal Sürücülük Akademiyası
+            </p>
+            <p className={`text-sm font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-500' : 'text-gray-600'
+            }`}>
+              Modern texnologiya ilə sürücülük təhsili
+            </p>
+          </div>
+          
+          <div className={`w-20 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r ${
             isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-500 to-green-500'
           }`}></div>
         </div>
@@ -111,50 +167,44 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             : 'bg-white/80 border-gray-200/50 shadow-2xl'
         }`}>
           <div className="space-y-6">
-            <div className="space-y-2">
-              <label className={`block text-sm font-semibold transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-200' : 'text-gray-800'
+            <div className="text-center mb-6">
+              <h2 className={`text-xl font-bold transition-colors duration-200 ${
+                isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                E-mail
-              </label>
-              <div className="relative group">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="E-mail ünvanınızı daxil edin"
-                  className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-300 ${
-                    isDarkMode 
-                      ? 'bg-gray-700/50 border-gray-600 text-gray-100 placeholder-gray-400 hover:bg-gray-700/70' 
-                      : 'bg-gray-50/50 border-gray-300 text-gray-900 placeholder-gray-500 hover:bg-gray-50/80'
-                  } group-hover:border-emerald-400`}
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-              </div>
+                Hesabınıza daxil olun
+              </h2>
+              <p className={`text-sm transition-colors duration-200 mt-1 ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                Təhsilinizi davam etdirmək üçün giriş edin
+              </p>
             </div>
+
+            <Input
+              type="email"
+              value={email}
+              onChange={setEmail}
+              label="E-mail ünvanı"
+              placeholder="ornek@email.com"
+              icon="📧"
+              error={errors.email}
+              required
+            />
             
-            <div className="space-y-2">
-              <label className={`block text-sm font-semibold transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-200' : 'text-gray-800'
-              }`}>
-                Şifrə
-              </label>
-              <div className="relative group">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Şifrənizi daxil edin"
-                  className={`w-full px-4 py-4 pr-12 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-300 ${
-                    isDarkMode 
-                      ? 'bg-gray-700/50 border-gray-600 text-gray-100 placeholder-gray-400 hover:bg-gray-700/70' 
-                      : 'bg-gray-50/50 border-gray-300 text-gray-900 placeholder-gray-500 hover:bg-gray-50/80'
-                  } group-hover:border-emerald-400`}
-                />
+            <Input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={setPassword}
+              label="Şifrə"
+              placeholder="Şifrənizi daxil edin"
+              icon="🔐"
+              error={errors.password}
+              required
+              rightElement={
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className={`absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium transition-colors duration-200 ${
+                  className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
                     isDarkMode 
                       ? 'text-gray-400 hover:text-gray-200' 
                       : 'text-gray-500 hover:text-gray-700'
@@ -162,9 +212,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 >
                   {showPassword ? '🙈' : '👁️'}
                 </button>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-              </div>
-            </div>
+              }
+            />
 
             {/* Enhanced Remember Me Checkbox */}
             <div className="flex items-center justify-between">
@@ -185,9 +234,12 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                   Yadda saxla
                 </label>
               </div>
-              <button className={`text-sm font-medium transition-colors duration-200 ${
-                isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
-              }`}>
+              <button 
+                onClick={() => setShowForgotPassword(true)}
+                className={`text-sm font-medium transition-colors duration-200 hover:underline ${
+                  isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+                }`}
+              >
                 Şifrəni unutmusan?
               </button>
             </div>
@@ -279,9 +331,12 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             isDarkMode ? 'text-gray-300' : 'text-gray-600'
           }`}>
             Hesabın yoxdur?{' '}
-            <button className={`font-bold transition-all duration-300 hover:scale-105 inline-block ${
-              isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
-            }`}>
+            <button 
+              onClick={() => setShowRegister(true)}
+              className={`font-bold transition-all duration-300 hover:scale-105 inline-block hover:underline ${
+                isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+              }`}
+            >
               Qeydiyyatdan keç
             </button>
           </div>
