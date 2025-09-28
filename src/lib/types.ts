@@ -97,37 +97,37 @@ export interface AppealFormData {
   userComment: string;
 }
 
-// Q&A System Types
+// Q&A Chat System Types (WhatsApp-like)
 export interface QAUser {
   id: string;
   name: string;
   role: 'student' | 'teacher';
   avatar?: string;
+  isOnline?: boolean;
+  lastSeen?: Date;
 }
 
 export interface QAMessage {
   id: string;
-  userId: string;
+  senderId: string;
   content: string;
   timestamp: Date;
   attachments?: string[];
-  isAnswer?: boolean;
+  messageType: 'text' | 'image' | 'file';
+  isRead?: boolean;
 }
 
-export interface QAQuestion {
+export interface QAChat {
   id: string;
-  authorId: string;
-  title: string;
-  content: string;
-  tags: string[];
+  studentId: string;
+  teacherId?: string;
+  subject: string; // Sualın mövzusu
   category: string;
-  attachments?: string[];
+  messages: QAMessage[];
   createdAt: Date;
   updatedAt: Date;
-  status: 'open' | 'answered' | 'closed';
-  viewCount: number;
-  likeCount: number;
-  isLiked?: boolean;
-  messages: QAMessage[];
-  teacherAssigned?: string;
+  isActive: boolean;
+  unreadCount: number;
+  lastMessage?: QAMessage;
+  teacherAssigned?: boolean;
 }

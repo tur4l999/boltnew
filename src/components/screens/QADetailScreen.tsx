@@ -1,35 +1,42 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { 
   ArrowLeft, 
-  Heart, 
-  MessageCircle, 
   Send, 
   Paperclip, 
-  Eye, 
-  Clock, 
-  Tag, 
-  User,
-  CheckCircle,
+  MoreVertical,
+  Phone,
+  Video,
   AlertCircle
 } from 'lucide-react';
-import type { QAQuestion, QAMessage, QAUser } from '../../lib/types';
+import type { QAChat, QAMessage, QAUser } from '../../lib/types';
 
 export function QADetailScreen() {
-  const { t, isDarkMode, navigate, goBack, currentScreen, getQuestionById, qaUsers, addQAMessage, likeQuestion } = useApp();
-  const questionId = currentScreen.params?.questionId;
+  const { t, isDarkMode, navigate, goBack, currentScreen, getChatById, qaUsers, sendMessage, markChatAsRead } = useApp();
+  const chatId = currentScreen.params?.chatId;
   const [newMessage, setNewMessage] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const question = getQuestionById(questionId);
+  const chat = getChatById(chatId);
   
-  if (!question) {
+  useEffect(() => {
+    if (chat) {
+      markChatAsRead(chatId);
+    }
+  }, [chatId, chat, markChatAsRead]);
+
+  useEffect(() => {
+    // Scroll to bottom when new messages arrive
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chat?.messages]);
+  
+  if (!chat) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <div className="text-center">
           <AlertCircle size={48} className={`mx-auto mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-          <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Sual tapılmadı</p>
+          <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Yazışma tapılmadı</p>
           <button
             onClick={goBack}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -41,75 +48,61 @@ export function QADetailScreen() {
     );
   }
 
+  const partner = chat.teacherAssigned && chat.teacherId ? qaUsers[chat.teacherId] : { name: 'Müəllim axtarılır...', avatar: '🔍', isOnline: false };
+
   const formatTime = (date: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor(diff / (1000 * 60));
-
-    if (days > 0) return `${days} gün əvvəl`;
-    if (hours > 0) return `${hours} saat əvvəl`;
-    if (minutes > 0) return `${minutes} dəqiqə əvvəl`;
-    return 'İndi';
-  };
-
-  const formatFullTime = (date: Date) => {
-    return date.toLocaleDateString('az-AZ', { 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric',
+    return date.toLocaleTimeString('az-AZ', { 
       hour: '2-digit',
       minute: '2-digit'
     });
   };
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      addQAMessage(questionId, newMessage);
-      setNewMessage('');
+  const formatDateHeader = (date: Date) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    if (date.toDateString() === today.toDateString()) {
+      return 'Bu gün';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Dünən';
+    } else {
+      return date.toLocaleDateString('az-AZ', { 
+        day: 'numeric', 
+        month: 'long'
+      });
     }
   };
 
-  const handleLike = () => {
-    likeQuestion(questionId);
-    setIsLiked(!isLiked);
+  const handleSendMessage = () => {
+    if (newMessage.trim()) {
+      sendMessage(chatId, newMessage.trim());
+      setNewMessage('');
+    }
   };
 
   const handleFileAttach = () => {
     fileInputRef.current?.click();
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'answered':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'open':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'closed':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-    }
+  const groupMessagesByDate = (messages: QAMessage[]) => {
+    const groups: { [key: string]: QAMessage[] } = {};
+    messages.forEach(message => {
+      const dateKey = message.timestamp.toDateString();
+      if (!groups[dateKey]) {
+        groups[dateKey] = [];
+      }
+      groups[dateKey].push(message);
+    });
+    return groups;
   };
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'answered':
-        return 'Cavablandı';
-      case 'open':
-        return 'Açıq';
-      case 'closed':
-        return 'Bağlandı';
-      default:
-        return status;
-    }
-  };
+  const messageGroups = groupMessagesByDate(chat.messages);
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Header */}
-      <div className={`sticky top-0 z-10 p-4 border-b ${
+    <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+      {/* WhatsApp-style Header */}
+      <div className={`p-4 border-b ${
         isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
         <div className="flex items-center space-x-3">
@@ -121,199 +114,183 @@ export function QADetailScreen() {
           >
             <ArrowLeft size={20} className={isDarkMode ? 'text-gray-300' : 'text-gray-600'} />
           </button>
-          <div className="flex-1">
-            <div className="flex items-center space-x-2 mb-1">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(question.status)}`}>
-                {getStatusText(question.status)}
-              </span>
-              <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                Yol qaydaları
-              </span>
-            </div>
-            <h1 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Sual Detalları
-            </h1>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 pb-20">
-        {/* Question */}
-        <div className={`p-4 border-b ${
-          isDarkMode ? 'border-gray-700' : 'border-gray-200'
-        }`}>
-          {/* Question Title */}
-          <h2 className={`text-xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            {question.title}
-          </h2>
-
-          {/* Question Content */}
-          <p className={`text-base mb-4 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {question.content}
-          </p>
-
-          {/* Tags */}
-          {question.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {question.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
-                    isDarkMode 
-                      ? 'bg-gray-700 text-gray-300' 
-                      : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
-                  <Tag size={12} className="mr-1" />
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Question Meta */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">{qaUsers[question.authorId]?.avatar}</span>
-                <div>
-                  <p className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                    {qaUsers[question.authorId]?.name}
-                  </p>
-                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {formatFullTime(question.createdAt)}
-                  </p>
-                </div>
+          
+          {/* Partner Info */}
+          <div className="flex items-center space-x-3 flex-1">
+            <div className="relative">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                partner.isOnline 
+                  ? 'bg-green-100 dark:bg-green-900' 
+                  : 'bg-gray-100 dark:bg-gray-800'
+              }`}>
+                {partner.avatar}
               </div>
+              {partner.isOnline && (
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+              )}
             </div>
-            <div className="flex items-center space-x-4">
-              <div className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                <Eye size={16} />
-                <span className="text-sm">{question.viewCount}</span>
-              </div>
-              <button
-                onClick={handleLike}
-                className={`flex items-center space-x-1 transition-colors ${
-                  isLiked ? 'text-red-500' : isDarkMode ? 'text-gray-400 hover:text-red-400' : 'text-gray-500 hover:text-red-500'
-                }`}
-              >
-                <Heart size={16} className={isLiked ? 'fill-current' : ''} />
-                <span className="text-sm">{question.likeCount + (isLiked ? 1 : 0)}</span>
-              </button>
+            
+            <div className="flex-1 min-w-0">
+              <h1 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                {partner.name}
+              </h1>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                {partner.isOnline ? 'Onlayn' : 'Son görünmə: ' + ('lastSeen' in partner && partner.lastSeen ? formatTime(partner.lastSeen) : 'naməlum')}
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Messages */}
-        <div className="p-4 space-y-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <MessageCircle size={18} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Cavablar və Müzakirələr
-            </h3>
-            <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              ({question.messages.length - 1})
-            </span>
-          </div>
-
-          {question.messages.slice(1).map((message) => {
-            const user = qaUsers[message.userId];
-            const isTeacher = user?.role === 'teacher';
-            const isAnswer = message.isAnswer;
-
-            return (
-              <div key={message.id} className={`flex space-x-3 ${isAnswer ? 'bg-green-50 dark:bg-green-900/20 p-4 rounded-xl' : ''}`}>
-                <div className="flex-shrink-0">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                    isTeacher 
-                      ? 'bg-blue-100 dark:bg-blue-900' 
-                      : 'bg-gray-100 dark:bg-gray-800'
-                  }`}>
-                    {user?.avatar}
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className={`font-medium text-sm ${
-                      isTeacher 
-                        ? 'text-blue-600 dark:text-blue-400' 
-                        : isDarkMode ? 'text-white' : 'text-gray-900'
-                    }`}>
-                      {user?.name}
-                    </span>
-                    {isTeacher && (
-                      <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 rounded-full text-xs font-medium">
-                        Müəllim
-                      </span>
-                    )}
-                    {isAnswer && (
-                      <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-0.5 rounded-full text-xs font-medium flex items-center">
-                        <CheckCircle size={12} className="mr-1" />
-                        Cavab
-                      </span>
-                    )}
-                    <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                      {formatTime(message.timestamp)}
-                    </span>
-                  </div>
-                  <p className={`text-sm leading-relaxed ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
-                    {message.content}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Message Input */}
-      <div className={`fixed bottom-0 left-0 right-0 p-4 border-t ${
-        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-      }`}>
-        <div className="max-w-md mx-auto">
+          {/* Action Buttons */}
           <div className="flex items-center space-x-2">
             <button
-              onClick={handleFileAttach}
               className={`p-2 rounded-lg transition-colors ${
                 isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
               }`}
             >
-              <Paperclip size={20} />
+              <Phone size={20} />
             </button>
+            <button
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+              }`}
+            >
+              <Video size={20} />
+            </button>
+            <button
+              className={`p-2 rounded-lg transition-colors ${
+                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+              }`}
+            >
+              <MoreVertical size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Subject Badge */}
+        <div className="mt-3">
+          <span className={`inline-block px-3 py-1 rounded-full text-sm ${
+            isDarkMode 
+              ? 'bg-blue-900 text-blue-200' 
+              : 'bg-blue-100 text-blue-800'
+          }`}>
+            📚 {chat.subject}
+          </span>
+        </div>
+      </div>
+
+      {/* Messages Area - WhatsApp Style */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {Object.entries(messageGroups).map(([dateKey, messages]) => (
+          <div key={dateKey}>
+            {/* Date Header */}
+            <div className="flex justify-center mb-4">
+              <span className={`px-3 py-1 rounded-full text-xs ${
+                isDarkMode 
+                  ? 'bg-gray-700 text-gray-300' 
+                  : 'bg-gray-200 text-gray-600'
+              }`}>
+                {formatDateHeader(new Date(dateKey))}
+              </span>
+            </div>
+
+            {/* Messages for this date */}
+            {messages.map((message, index) => {
+              const isCurrentUser = message.senderId === 'current';
+              const nextMessage = messages[index + 1];
+              const isLastInGroup = !nextMessage || nextMessage.senderId !== message.senderId;
+              
+              return (
+                <div
+                  key={message.id}
+                  className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-1`}
+                >
+                  <div
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                      isCurrentUser
+                        ? 'bg-blue-600 text-white'
+                        : isDarkMode
+                        ? 'bg-gray-700 text-gray-100'
+                        : 'bg-white text-gray-900 border border-gray-200'
+                    } ${
+                      isCurrentUser
+                        ? isLastInGroup ? 'rounded-br-md' : ''
+                        : isLastInGroup ? 'rounded-bl-md' : ''
+                    }`}
+                  >
+                    {/* Message content */}
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    
+                    {/* Time */}
+                    <div className={`flex items-center justify-end space-x-1 mt-1 ${
+                      isCurrentUser ? 'text-blue-100' : isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      <span className="text-xs">{formatTime(message.timestamp)}</span>
+                      {isCurrentUser && (
+                        <div className="text-xs">
+                          {message.isRead ? '✓✓' : '✓'}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+        
+        {/* Auto-scroll anchor */}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* WhatsApp-style Message Input */}
+      <div className={`p-4 border-t ${
+        isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <div className="max-w-md mx-auto">
+          <div className="flex items-end space-x-2">
+            <button
+              onClick={handleFileAttach}
+              className={`p-2 rounded-full transition-colors ${
+                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+              }`}
+            >
+              <Paperclip size={22} />
+            </button>
+            
             <div className="flex-1 relative">
               <input
                 type="text"
-                placeholder="Cavabınızı yazın..."
+                placeholder="Mesaj yazın..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                className={`w-full px-4 py-2 pr-12 rounded-xl border-0 ${
+                className={`w-full px-4 py-3 pr-12 rounded-full border-0 text-sm ${
                   isDarkMode 
                     ? 'bg-gray-700 text-white placeholder-gray-400' 
                     : 'bg-gray-100 text-gray-900 placeholder-gray-500'
                 } focus:ring-2 focus:ring-blue-500 focus:outline-none`}
               />
-              <button
-                onClick={handleSendMessage}
-                disabled={!newMessage.trim()}
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded-lg transition-colors ${
-                  newMessage.trim()
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : isDarkMode ? 'bg-gray-600 text-gray-400' : 'bg-gray-300 text-gray-500'
-                }`}
-              >
-                <Send size={16} />
-              </button>
             </div>
+            
+            <button
+              onClick={handleSendMessage}
+              disabled={!newMessage.trim()}
+              className={`p-3 rounded-full transition-all ${
+                newMessage.trim()
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 scale-100'
+                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 scale-95 cursor-not-allowed'
+              }`}
+            >
+              <Send size={20} />
+            </button>
           </div>
           
-          {/* Typing indicator (optional) */}
-          <p className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Müəllim cavab yazmaqda...
-          </p>
+          {/* Typing indicator (when teacher is typing) */}
+          {partner.isOnline && (
+            <div className={`text-xs mt-2 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              {partner.name} yazır...
+            </div>
+          )}
         </div>
       </div>
 

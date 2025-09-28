@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAQuestion, QAMessage, QAUser } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -61,14 +61,15 @@ interface AppContextType {
   appeals: Appeal[];
   submitAppeal: (formData: AppealFormData) => boolean;
   getAppealsByStatus: (status?: string) => Appeal[];
-  // Q&A System
-  qaQuestions: QAQuestion[];
+  // Q&A Chat System (WhatsApp-like)
+  qaChats: QAChat[];
   qaUsers: { [key: string]: QAUser };
-  submitQuestion: (title: string, content: string, category: string, tags: string[], attachments?: File[]) => boolean;
-  addQAMessage: (questionId: string, content: string, attachments?: string[]) => boolean;
-  likeQuestion: (questionId: string) => void;
-  getQuestionsByCategory: (category?: string) => QAQuestion[];
-  getQuestionById: (id: string) => QAQuestion | undefined;
+  qaTeachers: QAUser[];
+  startNewChat: (subject: string, category: string, teacherId?: string) => string | null;
+  sendMessage: (chatId: string, content: string, attachments?: string[], messageType?: 'text' | 'image' | 'file') => boolean;
+  getChatById: (id: string) => QAChat | undefined;
+  markChatAsRead: (chatId: string) => void;
+  getActiveChatsList: () => QAChat[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -256,117 +257,119 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   ]);
 
-  // Q&A System State
+  // Q&A Chat System State
   const [qaUsers] = useState<{ [key: string]: QAUser }>({
-    'student1': { id: 'student1', name: 'Əli Məmmədov', role: 'student', avatar: '👨‍🎓' },
-    'student2': { id: 'student2', name: 'Leyla İbrahimova', role: 'student', avatar: '👩‍🎓' },
-    'student3': { id: 'student3', name: 'Rəşad Quliyev', role: 'student', avatar: '👨‍🎓' },
-    'teacher1': { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫' },
-    'teacher2': { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫' },
-    'current': { id: 'current', name: 'Siz', role: 'student', avatar: '😊' }
+    'current': { id: 'current', name: 'Siz', role: 'student', avatar: '😊', isOnline: true },
+    'teacher1': { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher2': { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 30 * 60 * 1000) },
+    'teacher3': { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher4': { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000) }
   });
 
-  const [qaQuestions, setQaQuestions] = useState<QAQuestion[]>([
+  const [qaTeachers] = useState<QAUser[]>([
+    { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false },
+    { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false }
+  ]);
+
+  const [qaChats, setQaChats] = useState<QAChat[]>([
     {
-      id: '1',
-      authorId: 'student1',
-      title: 'Şəhər daxilində sürət məhdudiyyəti haqqında',
-      content: 'Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli? Xüsusilə Nizami küçəsində və Heydər Əliyev prospektində belə nişanlar var.',
-      tags: ['sürət', 'şəhər', 'məhdudiyyət', 'nişanlar'],
+      id: 'chat1',
+      studentId: 'current',
+      teacherId: 'teacher1',
+      subject: 'Şəhər daxilində sürət məhdudiyyəti',
       category: 'traffic-rules',
       createdAt: new Date('2025-01-15T10:30:00'),
       updatedAt: new Date('2025-01-15T16:45:00'),
-      status: 'answered',
-      viewCount: 24,
-      likeCount: 8,
-      isLiked: false,
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: true,
       messages: [
         {
           id: 'm1',
-          userId: 'student1',
-          content: 'Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli? Xüsusilə Nizami küçəsində və Heydər Əliyev prospektində belə nişanlar var.',
-          timestamp: new Date('2025-01-15T10:30:00')
+          senderId: 'current',
+          content: 'Salam müəllim! Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli?',
+          timestamp: new Date('2025-01-15T10:30:00'),
+          messageType: 'text',
+          isRead: true
         },
         {
           id: 'm2',
-          userId: 'teacher1',
-          content: 'Salam! Bu çox yaxşı sualdır. Şəhər daxilində ümumi sürət məhdudiyyəti 50 km/s-dir, lakin bəzi magistral yollarda və geniş küçələrdə xüsusi nişanlarla 60 km/s icazə verilir. Həmişə yol nişanlarına diqqət yetirin.',
+          senderId: 'teacher1',
+          content: 'Salam! Bu çox yaxşı sualdır. Şəhər daxilində ümumi sürət məhdudiyyəti 50 km/s-dir, lakin bəzi magistral yollarda və geniş küçələrdə xüsusi nişanlarla 60 km/s icazə verilir.',
           timestamp: new Date('2025-01-15T14:20:00'),
-          isAnswer: true
+          messageType: 'text',
+          isRead: true
         },
         {
           id: 'm3',
-          userId: 'student2',
-          content: 'Mən də eyni sualı verməkişəyirdim! Çox aydın izah oldu, təşəkkürlər müəllim.',
-          timestamp: new Date('2025-01-15T15:10:00')
+          senderId: 'current',
+          content: 'Təşəkkürlər! Yəni əsas qayda odur ki, əgər nişanla başqa sürət göstərilirsə, onu izləməliyik?',
+          timestamp: new Date('2025-01-15T15:30:00'),
+          messageType: 'text',
+          isRead: true
         },
         {
           id: 'm4',
-          userId: 'student1',
-          content: 'Təşəkkürlər! Yəni əsas qayda odur ki, əgər nişanla başqa sürət göstərilirsə, onu izləməliyik?',
-          timestamp: new Date('2025-01-15T15:30:00')
-        },
-        {
-          id: 'm5',
-          userId: 'teacher1',
-          content: 'Düz dedin! Yol nişanları həmişə prioritetdir. Əgər nişanla başqa sürət məhdudiyyəti göstərilirsə, onu izləməlisiniz. Bu, həm şəhər daxilində, həm də şəhərdən kənarda keçərlidir.',
+          senderId: 'teacher1',
+          content: 'Düz dedin! Yol nişanları həmişə prioritetdir. Həmişə yol nişanlarına diqqət yetirin.',
           timestamp: new Date('2025-01-15T16:45:00'),
-          isAnswer: true
-        }
-      ],
-      teacherAssigned: 'teacher1'
-    },
-    {
-      id: '2',
-      authorId: 'student2',
-      title: 'Park etmək qadağandır nişanının təsir zonası',
-      content: 'Bu nişan neçə metr ərzində təsir edir? Növbəti nişana qədər, yoxsa məhdud bir məsafə var?',
-      tags: ['park', 'nişan', 'qadağa'],
-      category: 'parking',
-      createdAt: new Date('2025-01-14T16:45:00'),
-      updatedAt: new Date('2025-01-14T16:45:00'),
-      status: 'open',
-      viewCount: 12,
-      likeCount: 3,
-      isLiked: false,
-      messages: [
-        {
-          id: 'm6',
-          userId: 'student2',
-          content: 'Bu nişan neçə metr ərzində təsir edir? Növbəti nişana qədər, yoxsa məhdud bir məsafə var?',
-          timestamp: new Date('2025-01-14T16:45:00')
+          messageType: 'text',
+          isRead: true
         }
       ]
     },
     {
-      id: '3',
-      authorId: 'student3',
-      title: 'İmtahan zamanı həyəcan necə idarə edilir?',
-      content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
-      tags: ['imtahan', 'həyəcan', 'psixoloji'],
+      id: 'chat2', 
+      studentId: 'current',
+      teacherId: 'teacher2',
+      subject: 'Park etmə qaydaları',
+      category: 'parking',
+      createdAt: new Date('2025-01-14T16:45:00'),
+      updatedAt: new Date('2025-01-14T17:30:00'),
+      isActive: true,
+      unreadCount: 1,
+      teacherAssigned: true,
+      messages: [
+        {
+          id: 'm5',
+          senderId: 'current',
+          content: 'Park etmək qadağandır nişanı neçə metr ərzində təsir edir?',
+          timestamp: new Date('2025-01-14T16:45:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm6',
+          senderId: 'teacher2',
+          content: 'Bu nişan növbəti nişana qədər və ya yolun sonuna qədər keçərlidir. Adətən əlavə lövhə ilə məsafə göstərilir.',
+          timestamp: new Date('2025-01-14T17:30:00'),
+          messageType: 'text',
+          isRead: false
+        }
+      ]
+    },
+    {
+      id: 'chat3',
+      studentId: 'current',
+      subject: 'İmtahan həyəcanı',
       category: 'exam-prep',
       createdAt: new Date('2025-01-13T09:15:00'),
-      updatedAt: new Date('2025-01-13T15:30:00'),
-      status: 'answered',
-      viewCount: 45,
-      likeCount: 15,
-      isLiked: false,
+      updatedAt: new Date('2025-01-13T09:15:00'),
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: false,
       messages: [
         {
           id: 'm7',
-          userId: 'student3',
+          senderId: 'current',
           content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
-          timestamp: new Date('2025-01-13T09:15:00')
-        },
-        {
-          id: 'm8',
-          userId: 'teacher2',
-          content: 'Bu çox normal haldır! İmtahandan əvvəl dərin nəfəs alın və özünüzə inamınızı artırın. Əvvəlcə asan sualları cavablandırın, sonra çətin olanlara keçin.',
-          timestamp: new Date('2025-01-13T15:30:00'),
-          isAnswer: true
+          timestamp: new Date('2025-01-13T09:15:00'),
+          messageType: 'text',
+          isRead: false
         }
-      ],
-      teacherAssigned: 'teacher2'
+      ]
     }
   ]);
   
@@ -530,57 +533,50 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return appeals.filter(appeal => appeal.status === status);
   };
 
-  // Q&A System Functions
-  const submitQuestion = (title: string, content: string, category: string, tags: string[], attachments?: File[]): boolean => {
+  // Q&A Chat System Functions
+  const startNewChat = (subject: string, category: string, teacherId?: string): string | null => {
     try {
-      const newQuestion: QAQuestion = {
-        id: Date.now().toString(),
-        authorId: 'current',
-        title,
-        content,
-        tags,
+      const newChat: QAChat = {
+        id: `chat_${Date.now()}`,
+        studentId: 'current',
+        teacherId,
+        subject,
         category,
-        attachments: attachments?.map(f => f.name) || [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        status: 'open',
-        viewCount: 0,
-        likeCount: 0,
-        isLiked: false,
-        messages: [
-          {
-            id: `m_${Date.now()}`,
-            userId: 'current',
-            content,
-            timestamp: new Date()
-          }
-        ]
+        isActive: true,
+        unreadCount: 0,
+        teacherAssigned: !!teacherId,
+        messages: []
       };
-      setQaQuestions(prev => [newQuestion, ...prev]);
-      return true;
+      setQaChats(prev => [newChat, ...prev]);
+      return newChat.id;
     } catch {
-      return false;
+      return null;
     }
   };
 
-  const addQAMessage = (questionId: string, content: string, attachments?: string[]): boolean => {
+  const sendMessage = (chatId: string, content: string, attachments?: string[], messageType: 'text' | 'image' | 'file' = 'text'): boolean => {
     try {
       const newMessage: QAMessage = {
         id: `m_${Date.now()}`,
-        userId: 'current',
+        senderId: 'current',
         content,
         timestamp: new Date(),
-        attachments
+        attachments,
+        messageType,
+        isRead: false
       };
 
-      setQaQuestions(prev => prev.map(q => 
-        q.id === questionId 
+      setQaChats(prev => prev.map(chat => 
+        chat.id === chatId 
           ? { 
-              ...q, 
-              messages: [...q.messages, newMessage],
-              updatedAt: new Date()
+              ...chat, 
+              messages: [...chat.messages, newMessage],
+              updatedAt: new Date(),
+              lastMessage: newMessage
             }
-          : q
+          : chat
       ));
       return true;
     } catch {
@@ -588,25 +584,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const likeQuestion = (questionId: string): void => {
-    setQaQuestions(prev => prev.map(q => 
-      q.id === questionId 
-        ? { 
-            ...q, 
-            likeCount: q.isLiked ? q.likeCount - 1 : q.likeCount + 1,
-            isLiked: !q.isLiked
-          }
-        : q
+  const getChatById = (id: string): QAChat | undefined => {
+    return qaChats.find(chat => chat.id === id);
+  };
+
+  const markChatAsRead = (chatId: string): void => {
+    setQaChats(prev => prev.map(chat => 
+      chat.id === chatId 
+        ? { ...chat, unreadCount: 0 }
+        : chat
     ));
   };
 
-  const getQuestionsByCategory = (category?: string): QAQuestion[] => {
-    if (!category || category === 'all') return qaQuestions;
-    return qaQuestions.filter(q => q.category === category);
-  };
-
-  const getQuestionById = (id: string): QAQuestion | undefined => {
-    return qaQuestions.find(q => q.id === id);
+  const getActiveChatsList = (): QAChat[] => {
+    return qaChats.filter(chat => chat.isActive).sort((a, b) => 
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
   };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
@@ -729,7 +722,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , deliveryMethod, setDeliveryMethod
       , examResults, addExamResult
       , appeals, submitAppeal, getAppealsByStatus
-      , qaQuestions, qaUsers, submitQuestion, addQAMessage, likeQuestion, getQuestionsByCategory, getQuestionById
+      , qaChats, qaUsers, qaTeachers, startNewChat, sendMessage, getChatById, markChatAsRead, getActiveChatsList
     }}>
       {children}
     </AppContext.Provider>
