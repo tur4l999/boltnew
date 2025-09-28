@@ -29,6 +29,7 @@ import { QuickTestScreen } from '../screens/QuickTestScreen';
 import { BlogsScreen } from '../screens/BlogsScreen';
 import { FinesScreen } from '../screens/FinesScreen';
 import { DrivingPracticeScreen } from '../screens/DrivingPracticeScreen';
+import { AppealsScreen } from '../screens/AppealsScreen';
 import { CertificateApplicationScreen } from '../screens/CertificateApplicationScreen';
 
 export function ScreenRenderer() {
@@ -77,10 +78,11 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Fines' && <FinesScreen />}
       {currentScreen.screen === 'Blogs' && <BlogsScreen />}
       {currentScreen.screen === 'DrivingPractice' && <DrivingPracticeScreen />}
+      {currentScreen.screen === 'Appeals' && <AppealsScreen />}
       {currentScreen.screen === 'CertificateApplication' && <CertificateApplicationScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'CertificateApplication'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
