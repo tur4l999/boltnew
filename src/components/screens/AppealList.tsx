@@ -134,22 +134,36 @@ export function AppealList({ appeals }: AppealListProps) {
                 </div>
               </div>
 
-              {/* Question Image */}
-              {appeal.questionImageUrl && (
-                <div className="relative">
-                  <img
-                    src={appeal.questionImageUrl}
-                    alt={t.questionImage}
-                    className="w-full h-32 object-cover rounded-xl"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                    {t.questionHasImage}
-                  </div>
+              {/* Question Display - Combined text and image */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ünvanladığınız sual:
+                  </span>
                 </div>
-              )}
+                <div className={`p-4 rounded-xl ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+                }`}>
+                  <p className="text-sm text-gray-800 dark:text-gray-200 mb-3">
+                    {appeal.questionText}
+                  </p>
+                  {appeal.questionImageUrl && (
+                    <div className="relative">
+                      <img
+                        src={appeal.questionImageUrl}
+                        alt={t.questionImage}
+                        className="w-full h-32 object-cover rounded-lg"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                        {t.questionHasImage}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* Comment Preview */}
               <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
@@ -238,37 +252,32 @@ export function AppealList({ appeals }: AppealListProps) {
                   </div>
                 </div>
 
-                {/* Question */}
+                {/* Question - Combined text and image */}
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    {t.questionText}
+                    Ünvanladığınız sual:
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-                    {selectedAppeal.questionText}
-                  </p>
-                </div>
-
-                {/* Question Image */}
-                {selectedAppeal.questionImageUrl && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                      {t.questionImage}
-                    </h3>
-                    <div className="relative">
-                      <img
-                        src={selectedAppeal.questionImageUrl}
-                        alt={t.questionImage}
-                        className="w-full max-h-64 object-cover rounded-xl"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                      <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                        {t.viewQuestionImage}
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
+                    <p className="text-gray-700 dark:text-gray-300 mb-3">
+                      {selectedAppeal.questionText}
+                    </p>
+                    {selectedAppeal.questionImageUrl && (
+                      <div className="relative">
+                        <img
+                          src={selectedAppeal.questionImageUrl}
+                          alt={t.questionImage}
+                          className="w-full max-h-64 object-cover rounded-lg"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                        <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                          {t.viewQuestionImage}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
 
                 {/* User Comment */}
                 <div>

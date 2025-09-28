@@ -9,7 +9,6 @@ import type { Appeal } from '../../lib/types';
 
 export function AppealsScreen() {
   const { t, isDarkMode, appeals } = useApp();
-  const [activeTab, setActiveTab] = useState<'list' | 'form'>('list');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
   const statusCounts = {
@@ -46,93 +45,54 @@ export function AppealsScreen() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="px-6 py-4">
-          <div className={`flex rounded-2xl p-1 transition-colors duration-200 ${
-            isDarkMode ? 'bg-gray-800' : 'bg-gray-100'
-          }`}>
-            <button
-              onClick={() => setActiveTab('list')}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
-                activeTab === 'list'
-                  ? isDarkMode
-                    ? 'bg-gray-700 text-white shadow-lg'
-                    : 'bg-white text-gray-900 shadow-lg'
-                  : isDarkMode
-                    ? 'text-gray-400 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {t.myAppeals}
-            </button>
-            <button
-              onClick={() => setActiveTab('form')}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
-                activeTab === 'form'
-                  ? isDarkMode
-                    ? 'bg-gray-700 text-white shadow-lg'
-                    : 'bg-white text-gray-900 shadow-lg'
-                  : isDarkMode
-                    ? 'text-gray-400 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {t.submitNewAppeal}
-            </button>
-          </div>
-        </div>
 
         {/* Content */}
         <div className="px-6 pb-6">
-          {activeTab === 'list' ? (
-            <div className="space-y-6">
-              {/* Status Filter */}
-              <Card variant="glass" padding="md">
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
-                    {t.appealStatus}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {Object.entries(statusCounts).map(([status, count]) => (
-                      <button
-                        key={status}
-                        onClick={() => setSelectedStatus(status)}
-                        className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+          <div className="space-y-6">
+            {/* Status Filter */}
+            <Card variant="glass" padding="md">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {t.appealStatus}
+                </h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(statusCounts).map(([status, count]) => (
+                    <button
+                      key={status}
+                      onClick={() => setSelectedStatus(status)}
+                      className={`p-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                        selectedStatus === status
+                          ? isDarkMode
+                            ? 'bg-emerald-600 text-white shadow-lg'
+                            : 'bg-emerald-500 text-white shadow-lg'
+                          : isDarkMode
+                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>
+                          {status === 'all' ? 'Hamısı' : t.appealStatuses[status as keyof typeof t.appealStatuses]}
+                        </span>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
                           selectedStatus === status
-                            ? isDarkMode
-                              ? 'bg-emerald-600 text-white shadow-lg'
-                              : 'bg-emerald-500 text-white shadow-lg'
+                            ? 'bg-white/20'
                             : isDarkMode
-                              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span>
-                            {status === 'all' ? 'Hamısı' : t.appealStatuses[status as keyof typeof t.appealStatuses]}
-                          </span>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            selectedStatus === status
-                              ? 'bg-white/20'
-                              : isDarkMode
-                                ? 'bg-gray-600'
-                                : 'bg-gray-200'
-                          }`}>
-                            {count}
-                          </span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                              ? 'bg-gray-600'
+                              : 'bg-gray-200'
+                        }`}>
+                          {count}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              </Card>
+              </div>
+            </Card>
 
-              {/* Appeals List */}
-              <AppealList appeals={filteredAppeals} />
-            </div>
-          ) : (
-            <AppealForm onSuccess={() => setActiveTab('list')} />
-          )}
+            {/* Appeals List */}
+            <AppealList appeals={filteredAppeals} />
+          </div>
         </div>
       </div>
     </FadeIn>
