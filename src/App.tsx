@@ -37,7 +37,6 @@ function AppContent() {
   const hideTabBar = currentScreen.screen === 'ExamRun' || 
                      currentScreen.screen === 'ProductDetail' || 
                      currentScreen.screen === 'Cart' ||
-                     currentScreen.screen === 'QA' ||
                      currentScreen.screen === 'QADetail' ||
                      currentScreen.screen === 'QAForm';
 
