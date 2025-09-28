@@ -206,18 +206,19 @@ export function CertificateApplicationScreen() {
           </div>
         </div>
 
+        {/* Certificate Types Selection Header */}
+        <div className="mb-4">
+          <h3 className={`text-xl font-black mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+            Kateqoriya Seçin
+          </h3>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Bir və ya bir neçə kateqoriya seçə bilərsiniz
+          </p>
+        </div>
+
         {/* Certificate Types Selection */}
         <SlideTransition direction="up" delay={100}>
           <div className="mb-6">
-            <div className="mb-4">
-              <h3 className={`text-xl font-black mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-                Kateqoriya Seçin
-              </h3>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Bir və ya bir neçə kateqoriya seçə bilərsiniz
-              </p>
-            </div>
-            
             <div className="grid grid-cols-2 gap-3">
               {certificateOptions.map((option, index) => (
                 <ScaleIn key={option.type} delay={200 + (index * 30)}>
