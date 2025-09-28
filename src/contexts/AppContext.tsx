@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAQuestion, QAMessage, QAUser } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -61,6 +61,14 @@ interface AppContextType {
   appeals: Appeal[];
   submitAppeal: (formData: AppealFormData) => boolean;
   getAppealsByStatus: (status?: string) => Appeal[];
+  // Q&A System
+  qaQuestions: QAQuestion[];
+  qaUsers: { [key: string]: QAUser };
+  submitQuestion: (title: string, content: string, category: string, tags: string[], attachments?: File[]) => boolean;
+  addQAMessage: (questionId: string, content: string, attachments?: string[]) => boolean;
+  likeQuestion: (questionId: string) => void;
+  getQuestionsByCategory: (category?: string) => QAQuestion[];
+  getQuestionById: (id: string) => QAQuestion | undefined;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -247,6 +255,120 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isResolved: true
     }
   ]);
+
+  // Q&A System State
+  const [qaUsers] = useState<{ [key: string]: QAUser }>({
+    'student1': { id: 'student1', name: 'Əli Məmmədov', role: 'student', avatar: '👨‍🎓' },
+    'student2': { id: 'student2', name: 'Leyla İbrahimova', role: 'student', avatar: '👩‍🎓' },
+    'student3': { id: 'student3', name: 'Rəşad Quliyev', role: 'student', avatar: '👨‍🎓' },
+    'teacher1': { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫' },
+    'teacher2': { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫' },
+    'current': { id: 'current', name: 'Siz', role: 'student', avatar: '😊' }
+  });
+
+  const [qaQuestions, setQaQuestions] = useState<QAQuestion[]>([
+    {
+      id: '1',
+      authorId: 'student1',
+      title: 'Şəhər daxilində sürət məhdudiyyəti haqqında',
+      content: 'Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli? Xüsusilə Nizami küçəsində və Heydər Əliyev prospektində belə nişanlar var.',
+      tags: ['sürət', 'şəhər', 'məhdudiyyət', 'nişanlar'],
+      category: 'traffic-rules',
+      createdAt: new Date('2025-01-15T10:30:00'),
+      updatedAt: new Date('2025-01-15T16:45:00'),
+      status: 'answered',
+      viewCount: 24,
+      likeCount: 8,
+      isLiked: false,
+      messages: [
+        {
+          id: 'm1',
+          userId: 'student1',
+          content: 'Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli? Xüsusilə Nizami küçəsində və Heydər Əliyev prospektində belə nişanlar var.',
+          timestamp: new Date('2025-01-15T10:30:00')
+        },
+        {
+          id: 'm2',
+          userId: 'teacher1',
+          content: 'Salam! Bu çox yaxşı sualdır. Şəhər daxilində ümumi sürət məhdudiyyəti 50 km/s-dir, lakin bəzi magistral yollarda və geniş küçələrdə xüsusi nişanlarla 60 km/s icazə verilir. Həmişə yol nişanlarına diqqət yetirin.',
+          timestamp: new Date('2025-01-15T14:20:00'),
+          isAnswer: true
+        },
+        {
+          id: 'm3',
+          userId: 'student2',
+          content: 'Mən də eyni sualı verməkişəyirdim! Çox aydın izah oldu, təşəkkürlər müəllim.',
+          timestamp: new Date('2025-01-15T15:10:00')
+        },
+        {
+          id: 'm4',
+          userId: 'student1',
+          content: 'Təşəkkürlər! Yəni əsas qayda odur ki, əgər nişanla başqa sürət göstərilirsə, onu izləməliyik?',
+          timestamp: new Date('2025-01-15T15:30:00')
+        },
+        {
+          id: 'm5',
+          userId: 'teacher1',
+          content: 'Düz dedin! Yol nişanları həmişə prioritetdir. Əgər nişanla başqa sürət məhdudiyyəti göstərilirsə, onu izləməlisiniz. Bu, həm şəhər daxilində, həm də şəhərdən kənarda keçərlidir.',
+          timestamp: new Date('2025-01-15T16:45:00'),
+          isAnswer: true
+        }
+      ],
+      teacherAssigned: 'teacher1'
+    },
+    {
+      id: '2',
+      authorId: 'student2',
+      title: 'Park etmək qadağandır nişanının təsir zonası',
+      content: 'Bu nişan neçə metr ərzində təsir edir? Növbəti nişana qədər, yoxsa məhdud bir məsafə var?',
+      tags: ['park', 'nişan', 'qadağa'],
+      category: 'parking',
+      createdAt: new Date('2025-01-14T16:45:00'),
+      updatedAt: new Date('2025-01-14T16:45:00'),
+      status: 'open',
+      viewCount: 12,
+      likeCount: 3,
+      isLiked: false,
+      messages: [
+        {
+          id: 'm6',
+          userId: 'student2',
+          content: 'Bu nişan neçə metr ərzində təsir edir? Növbəti nişana qədər, yoxsa məhdud bir məsafə var?',
+          timestamp: new Date('2025-01-14T16:45:00')
+        }
+      ]
+    },
+    {
+      id: '3',
+      authorId: 'student3',
+      title: 'İmtahan zamanı həyəcan necə idarə edilir?',
+      content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
+      tags: ['imtahan', 'həyəcan', 'psixoloji'],
+      category: 'exam-prep',
+      createdAt: new Date('2025-01-13T09:15:00'),
+      updatedAt: new Date('2025-01-13T15:30:00'),
+      status: 'answered',
+      viewCount: 45,
+      likeCount: 15,
+      isLiked: false,
+      messages: [
+        {
+          id: 'm7',
+          userId: 'student3',
+          content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
+          timestamp: new Date('2025-01-13T09:15:00')
+        },
+        {
+          id: 'm8',
+          userId: 'teacher2',
+          content: 'Bu çox normal haldır! İmtahandan əvvəl dərin nəfəs alın və özünüzə inamınızı artırın. Əvvəlcə asan sualları cavablandırın, sonra çətin olanlara keçin.',
+          timestamp: new Date('2025-01-13T15:30:00'),
+          isAnswer: true
+        }
+      ],
+      teacherAssigned: 'teacher2'
+    }
+  ]);
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -407,6 +529,85 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!status) return appeals;
     return appeals.filter(appeal => appeal.status === status);
   };
+
+  // Q&A System Functions
+  const submitQuestion = (title: string, content: string, category: string, tags: string[], attachments?: File[]): boolean => {
+    try {
+      const newQuestion: QAQuestion = {
+        id: Date.now().toString(),
+        authorId: 'current',
+        title,
+        content,
+        tags,
+        category,
+        attachments: attachments?.map(f => f.name) || [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        status: 'open',
+        viewCount: 0,
+        likeCount: 0,
+        isLiked: false,
+        messages: [
+          {
+            id: `m_${Date.now()}`,
+            userId: 'current',
+            content,
+            timestamp: new Date()
+          }
+        ]
+      };
+      setQaQuestions(prev => [newQuestion, ...prev]);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const addQAMessage = (questionId: string, content: string, attachments?: string[]): boolean => {
+    try {
+      const newMessage: QAMessage = {
+        id: `m_${Date.now()}`,
+        userId: 'current',
+        content,
+        timestamp: new Date(),
+        attachments
+      };
+
+      setQaQuestions(prev => prev.map(q => 
+        q.id === questionId 
+          ? { 
+              ...q, 
+              messages: [...q.messages, newMessage],
+              updatedAt: new Date()
+            }
+          : q
+      ));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const likeQuestion = (questionId: string): void => {
+    setQaQuestions(prev => prev.map(q => 
+      q.id === questionId 
+        ? { 
+            ...q, 
+            likeCount: q.isLiked ? q.likeCount - 1 : q.likeCount + 1,
+            isLiked: !q.isLiked
+          }
+        : q
+    ));
+  };
+
+  const getQuestionsByCategory = (category?: string): QAQuestion[] => {
+    if (!category || category === 'all') return qaQuestions;
+    return qaQuestions.filter(q => q.category === category);
+  };
+
+  const getQuestionById = (id: string): QAQuestion | undefined => {
+    return qaQuestions.find(q => q.id === id);
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -528,6 +729,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , deliveryMethod, setDeliveryMethod
       , examResults, addExamResult
       , appeals, submitAppeal, getAppealsByStatus
+      , qaQuestions, qaUsers, submitQuestion, addQAMessage, likeQuestion, getQuestionsByCategory, getQuestionById
     }}>
       {children}
     </AppContext.Provider>

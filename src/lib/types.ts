@@ -96,3 +96,38 @@ export interface AppealFormData {
   questionSourceId?: string;
   userComment: string;
 }
+
+// Q&A System Types
+export interface QAUser {
+  id: string;
+  name: string;
+  role: 'student' | 'teacher';
+  avatar?: string;
+}
+
+export interface QAMessage {
+  id: string;
+  userId: string;
+  content: string;
+  timestamp: Date;
+  attachments?: string[];
+  isAnswer?: boolean;
+}
+
+export interface QAQuestion {
+  id: string;
+  authorId: string;
+  title: string;
+  content: string;
+  tags: string[];
+  category: string;
+  attachments?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  status: 'open' | 'answered' | 'closed';
+  viewCount: number;
+  likeCount: number;
+  isLiked?: boolean;
+  messages: QAMessage[];
+  teacherAssigned?: string;
+}
