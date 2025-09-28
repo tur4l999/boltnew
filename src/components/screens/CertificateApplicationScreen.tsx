@@ -95,6 +95,7 @@ export function CertificateApplicationScreen() {
     termsAgreed: false
   });
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const applicationButtonRef = useRef<HTMLButtonElement>(null);
 
   const certificateOptions: { type: CertificateType; label: string; description: string; emoji: string }[] = [
@@ -125,6 +126,11 @@ export function CertificateApplicationScreen() {
   const handleApplicationClick = () => {
     setFormData((prev: ApplicationFormData) => ({ ...prev, selectedTypes }));
     setShowModal(true);
+  };
+
+  const handleTermsRead = () => {
+    setFormData((prev: ApplicationFormData) => ({ ...prev, termsAgreed: true }));
+    setShowTermsModal(false);
   };
 
   const handleSubmit = () => {
@@ -412,9 +418,17 @@ export function CertificateApplicationScreen() {
                       <span className="text-white text-sm">✓</span>
                     )}
                   </button>
-                  <label className={`text-sm leading-relaxed cursor-pointer ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Şərtlərlə tanış oldum və qəbul edirəm
-                  </label>
+                  <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <button
+                      onClick={() => setShowTermsModal(true)}
+                      className={`underline hover:no-underline transition-all duration-200 ${
+                        isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+                      }`}
+                    >
+                      Şərtlərlə
+                    </button>
+                    {' '}tanış oldum və qəbul edirəm
+                  </div>
                 </div>
 
                 {/* Submit Button */}
@@ -431,6 +445,133 @@ export function CertificateApplicationScreen() {
                   >
                   Müraciət Göndər
                 </button>
+              </div>
+            </div>
+          </ScaleIn>
+        </div>
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowTermsModal(false)}
+          ></div>
+          
+          {/* Modal */}
+          <ScaleIn delay={0}>
+            <div className={`relative w-full max-w-lg max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl transition-all duration-300 ${
+              isDarkMode 
+                ? 'bg-gradient-to-br from-gray-800 to-slate-800 border border-gray-700/50' 
+                : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
+            }`}>
+              {/* Modal Header */}
+              <div className={`sticky top-0 z-10 backdrop-blur-lg border-b p-6 flex items-center justify-between ${
+                isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+              }`}>
+                <div>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    İstifadə Şərtləri
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Şərtləri oxuyun və qəbul edin
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Terms Content */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                <div className={`text-sm leading-relaxed space-y-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      1. Ümumi Şərtlər
+                    </h4>
+                    <p>
+                      Sürücülük şəhadətnaməsi üçün müraciət edərkən, siz aşağıdakı şərtləri qəbul etmiş olursunuz. Bu şərtlər qanunvericilik çərçivəsində hazırlanmışdır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      2. Şəxsi Məlumatların Emalı
+                    </h4>
+                    <p>
+                      Təqdim etdiyiniz şəxsi məlumatlar yalnız sürücülük şəhadətnaməsi verilməsi məqsədi ilə istifadə olunacaq və qanunvericilik çərçivəsində qorunacaqdır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      3. Sənədlərin Düzgünlüyü
+                    </h4>
+                    <p>
+                      Təqdim edilən bütün məlumatların düzgün və həqiqi olması tələb olunur. Yalan məlumat təqdim etmək halında müraciət rədd edilə bilər.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      4. Müraciətin Emalı
+                    </h4>
+                    <p>
+                      Müraciətiniz qəbul edildikdən sonra 15 iş günü ərzində nəticə barədə məlumat veriləcəkdir. Əlavə sənədlər tələb oluna bilər.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      5. Ödəniş Şərtləri
+                    </h4>
+                    <p>
+                      Şəhadətnamə üçün müəyyən edilmiş dövlət rüsumu ödənilməlidir. Ödəniş qəbul edildikdən sonra geri qaytarılmır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      6. Məsuliyyət
+                    </h4>
+                    <p>
+                      Bu şərtləri qəbul etməklə, siz bütün tələbləri yerinə yetirməyi və müvafiq cavabdehliyi daşımağı öhdəyə götürürsünüz.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className={`sticky bottom-0 p-6 border-t ${
+                isDarkMode ? 'border-gray-700/50 bg-gray-800/80' : 'border-gray-200/50 bg-white/80'
+              } backdrop-blur-lg`}>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowTermsModal(false)}
+                    className={`flex-1 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={handleTermsRead}
+                    className="flex-1 py-3 rounded-2xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Oxudum
+                  </button>
+                </div>
               </div>
             </div>
           </ScaleIn>
