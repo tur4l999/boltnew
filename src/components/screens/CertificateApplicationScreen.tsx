@@ -19,14 +19,14 @@ const categories: Category[] = [
   { id: 'B', name: 'categoryB', description: 'Avtomobil (3500 kq-a qədər)', icon: '🚗' },
   { id: 'C', name: 'categoryC', description: 'Yük avtomobili (3500 kq-dan çox)', icon: '🚛' },
   { id: 'D', name: 'categoryD', description: 'Avtobus', icon: '🚌' },
-  { id: 'E', name: 'categoryE', description: 'Qoşqu', icon: '🚐' },
+  { id: 'E', name: 'categoryE', description: 'Qoşqu', icon: '🚚' },
   { id: 'AB', name: 'categoryAB', description: 'A + B kateqoriyaları', icon: '🏍️🚗' },
   { id: 'AC', name: 'categoryAC', description: 'A + C kateqoriyaları', icon: '🏍️🚛' },
   { id: 'BC', name: 'categoryBC', description: 'B + C kateqoriyaları', icon: '🚗🚛' },
   { id: 'ABC', name: 'categoryABC', description: 'A + B + C kateqoriyaları', icon: '🏍️🚗🚛' },
-  { id: 'BE', name: 'categoryBE', description: 'B + E kateqoriyaları', icon: '🚗🚐' },
-  { id: 'CE', name: 'categoryCE', description: 'C + E kateqoriyaları', icon: '🚛🚐' },
-  { id: 'DE', name: 'categoryDE', description: 'D + E kateqoriyaları', icon: '🚌🚐' },
+  { id: 'BE', name: 'categoryBE', description: 'B + E kateqoriyaları', icon: '🚗🚚' },
+  { id: 'CE', name: 'categoryCE', description: 'C + E kateqoriyaları', icon: '🚛🚚' },
+  { id: 'DE', name: 'categoryDE', description: 'D + E kateqoriyaları', icon: '🚌🚚' },
 ];
 
 const regions: Region[] = [
