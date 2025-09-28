@@ -223,7 +223,7 @@ export function CertificateApplicationScreen() {
                 <ScaleIn key={option.type} delay={200 + (index * 30)}>
                   <button
                     onClick={() => handleTypeSelection(option.type)}
-                    className={`relative aspect-square p-4 rounded-3xl border transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                    className={`relative w-full h-32 p-4 rounded-3xl border transition-all duration-300 transform hover:scale-105 active:scale-95 ${
                       selectedTypes.includes(option.type)
                         ? isDarkMode
                           ? 'bg-gradient-to-br from-emerald-600 to-green-600 border-emerald-500 shadow-lg text-white'
@@ -233,8 +233,8 @@ export function CertificateApplicationScreen() {
                           : 'bg-white/80 border-gray-200 hover:border-gray-300 text-gray-800'
                     }`}
                   >
-                    <div className="flex flex-col items-center justify-center gap-2 h-full text-center">
-                      <div className="text-2xl mb-1">
+                    <div className="flex flex-col items-center justify-center gap-1 h-full text-center">
+                      <div className="text-xl">
                         {option.emoji}
                       </div>
                       <div className={`font-bold text-sm leading-tight ${
@@ -271,7 +271,7 @@ export function CertificateApplicationScreen() {
               <button
                 ref={applicationButtonRef}
                 onClick={handleApplicationClick}
-                className="w-full rounded-3xl p-6 flex items-center gap-4 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 hover:from-emerald-700 hover:via-green-700 hover:to-emerald-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden"
+                className="w-full rounded-3xl p-6 flex items-center gap-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 hover:from-blue-700 hover:via-indigo-700 hover:to-blue-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
@@ -417,17 +417,17 @@ export function CertificateApplicationScreen() {
                 </div>
 
                 {/* Submit Button */}
-                <button
-                  onClick={handleSubmit}
-                  disabled={!formData.region || !formData.fullAddress || !formData.termsAgreed}
-                  className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
-                    formData.region && formData.fullAddress && formData.termsAgreed
-                      ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl'
-                      : isDarkMode 
-                        ? 'bg-gray-700 text-gray-400'
-                        : 'bg-gray-200 text-gray-500'
-                  }`}
-                >
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!formData.region || !formData.fullAddress || !formData.termsAgreed}
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+                      formData.region && formData.fullAddress && formData.termsAgreed
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
+                        : isDarkMode 
+                          ? 'bg-gray-700 text-gray-400'
+                          : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
                   Müraciət Göndər
                 </button>
               </div>
