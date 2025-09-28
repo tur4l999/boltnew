@@ -277,7 +277,7 @@ export function CertificateApplicationScreen() {
                 <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
                 <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 relative z-10">
-                  <EmojiIcon emoji="📝" size={24} className="text-white" />
+                  <EmojiIcon emoji="✅" size={24} className="text-white" />
                 </div>
                 <div className="text-left font-black text-lg leading-tight relative z-10 flex-1">
                   Müraciət Et
@@ -285,8 +285,8 @@ export function CertificateApplicationScreen() {
                     {selectedTypes.length} kateqoriya seçildi
                   </div>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm transition-transform duration-300 group-hover:scale-110">
-                  ✓
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm transition-transform duration-300 group-hover:translate-x-1">
+                  →
                 </div>
               </button>
             </div>
