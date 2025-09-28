@@ -5,9 +5,10 @@ import {
   Send, 
   Paperclip, 
   MoreVertical,
-  Phone,
-  Video,
-  AlertCircle
+  AlertCircle,
+  Clock,
+  CheckCircle,
+  UserCheck
 } from 'lucide-react';
 import type { QAChat, QAMessage, QAUser } from '../../lib/types';
 
@@ -99,6 +100,21 @@ export function QADetailScreen() {
 
   const messageGroups = groupMessagesByDate(chat.messages);
 
+  const getChatStatus = () => {
+    if (!chat.teacherAssigned) {
+      return { status: 'waiting', text: 'Müəllim axtarılır', icon: Clock, color: 'text-orange-500' };
+    }
+    if (chat.messages.length === 0) {
+      return { status: 'assigned', text: 'Müəllim təyin edildi', icon: UserCheck, color: 'text-blue-500' };
+    }
+    if (chat.messages.length > 0 && chat.messages[chat.messages.length - 1].senderId !== 'current') {
+      return { status: 'responded', text: 'Cavab verildi', icon: CheckCircle, color: 'text-green-500' };
+    }
+    return { status: 'active', text: 'Aktiv yazışma', icon: CheckCircle, color: 'text-green-500' };
+  };
+
+  const chatStatus = getChatStatus();
+
   return (
     <div className={`min-h-screen flex flex-col ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* WhatsApp-style Header */}
@@ -140,22 +156,16 @@ export function QADetailScreen() {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Chat Status */}
           <div className="flex items-center space-x-2">
-            <button
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-              }`}
-            >
-              <Phone size={20} />
-            </button>
-            <button
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-              }`}
-            >
-              <Video size={20} />
-            </button>
+            <div className={`flex items-center space-x-1 px-3 py-1 rounded-full ${
+              isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+            }`}>
+              <chatStatus.icon size={14} className={chatStatus.color} />
+              <span className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                {chatStatus.text}
+              </span>
+            </div>
             <button
               className={`p-2 rounded-lg transition-colors ${
                 isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
