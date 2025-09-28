@@ -34,7 +34,12 @@ function AppContent() {
 
   const isAIChat = currentScreen.screen === 'AIChat';
   const hideHeader = currentScreen.screen !== 'Home';
-  const hideTabBar = currentScreen.screen === 'ExamRun' || currentScreen.screen === 'ProductDetail' || currentScreen.screen === 'Cart';
+  const hideTabBar = currentScreen.screen === 'ExamRun' || 
+                     currentScreen.screen === 'ProductDetail' || 
+                     currentScreen.screen === 'Cart' ||
+                     currentScreen.screen === 'QA' ||
+                     currentScreen.screen === 'QADetail' ||
+                     currentScreen.screen === 'QAForm';
 
   return (
     <div className={`min-h-screen transition-colors duration-200 ${
