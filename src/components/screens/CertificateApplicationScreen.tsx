@@ -19,7 +19,7 @@ const categories: Category[] = [
   { id: 'B', name: 'categoryB', description: 'Avtomobil (3500 kq-a qədər)', icon: '🚗' },
   { id: 'C', name: 'categoryC', description: 'Yük avtomobili (3500 kq-dan çox)', icon: '🚛' },
   { id: 'D', name: 'categoryD', description: 'Avtobus', icon: '🚌' },
-  { id: 'E', name: 'categoryE', description: 'Qoşqu', icon: '🚚' },
+  { id: 'E', name: 'categoryE', description: 'Qoşqu', icon: '🚗‍💨' },
   { id: 'AB', name: 'categoryAB', description: 'A + B kateqoriyaları', icon: '🏍️🚗' },
   { id: 'AC', name: 'categoryAC', description: 'A + C kateqoriyaları', icon: '🏍️🚛' },
   { id: 'BC', name: 'categoryBC', description: 'B + C kateqoriyaları', icon: '🚗🚛' },
