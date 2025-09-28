@@ -226,139 +226,198 @@ export function AppealList({ appeals }: AppealListProps) {
       {selectedAppeal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300"
             onClick={() => setSelectedAppeal(null)}
           />
-          <div className={`relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl ${
-            isDarkMode ? 'bg-gray-800' : 'bg-white'
-          }`}>
-            <div className="p-6">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {t.appealDetails}
-                </h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedAppeal(null)}
-                >
-                  ✕
-                </Button>
+          <FadeIn>
+            <div className={`relative w-full max-w-3xl max-h-[95vh] overflow-hidden rounded-3xl shadow-2xl ${
+              isDarkMode ? 'bg-gray-800' : 'bg-white'
+            }`}>
+              {/* Header with Gradient */}
+              <div className={`relative p-6 pb-4 ${
+                isDarkMode 
+                  ? 'bg-gradient-to-r from-gray-800 to-gray-700' 
+                  : 'bg-gradient-to-r from-gray-50 to-gray-100'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-white shadow-lg'
+                    }`}>
+                      {getSourceIcon(selectedAppeal.questionSource)}
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                        {t.appealDetails}
+                      </h2>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {getSourceLabel(selectedAppeal.questionSource, selectedAppeal.questionSourceId)}
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedAppeal(null)}
+                    className="w-10 h-10 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                  >
+                    ✕
+                  </Button>
+                </div>
               </div>
 
-              {/* Content */}
-              <div className="space-y-6">
-                {/* Question Source */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    {t.questionSource}
-                  </h3>
-                  <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                    <span className="text-lg">{getSourceIcon(selectedAppeal.questionSource)}</span>
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {getSourceLabel(selectedAppeal.questionSource, selectedAppeal.questionSourceId)}
-                    </span>
+              {/* Content with Scroll */}
+              <div className="overflow-y-auto max-h-[calc(95vh-120px)] p-6 space-y-6">
+                {/* Status Card */}
+                <div className={`p-4 rounded-2xl border-2 ${
+                  selectedAppeal.status === 'accepted'
+                    ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+                    : selectedAppeal.status === 'rejected'
+                    ? 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
+                    : selectedAppeal.status === 'under_review'
+                    ? 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20'
+                    : 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-900/20'
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                        selectedAppeal.status === 'accepted'
+                          ? 'bg-green-500 text-white'
+                          : selectedAppeal.status === 'rejected'
+                          ? 'bg-red-500 text-white'
+                          : selectedAppeal.status === 'under_review'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-yellow-500 text-white'
+                      }`}>
+                        {getStatusIcon(selectedAppeal.status)}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {t.appealStatuses[selectedAppeal.status as keyof typeof t.appealStatuses]}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t.submitDate}: {formatDate(selectedAppeal.submittedDate)}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedAppeal.reviewedDate && (
+                      <div className="text-right">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t.answerDate}
+                        </p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {formatDate(selectedAppeal.reviewedDate)}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Question with Appeal Text */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
+                {/* Question Card */}
+                <div className={`p-6 rounded-2xl border-2 ${
+                  isDarkMode 
+                    ? 'border-gray-700 bg-gray-800/50' 
+                    : 'border-gray-200 bg-gray-50'
+                }`}>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      Ünvanladığınız sual
+                    </h3>
                     <Button
                       variant="secondary"
                       size="sm"
-                      onClick={() => {
-                        setShowQuestionModal(true);
-                      }}
+                      onClick={() => setShowQuestionModal(true)}
+                      className="flex items-center gap-2"
                     >
+                      <span>👁️</span>
                       {t.viewQuestion}
                     </Button>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      Ünvanladığınız sual:
-                    </h3>
                   </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-                    <p className="text-gray-700 dark:text-gray-300 mb-3">
+                  <div className="space-y-4">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                       {selectedAppeal.userComment}
                     </p>
                     {selectedAppeal.questionImageUrl && (
-                      <div className="relative">
+                      <div className="relative group">
                         <img
                           src={selectedAppeal.questionImageUrl}
                           alt={t.questionImage}
-                          className="w-full max-h-32 object-cover rounded-lg"
+                          className="w-full max-h-48 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
                         />
-                        <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                          {t.viewQuestionImage}
+                        <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
+                          {t.questionHasImage}
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Status and Dates */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                      {t.appealStatus}
-                    </h4>
-                    <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium ${getStatusColor(selectedAppeal.status)}`}>
-                      <span>{getStatusIcon(selectedAppeal.status)}</span>
-                      <span>{t.appealStatuses[selectedAppeal.status as keyof typeof t.appealStatuses]}</span>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                      {t.submitDate}
-                    </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {formatDate(selectedAppeal.submittedDate)}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Admin Response */}
+                {/* Admin Response Card */}
                 {selectedAppeal.adminResponse && (
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                      {t.adminResponse}
-                    </h3>
-                    <div className={`p-4 rounded-xl ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-                    }`}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          {selectedAppeal.adminName || 'Admin'}
-                        </span>
-                        {selectedAppeal.reviewedDate && (
-                          <span className="text-sm text-gray-400 dark:text-gray-500">
-                            • {formatDate(selectedAppeal.reviewedDate)}
-                          </span>
-                        )}
+                  <div className={`p-6 rounded-2xl border-2 ${
+                    isDarkMode 
+                      ? 'border-blue-700 bg-blue-900/20' 
+                      : 'border-blue-200 bg-blue-50'
+                  }`}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                        isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                      } text-white`}>
+                        👨‍🏫
                       </div>
-                      <p className="text-gray-700 dark:text-gray-300">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {t.teacherResponse}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {selectedAppeal.adminName || 'Admin'} • {selectedAppeal.reviewedDate ? formatDate(selectedAppeal.reviewedDate) : ''}
+                        </p>
+                      </div>
+                    </div>
+                    <div className={`p-4 rounded-xl ${
+                      isDarkMode ? 'bg-gray-800/50' : 'bg-white/80'
+                    }`}>
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                         {selectedAppeal.adminResponse}
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* Actions */}
-                <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+                {/* Question ID */}
+                <div className={`p-4 rounded-xl ${
+                  isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      {t.questionId}:
+                    </span>
+                    <span className="text-sm font-mono text-gray-900 dark:text-white bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
+                      {selectedAppeal.questionId}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className={`p-6 pt-4 border-t ${
+                isDarkMode ? 'border-gray-700' : 'border-gray-200'
+              }`}>
+                <div className="flex justify-end">
                   <Button
                     variant="secondary"
                     onClick={() => setSelectedAppeal(null)}
+                    className="px-6"
                   >
                     {t.backToAppeals}
                   </Button>
                 </div>
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
       )}
 
