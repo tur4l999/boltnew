@@ -243,13 +243,13 @@ export function CertificateApplicationScreen() {
               </p>
             </div>
             
-            <div className="grid gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {certificateOptions.map((option, index) => (
                 <div key={option.type}>
                   <ScaleIn delay={300 + (index * 50)}>
                     <button
                       onClick={() => handleTypeSelection(option.type)}
-                      className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 text-left transform hover:scale-[1.02] ${
+                      className={`w-full p-3 rounded-2xl border-2 transition-all duration-300 text-left transform hover:scale-[1.02] ${
                         selectedTypes.includes(option.type)
                           ? isDarkMode
                             ? 'bg-gradient-to-r from-emerald-900/50 to-green-900/50 border-emerald-600 shadow-lg'
@@ -259,8 +259,8 @@ export function CertificateApplicationScreen() {
                             : 'bg-gray-50/50 border-gray-200/50 hover:border-gray-300'
                       }`}
                     >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-lg transition-all duration-300 ${
+                      <div className="flex flex-col items-center gap-2 text-center">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-base transition-all duration-300 ${
                           selectedTypes.includes(option.type)
                             ? isDarkMode ? 'bg-emerald-800/50' : 'bg-emerald-100/80'
                             : isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
@@ -268,14 +268,14 @@ export function CertificateApplicationScreen() {
                           <span>{option.emoji}</span>
                         </div>
                         <div className="flex-1">
-                          <div className={`font-bold text-base mb-1 ${
+                          <div className={`font-bold text-sm mb-1 ${
                             selectedTypes.includes(option.type)
                               ? isDarkMode ? 'text-emerald-200' : 'text-emerald-800'
                               : isDarkMode ? 'text-gray-200' : 'text-gray-800'
                           }`}>
                             {option.label}
                           </div>
-                          <div className={`text-sm ${
+                          <div className={`text-xs leading-tight ${
                             selectedTypes.includes(option.type)
                               ? isDarkMode ? 'text-emerald-300/80' : 'text-emerald-700/80'
                               : isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -283,7 +283,7 @@ export function CertificateApplicationScreen() {
                             {option.description}
                           </div>
                         </div>
-                        <div className={`w-6 h-6 rounded-full border-2 transition-all duration-300 ${
+                        <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
                           selectedTypes.includes(option.type)
                             ? 'bg-emerald-500 border-emerald-500'
                             : isDarkMode ? 'border-gray-600' : 'border-gray-300'
