@@ -136,14 +136,11 @@ export function AppealList({ appeals }: AppealListProps) {
                 </div>
               </div>
 
-              {/* Question Preview with View Button */}
+              {/* Question with Appeal Text */}
               <div className={`p-4 rounded-xl ${
                 isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
               }`}>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Ünvanladığınız sual:
-                  </span>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -156,9 +153,12 @@ export function AppealList({ appeals }: AppealListProps) {
                   >
                     {t.viewQuestion}
                   </Button>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ünvanladığınız sual:
+                  </span>
                 </div>
-                <p className="text-sm text-gray-800 dark:text-gray-200 mb-3 line-clamp-2">
-                  {appeal.questionText}
+                <p className="text-sm text-gray-800 dark:text-gray-200 mb-3">
+                  {appeal.userComment}
                 </p>
                 {appeal.questionImageUrl && (
                   <div className="relative">
@@ -175,16 +175,6 @@ export function AppealList({ appeals }: AppealListProps) {
                     </div>
                   </div>
                 )}
-              </div>
-
-              {/* Your Appeal */}
-              <div>
-                <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  {t.yourAppeal}:
-                </h5>
-                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                  {appeal.userComment}
-                </p>
               </div>
 
               {/* Teacher Response Preview */}
@@ -272,12 +262,9 @@ export function AppealList({ appeals }: AppealListProps) {
                   </div>
                 </div>
 
-                {/* Question with View Button */}
+                {/* Question with Appeal Text */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      Ünvanladığınız sual:
-                    </h3>
                     <Button
                       variant="secondary"
                       size="sm"
@@ -287,10 +274,13 @@ export function AppealList({ appeals }: AppealListProps) {
                     >
                       {t.viewQuestion}
                     </Button>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      Ünvanladığınız sual:
+                    </h3>
                   </div>
                   <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
                     <p className="text-gray-700 dark:text-gray-300 mb-3">
-                      {selectedAppeal.questionText}
+                      {selectedAppeal.userComment}
                     </p>
                     {selectedAppeal.questionImageUrl && (
                       <div className="relative">
@@ -308,16 +298,6 @@ export function AppealList({ appeals }: AppealListProps) {
                       </div>
                     )}
                   </div>
-                </div>
-
-                {/* User Comment */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
-                    {t.appealComment}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-                    {selectedAppeal.userComment}
-                  </p>
                 </div>
 
                 {/* Status and Dates */}

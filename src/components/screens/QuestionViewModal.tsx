@@ -99,7 +99,7 @@ export function QuestionViewModal({ isOpen, onClose, appeal }: QuestionViewModal
                   {t.questionText}
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl">
-                  {appeal.questionText}
+                  {appeal.userComment}
                 </p>
               </div>
 
