@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { BlogDetailScreen } from './BlogDetailScreen';
 
 type BlogItem = {
   id: string;
@@ -103,7 +104,7 @@ Bu hazırlıqları etməklə qış mövsümündə təhlükəsiz və rahat sürə
 
 export function BlogsScreen() {
   const { isDarkMode } = useApp();
-  const [expandedBlog, setExpandedBlog] = useState<string | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filter blogs based on search term
@@ -113,41 +114,28 @@ export function BlogsScreen() {
     blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const toggleBlogExpansion = (blogId: string) => {
-    setExpandedBlog(expandedBlog === blogId ? null : blogId);
+  const handleBlogClick = (blogId: string) => {
+    setSelectedBlog(blogId);
   };
 
-  const formatContent = (content: string) => {
-    return content
-      .split('\n\n')
-      .map((paragraph, index) => {
-        if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-          return (
-            <h3 key={index} className={`font-bold text-lg mt-4 mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              {paragraph.replace(/\*\*/g, '')}
-            </h3>
-          );
-        }
-        if (paragraph.includes('**')) {
-          const parts = paragraph.split(/(\*\*.*?\*\*)/);
-          return (
-            <p key={index} className={`mb-3 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              {parts.map((part, partIndex) => {
-                if (part.startsWith('**') && part.endsWith('**')) {
-                  return <strong key={partIndex} className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{part.replace(/\*\*/g, '')}</strong>;
-                }
-                return part;
-              })}
-            </p>
-          );
-        }
-        return (
-          <p key={index} className={`mb-3 leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {paragraph}
-          </p>
-        );
-      });
+  const handleNavigateBack = () => {
+    setSelectedBlog(null);
   };
+
+  const selectedBlogData = selectedBlog ? SAMPLE_BLOGS.find(b => b.id === selectedBlog) : null;
+
+  // If a blog is selected, show the detail screen
+  if (selectedBlogData) {
+    return (
+      <BlogDetailScreen
+        blog={selectedBlogData}
+        allBlogs={SAMPLE_BLOGS}
+        onNavigateBack={handleNavigateBack}
+        onNavigateToBlog={handleBlogClick}
+      />
+    );
+  }
+
 
   return (
     <div className={`min-h-screen pb-24 transition-colors duration-300 ${
@@ -205,11 +193,9 @@ export function BlogsScreen() {
             <Card
               key={blog.id}
               variant="glass"
-              className={`overflow-hidden hover-lift cursor-pointer transition-all duration-500 animate-fade-in-up ${
-                expandedBlog === blog.id ? 'ring-2 ring-emerald-500/50' : ''
-              }`}
+              className="overflow-hidden hover-lift cursor-pointer transition-all duration-500 animate-fade-in-up"
               style={{animationDelay: `${index * 0.1}s`}}
-              onClick={() => toggleBlogExpansion(blog.id)}
+              onClick={() => handleBlogClick(blog.id)}
             >
               {/* Blog Header */}
               <div className="flex gap-4 mb-4">
@@ -239,20 +225,18 @@ export function BlogsScreen() {
                   </div>
                 </div>
                 
-                {/* Expand/Collapse Button */}
-                <div className={`self-start p-2 rounded-xl transition-all duration-300 ${
-                  expandedBlog === blog.id 
-                    ? isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
-                    : isDarkMode ? 'text-gray-500 hover:bg-gray-700/50' : 'text-gray-400 hover:bg-gray-100'
-                } ${expandedBlog === blog.id ? 'rotate-180' : ''}`}>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                {/* Read More Arrow */}
+                <div className={`self-center p-2 rounded-xl transition-all duration-300 ${
+                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                }`}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
               </div>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2">
                 {blog.tags.map((tag, tagIndex) => (
                   <span
                     key={tagIndex}
@@ -266,52 +250,6 @@ export function BlogsScreen() {
                   </span>
                 ))}
               </div>
-
-              {/* Expanded Content */}
-              {expandedBlog === blog.id && (
-                <div className="animate-fade-in-up">
-                  <div className={`border-t pt-6 ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'}`}>
-                    <div className="prose prose-sm max-w-none">
-                      {formatContent(blog.content)}
-                    </div>
-                    
-                    {/* Reading Actions */}
-                    <div className={`mt-6 pt-4 border-t flex items-center justify-between ${
-                      isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
-                    }`}>
-                      <div className="flex gap-3">
-                        <button className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
-                          isDarkMode 
-                            ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' 
-                            : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
-                        }`}>
-                          ❤️ Bəyən
-                        </button>
-                        <button className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
-                          isDarkMode 
-                            ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        }`}>
-                          📤 Paylaş
-                        </button>
-                      </div>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpandedBlog(null);
-                        }}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 ${
-                          isDarkMode 
-                            ? 'bg-gray-700/50 text-gray-400 hover:bg-gray-600/50' 
-                            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                        }`}
-                      >
-                        ✕ Bağla
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
             </Card>
           ))}
         </div>
