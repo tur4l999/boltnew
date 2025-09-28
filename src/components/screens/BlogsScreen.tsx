@@ -126,6 +126,7 @@ export function BlogsScreen() {
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
   // Filter blogs based on search term and category
   const filteredBlogs = SAMPLE_BLOGS.filter(blog => {
@@ -144,6 +145,15 @@ export function BlogsScreen() {
 
   const handleNavigateBack = () => {
     setSelectedBlog(null);
+  };
+
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setIsCategoryDropdownOpen(false);
+  };
+
+  const getSelectedCategoryInfo = () => {
+    return CATEGORIES.find(cat => cat.id === selectedCategory) || CATEGORIES[0];
   };
 
   const selectedBlogData = selectedBlog ? SAMPLE_BLOGS.find(b => b.id === selectedBlog) : null;
@@ -208,38 +218,88 @@ export function BlogsScreen() {
             </div>
           </div>
 
-          {/* Categories */}
-          <div className="animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+          {/* Categories Dropdown */}
+          <div className="relative animate-fade-in-up" style={{animationDelay: '0.2s'}}>
             <h3 className={`text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               Kateqoriyalar
             </h3>
-            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-              {CATEGORIES.map((category, index) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 hover:scale-105 animate-slide-in-right ${
-                    selectedCategory === category.id
-                      ? isDarkMode 
-                        ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50' 
-                        : 'bg-emerald-50 text-emerald-600 border-2 border-emerald-200'
-                      : isDarkMode 
-                        ? 'bg-gray-800/50 text-gray-300 border border-gray-700 hover:bg-gray-700/50' 
-                        : 'bg-white/50 text-gray-600 border border-gray-200 hover:bg-gray-100/50'
-                  }`}
-                  style={{animationDelay: `${index * 0.05}s`}}
+            <div className="relative">
+              <button
+                onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${
+                  isDarkMode 
+                    ? 'bg-gray-800/50 border-gray-700 text-gray-100 hover:bg-gray-700/50' 
+                    : 'bg-white/50 border-gray-200 text-gray-900 hover:bg-gray-100/50'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-lg">{getSelectedCategoryInfo().emoji}</span>
+                  <span className="font-medium">{getSelectedCategoryInfo().name}</span>
+                  <span className={`px-2 py-1 rounded-full text-xs ${
+                    isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+                  }`}>
+                    {selectedCategory === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === selectedCategory).length}
+                  </span>
+                </div>
+                <svg 
+                  className={`w-5 h-5 transition-transform duration-300 ${
+                    isCategoryDropdownOpen ? 'rotate-180' : ''
+                  } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
                 >
-                  <span className="text-base">{category.emoji}</span>
-                  {category.name}
-                  {selectedCategory === category.id && (
-                    <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${
-                      isDarkMode ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
-                    }`}>
-                      {category.id === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === category.id).length}
-                    </span>
-                  )}
-                </button>
-              ))}
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isCategoryDropdownOpen && (
+                <div className={`absolute top-full left-0 right-0 mt-2 z-30 rounded-xl border shadow-xl animate-fade-in-up ${
+                  isDarkMode 
+                    ? 'bg-gray-800/95 border-gray-700 backdrop-blur-xl' 
+                    : 'bg-white/95 border-gray-200 backdrop-blur-xl'
+                }`}>
+                  <div className="p-2">
+                    {CATEGORIES.map((category, index) => (
+                      <button
+                        key={category.id}
+                        onClick={() => handleCategorySelect(category.id)}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-[1.02] animate-slide-in-right ${
+                          selectedCategory === category.id
+                            ? isDarkMode 
+                              ? 'bg-emerald-500/20 text-emerald-400' 
+                              : 'bg-emerald-50 text-emerald-600'
+                            : isDarkMode 
+                              ? 'text-gray-300 hover:bg-gray-700/50' 
+                              : 'text-gray-700 hover:bg-gray-100/50'
+                        }`}
+                        style={{animationDelay: `${index * 0.05}s`}}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-base">{category.emoji}</span>
+                          <span>{category.name}</span>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          selectedCategory === category.id
+                            ? isDarkMode ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
+                            : isDarkMode ? 'bg-gray-700/50 text-gray-400' : 'bg-gray-100 text-gray-500'
+                        }`}>
+                          {category.id === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === category.id).length}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Overlay to close dropdown when clicking outside */}
+              {isCategoryDropdownOpen && (
+                <div 
+                  className="fixed inset-0 z-20" 
+                  onClick={() => setIsCategoryDropdownOpen(false)}
+                />
+              )}
             </div>
           </div>
         </div>
