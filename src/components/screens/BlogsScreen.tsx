@@ -8,10 +8,9 @@ type BlogItem = {
   excerpt: string;
   content: string;
   date: string;
-  readTime: string;
   tags: string[];
   image?: string;
-  author: string;
+  viewCount: number;
 };
 
 const SAMPLE_BLOGS: BlogItem[] = [
@@ -33,10 +32,9 @@ const SAMPLE_BLOGS: BlogItem[] = [
 
 Bu qaydalar artıq qüvvədədir və bütün sürücülər onlara riayət etməlidirlər. Qaydaları pozanlara münasibətdə ciddi tədbirlər görüləcəkdir.`,
     date: '2025-01-15',
-    readTime: '3 dəq',
     tags: ['Qaydalar', 'Dəyişiklik', 'Təhlükəsizlik'],
     image: '/image.png',
-    author: 'DDA Ekspert Qrupu',
+    viewCount: 1247,
   },
   {
     id: 'b2',
@@ -63,10 +61,9 @@ Nəzəri bilikləri praktiki vəziyyətlərlə əlaqələndirin.
 
 Bu üsulları tətbiq etməklə imtahanda uğur qazanma şansınız əhəmiyyətli dərəcədə artacaq. Unutmayın ki, səbir və düzenli məşq uğurun açarıdır.`,
     date: '2025-01-05',
-    readTime: '4 dəq',
     tags: ['İmtahan', 'Hazırlıq', 'Məşq'],
     image: '/image copy.png',
-    author: 'Orxan Məmmədov',
+    viewCount: 892,
   },
   {
     id: 'b3',
@@ -98,10 +95,9 @@ Bu üsulları tətbiq etməklə imtahanda uğur qazanma şansınız əhəmiyyət
 
 Bu hazırlıqları etməklə qış mövsümündə təhlükəsiz və rahat sürə bilərsiniz.`,
     date: '2024-12-20',
-    readTime: '5 dəq',
     tags: ['Qış', 'Təhlükəsizlik', 'Təchizat'],
     image: '/DDA_logo.png',
-    author: 'Səbinə Əliyeva',
+    viewCount: 654,
   },
 ];
 
@@ -238,10 +234,7 @@ export function BlogsScreen() {
                       📅 {new Date(blog.date).toLocaleDateString('az-AZ')}
                     </span>
                     <span className={`flex items-center gap-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                      ⏱️ {blog.readTime}
-                    </span>
-                    <span className={`flex items-center gap-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                      👤 {blog.author}
+                      👁️ {blog.viewCount.toLocaleString()} baxış
                     </span>
                   </div>
                 </div>
