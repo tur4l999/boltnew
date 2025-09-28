@@ -206,35 +206,10 @@ export function CertificateApplicationScreen() {
           </div>
         </div>
 
-        {/* Info Card */}
-        <FadeInUp delay={100}>
-          <Card variant="elevated" padding="lg" className={`mb-6 ${
-            isDarkMode 
-              ? 'bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border-blue-700/50' 
-              : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200/50'
-          }`}>
-            <div className="flex items-start gap-4">
-              <div className={`w-16 h-16 rounded-3xl flex items-center justify-center shadow-lg ${
-                isDarkMode ? 'bg-blue-800/50' : 'bg-blue-100/80'
-              }`}>
-                <EmojiIcon emoji="🎓" size={28} />
-              </div>
-              <div className="flex-1">
-                <h3 className={`font-black text-xl mb-2 ${isDarkMode ? 'text-blue-200' : 'text-blue-900'}`}>
-                  Sürücülük Şəhadətnaməsi
-                </h3>
-                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-blue-300/80' : 'text-blue-700/80'}`}>
-                  Müxtəlif nəqliyyat vasitələri kateqoriyaları üzrə sürücülük şəhadətnaməsi almaq üçün müraciət edə bilərsiniz.
-                </p>
-              </div>
-            </div>
-          </Card>
-        </FadeInUp>
-
         {/* Certificate Types Selection */}
-        <SlideTransition direction="up" delay={200}>
-          <Card variant="elevated" padding="lg" className="mb-6">
-            <div className="mb-6">
+        <SlideTransition direction="up" delay={100}>
+          <div className="mb-6">
+            <div className="mb-4">
               <h3 className={`text-xl font-black mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
                 Kateqoriya Seçin
               </h3>
@@ -245,62 +220,48 @@ export function CertificateApplicationScreen() {
             
             <div className="grid grid-cols-2 gap-3">
               {certificateOptions.map((option, index) => (
-                <div key={option.type}>
-                  <ScaleIn delay={300 + (index * 50)}>
-                    <button
-                      onClick={() => handleTypeSelection(option.type)}
-                      className={`w-full p-3 rounded-2xl border-2 transition-all duration-300 text-left transform hover:scale-[1.02] ${
-                        selectedTypes.includes(option.type)
-                          ? isDarkMode
-                            ? 'bg-gradient-to-r from-emerald-900/50 to-green-900/50 border-emerald-600 shadow-lg'
-                            : 'bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-500 shadow-lg'
-                          : isDarkMode
-                            ? 'bg-gray-800/50 border-gray-700/50 hover:border-gray-600'
-                            : 'bg-gray-50/50 border-gray-200/50 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-2 text-center">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-base transition-all duration-300 ${
-                          selectedTypes.includes(option.type)
-                            ? isDarkMode ? 'bg-emerald-800/50' : 'bg-emerald-100/80'
-                            : isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100/80'
-                        }`}>
-                          <span>{option.emoji}</span>
-                        </div>
-                        <div className="flex-1">
-                          <div className={`font-bold text-sm mb-1 ${
-                            selectedTypes.includes(option.type)
-                              ? isDarkMode ? 'text-emerald-200' : 'text-emerald-800'
-                              : isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                          }`}>
-                            {option.label}
-                          </div>
-                          <div className={`text-xs leading-tight ${
-                            selectedTypes.includes(option.type)
-                              ? isDarkMode ? 'text-emerald-300/80' : 'text-emerald-700/80'
-                              : isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                          }`}>
-                            {option.description}
-                          </div>
-                        </div>
-                        <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
-                          selectedTypes.includes(option.type)
-                            ? 'bg-emerald-500 border-emerald-500'
-                            : isDarkMode ? 'border-gray-600' : 'border-gray-300'
-                        }`}>
-                          {selectedTypes.includes(option.type) && (
-                            <div className="w-full h-full flex items-center justify-center text-white text-xs">
-                              ✓
-                            </div>
-                          )}
-                        </div>
+                <ScaleIn key={option.type} delay={200 + (index * 30)}>
+                  <button
+                    onClick={() => handleTypeSelection(option.type)}
+                    className={`relative aspect-square p-4 rounded-3xl border transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                      selectedTypes.includes(option.type)
+                        ? isDarkMode
+                          ? 'bg-gradient-to-br from-emerald-600 to-green-600 border-emerald-500 shadow-lg text-white'
+                          : 'bg-gradient-to-br from-emerald-500 to-green-500 border-emerald-400 shadow-lg text-white'
+                        : isDarkMode
+                          ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600 text-gray-200'
+                          : 'bg-white/80 border-gray-200 hover:border-gray-300 text-gray-800'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2 h-full text-center">
+                      <div className="text-2xl mb-1">
+                        {option.emoji}
                       </div>
-                    </button>
-                  </ScaleIn>
-                </div>
+                      <div className={`font-bold text-sm leading-tight ${
+                        selectedTypes.includes(option.type)
+                          ? 'text-white'
+                          : isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                      }`}>
+                        {option.label}
+                      </div>
+                      <div className={`text-xs leading-tight opacity-80 ${
+                        selectedTypes.includes(option.type)
+                          ? 'text-white/90'
+                          : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        {option.description}
+                      </div>
+                    </div>
+                    {selectedTypes.includes(option.type) && (
+                      <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <span className="text-white text-sm">✓</span>
+                      </div>
+                    )}
+                  </button>
+                </ScaleIn>
               ))}
             </div>
-          </Card>
+          </div>
         </SlideTransition>
 
         {/* Application Button */}
