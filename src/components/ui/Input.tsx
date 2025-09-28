@@ -48,7 +48,7 @@ export function Input({
       
       <div className="relative group">
         {icon && (
-          <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-lg transition-colors duration-200 ${
+          <div className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-lg transition-colors duration-200 pointer-events-none z-20 ${
             isFocused 
               ? 'text-emerald-500' 
               : isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -65,7 +65,7 @@ export function Input({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           disabled={disabled}
-          className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all duration-300 ${
+          className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all duration-300 relative z-10 ${
             icon ? 'pl-12' : ''
           } ${
             rightElement ? 'pr-12' : ''
@@ -73,23 +73,19 @@ export function Input({
             error 
               ? 'border-red-400 focus:border-red-500 focus:ring-red-500/15' 
               : isDarkMode 
-                ? 'bg-gray-700/40 border-gray-600/50 text-gray-100 placeholder-gray-400 hover:bg-gray-700/60 hover:border-gray-500/70' 
-                : 'bg-gray-50/70 border-gray-200/70 text-gray-900 placeholder-gray-500 hover:bg-white/90 hover:border-gray-300/90'
+                ? 'bg-gray-700/40 border-gray-600/50 text-gray-100 placeholder-gray-400 hover:bg-gray-700/50 hover:border-gray-500/60' 
+                : 'bg-gray-50/70 border-gray-200/70 text-gray-900 placeholder-gray-500 hover:bg-white/95 hover:border-gray-300/80'
           } ${
-            disabled ? 'opacity-50 cursor-not-allowed' : isFocused ? 'scale-[1.01] shadow-lg' : 'group-hover:border-emerald-400/70'
+            disabled ? 'opacity-50 cursor-not-allowed' : isFocused ? 'shadow-lg border-emerald-500' : ''
           }`}
         />
         
         {rightElement && (
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20">
             {rightElement}
           </div>
         )}
         
-        {/* Subtle hover effect */}
-        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/3 to-green-500/3 opacity-0 transition-opacity duration-500 pointer-events-none ${
-          !disabled && !error ? 'group-hover:opacity-100' : ''
-        } ${isFocused ? 'opacity-100' : ''}`}></div>
       </div>
       
       {error && (
