@@ -285,8 +285,8 @@ export function CertificateApplicationScreen() {
                     {selectedTypes.length} kateqoriya seçildi
                   </div>
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm transition-transform duration-300 group-hover:translate-x-1">
-                  →
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm transition-transform duration-300 group-hover:scale-110">
+                  ✓
                 </div>
               </button>
             </div>
