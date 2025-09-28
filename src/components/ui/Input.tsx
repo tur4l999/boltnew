@@ -65,18 +65,18 @@ export function Input({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           disabled={disabled}
-          className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-300 ${
+          className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all duration-300 ${
             icon ? 'pl-12' : ''
           } ${
             rightElement ? 'pr-12' : ''
           } ${
             error 
-              ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' 
+              ? 'border-red-400 focus:border-red-500 focus:ring-red-500/15' 
               : isDarkMode 
-                ? 'bg-gray-700/50 border-gray-600 text-gray-100 placeholder-gray-400 hover:bg-gray-700/70' 
-                : 'bg-gray-50/50 border-gray-300 text-gray-900 placeholder-gray-500 hover:bg-gray-50/80'
+                ? 'bg-gray-700/40 border-gray-600/50 text-gray-100 placeholder-gray-400 hover:bg-gray-700/60 hover:border-gray-500/70' 
+                : 'bg-gray-50/70 border-gray-200/70 text-gray-900 placeholder-gray-500 hover:bg-white/90 hover:border-gray-300/90'
           } ${
-            disabled ? 'opacity-50 cursor-not-allowed' : 'group-hover:border-emerald-400'
+            disabled ? 'opacity-50 cursor-not-allowed' : isFocused ? 'scale-[1.01] shadow-lg' : 'group-hover:border-emerald-400/70'
           }`}
         />
         
@@ -87,9 +87,9 @@ export function Input({
         )}
         
         {/* Subtle hover effect */}
-        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 transition-opacity duration-300 pointer-events-none ${
+        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/3 to-green-500/3 opacity-0 transition-opacity duration-500 pointer-events-none ${
           !disabled && !error ? 'group-hover:opacity-100' : ''
-        }`}></div>
+        } ${isFocused ? 'opacity-100' : ''}`}></div>
       </div>
       
       {error && (

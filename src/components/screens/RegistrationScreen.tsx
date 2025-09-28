@@ -193,7 +193,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
               value={formData.email}
               onChange={(value) => updateField('email', value)}
               label="E-mail ünvanı"
-              placeholder="ornek@email.com"
+              placeholder="E-poçtunuzu daxil edin"
               icon="📧"
               error={errors.email}
               required

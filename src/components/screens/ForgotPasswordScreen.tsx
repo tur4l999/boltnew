@@ -119,7 +119,7 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
               value={email}
               onChange={setEmail}
               label="E-mail ünvanı"
-              placeholder="ornek@email.com"
+              placeholder="E-poçtunuzu daxil edin"
               icon="📧"
               error={errors.email}
               required
