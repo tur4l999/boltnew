@@ -11,6 +11,7 @@ type BlogItem = {
   tags: string[];
   image?: string;
   viewCount: number;
+  category: string;
 };
 
 type Comment = {

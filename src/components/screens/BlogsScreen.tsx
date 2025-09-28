@@ -12,7 +12,23 @@ type BlogItem = {
   tags: string[];
   image?: string;
   viewCount: number;
+  category: string;
 };
+
+type Category = {
+  id: string;
+  name: string;
+  emoji: string;
+  color: string;
+};
+
+const CATEGORIES: Category[] = [
+  { id: 'all', name: 'Hamısı', emoji: '📚', color: 'gray' },
+  { id: 'rules', name: 'Qaydalar', emoji: '⚖️', color: 'blue' },
+  { id: 'exam', name: 'İmtahan', emoji: '📝', color: 'emerald' },
+  { id: 'safety', name: 'Təhlükəsizlik', emoji: '🛡️', color: 'red' },
+  { id: 'tips', name: 'Məsləhətlər', emoji: '💡', color: 'yellow' },
+];
 
 const SAMPLE_BLOGS: BlogItem[] = [
   {
@@ -36,6 +52,7 @@ Bu qaydalar artıq qüvvədədir və bütün sürücülər onlara riayət etməl
     tags: ['Qaydalar', 'Dəyişiklik', 'Təhlükəsizlik'],
     image: '/image.png',
     viewCount: 1247,
+    category: 'rules',
   },
   {
     id: 'b2',
@@ -65,6 +82,7 @@ Bu üsulları tətbiq etməklə imtahanda uğur qazanma şansınız əhəmiyyət
     tags: ['İmtahan', 'Hazırlıq', 'Məşq'],
     image: '/image copy.png',
     viewCount: 892,
+    category: 'exam',
   },
   {
     id: 'b3',
@@ -99,6 +117,7 @@ Bu hazırlıqları etməklə qış mövsümündə təhlükəsiz və rahat sürə
     tags: ['Qış', 'Təhlükəsizlik', 'Təchizat'],
     image: '/DDA_logo.png',
     viewCount: 654,
+    category: 'safety',
   },
 ];
 
@@ -106,13 +125,18 @@ export function BlogsScreen() {
   const { isDarkMode } = useApp();
   const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Filter blogs based on search term
-  const filteredBlogs = SAMPLE_BLOGS.filter(blog =>
-    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  // Filter blogs based on search term and category
+  const filteredBlogs = SAMPLE_BLOGS.filter(blog => {
+    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesCategory = selectedCategory === 'all' || blog.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
 
   const handleBlogClick = (blogId: string) => {
     setSelectedBlog(blogId);
@@ -165,7 +189,7 @@ export function BlogsScreen() {
           </div>
 
           {/* Search Bar */}
-          <div className="relative animate-slide-in-right">
+          <div className="relative animate-slide-in-right mb-4">
             <input
               type="text"
               placeholder="Bloglərdə axtar..."
@@ -181,6 +205,41 @@ export function BlogsScreen() {
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>
               🔍
+            </div>
+          </div>
+
+          {/* Categories */}
+          <div className="animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+            <h3 className={`text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Kateqoriyalar
+            </h3>
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+              {CATEGORIES.map((category, index) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 hover:scale-105 animate-slide-in-right ${
+                    selectedCategory === category.id
+                      ? isDarkMode 
+                        ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50' 
+                        : 'bg-emerald-50 text-emerald-600 border-2 border-emerald-200'
+                      : isDarkMode 
+                        ? 'bg-gray-800/50 text-gray-300 border border-gray-700 hover:bg-gray-700/50' 
+                        : 'bg-white/50 text-gray-600 border border-gray-200 hover:bg-gray-100/50'
+                  }`}
+                  style={{animationDelay: `${index * 0.05}s`}}
+                >
+                  <span className="text-base">{category.emoji}</span>
+                  {category.name}
+                  {selectedCategory === category.id && (
+                    <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${
+                      isDarkMode ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
+                    }`}>
+                      {category.id === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === category.id).length}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
         </div>
