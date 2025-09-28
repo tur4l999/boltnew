@@ -269,18 +269,6 @@ export function BlogsScreen() {
           </Card>
         )}
 
-        {/* Footer Info */}
-        <Card variant="glass" className="mt-8 text-center animate-fade-in-up">
-          <div>
-            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              💡 <strong>Məsləhət:</strong> Daha çox məqalə və güncel məlumatlar üçün{' '}
-              <span className={`font-semibold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                dda.az/blogs
-              </span>{' '}
-              səhifəsini ziyarət edin
-            </div>
-          </div>
-        </Card>
       </div>
     </div>
   );
