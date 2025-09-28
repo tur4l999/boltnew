@@ -122,9 +122,6 @@ export function AppealList({ appeals }: AppealListProps) {
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {getSourceLabel(appeal.questionSource, appeal.questionSourceId)}
                     </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      • ID: {appeal.questionId}
-                    </span>
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 mb-2">
                     {appeal.questionText}
@@ -387,19 +384,6 @@ export function AppealList({ appeals }: AppealListProps) {
                   </div>
                 )}
 
-                {/* Question ID */}
-                <div className={`p-4 rounded-xl ${
-                  isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                      {t.questionId}:
-                    </span>
-                    <span className="text-sm font-mono text-gray-900 dark:text-white bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
-                      {selectedAppeal.questionId}
-                    </span>
-                  </div>
-                </div>
               </div>
 
               {/* Footer */}

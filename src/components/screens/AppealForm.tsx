@@ -26,56 +26,56 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
   // Mock questions for demo purposes
   const mockQuestions = [
     { 
-      id: 'q1', 
+      id: '1', 
       text: 'Yol nişanları nə vaxt tətbiq edilir?', 
       source: 'ticket' as const, 
       sourceId: '5',
       imageUrl: undefined 
     },
     { 
-      id: 'q2', 
+      id: '2', 
       text: 'Bu nişan nə deməkdir?', 
       source: 'ticket' as const, 
       sourceId: '12',
       imageUrl: '/public/image.png' 
     },
     { 
-      id: 'q3', 
+      id: '3', 
       text: 'Park etmək qadağandır nişanı nə deməkdir?', 
       source: 'topic' as const, 
       sourceId: 'M8',
       imageUrl: undefined 
     },
     { 
-      id: 'q4', 
+      id: '4', 
       text: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?', 
       source: 'simulator' as const, 
       sourceId: undefined,
       imageUrl: '/public/image copy.png' 
     },
     { 
-      id: 'q5', 
+      id: '5', 
       text: 'Bu yol nişanı nə mənasını verir?', 
       source: 'topic' as const, 
       sourceId: 'M15',
       imageUrl: '/public/book-1.svg' 
     },
     { 
-      id: 'q6', 
+      id: '6', 
       text: 'Dönüş nişanları necə istifadə edilir?', 
       source: 'ticket' as const, 
       sourceId: '8',
       imageUrl: undefined 
     },
     { 
-      id: 'q7', 
+      id: '7', 
       text: 'Trafik işıqları necə işləyir?', 
       source: 'topic' as const, 
       sourceId: 'M3',
       imageUrl: '/public/book-2.svg' 
     },
     { 
-      id: 'q8', 
+      id: '8', 
       text: 'Yol xəttləri nə üçün lazımdır?', 
       source: 'simulator' as const, 
       sourceId: undefined,

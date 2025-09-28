@@ -142,7 +142,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Demo appeals data
     {
       id: '1',
-      questionId: 'q1',
+      questionId: '1',
       questionText: 'Yol nişanları nə vaxt tətbiq edilir?',
       questionOptions: [
         { id: 'a1', text: 'Həmişə' },
@@ -164,7 +164,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     {
       id: '2',
-      questionId: 'q2',
+      questionId: '2',
       questionText: 'Bu nişan nə deməkdir?',
       questionImageUrl: '/public/image.png',
       questionOptions: [
@@ -184,7 +184,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     {
       id: '3',
-      questionId: 'q3',
+      questionId: '3',
       questionText: 'Park etmək qadağandır nişanı nə deməkdir?',
       questionOptions: [
         { id: 'c1', text: 'Park etmək icazə verilir' },
@@ -206,7 +206,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     {
       id: '4',
-      questionId: 'q4',
+      questionId: '4',
       questionText: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?',
       questionImageUrl: '/public/image copy.png',
       questionOptions: [
@@ -225,7 +225,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     },
     {
       id: '5',
-      questionId: 'q5',
+      questionId: '5',
       questionText: 'Bu yol nişanı nə mənasını verir?',
       questionImageUrl: '/public/book-1.svg',
       questionOptions: [
