@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -38,6 +38,7 @@ interface AppContextType {
   moreSheetVisible: boolean;
   setMoreSheetVisible: (visible: boolean) => void;
   balance: number;
+  simulatorBalance: number;
   activePackage: UserPackage | null;
   transactions: Transaction[];
   purchasePackage: (packageId: string, packageName: string, price: number, days: number, activationDate?: Date) => boolean;
@@ -58,6 +59,18 @@ interface AppContextType {
   checkoutByCard: (deliveryAddress: string, method: DeliveryMethod) => boolean;
   examResults: StoredExamResult[];
   addExamResult: (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details?: any) => void;
+  appeals: Appeal[];
+  submitAppeal: (formData: AppealFormData) => boolean;
+  getAppealsByStatus: (status?: string) => Appeal[];
+  // Q&A Chat System (WhatsApp-like)
+  qaChats: QAChat[];
+  qaUsers: { [key: string]: QAUser };
+  qaTeachers: QAUser[];
+  startNewChat: (subject: string, category: string, teacherId?: string) => string | null;
+  sendMessage: (chatId: string, content: string, attachments?: string[], messageType?: 'text' | 'image' | 'file') => boolean;
+  getChatById: (id: string) => QAChat | undefined;
+  markChatAsRead: (chatId: string) => void;
+  getActiveChatsList: () => QAChat[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -71,6 +84,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   ]);
   const [moreSheetVisible, setMoreSheetVisible] = useState(false);
   const [balance, setBalance] = useState(100); // Demo account starts with 100 AZN
+  const [simulatorBalance, setSimulatorBalance] = useState(5); // Demo starts with 5 simulator tickets
   const [tickets, setTickets] = useState(3); // Demo starts with 3 tickets
   const [activePackage, setActivePackage] = useState<UserPackage | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -132,6 +146,232 @@ export function AppProvider({ children }: { children: ReactNode }) {
       date: new Date('2025-09-03T11:30:00'),
       passed: false,
       details: { moduleId: '15ci' }
+    }
+  ]);
+  
+  const [appeals, setAppeals] = useState<Appeal[]>([
+    // Demo appeals data
+    {
+      id: '1',
+      questionId: '1',
+      questionText: 'Yol nişanları nə vaxt tətbiq edilir?',
+      questionOptions: [
+        { id: 'a1', text: 'Həmişə' },
+        { id: 'a2', text: 'Yalnız gecə' },
+        { id: 'a3', text: 'Yalnız gündüz' },
+        { id: 'a4', text: 'Yol şəraitindən asılı olaraq' }
+      ],
+      questionCorrectOptionId: 'a4',
+      questionExplanation: 'Yol nişanları yol şəraitindən asılı olaraq müxtəlif vaxtlarda tətbiq edilir. Bəzi nişanlar həmişə, bəziləri isə müəyyən şəraitdə tətbiq edilir.',
+      questionSource: 'ticket',
+      questionSourceId: '5',
+      userComment: 'Bu sualda bəzi nişanların tətbiq vaxtı dəqiq göstərilməyib. Daha aydın olmalıdır.',
+      status: 'accepted',
+      submittedDate: new Date('2025-01-15T10:30:00'),
+      reviewedDate: new Date('2025-01-16T14:20:00'),
+      adminResponse: 'Sual yenidən nəzərdən keçirildi və daha aydın şəkildə yenidən yazıldı. Təşəkkürlər.',
+      adminName: 'Admin Əli',
+      isResolved: true
+    },
+    {
+      id: '2',
+      questionId: '2',
+      questionText: 'Bu nişan nə deməkdir?',
+      questionImageUrl: '/public/image.png',
+      questionOptions: [
+        { id: 'b1', text: 'Sürət məhdudiyyəti' },
+        { id: 'b2', text: 'Dayanma qadağandır' },
+        { id: 'b3', text: 'Sağa dönmək qadağandır' },
+        { id: 'b4', text: 'Sol dönmək qadağandır' }
+      ],
+      questionCorrectOptionId: 'b1',
+      questionExplanation: 'Bu nişan sürət məhdudiyyətini göstərir. Sürücü bu nişanı gördükdə sürətini məhdudlaşdırmalıdır.',
+      questionSource: 'ticket',
+      questionSourceId: '12',
+      userComment: 'Bu sualda şəhər daxilində sürət məhdudiyyəti haqqında məlumat natamamdır.',
+      status: 'under_review',
+      submittedDate: new Date('2025-01-14T16:45:00'),
+      isResolved: false
+    },
+    {
+      id: '3',
+      questionId: '3',
+      questionText: 'Park etmək qadağandır nişanı nə deməkdir?',
+      questionOptions: [
+        { id: 'c1', text: 'Park etmək icazə verilir' },
+        { id: 'c2', text: 'Park etmək qadağandır' },
+        { id: 'c3', text: 'Yalnız yük maşınları park edə bilər' },
+        { id: 'c4', text: 'Yalnız avtobuslar park edə bilər' }
+      ],
+      questionCorrectOptionId: 'c2',
+      questionExplanation: 'Park etmək qadağandır nişanı o sahədə avtomobil park etməyin qadağan olduğunu göstərir.',
+      questionSource: 'topic',
+      questionSourceId: 'M8',
+      userComment: 'Bu sualda park etmək qadağandır nişanının tətbiq sahəsi dəqiq göstərilməyib.',
+      status: 'rejected',
+      submittedDate: new Date('2025-01-13T09:15:00'),
+      reviewedDate: new Date('2025-01-13T11:30:00'),
+      adminResponse: 'Sual düzgündür və qaydalara uyğundur. Əlavə dəyişiklik tələb olunmur.',
+      adminName: 'Admin Leyla',
+      isResolved: true
+    },
+    {
+      id: '4',
+      questionId: '4',
+      questionText: 'Yol keçidində piyadalar üçün nə vaxt dayanmaq lazımdır?',
+      questionImageUrl: '/public/image copy.png',
+      questionOptions: [
+        { id: 'd1', text: 'Həmişə' },
+        { id: 'd2', text: 'Piyadalar yol keçidində olduqda' },
+        { id: 'd3', text: 'Yalnız qırmızı işıqda' },
+        { id: 'd4', text: 'Heç vaxt' }
+      ],
+      questionCorrectOptionId: 'b2',
+      questionExplanation: 'Sürücü piyadaların yol keçidində olduğunu gördükdə dayanmalıdır və onların keçməsini gözləməlidir.',
+      questionSource: 'simulator',
+      userComment: 'Bu sualda piyadaların yol keçidində olması halında dayanma vaxtı dəqiq göstərilməyib.',
+      status: 'pending',
+      submittedDate: new Date('2025-01-12T14:20:00'),
+      isResolved: false
+    },
+    {
+      id: '5',
+      questionId: '5',
+      questionText: 'Bu yol nişanı nə mənasını verir?',
+      questionImageUrl: '/public/book-1.svg',
+      questionOptions: [
+        { id: 'e1', text: 'Sağa dönmək icazə verilir' },
+        { id: 'e2', text: 'Sola dönmək icazə verilir' },
+        { id: 'e3', text: 'Düz getmək icazə verilir' },
+        { id: 'e4', text: 'Geri dönmək icazə verilir' }
+      ],
+      questionCorrectOptionId: 'e1',
+      questionExplanation: 'Bu nişan sağa dönməyin icazə verildiyini göstərir. Sürücü bu nişanı gördükdə sağa dönə bilər.',
+      questionSource: 'topic',
+      questionSourceId: 'M15',
+      userComment: 'Bu nişanın mənası dəqiq göstərilməyib. Daha aydın izah olmalıdır.',
+      status: 'accepted',
+      submittedDate: new Date('2025-01-11T08:30:00'),
+      reviewedDate: new Date('2025-01-11T15:45:00'),
+      adminResponse: 'Nişanın mənası əlavə edildi və daha aydın şəkildə izah edildi.',
+      adminName: 'Admin Rəşad',
+      isResolved: true
+    }
+  ]);
+
+  // Q&A Chat System State
+  const [qaUsers] = useState<{ [key: string]: QAUser }>({
+    'current': { id: 'current', name: 'Siz', role: 'student', avatar: '😊', isOnline: true },
+    'teacher1': { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher2': { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 30 * 60 * 1000) },
+    'teacher3': { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher4': { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000) }
+  });
+
+  const [qaTeachers] = useState<QAUser[]>([
+    { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false },
+    { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false }
+  ]);
+
+  const [qaChats, setQaChats] = useState<QAChat[]>([
+    {
+      id: 'chat1',
+      studentId: 'current',
+      teacherId: 'teacher1',
+      subject: 'Şəhər daxilində sürət məhdudiyyəti',
+      category: 'traffic-rules',
+      createdAt: new Date('2025-01-15T10:30:00'),
+      updatedAt: new Date('2025-01-15T16:45:00'),
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: true,
+      messages: [
+        {
+          id: 'm1',
+          senderId: 'current',
+          content: 'Salam müəllim! Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli?',
+          timestamp: new Date('2025-01-15T10:30:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm2',
+          senderId: 'teacher1',
+          content: 'Salam! Bu çox yaxşı sualdır. Şəhər daxilində ümumi sürət məhdudiyyəti 50 km/s-dir, lakin bəzi magistral yollarda və geniş küçələrdə xüsusi nişanlarla 60 km/s icazə verilir.',
+          timestamp: new Date('2025-01-15T14:20:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm3',
+          senderId: 'current',
+          content: 'Təşəkkürlər! Yəni əsas qayda odur ki, əgər nişanla başqa sürət göstərilirsə, onu izləməliyik?',
+          timestamp: new Date('2025-01-15T15:30:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm4',
+          senderId: 'teacher1',
+          content: 'Düz dedin! Yol nişanları həmişə prioritetdir. Həmişə yol nişanlarına diqqət yetirin.',
+          timestamp: new Date('2025-01-15T16:45:00'),
+          messageType: 'text',
+          isRead: true
+        }
+      ]
+    },
+    {
+      id: 'chat2', 
+      studentId: 'current',
+      teacherId: 'teacher2',
+      subject: 'Park etmə qaydaları',
+      category: 'parking',
+      createdAt: new Date('2025-01-14T16:45:00'),
+      updatedAt: new Date('2025-01-14T17:30:00'),
+      isActive: true,
+      unreadCount: 1,
+      teacherAssigned: true,
+      messages: [
+        {
+          id: 'm5',
+          senderId: 'current',
+          content: 'Park etmək qadağandır nişanı neçə metr ərzində təsir edir?',
+          timestamp: new Date('2025-01-14T16:45:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm6',
+          senderId: 'teacher2',
+          content: 'Bu nişan növbəti nişana qədər və ya yolun sonuna qədər keçərlidir. Adətən əlavə lövhə ilə məsafə göstərilir.',
+          timestamp: new Date('2025-01-14T17:30:00'),
+          messageType: 'text',
+          isRead: false
+        }
+      ]
+    },
+    {
+      id: 'chat3',
+      studentId: 'current',
+      subject: 'İmtahan həyəcanı',
+      category: 'exam-prep',
+      createdAt: new Date('2025-01-13T09:15:00'),
+      updatedAt: new Date('2025-01-13T09:15:00'),
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: false,
+      messages: [
+        {
+          id: 'm7',
+          senderId: 'current',
+          content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
+          timestamp: new Date('2025-01-13T09:15:00'),
+          messageType: 'text',
+          isRead: false
+        }
+      ]
     }
   ]);
   
@@ -271,6 +511,98 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setExamResults(prev => [newResult, ...prev]);
   };
+
+  const submitAppeal = (formData: AppealFormData): boolean => {
+    try {
+      const newAppeal: Appeal = {
+        id: Date.now().toString(),
+        questionId: formData.questionId,
+        questionText: formData.questionText,
+        userComment: formData.userComment,
+        status: 'pending',
+        submittedDate: new Date(),
+        isResolved: false
+      };
+      setAppeals(prev => [newAppeal, ...prev]);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const getAppealsByStatus = (status?: string): Appeal[] => {
+    if (!status) return appeals;
+    return appeals.filter(appeal => appeal.status === status);
+  };
+
+  // Q&A Chat System Functions
+  const startNewChat = (subject: string, category: string, teacherId?: string): string | null => {
+    try {
+      const newChat: QAChat = {
+        id: `chat_${Date.now()}`,
+        studentId: 'current',
+        teacherId,
+        subject,
+        category,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
+        unreadCount: 0,
+        teacherAssigned: !!teacherId,
+        messages: []
+      };
+      setQaChats(prev => [newChat, ...prev]);
+      return newChat.id;
+    } catch {
+      return null;
+    }
+  };
+
+  const sendMessage = (chatId: string, content: string, attachments?: string[], messageType: 'text' | 'image' | 'file' = 'text'): boolean => {
+    try {
+      const newMessage: QAMessage = {
+        id: `m_${Date.now()}`,
+        senderId: 'current',
+        content,
+        timestamp: new Date(),
+        attachments,
+        messageType,
+        isRead: false
+      };
+
+      setQaChats(prev => prev.map(chat => 
+        chat.id === chatId 
+          ? { 
+              ...chat, 
+              messages: [...chat.messages, newMessage],
+              updatedAt: new Date(),
+              lastMessage: newMessage
+            }
+          : chat
+      ));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const getChatById = (id: string): QAChat | undefined => {
+    return qaChats.find(chat => chat.id === id);
+  };
+
+  const markChatAsRead = (chatId: string): void => {
+    setQaChats(prev => prev.map(chat => 
+      chat.id === chatId 
+        ? { ...chat, unreadCount: 0 }
+        : chat
+    ));
+  };
+
+  const getActiveChatsList = (): QAChat[] => {
+    return qaChats.filter(chat => chat.isActive).sort((a, b) => 
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -378,6 +710,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       moreSheetVisible,
       setMoreSheetVisible,
       balance,
+      simulatorBalance,
       tickets,
       activePackage,
       transactions,
@@ -391,6 +724,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , checkoutByCard
       , deliveryMethod, setDeliveryMethod
       , examResults, addExamResult
+      , appeals, submitAppeal, getAppealsByStatus
+      , qaChats, qaUsers, qaTeachers, startNewChat, sendMessage, getChatById, markChatAsRead, getActiveChatsList
     }}>
       {children}
     </AppContext.Provider>

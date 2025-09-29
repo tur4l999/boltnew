@@ -5,6 +5,7 @@ import { Button } from '../ui/Button';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
+import { AppealSubmitModal } from './AppealSubmitModal';
 
 export function ExamRunScreen() {
   const { navigate, currentScreen, isDarkMode, goBack, addExamResult } = useApp();
@@ -20,6 +21,7 @@ export function ExamRunScreen() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
+  const [showAppealModal, setShowAppealModal] = useState(false);
 
   function truncateText(text: string, maxChars: number): string {
     if (!text) return '';
@@ -274,8 +276,16 @@ export function ExamRunScreen() {
               })}
             </div>
 
-            {/* Actions row: only Confirm on the right */}
-            <div className="mt-4 flex items-center gap-2 justify-end">
+            {/* Actions row: Appeal button and Confirm button */}
+            <div className="mt-4 flex items-center gap-2 justify-between">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setShowAppealModal(true)}
+                className="text-white border-white/30 hover:bg-white/10"
+              >
+                📝 Apellyasiya
+              </Button>
               {!isConfirmed && selectedOptions[currentQuestion.id] && (
                 <Button onClick={confirmAnswer}>Təsdiq et</Button>
               )}
@@ -334,6 +344,19 @@ export function ExamRunScreen() {
           {formatTime(timeLeft)}
         </div>
       </div>
+
+      {/* Appeal Submit Modal */}
+      <AppealSubmitModal
+        isOpen={showAppealModal}
+        onClose={() => setShowAppealModal(false)}
+        question={{
+          id: currentQuestion.id,
+          text: currentQuestion.text,
+          imageUrl: currentQuestion.imageUrl,
+          source: config?.ticket ? 'ticket' : config?.moduleId ? 'topic' : 'simulator',
+          sourceId: config?.ticket?.toString() || config?.moduleId
+        }}
+      />
     </div>
   );
 }

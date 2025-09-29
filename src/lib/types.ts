@@ -66,3 +66,68 @@ export interface Product {
   image?: string;
   description?: string;
 }
+
+export type AppealStatus = 'pending' | 'under_review' | 'accepted' | 'rejected' | 'resolved';
+
+export interface Appeal {
+  id: string;
+  questionId: string;
+  questionText: string;
+  questionImageUrl?: string;
+  questionOptions: QuestionOption[];
+  questionCorrectOptionId: string;
+  questionExplanation: string;
+  questionSource: 'ticket' | 'topic' | 'simulator';
+  questionSourceId?: string; // ticket number or topic/module ID
+  userComment: string;
+  status: AppealStatus;
+  submittedDate: Date;
+  reviewedDate?: Date;
+  adminResponse?: string;
+  adminName?: string;
+  isResolved: boolean;
+}
+
+export interface AppealFormData {
+  questionId: string;
+  questionText: string;
+  questionImageUrl?: string;
+  questionSource: 'ticket' | 'topic' | 'simulator';
+  questionSourceId?: string;
+  userComment: string;
+}
+
+// Q&A Chat System Types (WhatsApp-like)
+export interface QAUser {
+  id: string;
+  name: string;
+  role: 'student' | 'teacher';
+  avatar?: string;
+  isOnline?: boolean;
+  lastSeen?: Date;
+}
+
+export interface QAMessage {
+  id: string;
+  senderId: string;
+  content: string;
+  timestamp: Date;
+  attachments?: string[];
+  messageType: 'text' | 'image' | 'file';
+  isRead?: boolean;
+}
+
+export interface QAChat {
+  id: string;
+  studentId: string;
+  teacherId?: string;
+  subject: string; // Sualın mövzusu
+  category: string;
+  messages: QAMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
+  unreadCount: number;
+  lastMessage?: QAMessage;
+  teacherAssigned?: boolean;
+}

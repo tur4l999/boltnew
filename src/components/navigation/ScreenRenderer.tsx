@@ -28,6 +28,12 @@ import { CartScreen } from '../screens/CartScreen';
 import { QuickTestScreen } from '../screens/QuickTestScreen';
 import { BlogsScreen } from '../screens/BlogsScreen';
 import { FinesScreen } from '../screens/FinesScreen';
+import { DrivingPracticeScreen } from '../screens/DrivingPracticeScreen';
+import { AppealsScreen } from '../screens/AppealsScreen';
+import { CertificateApplicationScreen } from '../screens/CertificateApplicationScreen';
+import { QAScreen } from '../screens/QAScreen';
+import { QADetailScreen } from '../screens/QADetailScreen';
+import { QAFormScreen } from '../screens/QAFormScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -74,9 +80,15 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Cart' && <CartScreen />}
       {currentScreen.screen === 'Fines' && <FinesScreen />}
       {currentScreen.screen === 'Blogs' && <BlogsScreen />}
+      {currentScreen.screen === 'DrivingPractice' && <DrivingPracticeScreen />}
+      {currentScreen.screen === 'Appeals' && <AppealsScreen />}
+      {currentScreen.screen === 'CertificateApplication' && <CertificateApplicationScreen />}
+      {currentScreen.screen === 'QA' && <QAScreen />}
+      {currentScreen.screen === 'QADetail' && <QADetailScreen />}
+      {currentScreen.screen === 'QAForm' && <QAFormScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
