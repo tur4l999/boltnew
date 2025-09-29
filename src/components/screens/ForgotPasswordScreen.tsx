@@ -99,10 +99,7 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-2xl">
-                🔑
-              </div>
-              <h2 className={`text-xl font-bold transition-colors duration-200 ${
+              <h2 className={`text-lg font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
                 Şifrəni unutmusan?
@@ -110,7 +107,7 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
               <p className={`text-sm transition-colors duration-200 mt-2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>
-                Narahat olma! E-mail ünvanını daxil et, şifrə bərpa linki göndərəcəyik.
+                E-mail ünvanını daxil et, bərpa linki göndərəcəyik
               </p>
             </div>
 
@@ -129,7 +126,6 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
               onClick={handleSendCode}
               loading={isLoading}
               className="w-full"
-              size="lg"
             >
               {isLoading ? 'Göndərilir...' : 'Bərpa kodu göndər'}
             </Button>
@@ -140,18 +136,15 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-2xl">
-                💬
-              </div>
-              <h2 className={`text-xl font-bold transition-colors duration-200 ${
+              <h2 className={`text-lg font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                Kodu daxil et
+                Təsdiq kodu
               </h2>
               <p className={`text-sm transition-colors duration-200 mt-2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>
-                <span className="font-semibold">{email}</span> ünvanına göndərilən 6 rəqəmli kodu daxil et.
+                <span className="font-medium">{email}</span> ünvanına göndərilən kodu daxil et
               </p>
             </div>
 
@@ -159,8 +152,8 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
               value={code}
               onChange={setCode}
               label="Təsdiq kodu"
-              placeholder="123456"
-              icon="🔢"
+              placeholder="6 rəqəmli kod"
+              icon="💬"
               error={errors.code}
               required
             />
@@ -184,7 +177,7 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
             <div className="text-center">
               <button
                 onClick={handleSendCode}
-                className={`text-sm font-medium transition-colors duration-200 hover:underline ${
+                className={`text-xs font-medium transition-colors duration-200 hover:underline opacity-70 hover:opacity-100 ${
                   isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
                 }`}
               >
@@ -198,18 +191,15 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
         return (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl">
-                🔐
-              </div>
-              <h2 className={`text-xl font-bold transition-colors duration-200 ${
+              <h2 className={`text-lg font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                Yeni şifrə təyin et
+                Yeni şifrə
               </h2>
               <p className={`text-sm transition-colors duration-200 mt-2 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>
-                Hesabın üçün güclü və unudulmaz şifrə seç.
+                Hesabın üçün yeni şifrə təyin et
               </p>
             </div>
 
@@ -252,7 +242,6 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
               onClick={handleResetPassword}
               loading={isLoading}
               className="w-full"
-              size="lg"
             >
               {isLoading ? 'Yenilənir...' : 'Şifrəni yenilə'}
             </Button>
@@ -265,74 +254,88 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden transition-all duration-300 ${
+    <div className={`min-h-screen flex items-center justify-center p-4 relative transition-all duration-300 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
+        ? 'bg-gradient-to-b from-gray-900 via-slate-800 to-gray-900' 
+        : 'bg-gradient-to-b from-gray-50 via-white to-blue-50/30'
     } pt-11`}>
-      {/* Background Elements */}
+      {/* Soft, calming background elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className={`absolute top-20 left-10 w-32 h-32 rounded-full blur-3xl animate-pulse ${
-          isDarkMode ? 'bg-blue-500/10' : 'bg-blue-400/20'
-        }`}></div>
-        <div className={`absolute bottom-32 right-16 w-40 h-40 rounded-full blur-3xl animate-pulse ${
-          isDarkMode ? 'bg-purple-500/10' : 'bg-purple-400/15'
-        }`} style={{ animationDelay: '1s' }}></div>
+        {/* Gentle floating orbs */}
+        <div className={`absolute top-1/4 left-1/6 w-64 h-64 rounded-full blur-3xl ${
+          isDarkMode ? 'bg-blue-500/5' : 'bg-blue-300/20'
+        } animate-pulse`} style={{ animationDuration: '4s' }}></div>
+        <div className={`absolute bottom-1/4 right-1/6 w-80 h-80 rounded-full blur-3xl ${
+          isDarkMode ? 'bg-purple-500/5' : 'bg-purple-200/20'
+        } animate-pulse`} style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
         
-        {/* Floating icons */}
-        <div className="absolute top-20 right-20 w-12 h-12 bg-gradient-to-br from-blue-400/20 to-purple-500/20 rounded-2xl flex items-center justify-center text-xl backdrop-blur-sm border border-white/10 animate-bounce-subtle">
-          🔑
+        {/* Subtle themed elements */}
+        <div className="absolute top-16 right-8 opacity-30">
+          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${
+            isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'
+          } backdrop-blur-sm animate-bounce-subtle`}>
+            🔑
+          </div>
         </div>
-        <div className="absolute bottom-40 left-16 w-10 h-10 bg-gradient-to-br from-purple-400/20 to-blue-500/20 rounded-xl flex items-center justify-center text-lg backdrop-blur-sm border border-white/10 animate-bounce-subtle" style={{ animationDelay: '0.5s' }}>
-          💬
+        <div className="absolute bottom-20 left-8 opacity-30">
+          <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${
+            isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'
+          } backdrop-blur-sm animate-bounce-subtle`} style={{ animationDelay: '1s' }}>
+            💬
+          </div>
         </div>
       </div>
       
       <div className="w-full max-w-md relative z-10 animate-fade-in-up">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center mb-6">
             <button
               onClick={onBack}
-              className={`p-3 rounded-2xl transition-all duration-300 hover:scale-105 ${
+              className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                 isDarkMode 
-                  ? 'bg-gray-800/80 text-gray-200 hover:bg-gray-700/80' 
-                  : 'bg-white/80 text-gray-700 hover:bg-gray-50/80'
-              } backdrop-blur-sm shadow-lg`}
+                  ? 'bg-gray-800/80 text-gray-300 hover:bg-gray-700/80' 
+                  : 'bg-white/90 text-gray-600 hover:bg-white/95'
+              } backdrop-blur-sm shadow-md hover:shadow-lg`}
             >
-              ←
+              ← Geri
             </button>
-            
-            <div className="flex-1">
-              <h1 className={`text-lg font-black transition-all duration-300 bg-gradient-to-r ${
-                isDarkMode 
-                  ? 'from-blue-400 via-purple-400 to-blue-500' 
-                  : 'from-blue-600 via-purple-600 to-blue-700'
+          </div>
+          
+          <div className="space-y-2">
+            <h1 className={`text-xl font-black transition-all duration-300 bg-gradient-to-r ${
+              isDarkMode 
+                ? 'from-emerald-400 via-green-400 to-emerald-500' 
+                : 'from-emerald-600 via-green-600 to-emerald-700'
               } bg-clip-text text-transparent`}>
-                Digital Driving Academy
-              </h1>
-            </div>
+              Digital Driving Academy
+            </h1>
+            <p className={`text-sm font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-500' : 'text-gray-600'
+            }`}>
+              Şifrə bərpası
+            </p>
           </div>
         </div>
 
         {/* Form */}
         <Card className={`p-8 transition-all duration-300 backdrop-blur-lg ${
           isDarkMode 
-            ? 'bg-gray-800/80 border-gray-600/50 shadow-2xl' 
-            : 'bg-white/80 border-gray-200/50 shadow-2xl'
-        }`}>
+            ? 'bg-gray-800/90 border-gray-600/30 shadow-2xl' 
+            : 'bg-white/95 border-white/50 shadow-xl'
+        } hover:shadow-2xl`}>
           {renderStepContent()}
         </Card>
 
         {/* Help text */}
-        <div className={`mt-6 text-center text-sm ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-600'
+        <div className={`mt-8 text-center text-sm ${
+          isDarkMode ? 'text-gray-500' : 'text-gray-400'
         }`}>
-          <p>Kömək lazımdır? Bizə müraciət edin:</p>
+          <p className="opacity-70">Kömək lazımdır?</p>
           <a 
             href="mailto:support@dda.az" 
             className={`font-medium transition-colors duration-200 hover:underline ${
-              isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+              isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
             }`}
           >
             support@dda.az
