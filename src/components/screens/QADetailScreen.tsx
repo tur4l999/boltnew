@@ -8,7 +8,10 @@ import {
   AlertCircle,
   Clock,
   CheckCircle,
-  UserCheck
+  UserCheck,
+  Image,
+  X,
+  Camera
 } from 'lucide-react';
 import type { QAChat, QAMessage, QAUser } from '../../lib/types';
 
@@ -16,6 +19,8 @@ export function QADetailScreen() {
   const { t, isDarkMode, navigate, goBack, currentScreen, getChatById, qaUsers, sendMessage, markChatAsRead } = useApp();
   const chatId = currentScreen.params?.chatId;
   const [newMessage, setNewMessage] = useState('');
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [showImageUpload, setShowImageUpload] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -76,14 +81,71 @@ export function QADetailScreen() {
   };
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      sendMessage(chatId, newMessage.trim());
+    if (newMessage.trim() || selectedImages.length > 0) {
+      if (selectedImages.length > 0) {
+        // Send images
+        const imageNames = selectedImages.map(img => img.name);
+        sendMessage(chatId, newMessage.trim() || '📷 Şəkil göndərildi', imageNames, 'image');
+        setSelectedImages([]);
+      } else {
+        // Send text only
+        sendMessage(chatId, newMessage.trim());
+      }
       setNewMessage('');
+      setShowImageUpload(false);
     }
   };
 
-  const handleFileAttach = () => {
-    fileInputRef.current?.click();
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    const validImages: File[] = [];
+    const errors: string[] = [];
+
+    files.forEach(file => {
+      // Check if it's an image
+      if (!file.type.startsWith('image/')) {
+        errors.push(`${file.name}: Yalnız şəkil faylları göndərilə bilər`);
+        return;
+      }
+      
+      // Check size (2MB = 2 * 1024 * 1024 bytes)
+      if (file.size > 2 * 1024 * 1024) {
+        errors.push(`${file.name}: Şəkil 2MB-dan böyük ola bilməz`);
+        return;
+      }
+
+      // Check total count (max 3)
+      if (selectedImages.length + validImages.length >= 3) {
+        errors.push('Maksimum 3 şəkil göndərilə bilər');
+        return;
+      }
+
+      validImages.push(file);
+    });
+
+    if (errors.length > 0) {
+      alert(errors.join('\n'));
+    }
+
+    if (validImages.length > 0) {
+      setSelectedImages([...selectedImages, ...validImages]);
+      setShowImageUpload(true);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    if (selectedImages.length === 1) {
+      setShowImageUpload(false);
+    }
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
   const groupMessagesByDate = (messages: QAMessage[]) => {
@@ -215,7 +277,9 @@ export function QADetailScreen() {
                   className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-1`}
                 >
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
+                    className={`max-w-xs lg:max-w-md ${
+                      message.messageType === 'image' ? 'p-1' : 'px-4 py-2'
+                    } rounded-2xl ${
                       isCurrentUser
                         ? 'bg-blue-600 text-white'
                         : isDarkMode
@@ -227,20 +291,64 @@ export function QADetailScreen() {
                         : isLastInGroup ? 'rounded-bl-md' : ''
                     }`}
                   >
-                    {/* Message content */}
-                    <p className="text-sm leading-relaxed">{message.content}</p>
-                    
-                    {/* Time */}
-                    <div className={`flex items-center justify-end space-x-1 mt-1 ${
-                      isCurrentUser ? 'text-blue-100' : isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                    }`}>
-                      <span className="text-xs">{formatTime(message.timestamp)}</span>
-                      {isCurrentUser && (
-                        <div className="text-xs">
-                          {message.isRead ? '✓✓' : '✓'}
+                    {/* Image Messages */}
+                    {message.messageType === 'image' && message.attachments && (
+                      <div className="space-y-1">
+                        {message.attachments.map((attachment, imgIndex) => (
+                          <div key={imgIndex} className="relative">
+                            <div className="rounded-xl overflow-hidden">
+                              <img
+                                src={`/public/${attachment}`} // Demo path
+                                alt="Shared image"
+                                className="w-full max-w-48 h-auto"
+                                onError={(e) => {
+                                  // Fallback for demo
+                                  e.currentTarget.src = '/public/image.png';
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        {message.content && message.content !== '📷 Şəkil göndərildi' && (
+                          <p className={`text-sm px-3 py-1 ${
+                            isCurrentUser ? 'text-white' : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
+                            {message.content}
+                          </p>
+                        )}
+                        
+                        {/* Time for image messages */}
+                        <div className={`flex items-center justify-end space-x-1 px-3 py-1 ${
+                          isCurrentUser ? 'text-blue-100' : isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          <span className="text-xs">{formatTime(message.timestamp)}</span>
+                          {isCurrentUser && (
+                            <div className="text-xs">
+                              {message.isRead ? '✓✓' : '✓'}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
+
+                    {/* Text Messages */}
+                    {message.messageType === 'text' && (
+                      <>
+                        <p className="text-sm leading-relaxed">{message.content}</p>
+                        
+                        {/* Time for text messages */}
+                        <div className={`flex items-center justify-end space-x-1 mt-1 ${
+                          isCurrentUser ? 'text-blue-100' : isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          <span className="text-xs">{formatTime(message.timestamp)}</span>
+                          {isCurrentUser && (
+                            <div className="text-xs">
+                              {message.isRead ? '✓✓' : '✓'}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               );
@@ -253,54 +361,138 @@ export function QADetailScreen() {
       </div>
 
       {/* WhatsApp-style Message Input */}
-      <div className={`p-4 border-t ${
+      <div className={`border-t ${
         isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
-        <div className="max-w-md mx-auto">
-          <div className="flex items-end space-x-2">
-            <button
-              onClick={handleFileAttach}
-              className={`p-2 rounded-full transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-              }`}
-            >
-              <Paperclip size={22} />
-            </button>
-            
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                placeholder="Mesaj yazın..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                className={`w-full px-4 py-3 pr-12 rounded-full border-0 text-sm ${
-                  isDarkMode 
-                    ? 'bg-gray-700 text-white placeholder-gray-400' 
-                    : 'bg-gray-100 text-gray-900 placeholder-gray-500'
-                } focus:ring-2 focus:ring-blue-500 focus:outline-none`}
-              />
+        {/* Image Preview Area */}
+        {showImageUpload && selectedImages.length > 0 && (
+          <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="max-w-md mx-auto">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                  Seçilən şəkillər ({selectedImages.length}/3)
+                </h4>
+                <button
+                  onClick={() => {
+                    setSelectedImages([]);
+                    setShowImageUpload(false);
+                  }}
+                  className={`text-xs ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+                >
+                  Hamısını sil
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2">
+                {selectedImages.map((image, index) => (
+                  <div key={index} className="relative">
+                    <div className={`aspect-square rounded-lg overflow-hidden ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                    }`}>
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <button
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                    >
+                      <X size={12} />
+                    </button>
+                    <div className={`absolute bottom-1 left-1 right-1 text-xs text-center text-white bg-black bg-opacity-50 rounded px-1`}>
+                      {formatFileSize(image.size)}
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Add more images button */}
+                {selectedImages.length < 3 && (
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className={`aspect-square rounded-lg border-2 border-dashed flex flex-col items-center justify-center transition-colors ${
+                      isDarkMode 
+                        ? 'border-gray-600 hover:border-gray-500 bg-gray-700 hover:bg-gray-600' 
+                        : 'border-gray-300 hover:border-gray-400 bg-gray-100 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Camera size={20} className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                    <span className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      +
+                    </span>
+                  </button>
+                )}
+              </div>
+              
+              {/* Image upload info */}
+              <div className={`mt-3 p-3 rounded-lg ${isDarkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'}`}>
+                <div className="flex items-center space-x-2">
+                  <Image size={16} className="text-blue-600 dark:text-blue-400" />
+                  <div>
+                    <p className={`text-xs font-medium ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                      Şəkil göndərmə qaydaları:
+                    </p>
+                    <ul className={`text-xs mt-1 space-y-0.5 ${isDarkMode ? 'text-blue-200' : 'text-blue-600'}`}>
+                      <li>• Maksimum 3 şəkil göndərilə bilər</li>
+                      <li>• Hər şəkil 2MB-dan kiçik olmalıdır</li>
+                      <li>• PNG, JPG, JPEG formatları dəstəklənir</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <button
-              onClick={handleSendMessage}
-              disabled={!newMessage.trim()}
-              className={`p-3 rounded-full transition-all ${
-                newMessage.trim()
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 scale-100'
-                  : 'bg-gray-300 dark:bg-gray-600 text-gray-500 scale-95 cursor-not-allowed'
-              }`}
-            >
-              <Send size={20} />
-            </button>
           </div>
-          
-          {/* Typing indicator (when teacher is typing) */}
-          {partner.isOnline && (
-            <div className={`text-xs mt-2 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              {partner.name} yazır...
+        )}
+
+        {/* Input Area */}
+        <div className="p-4">
+          <div className="max-w-md mx-auto">
+            <div className="flex items-end space-x-2">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className={`p-2 rounded-full transition-colors ${
+                  isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
+                }`}
+              >
+                <Camera size={22} />
+              </button>
+              
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="Mesaj yazın..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className={`w-full px-4 py-3 pr-12 rounded-full border-0 text-sm ${
+                    isDarkMode 
+                      ? 'bg-gray-700 text-white placeholder-gray-400' 
+                      : 'bg-gray-100 text-gray-900 placeholder-gray-500'
+                  } focus:ring-2 focus:ring-blue-500 focus:outline-none`}
+                />
+              </div>
+              
+              <button
+                onClick={handleSendMessage}
+                disabled={!newMessage.trim() && selectedImages.length === 0}
+                className={`p-3 rounded-full transition-all ${
+                  (newMessage.trim() || selectedImages.length > 0)
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 scale-100'
+                    : 'bg-gray-300 dark:bg-gray-600 text-gray-500 scale-95 cursor-not-allowed'
+                }`}
+              >
+                <Send size={20} />
+              </button>
             </div>
-          )}
+            
+            {/* Typing indicator (when teacher is typing) */}
+            {partner.isOnline && (
+              <div className={`text-xs mt-2 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                {partner.name} yazır...
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -310,11 +502,8 @@ export function QADetailScreen() {
         type="file"
         className="hidden"
         multiple
-        accept="image/*,application/pdf"
-        onChange={(e) => {
-          // Handle file upload
-          console.log('Files selected:', e.target.files);
-        }}
+        accept="image/*"
+        onChange={handleImageSelect}
       />
     </div>
   );
