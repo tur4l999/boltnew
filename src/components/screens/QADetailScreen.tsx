@@ -694,12 +694,6 @@ export function QADetailScreen() {
               </button>
             </div>
             
-            {/* Typing indicator (when teacher is typing) */}
-            {partner.isOnline && (
-              <div className={`text-xs mt-2 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                {partner.name} yazır...
-              </div>
-            )}
           </div>
         </div>
       </div>
