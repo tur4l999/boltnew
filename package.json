@@ -8,6 +8,7 @@
     "build": "vite build",
     "build:github": "vite build --mode production",
     "deploy": "./deploy.sh",
+    "force-deploy": "./scripts/force-deploy.sh",
     "lint": "eslint .",
     "preview": "vite preview",
     "preview:github": "vite preview --base /boltnew/",
