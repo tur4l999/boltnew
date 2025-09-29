@@ -82,54 +82,171 @@ export function QADetailScreen() {
 
   const handleSendMessage = () => {
     if (newMessage.trim() || selectedImages.length > 0) {
+      // Sanitize text message
+      const sanitizedMessage = newMessage.trim()
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '[SCRIPT REMOVED]')
+        .replace(/javascript:/gi, '[JS REMOVED]')
+        .replace(/vbscript:/gi, '[VBS REMOVED]')
+        .replace(/data:text\/html/gi, '[HTML REMOVED]')
+        .substring(0, 1000); // Limit message length
+
       if (selectedImages.length > 0) {
-        // Send images
-        const imageNames = selectedImages.map(img => img.name);
-        sendMessage(chatId, newMessage.trim() || '📷 Şəkil göndərildi', imageNames, 'image');
+        // Send images with sanitized names
+        const sanitizedImageNames = selectedImages.map(img => sanitizeFilename(img.name));
+        sendMessage(chatId, sanitizedMessage || '📷 Şəkil göndərildi', sanitizedImageNames, 'image');
         setSelectedImages([]);
       } else {
         // Send text only
-        sendMessage(chatId, newMessage.trim());
+        if (sanitizedMessage !== newMessage.trim()) {
+          alert('⚠️ Mesajda təhlükəli məzmun aşkar edildi və təmizləndi');
+        }
+        sendMessage(chatId, sanitizedMessage);
       }
       setNewMessage('');
       setShowImageUpload(false);
     }
   };
 
-  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
     const validImages: File[] = [];
     const errors: string[] = [];
 
-    files.forEach(file => {
-      // Check if it's an image
-      if (!file.type.startsWith('image/')) {
-        errors.push(`${file.name}: Yalnız şəkil faylları göndərilə bilər`);
-        return;
-      }
-      
-      // Check size (2MB = 2 * 1024 * 1024 bytes)
-      if (file.size > 2 * 1024 * 1024) {
-        errors.push(`${file.name}: Şəkil 2MB-dan böyük ola bilməz`);
-        return;
-      }
+    // Allowed image types with strict checking
+    const allowedTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp'
+    ];
 
-      // Check total count (max 3)
-      if (selectedImages.length + validImages.length >= 3) {
-        errors.push('Maksimum 3 şəkil göndərilə bilər');
-        return;
+    // Comprehensive list of dangerous extensions
+    const dangerousExtensions = [
+      '.exe', '.bat', '.cmd', '.scr', '.pif', '.com', '.vbs', '.js', '.jar',
+      '.app', '.deb', '.dmg', '.pkg', '.rpm', '.msi', '.apk', '.ipa',
+      '.php', '.asp', '.jsp', '.cgi', '.py', '.rb', '.pl', '.sh', '.ps1',
+      '.html', '.htm', '.svg', '.xml', '.swf', '.dll', '.sys', '.bin'
+    ];
+
+    // Process each file with comprehensive security checks
+    for (const file of files) {
+      try {
+        // 1. Basic validations
+        const originalName = file.name.toLowerCase();
+        const fileExtension = originalName.substring(originalName.lastIndexOf('.'));
+        
+        // Check for dangerous extensions
+        const isDangerous = dangerousExtensions.some(ext => originalName.endsWith(ext));
+        if (isDangerous) {
+          errors.push(`${file.name}: Təhlükəli fayl növü bloklandı`);
+          continue;
+        }
+
+        // Check for double extensions (e.g., image.jpg.exe)
+        const extensionCount = (file.name.match(/\./g) || []).length;
+        if (extensionCount > 1) {
+          errors.push(`${file.name}: Çoxlu uzantılı fayl qəbul edilmir`);
+          continue;
+        }
+
+        // 2. MIME type validation
+        if (!allowedTypes.includes(file.type)) {
+          errors.push(`${file.name}: Yalnız PNG, JPG, GIF, WebP formatları qəbul edilir`);
+          continue;
+        }
+
+        // 3. File extension and MIME type consistency
+        const expectedExtensions = {
+          'image/jpeg': ['.jpg', '.jpeg'],
+          'image/png': ['.png'],
+          'image/gif': ['.gif'],
+          'image/webp': ['.webp']
+        };
+        
+        const expectedExts = expectedExtensions[file.type as keyof typeof expectedExtensions];
+        if (expectedExts && !expectedExts.includes(fileExtension)) {
+          errors.push(`${file.name}: Format və uzantı uyğunsuzluğu`);
+          continue;
+        }
+        
+        // 4. Size validations
+        if (file.size > 2 * 1024 * 1024) {
+          errors.push(`${file.name}: 2MB limitini aşır (${formatFileSize(file.size)})`);
+          continue;
+        }
+
+        if (file.size < 100) {
+          errors.push(`${file.name}: Çox kiçik fayl (minimum 100 bayt)`);
+          continue;
+        }
+
+        // 5. Count limit
+        if (selectedImages.length + validImages.length >= 3) {
+          errors.push('Maksimum 3 şəkil seçilə bilər');
+          break;
+        }
+
+        // 6. Filename security checks
+        if (file.name.length > 100) {
+          errors.push(`${file.name}: Fayl adı çox uzun (maksimum 100 simvol)`);
+          continue;
+        }
+
+        // Check for suspicious patterns in filename
+        const suspiciousPatterns = [
+          /\.exe\./i, /\.bat\./i, /\.cmd\./i, /\.scr\./i,
+          /script/i, /javascript/i, /vbscript/i, /onload/i, /onclick/i,
+          /<script/i, /<?php/i, /<%/i, /\$\{/i, /#{/i
+        ];
+        
+        if (suspiciousPatterns.some(pattern => pattern.test(file.name))) {
+          errors.push(`${file.name}: Şübhəli fayl adı bloklandı`);
+          continue;
+        }
+
+        // 7. Advanced security validation
+        const securityCheck = await validateImageSecurity(file);
+        if (!securityCheck.isValid) {
+          errors.push(`${file.name}: ${securityCheck.error}`);
+          continue;
+        }
+
+        // If all checks pass, add to valid images
+        validImages.push(file);
+        
+      } catch (error) {
+        errors.push(`${file.name}: Yoxlanarkən xəta baş verdi`);
       }
-
-      validImages.push(file);
-    });
-
-    if (errors.length > 0) {
-      alert(errors.join('\n'));
     }
 
+    // Display errors with security warning
+    if (errors.length > 0) {
+      const errorMessage = `🛡️ TƏHLÜKƏSIZLIK XƏBƏRDARLIGI\n\nAşağıdakı fayllar bloklandı:\n\n${errors.join('\n')}\n\n⚠️ Təhlükəsizlik üçün yalnız yoxlanılmış şəkil faylları qəbul edilir.`;
+      alert(errorMessage);
+    }
+
+    // Add valid images
     if (validImages.length > 0) {
-      setSelectedImages([...selectedImages, ...validImages]);
-      setShowImageUpload(true);
+      // Additional check: Ensure no duplicate files
+      const newImages = validImages.filter(newImg => 
+        !selectedImages.some(existingImg => 
+          existingImg.name === newImg.name && existingImg.size === newImg.size
+        )
+      );
+      
+      if (newImages.length > 0) {
+        setSelectedImages(prev => [...prev, ...newImages]);
+        setShowImageUpload(true);
+      } else if (validImages.length > 0) {
+        alert('⚠️ Seçdiyiniz şəkillər artıq əlavə edilib');
+      }
+    }
+
+    // Always clear the file input for security
+    if (event.target) {
+      event.target.value = '';
     }
   };
 
@@ -146,6 +263,75 @@ export function QADetailScreen() {
     const sizes = ['B', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  };
+
+  // Advanced security validation
+  const validateImageSecurity = async (file: File): Promise<{ isValid: boolean; error?: string }> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        try {
+          const arrayBuffer = e.target?.result as ArrayBuffer;
+          const bytes = new Uint8Array(arrayBuffer);
+          
+          // Check file headers (magic numbers) for actual image files
+          const jpegHeader = [0xFF, 0xD8, 0xFF];
+          const pngHeader = [0x89, 0x50, 0x4E, 0x47];
+          const gifHeader = [0x47, 0x49, 0x46];
+          const webpHeader = [0x52, 0x49, 0x46, 0x46];
+          
+          const isJPEG = jpegHeader.every((byte, i) => bytes[i] === byte);
+          const isPNG = pngHeader.every((byte, i) => bytes[i] === byte);
+          const isGIF = gifHeader.every((byte, i) => bytes[i] === byte);
+          const isWebP = webpHeader.every((byte, i) => bytes[i] === byte);
+          
+          if (!isJPEG && !isPNG && !isGIF && !isWebP) {
+            resolve({ isValid: false, error: 'Fayl həqiqi şəkil deyil (file header yoxlanışı uğursuz)' });
+            return;
+          }
+
+          // Check for embedded scripts or suspicious content
+          const fileContent = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+          const suspiciousContent = [
+            '<script', '<?php', '<%', 'javascript:', 'vbscript:',
+            'data:text/html', 'data:application', 'eval(', 'document.write'
+          ];
+          
+          if (suspiciousContent.some(pattern => fileContent.toLowerCase().includes(pattern))) {
+            resolve({ isValid: false, error: 'Şəkildə zərərli kod aşkar edildi' });
+            return;
+          }
+
+          // Check file size again from actual content
+          if (bytes.length !== file.size) {
+            resolve({ isValid: false, error: 'Fayl ölçüsü uyğunsuzluğu aşkar edildi' });
+            return;
+          }
+
+          resolve({ isValid: true });
+        } catch (error) {
+          resolve({ isValid: false, error: 'Fayl oxunarkən xəta baş verdi' });
+        }
+      };
+
+      reader.onerror = () => {
+        resolve({ isValid: false, error: 'Fayl oxuna bilmədi' });
+      };
+
+      // Read only first 1KB for header check and security scan
+      const chunk = file.slice(0, Math.min(file.size, 1024));
+      reader.readAsArrayBuffer(chunk);
+    });
+  };
+
+  // Enhanced filename sanitization
+  const sanitizeFilename = (filename: string): string => {
+    return filename
+      .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace special chars
+      .replace(/_{2,}/g, '_') // Remove multiple underscores
+      .substring(0, 50) // Limit length
+      .toLowerCase();
   };
 
   const groupMessagesByDate = (messages: QAMessage[]) => {
@@ -393,6 +579,14 @@ export function QADetailScreen() {
                         src={URL.createObjectURL(image)}
                         alt={`Preview ${index + 1}`}
                         className="w-full h-full object-cover"
+                        onLoad={(e) => {
+                          // Clean up object URL after loading for memory management
+                          setTimeout(() => URL.revokeObjectURL(e.currentTarget.src), 1000);
+                        }}
+                        onError={(e) => {
+                          URL.revokeObjectURL(e.currentTarget.src);
+                          console.error('Image preview failed for:', image.name);
+                        }}
                       />
                     </div>
                     <button
@@ -425,18 +619,32 @@ export function QADetailScreen() {
                 )}
               </div>
               
-              {/* Image upload info */}
+              {/* Security and upload info */}
               <div className={`mt-3 p-3 rounded-lg ${isDarkMode ? 'bg-blue-900/20 border border-blue-800' : 'bg-blue-50 border border-blue-200'}`}>
-                <div className="flex items-center space-x-2">
-                  <Image size={16} className="text-blue-600 dark:text-blue-400" />
-                  <div>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Image size={16} className="text-blue-600 dark:text-blue-400" />
                     <p className={`text-xs font-medium ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
                       Şəkil göndərmə qaydaları:
                     </p>
+                  </div>
+                  <ul className={`text-xs space-y-0.5 ${isDarkMode ? 'text-blue-200' : 'text-blue-600'}`}>
+                    <li>• Maksimum 3 şəkil göndərilə bilər</li>
+                    <li>• Hər şəkil 2MB-dan kiçik olmalıdır</li>
+                    <li>• Yalnız PNG, JPG, GIF, WebP formatları</li>
+                  </ul>
+                  
+                  <div className={`pt-2 border-t ${isDarkMode ? 'border-blue-800' : 'border-blue-200'}`}>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs">🛡️</span>
+                      <p className={`text-xs font-medium ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                        Təhlükəsizlik:
+                      </p>
+                    </div>
                     <ul className={`text-xs mt-1 space-y-0.5 ${isDarkMode ? 'text-blue-200' : 'text-blue-600'}`}>
-                      <li>• Maksimum 3 şəkil göndərilə bilər</li>
-                      <li>• Hər şəkil 2MB-dan kiçik olmalıdır</li>
-                      <li>• PNG, JPG, JPEG formatları dəstəklənir</li>
+                      <li>• Bütün fayllar avtomatik yoxlanılır</li>
+                      <li>• Zərərli məzmun bloklanır</li>
+                      <li>• Yalnız təsdiqlənmiş şəkillər qəbul edilir</li>
                     </ul>
                   </div>
                 </div>
@@ -496,14 +704,18 @@ export function QADetailScreen() {
         </div>
       </div>
 
-      {/* Hidden file input */}
+      {/* Hidden file input with security restrictions */}
       <input
         ref={fileInputRef}
         type="file"
         className="hidden"
         multiple
-        accept="image/*"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
         onChange={handleImageSelect}
+        onClick={(e) => {
+          // Clear any previous selections for security
+          e.currentTarget.value = '';
+        }}
       />
     </div>
   );
