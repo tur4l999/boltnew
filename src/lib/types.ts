@@ -96,3 +96,38 @@ export interface AppealFormData {
   questionSourceId?: string;
   userComment: string;
 }
+
+// Q&A Chat System Types (WhatsApp-like)
+export interface QAUser {
+  id: string;
+  name: string;
+  role: 'student' | 'teacher';
+  avatar?: string;
+  isOnline?: boolean;
+  lastSeen?: Date;
+}
+
+export interface QAMessage {
+  id: string;
+  senderId: string;
+  content: string;
+  timestamp: Date;
+  attachments?: string[];
+  messageType: 'text' | 'image' | 'file';
+  isRead?: boolean;
+}
+
+export interface QAChat {
+  id: string;
+  studentId: string;
+  teacherId?: string;
+  subject: string; // Sualın mövzusu
+  category: string;
+  messages: QAMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+  isActive: boolean;
+  unreadCount: number;
+  lastMessage?: QAMessage;
+  teacherAssigned?: boolean;
+}

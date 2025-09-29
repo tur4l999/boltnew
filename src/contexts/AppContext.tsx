@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser } from '../lib/types';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -62,6 +62,15 @@ interface AppContextType {
   appeals: Appeal[];
   submitAppeal: (formData: AppealFormData) => boolean;
   getAppealsByStatus: (status?: string) => Appeal[];
+  // Q&A Chat System (WhatsApp-like)
+  qaChats: QAChat[];
+  qaUsers: { [key: string]: QAUser };
+  qaTeachers: QAUser[];
+  startNewChat: (subject: string, category: string, teacherId?: string) => string | null;
+  sendMessage: (chatId: string, content: string, attachments?: string[], messageType?: 'text' | 'image' | 'file') => boolean;
+  getChatById: (id: string) => QAChat | undefined;
+  markChatAsRead: (chatId: string) => void;
+  getActiveChatsList: () => QAChat[];
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -249,6 +258,122 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isResolved: true
     }
   ]);
+
+  // Q&A Chat System State
+  const [qaUsers] = useState<{ [key: string]: QAUser }>({
+    'current': { id: 'current', name: 'Siz', role: 'student', avatar: '😊', isOnline: true },
+    'teacher1': { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher2': { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 30 * 60 * 1000) },
+    'teacher3': { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true, lastSeen: new Date() },
+    'teacher4': { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false, lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000) }
+  });
+
+  const [qaTeachers] = useState<QAUser[]>([
+    { id: 'teacher1', name: 'Müəllim Səbinə', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher2', name: 'Müəllim Ramil', role: 'teacher', avatar: '👨‍🏫', isOnline: false },
+    { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
+    { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false }
+  ]);
+
+  const [qaChats, setQaChats] = useState<QAChat[]>([
+    {
+      id: 'chat1',
+      studentId: 'current',
+      teacherId: 'teacher1',
+      subject: 'Şəhər daxilində sürət məhdudiyyəti',
+      category: 'traffic-rules',
+      createdAt: new Date('2025-01-15T10:30:00'),
+      updatedAt: new Date('2025-01-15T16:45:00'),
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: true,
+      messages: [
+        {
+          id: 'm1',
+          senderId: 'current',
+          content: 'Salam müəllim! Şəhər daxilində sürət məhdudiyyəti 50 km/s-dir, amma bəzi yerlərdə 60 km/s göstərilir. Bu necə başa düşməli?',
+          timestamp: new Date('2025-01-15T10:30:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm2',
+          senderId: 'teacher1',
+          content: 'Salam! Bu çox yaxşı sualdır. Şəhər daxilində ümumi sürət məhdudiyyəti 50 km/s-dir, lakin bəzi magistral yollarda və geniş küçələrdə xüsusi nişanlarla 60 km/s icazə verilir.',
+          timestamp: new Date('2025-01-15T14:20:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm3',
+          senderId: 'current',
+          content: 'Təşəkkürlər! Yəni əsas qayda odur ki, əgər nişanla başqa sürət göstərilirsə, onu izləməliyik?',
+          timestamp: new Date('2025-01-15T15:30:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm4',
+          senderId: 'teacher1',
+          content: 'Düz dedin! Yol nişanları həmişə prioritetdir. Həmişə yol nişanlarına diqqət yetirin.',
+          timestamp: new Date('2025-01-15T16:45:00'),
+          messageType: 'text',
+          isRead: true
+        }
+      ]
+    },
+    {
+      id: 'chat2', 
+      studentId: 'current',
+      teacherId: 'teacher2',
+      subject: 'Park etmə qaydaları',
+      category: 'parking',
+      createdAt: new Date('2025-01-14T16:45:00'),
+      updatedAt: new Date('2025-01-14T17:30:00'),
+      isActive: true,
+      unreadCount: 1,
+      teacherAssigned: true,
+      messages: [
+        {
+          id: 'm5',
+          senderId: 'current',
+          content: 'Park etmək qadağandır nişanı neçə metr ərzində təsir edir?',
+          timestamp: new Date('2025-01-14T16:45:00'),
+          messageType: 'text',
+          isRead: true
+        },
+        {
+          id: 'm6',
+          senderId: 'teacher2',
+          content: 'Bu nişan növbəti nişana qədər və ya yolun sonuna qədər keçərlidir. Adətən əlavə lövhə ilə məsafə göstərilir.',
+          timestamp: new Date('2025-01-14T17:30:00'),
+          messageType: 'text',
+          isRead: false
+        }
+      ]
+    },
+    {
+      id: 'chat3',
+      studentId: 'current',
+      subject: 'İmtahan həyəcanı',
+      category: 'exam-prep',
+      createdAt: new Date('2025-01-13T09:15:00'),
+      updatedAt: new Date('2025-01-13T09:15:00'),
+      isActive: true,
+      unreadCount: 0,
+      teacherAssigned: false,
+      messages: [
+        {
+          id: 'm7',
+          senderId: 'current',
+          content: 'İmtahan zamanı çox həyəcanlanıram və səhv cavablar verirəm. Bu vəziyyətdə nə etməli?',
+          timestamp: new Date('2025-01-13T09:15:00'),
+          messageType: 'text',
+          isRead: false
+        }
+      ]
+    }
+  ]);
   
   // Determine if dark mode should be active
   const isDarkMode = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -409,6 +534,75 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!status) return appeals;
     return appeals.filter(appeal => appeal.status === status);
   };
+
+  // Q&A Chat System Functions
+  const startNewChat = (subject: string, category: string, teacherId?: string): string | null => {
+    try {
+      const newChat: QAChat = {
+        id: `chat_${Date.now()}`,
+        studentId: 'current',
+        teacherId,
+        subject,
+        category,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        isActive: true,
+        unreadCount: 0,
+        teacherAssigned: !!teacherId,
+        messages: []
+      };
+      setQaChats(prev => [newChat, ...prev]);
+      return newChat.id;
+    } catch {
+      return null;
+    }
+  };
+
+  const sendMessage = (chatId: string, content: string, attachments?: string[], messageType: 'text' | 'image' | 'file' = 'text'): boolean => {
+    try {
+      const newMessage: QAMessage = {
+        id: `m_${Date.now()}`,
+        senderId: 'current',
+        content,
+        timestamp: new Date(),
+        attachments,
+        messageType,
+        isRead: false
+      };
+
+      setQaChats(prev => prev.map(chat => 
+        chat.id === chatId 
+          ? { 
+              ...chat, 
+              messages: [...chat.messages, newMessage],
+              updatedAt: new Date(),
+              lastMessage: newMessage
+            }
+          : chat
+      ));
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const getChatById = (id: string): QAChat | undefined => {
+    return qaChats.find(chat => chat.id === id);
+  };
+
+  const markChatAsRead = (chatId: string): void => {
+    setQaChats(prev => prev.map(chat => 
+      chat.id === chatId 
+        ? { ...chat, unreadCount: 0 }
+        : chat
+    ));
+  };
+
+  const getActiveChatsList = (): QAChat[] => {
+    return qaChats.filter(chat => chat.isActive).sort((a, b) => 
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+  };
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -531,6 +725,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , deliveryMethod, setDeliveryMethod
       , examResults, addExamResult
       , appeals, submitAppeal, getAppealsByStatus
+      , qaChats, qaUsers, qaTeachers, startNewChat, sendMessage, getChatById, markChatAsRead, getActiveChatsList
     }}>
       {children}
     </AppContext.Provider>
