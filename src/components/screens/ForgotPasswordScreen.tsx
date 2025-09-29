@@ -332,14 +332,16 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
           isDarkMode ? 'text-gray-500' : 'text-gray-400'
         }`}>
           <p className="opacity-70 mb-3">Kömək lazımdır?</p>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-3">
             <a 
               href="mailto:info@dda.az" 
-              className={`font-medium transition-colors duration-200 hover:underline ${
-                isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+              className={`inline-flex items-center gap-1 px-3 py-2 rounded-full transition-all duration-300 hover:scale-105 ${
+                isDarkMode 
+                  ? 'bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20' 
+                  : 'bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200'
               }`}
             >
-              📧 info@dda.az
+              📧 E-mail
             </a>
             
             <a 
