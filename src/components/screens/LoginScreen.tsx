@@ -297,20 +297,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 <span className="font-medium text-sm">Apple ilə daxil ol</span>
               </button>
             </div>
-            
-            <div className="text-center pt-4">
-              <button
-                onClick={handleDemoLogin}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 transform hover:scale-105 ${
-                  isDarkMode 
-                    ? 'text-emerald-400 hover:text-emerald-300 bg-emerald-500/8 hover:bg-emerald-500/15 border border-emerald-500/15' 
-                    : 'text-emerald-600 hover:text-emerald-700 bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-200/60'
-                }`}
-              >
-                <span>✨</span>
-                Demo hesabı ilə daxil ol
-              </button>
-            </div>
           </div>
         </Card>
 
