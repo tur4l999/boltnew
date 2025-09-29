@@ -358,32 +358,32 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
       <div className="w-full max-w-md relative z-10 animate-fade-in-up">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center mb-6">
             <button
               onClick={handleBack}
-              className={`p-3 rounded-2xl transition-all duration-300 hover:scale-105 ${
+              className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
                 isDarkMode 
-                  ? 'bg-gray-800/80 text-gray-200 hover:bg-gray-700/80' 
-                  : 'bg-white/80 text-gray-700 hover:bg-gray-50/80'
-              } backdrop-blur-sm shadow-lg`}
+                  ? 'bg-gray-800/80 text-gray-300 hover:bg-gray-700/80' 
+                  : 'bg-white/90 text-gray-600 hover:bg-white/95'
+              } backdrop-blur-sm shadow-md hover:shadow-lg`}
             >
-              ←
+              ← Geri
             </button>
-            
-            <div className="flex-1">
-              <h1 className={`text-2xl font-black transition-all duration-300 bg-gradient-to-r ${
-                isDarkMode 
-                  ? 'from-emerald-400 via-green-400 to-emerald-500' 
-                  : 'from-emerald-600 via-green-600 to-emerald-700'
-              } bg-clip-text text-transparent`}>
-                Qeydiyyat
-              </h1>
-              <p className={`text-sm font-medium transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-600'
-              }`}>
-                Digital Driving Academy
-              </p>
-            </div>
+          </div>
+          
+          <div className="space-y-2">
+            <h1 className={`text-2xl font-black transition-all duration-300 bg-gradient-to-r ${
+              isDarkMode 
+                ? 'from-emerald-400 via-green-400 to-emerald-500' 
+                : 'from-emerald-600 via-green-600 to-emerald-700'
+            } bg-clip-text text-transparent`}>
+              Qeydiyyat
+            </h1>
+            <p className={`text-sm font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-500' : 'text-gray-600'
+            }`}>
+              Digital Driving Academy
+            </p>
           </div>
           
           {/* Progress Steps */}
