@@ -9,6 +9,7 @@
     "build:github": "vite build --mode production",
     "build:stackblitz": "STACKBLITZ=true vite build",
     "deploy": "./deploy.sh",
+    "deploy:gh-pages": "npm run build:github && npx gh-pages -d dist -m 'Deploy to GitHub Pages'",
     "force-deploy": "./scripts/force-deploy.sh",
     "lint": "eslint .",
     "preview": "vite preview",
