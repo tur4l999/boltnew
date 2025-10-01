@@ -62,6 +62,37 @@ git push origin main
 ## Troubleshooting
 
 Əgər sayt hələ də boş görünürsə:
-1. GitHub repository Settings > Pages > Source = "GitHub Actions" olduğunu yoxlayın
-2. Actions tab-da deploy workflow-nun uğurla bitdiyini yoxlayın
-3. Browser cache-ni təmizləyin (Ctrl+F5)
+1. **GitHub Pages Source konfiqurasiyası**:
+   - GitHub repository-yə gedin: https://github.com/tur4l999/boltnew
+   - Settings > Pages > Source seçin
+   - **ÖNƏMLİ**: "Deploy from a branch" seçin
+   - Branch: `gh-pages` və folder: `/ (root)` seçin
+   - Save düyməsinə basın
+
+2. **Manual deployment (gh-pages branch)**:
+   ```bash
+   npm run build:github
+   npx gh-pages -d dist -m "Deploy to GitHub Pages"
+   ```
+
+3. **GitHub Actions deployment**:
+   - Actions tab-da deploy workflow-nun uğurla bitdiyini yoxlayın
+   - Əgər GitHub Actions istifadə edirsinizsə, Source-u "GitHub Actions" olaraq təyin edin
+
+4. **Browser cache-ni təmizləyin** (Ctrl+F5)
+
+## Deployment Metodları
+
+### Metod 1: gh-pages branch (Hal-hazırda aktiv)
+```bash
+npm run build:github
+npx gh-pages -d dist
+```
+- ✅ Sürətli
+- ✅ Sadə
+- ✅ Local-dan birbaşa deploy
+
+### Metod 2: GitHub Actions (Gələcək üçün)
+- Settings > Pages > Source > "GitHub Actions" seçin
+- Hər main branch push-dan sonra avtomatik deploy
+- `.github/workflows/deploy.yml` workflow faylı artıq hazırdır
