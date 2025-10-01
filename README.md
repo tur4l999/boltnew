@@ -288,4 +288,35 @@ const styles = StyleSheet.create({
 
 **AZ/EN**: Bu sistem həm Azərbaycan, həm də İngilis dilində şərhlər dəstəkləyir.
 **Stability**: Bütün asset adları və token strukturu sabit saxlanılır.
-**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.# Force deploy: 2025-10-01 14:22:10
+**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.
+
+## 🚀 Deployment
+
+### GitHub Pages
+Proyekt avtomatik olaraq GitHub Pages-də deploy olunur:
+- **URL**: https://tur4l999.github.io/boltnew/
+- **Branch**: main
+- **Auto-deploy**: Hər main branch-a push zamanı
+
+### StackBlitz
+StackBlitz-də işləmək üçün:
+1. Proyekti StackBlitz-ə import edin
+2. Avtomatik olaraq düzgün konfiqurasiya ilə işə düşəcək
+3. `.stackblitzrc` və `stackblitz.json` faylları mühiti idarə edir
+
+### Build Commands
+```bash
+# GitHub Pages üçün build
+npm run build:github
+
+# StackBlitz/Local üçün build  
+npm run build
+
+# Preview GitHub Pages build
+npm run preview:github
+```
+
+### Konfiqurasiya
+- **Vite Config**: Avtomatik olaraq mühiti aşkar edir (GitHub Pages vs StackBlitz)
+- **Base Path**: GitHub Pages üçün `/boltnew/`, StackBlitz üçün `./`
+- **Router**: BrowserRouter hostname əsasında basename təyin edir
