@@ -2,11 +2,15 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ command, mode }) => {
-  // For GitHub Pages, use the repository name as base
-  // For StackBlitz and local dev, use relative path
-  const base = command === 'build' && mode === 'production' 
-    ? '/boltnew/' 
-    : './'
+  // Detect environment
+  const isStackBlitz = process.env.STACKBLITZ === 'true' || process.env.NODE_ENV === 'stackblitz'
+  const isGitHubPages = mode === 'github' || mode === 'production'
+  
+  // Determine base path
+  let base = './'
+  if (command === 'build' && isGitHubPages && !isStackBlitz) {
+    base = '/boltnew/'
+  }
 
   return {
     plugins: [react()],
