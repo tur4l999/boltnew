@@ -1,6 +1,14 @@
 # DDA.az — Figma-style Inspect & Auto-Handoff
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=flat&logo=github)](https://tur4l999.github.io/boltnew/)
+[![StackBlitz](https://img.shields.io/badge/Open-StackBlitz-blue?style=flat&logo=stackblitz)](https://stackblitz.com/github/tur4l999/boltnew)
+[![Deployment](https://img.shields.io/badge/Status-Deployed-success?style=flat)](https://github.com/tur4l999/boltnew/deployments)
+
 Bu layihə avtomatik design handoff sistemi və Figma-style inspector ilə təchiz edilmişdir.
+
+## 🌐 Live Deployment
+- **Production**: [https://tur4l999.github.io/boltnew/](https://tur4l999.github.io/boltnew/)
+- **Development**: [StackBlitz](https://stackblitz.com/github/tur4l999/boltnew)
 
 ## 🚀 Quick Start
 
