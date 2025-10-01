@@ -288,4 +288,4 @@ const styles = StyleSheet.create({
 
 **AZ/EN**: Bu sistem həm Azərbaycan, həm də İngilis dilində şərhlər dəstəkləyir.
 **Stability**: Bütün asset adları və token strukturu sabit saxlanılır.
-**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.
+**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.# Force deploy: 2025-10-01 14:22:10
