@@ -293,13 +293,6 @@ export function ResultDetailScreen() {
                 <strong>Doğru cavab:</strong> {correctOption?.text}
               </div>
             )}
-            {userSelectedOption && (
-              <div className={`text-sm mt-1 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
-                <strong>Sizin cavabınız:</strong> {userSelectedOption.text}
-              </div>
-            )}
           </div>
 
           {/* Explanation Section */}
