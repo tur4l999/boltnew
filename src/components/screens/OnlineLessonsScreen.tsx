@@ -98,15 +98,6 @@ export function OnlineLessonsScreen() {
     }
   };
 
-  const getLessonEmoji = (moduleId: string): string => {
-    const emojiMap: { [key: string]: string } = {
-      'M1': '📚', 'M2': '🔍', 'M3': '🧮', 'M4': '📊', 
-      'M5': '🎯', 'M6': '💡', 'M7': '🔬', 'M8': '🎨',
-      'M9': '🏗️', 'M10': '📈', 'M11': '🌟', 'M12': '🏆',
-      'M13': '🚀', 'M14': '💼', 'M15': '🌐', 'QA': '❓'
-    };
-    return emojiMap[moduleId] || '📖';
-  };
 
   const formatDateTime = (d: Date): string => {
     const dd = String(d.getDate()).padStart(2, '0');
@@ -238,7 +229,6 @@ export function OnlineLessonsScreen() {
               const dateInfo = formatDateTimeModern(d);
               const status = getLessonStatus(l);
               const statusInfo = getStatusInfo(status);
-              const emoji = getLessonEmoji(l.moduleId);
               
               return (
                 <div
@@ -302,12 +292,9 @@ export function OnlineLessonsScreen() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="text-2xl">{emoji}</span>
-                              <h3 className={`text-xl font-black leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {truncate(l.title, 50)}
-                              </h3>
-                            </div>
+                            <h3 className={`text-xl font-black leading-tight mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {truncate(l.title, 50)}
+                            </h3>
                             
                             <div className="flex flex-wrap items-center gap-3 text-sm mb-3">
                               <div className="flex items-center gap-1.5">
@@ -432,7 +419,6 @@ export function OnlineLessonsScreen() {
                     const dateInfo = formatDateTimeModern(d);
                     const status = getLessonStatus(l);
                     const statusInfo = getStatusInfo(status);
-                    const emoji = getLessonEmoji(l.moduleId);
                     
                     return (
                       <div
@@ -447,8 +433,6 @@ export function OnlineLessonsScreen() {
                         <div className="p-5">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1 min-w-0">
-                              <div className="text-3xl flex-shrink-0">{emoji}</div>
-                              
                               <div className="flex-1 min-w-0">
                                 <h4 className={`text-base font-bold truncate mb-1.5 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                   {truncate(l.title, 45)}
@@ -721,12 +705,9 @@ export function OnlineLessonsScreen() {
                 
                 <div className="relative flex items-start justify-between mb-4">
                   <div className="flex-1 pr-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-4xl">{getLessonEmoji(showCourseDetailsPopup.moduleId)}</span>
-                      <h3 className={`text-2xl font-black leading-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {showCourseDetailsPopup.title}
-                      </h3>
-                    </div>
+                    <h3 className={`text-2xl font-black leading-tight mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {showCourseDetailsPopup.title}
+                    </h3>
                     {courseStatusInfo && (
                       <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border-2 ${
                         courseStatusInfo.bgColor} ${courseStatusInfo.textColor} ${courseStatusInfo.borderColor} backdrop-blur-sm`}>
