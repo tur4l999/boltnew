@@ -369,8 +369,10 @@ export function ResultDetailScreen() {
                   onClick={() => setShowTeacherQuestionModal(true)}
                   className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  <EmojiIcon emoji="👨‍🏫" size={16} />
-                  Müəllimə sual ver
+                  <span className="flex items-center gap-2">
+                    <EmojiIcon emoji="👨‍🏫" size={16} />
+                    Müəllimə sual
+                  </span>
                 </Button>
                 
                 <Button
@@ -382,8 +384,10 @@ export function ResultDetailScreen() {
                       : 'border-orange-500 text-orange-600 hover:bg-orange-50'
                   }`}
                 >
-                  <EmojiIcon emoji="📮" size={16} />
-                  Apellyasiya
+                  <span className="flex items-center gap-2">
+                    <EmojiIcon emoji="📮" size={16} />
+                    Apellyasiya
+                  </span>
                 </Button>
               </div>
               
@@ -440,7 +444,7 @@ export function ResultDetailScreen() {
             <div className={`text-lg font-bold mb-4 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              Müəllimə sual ver
+              Müəllimə sual
             </div>
             
             <div className={`text-sm mb-4 transition-colors duration-200 ${
