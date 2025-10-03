@@ -344,11 +344,14 @@ export function ResultsScreen() {
             const examDate = new Date(result.date);
             
             return (
-              <div key={result.id} className={`rounded-3xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] ${
-                isDarkMode 
-                  ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600' 
-                  : 'bg-gradient-to-br from-white to-gray-50 border border-gray-100'
-              }`}>
+              <button 
+                key={result.id} 
+                onClick={() => navigate('ResultDetail', { result })}
+                className={`w-full text-left rounded-3xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] cursor-pointer ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600' 
+                    : 'bg-gradient-to-br from-white to-gray-50 border border-gray-100'
+                }`}>
                 {/* Header with Date */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4">
@@ -446,7 +449,19 @@ export function ResultsScreen() {
                     </div>
                   )}
                 </div>
-              </div>
+
+                {/* Click indicator */}
+                <div className="flex items-center justify-center mt-4 pt-4 border-t border-gray-600/30">
+                  <div className={`text-sm font-medium flex items-center gap-2 ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    <span>Detallara bax</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </button>
             );
           })}
         </div>

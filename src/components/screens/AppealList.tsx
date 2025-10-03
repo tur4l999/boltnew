@@ -87,7 +87,7 @@ export function AppealList({ appeals }: AppealListProps) {
       <FadeIn>
         <Card variant="glass" padding="lg" className="text-center">
           <div className="py-8">
-            <div className="text-6xl mb-4">📝</div>
+            <div className="text-6xl mb-4">📮</div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               {t.noAppeals}
             </h3>
