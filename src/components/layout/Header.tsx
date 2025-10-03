@@ -48,7 +48,7 @@ export function Header() {
           
           <div className="flex items-center gap-2">
             <IconButton
-              onClick={() => showToast('📣 Push (demo): Bu gün 15 dəq məşq et!')}
+              onClick={() => navigate('Notifications')}
               label={t.notifications}
               className="transform hover:scale-110 active:scale-95 transition-transform duration-200"
             >
