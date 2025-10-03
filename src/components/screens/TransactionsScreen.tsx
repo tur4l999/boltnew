@@ -9,6 +9,7 @@ export function TransactionsScreen() {
   const { goBack, balance, transactions, isDarkMode } = useApp();
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'purchase' | 'refund'>('all');
   const [showAddBalance, setShowAddBalance] = useState(false);
+  const [amount, setAmount] = useState<string>('');
 
   // Calculate statistics
   const totalSpent = transactions
@@ -18,6 +19,23 @@ export function TransactionsScreen() {
   const totalRefunded = transactions
     .filter(t => t.type === 'refund')
     .reduce((sum, t) => sum + t.amount, 0);
+
+  const quickAmounts = [3, 5, 10, 20, 50];
+
+  const handleQuickAmount = (value: number) => {
+    setAmount(value.toString());
+  };
+
+  const handleAddBalance = () => {
+    const amountNum = parseFloat(amount);
+    if (amountNum && amountNum > 0) {
+      alert(`${amountNum} AZN balans artırıldı (demo)`);
+      setAmount('');
+      setShowAddBalance(false);
+    } else {
+      alert('Zəhmət olmasa məbləğ daxil edin');
+    }
+  };
 
   const filteredTransactions = transactions.filter(t => 
     selectedFilter === 'all' ? true : t.type === selectedFilter
@@ -86,34 +104,11 @@ export function TransactionsScreen() {
               <span>Cari Balans</span>
             </div>
             
-            <div className={`text-5xl font-black mb-4 transition-all duration-300 ${
+            <div className={`text-5xl font-black mb-6 transition-all duration-300 ${
               isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
             }`}>
               {balance}
               <span className="text-3xl ml-2">AZN</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className={`p-3 rounded-xl backdrop-blur-sm ${
-                isDarkMode ? 'bg-gray-800/50 border border-gray-700/50' : 'bg-white/50 border border-gray-200/50'
-              }`}>
-                <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Xərcləndi
-                </div>
-                <div className={`text-xl font-bold ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>
-                  -{totalSpent} AZN
-                </div>
-              </div>
-              <div className={`p-3 rounded-xl backdrop-blur-sm ${
-                isDarkMode ? 'bg-gray-800/50 border border-gray-700/50' : 'bg-white/50 border border-gray-200/50'
-              }`}>
-                <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Geri qaytarıldı
-                </div>
-                <div className={`text-xl font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
-                  +{totalRefunded} AZN
-                </div>
-              </div>
             </div>
 
             <Button
@@ -183,7 +178,7 @@ export function TransactionsScreen() {
           </Card>
         </div>
 
-        {/* Payment Methods Section - Collapsible */}
+        {/* Add Balance Section - Collapsible */}
         {showAddBalance && (
           <Card 
             variant="elevated"
@@ -195,7 +190,7 @@ export function TransactionsScreen() {
               <h3 className={`text-lg font-bold ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                Balans artırma üsulları
+                Balans artır
               </h3>
               <button
                 onClick={() => setShowAddBalance(false)}
@@ -207,83 +202,93 @@ export function TransactionsScreen() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => alert('Kart ilə ödəniş (demo)')}
-                className={`p-4 border-2 rounded-2xl text-center transition-all duration-300 hover:scale-105 group ${
+            {/* Amount Input */}
+            <div className="mb-4">
+              <label className={`text-sm font-medium mb-2 block ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                Məbləğ (AZN)
+              </label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0.00"
+                className={`w-full px-4 py-3 rounded-xl text-lg font-bold border-2 transition-all duration-200 ${
                   isDarkMode 
-                    ? 'border-gray-600 hover:border-emerald-500 bg-gray-700/50 hover:bg-gray-700' 
-                    : 'border-gray-200 hover:border-emerald-500 bg-gray-50 hover:bg-white shadow-md hover:shadow-lg'
-                }`}
-              >
-                <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <EmojiIcon emoji="💳" size={24} />
-                </div>
-                <div className={`text-sm font-bold mb-1 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Bank Kartı</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>Ani ödəniş</div>
-              </button>
-
-              <button
-                onClick={() => alert('Mobil ödəniş (demo)')}
-                className={`p-4 border-2 rounded-2xl text-center transition-all duration-300 hover:scale-105 group ${
-                  isDarkMode 
-                    ? 'border-gray-600 hover:border-emerald-500 bg-gray-700/50 hover:bg-gray-700' 
-                    : 'border-gray-200 hover:border-emerald-500 bg-gray-50 hover:bg-white shadow-md hover:shadow-lg'
-                }`}
-              >
-                <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <EmojiIcon emoji="📱" size={24} />
-                </div>
-                <div className={`text-sm font-bold mb-1 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Mobil Ödəniş</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>Rahat və sürətli</div>
-              </button>
-
-              <button
-                onClick={() => alert('Bank köçürməsi (demo)')}
-                className={`p-4 border-2 rounded-2xl text-center transition-all duration-300 hover:scale-105 group ${
-                  isDarkMode 
-                    ? 'border-gray-600 hover:border-emerald-500 bg-gray-700/50 hover:bg-gray-700' 
-                    : 'border-gray-200 hover:border-emerald-500 bg-gray-50 hover:bg-white shadow-md hover:shadow-lg'
-                }`}
-              >
-                <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <EmojiIcon emoji="🏦" size={24} />
-                </div>
-                <div className={`text-sm font-bold mb-1 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Bank Köçürməsi</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>1-2 iş günü</div>
-              </button>
-
-              <button
-                onClick={() => alert('E-manat (demo)')}
-                className={`p-4 border-2 rounded-2xl text-center transition-all duration-300 hover:scale-105 group ${
-                  isDarkMode 
-                    ? 'border-gray-600 hover:border-emerald-500 bg-gray-700/50 hover:bg-gray-700' 
-                    : 'border-gray-200 hover:border-emerald-500 bg-gray-50 hover:bg-white shadow-md hover:shadow-lg'
-                }`}
-              >
-                <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-                  <EmojiIcon emoji="💰" size={24} />
-                </div>
-                <div className={`text-sm font-bold mb-1 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>E-Manat</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>Elektron pul</div>
-              </button>
+                    ? 'bg-gray-700/50 border-gray-600 text-gray-100 placeholder-gray-500 focus:border-emerald-500 focus:bg-gray-700' 
+                    : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-400 focus:border-emerald-500 focus:bg-white'
+                } focus:outline-none focus:ring-4 focus:ring-emerald-500/20`}
+              />
             </div>
+
+            {/* Quick Amount Buttons */}
+            <div className="mb-4">
+              <label className={`text-sm font-medium mb-2 block ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                Sürətli seçim
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                {quickAmounts.map((quickAmount) => (
+                  <button
+                    key={quickAmount}
+                    onClick={() => handleQuickAmount(quickAmount)}
+                    className={`py-2 rounded-xl font-bold text-sm transition-all duration-200 ${
+                      amount === quickAmount.toString()
+                        ? 'bg-emerald-600 text-white shadow-lg scale-105'
+                        : isDarkMode
+                          ? 'bg-gray-700 text-gray-300 border-2 border-gray-600 hover:border-emerald-500'
+                          : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-emerald-500 shadow-sm'
+                    }`}
+                  >
+                    {quickAmount}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Payment Method - Bank Card Only */}
+            <div className="mb-4">
+              <label className={`text-sm font-medium mb-2 block ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                Ödəniş üsulu
+              </label>
+              <div className={`p-4 border-2 rounded-2xl transition-all duration-200 ${
+                isDarkMode 
+                  ? 'border-emerald-500 bg-gray-700/50' 
+                  : 'border-emerald-500 bg-emerald-50'
+              }`}>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white shadow-lg">
+                    <EmojiIcon emoji="💳" size={24} />
+                  </div>
+                  <div className="flex-1">
+                    <div className={`text-sm font-bold ${
+                      isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                    }`}>Bank Kartı</div>
+                    <div className={`text-xs ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                    }`}>Ani və təhlükəsiz ödəniş</div>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Confirm Button */}
+            <Button
+              variant="success"
+              size="lg"
+              fullWidth
+              onClick={handleAddBalance}
+              className="shadow-xl"
+            >
+              Təsdiq et
+            </Button>
           </Card>
         )}
 
