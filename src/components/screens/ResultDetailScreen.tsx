@@ -269,31 +269,6 @@ export function ResultDetailScreen() {
             })}
           </div>
 
-          {/* Result Summary for this question */}
-          <div className={`p-4 rounded-xl mb-4 ${
-            isCorrect 
-              ? isDarkMode 
-                ? 'bg-emerald-900/30 border border-emerald-700' 
-                : 'bg-emerald-50 border border-emerald-200'
-              : isDarkMode 
-                ? 'bg-red-900/30 border border-red-700' 
-                : 'bg-red-50 border border-red-200'
-          }`}>
-            <div className={`font-bold mb-2 ${
-              isCorrect 
-                ? isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                : isDarkMode ? 'text-red-300' : 'text-red-700'
-            }`}>
-              {isCorrect ? '✅ Doğru cavab' : '❌ Yanlış cavab'}
-            </div>
-            {!isCorrect && (
-              <div className={`text-sm ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
-                <strong>Doğru cavab:</strong> {correctOption?.text}
-              </div>
-            )}
-          </div>
 
           {/* Explanation Section */}
           <div className="border-t pt-4">
