@@ -3,7 +3,7 @@ import { Bell } from 'lucide-react';
 import { useApp } from '../../contexts/AppContext';
 import { MODULES } from '../../lib/data';
 
-type LessonStatus = 'scheduled' | 'ongoing' | 'completed';
+type LessonStatus = 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
 
 type LessonItem = {
   id: string;
@@ -21,6 +21,7 @@ export function OnlineLessonsScreen() {
   const [selectedSource, setSelectedSource] = useState<'upcoming' | 'schedule' | null>(null);
   const [notificationLessons, setNotificationLessons] = useState<Set<string>>(new Set());
   const [showNotificationPopup, setShowNotificationPopup] = useState<{ lessonId: string; show: boolean } | null>(null);
+  const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState<LessonItem | null>(null);
   // Scheduling visuals removed per requirements
 
   const truncate = (text: string, max: number): string => {
@@ -32,9 +33,14 @@ export function OnlineLessonsScreen() {
     return MODULES.find(m => m.id === moduleId)?.title || moduleId;
   };
 
-  const getLessonStatus = (lessonDate: string): LessonStatus | null => {
+  const getLessonStatus = (lesson: LessonItem): LessonStatus | null => {
+    // If lesson has explicit status, use it
+    if (lesson.status) {
+      return lesson.status;
+    }
+    
     const now = new Date();
-    const date = new Date(lessonDate);
+    const date = new Date(lesson.date);
     const endTime = new Date(date.getTime() + 60 * 60 * 1000); // Dərs bitməsi (1 saat sonra)
     
     // Yalnız bu günün tarixi üçün status göstərilir
@@ -79,6 +85,15 @@ export function OnlineLessonsScreen() {
           dotColor: isDarkMode ? 'bg-gray-500' : 'bg-gray-400',
           icon: '✅'
         };
+      case 'cancelled':
+        return {
+          label: 'Ləğv edilib',
+          bgColor: isDarkMode ? 'bg-red-900/20' : 'bg-red-50',
+          borderColor: isDarkMode ? 'border-red-700' : 'border-red-200',
+          textColor: isDarkMode ? 'text-red-400' : 'text-red-700',
+          dotColor: isDarkMode ? 'bg-red-500' : 'bg-red-500',
+          icon: '🚫'
+        };
     }
   };
 
@@ -122,12 +137,12 @@ export function OnlineLessonsScreen() {
 
   // Use real module titles
   const lessons: LessonItem[] = useMemo(() => [
-    { id: 'l1', moduleId: 'M3',  title: getTitleFor('M3'),  instructor: 'Ə.Talıbov',  date: new Date(Date.now() + 2  * 60 * 60 * 1000).toISOString(),  durationMin: 60 },
+    { id: 'l1', moduleId: 'M3',  title: getTitleFor('M3'),  instructor: 'Ə.Talıbov',  date: new Date(Date.now() + 2  * 60 * 60 * 1000).toISOString(),  durationMin: 60, status: 'scheduled' },
     // Eyni gündə ikinci onlayn dərs (Sual-Cavab)
-    { id: 'l5', moduleId: 'QA',  title: 'Sual- Cavab',      instructor: 'Moderator',   date: new Date(Date.now() + 5  * 60 * 60 * 1000).toISOString(),  durationMin: 45 },
-    { id: 'l2', moduleId: 'M13', title: getTitleFor('M13'), instructor: 'R.Məmmədov', date: new Date(Date.now() + 26 * 60 * 60 * 1000).toISOString(), durationMin: 75 },
-    { id: 'l3', moduleId: 'M10', title: getTitleFor('M10'), instructor: 'Ə.Talıbov',  date: new Date(Date.now() + 50 * 60 * 60 * 1000).toISOString(), durationMin: 50 },
-    { id: 'l4', moduleId: 'M12', title: getTitleFor('M12'), instructor: 'N.Quliyev',  date: new Date(Date.now() + 3  * 24 * 60 * 60 * 1000).toISOString(), durationMin: 55 },
+    { id: 'l5', moduleId: 'QA',  title: 'Sual- Cavab',      instructor: 'Moderator',   date: new Date(Date.now() + 5  * 60 * 60 * 1000).toISOString(),  durationMin: 45, status: 'ongoing' },
+    { id: 'l2', moduleId: 'M13', title: getTitleFor('M13'), instructor: 'R.Məmmədov', date: new Date(Date.now() + 26 * 60 * 60 * 1000).toISOString(), durationMin: 75, status: 'completed' },
+    { id: 'l3', moduleId: 'M10', title: getTitleFor('M10'), instructor: 'Ə.Talıbov',  date: new Date(Date.now() + 50 * 60 * 60 * 1000).toISOString(), durationMin: 50, status: 'cancelled' },
+    { id: 'l4', moduleId: 'M12', title: getTitleFor('M12'), instructor: 'N.Quliyev',  date: new Date(Date.now() + 3  * 24 * 60 * 60 * 1000).toISOString(), durationMin: 55, status: 'scheduled' },
   ], []);
 
   const upcoming = useMemo(() => {
@@ -180,7 +195,7 @@ export function OnlineLessonsScreen() {
         {upcoming.map((l, idx) => {
           const d = new Date(l.date);
           const dateInfo = formatDateTimeModern(d);
-          const status = getLessonStatus(l.date);
+          const status = getLessonStatus(l);
           const statusInfo = getStatusInfo(status);
           const emoji = getLessonEmoji(l.moduleId);
           
@@ -294,7 +309,7 @@ export function OnlineLessonsScreen() {
                             ? 'bg-blue-600 text-white hover:bg-blue-700' 
                             : 'bg-blue-500 text-white hover:bg-blue-600'
                       }`}
-                      onClick={(e) => { e.stopPropagation(); alert('Qoşulma linki (demo)'); }}
+                      onClick={(e) => { e.stopPropagation(); setShowCourseDetailsPopup(l); }}
                     >
                       {status === 'ongoing' ? '🔴 Qoşul' : '📅 Qoşul'}
                     </button>
@@ -324,7 +339,7 @@ export function OnlineLessonsScreen() {
               {items.map((l) => {
                 const d = new Date(l.date);
                 const dateInfo = formatDateTimeModern(d);
-                const status = getLessonStatus(l.date);
+                const status = getLessonStatus(l);
                 const statusInfo = getStatusInfo(status);
                 const emoji = getLessonEmoji(l.moduleId);
                 
@@ -398,7 +413,7 @@ export function OnlineLessonsScreen() {
                     {selectedLesson.title}
                   </h3>
                   {(() => {
-                    const modalStatusInfo = getStatusInfo(getLessonStatus(selectedLesson.date));
+                    const modalStatusInfo = getStatusInfo(getLessonStatus(selectedLesson));
                     return modalStatusInfo ? (
                       <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
                         modalStatusInfo.bgColor} ${modalStatusInfo.textColor} ${modalStatusInfo.borderColor} border`}>
@@ -469,16 +484,16 @@ export function OnlineLessonsScreen() {
             <div className={`p-6 pt-2 space-y-3 ${
               isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
             }`}>
-              {selectedSource === 'upcoming' && getLessonStatus(selectedLesson.date) !== 'completed' && (
+              {selectedSource === 'upcoming' && getLessonStatus(selectedLesson) !== 'completed' && (
                 <button
                   onClick={() => alert('Qoşulma linki (demo)')}
                   className={`w-full px-6 py-3.5 rounded-2xl font-bold text-base shadow-lg transition-all duration-200 ${
-                    getLessonStatus(selectedLesson.date) === 'ongoing'
+                    getLessonStatus(selectedLesson) === 'ongoing'
                       ? 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse'
                       : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
                   }`}
                 >
-                  {getLessonStatus(selectedLesson.date) === 'ongoing' ? '🔴 Dərsə Qoşul' : '📅 Dərsə Qoşul'}
+                  {getLessonStatus(selectedLesson) === 'ongoing' ? '🔴 Dərsə Qoşul' : '📅 Dərsə Qoşul'}
                 </button>
               )}
               <button
@@ -552,6 +567,215 @@ export function OnlineLessonsScreen() {
           </div>
         </div>
       )}
+
+      {/* Course Details Popup */}
+      {showCourseDetailsPopup && (() => {
+        const courseStatus = getLessonStatus(showCourseDetailsPopup);
+        const courseStatusInfo = getStatusInfo(courseStatus);
+        
+        const getNotificationMessage = (status: LessonStatus | null) => {
+          switch (status) {
+            case 'scheduled':
+              return 'Dərs planlaşdırılıb. Başlama vaxtı yaxınlaşdıqda sizə bildiriş göndəriləcək.';
+            case 'ongoing':
+              return 'Dərs hazırda davam edir! İndi qoşula bilərsiniz.';
+            case 'completed':
+              return 'Dərs artıq başa çatıb. Növbəti dərslərdə iştirak edə bilərsiniz.';
+            case 'cancelled':
+              return 'Dərs ləğv edilib. Təəssüf ki, bu dərsə qoşula bilməzsiniz.';
+            default:
+              return 'Dərs haqqında məlumat əldə edilə bilmədi.';
+          }
+        };
+        
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCourseDetailsPopup(null)} />
+            <div className={`relative z-10 w-full max-w-md rounded-3xl shadow-2xl border overflow-hidden ${
+              isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+            }`}>
+              {/* Header */}
+              <div className={`p-6 pb-4 ${
+                isDarkMode ? 'bg-gradient-to-br from-gray-800 to-gray-700' : 'bg-gradient-to-br from-gray-50 to-white'
+              }`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className={`text-xl font-black mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      {showCourseDetailsPopup.title}
+                    </h3>
+                    {courseStatusInfo && (
+                      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${
+                        courseStatusInfo.bgColor} ${courseStatusInfo.textColor} ${courseStatusInfo.borderColor} border`}>
+                        <span>{courseStatusInfo.icon}</span>
+                        <span>{courseStatusInfo.label}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="p-6 pt-2 space-y-4">
+                {/* General Information */}
+                <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                  <h4 className={`text-sm font-bold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Ümumi məlumat
+                  </h4>
+                  
+                  {/* Date and Time */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      isDarkMode ? 'bg-gray-600' : 'bg-white'
+                    }`}>
+                      <span className="text-lg">📆</span>
+                    </div>
+                    <div>
+                      <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Tarix və Saat
+                      </div>
+                      <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {formatDateTimeModern(new Date(showCourseDetailsPopup.date)).date} {formatDateTimeModern(new Date(showCourseDetailsPopup.date)).month}, {formatDateTimeModern(new Date(showCourseDetailsPopup.date)).time}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Instructor */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      isDarkMode ? 'bg-gray-600' : 'bg-white'
+                    }`}>
+                      <span className="text-lg">👨‍🏫</span>
+                    </div>
+                    <div>
+                      <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Müəllim
+                      </div>
+                      <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {showCourseDetailsPopup.instructor}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Duration */}
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                      isDarkMode ? 'bg-gray-600' : 'bg-white'
+                    }`}>
+                      <span className="text-lg">⏱️</span>
+                    </div>
+                    <div>
+                      <div className={`text-xs font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        Müddət
+                      </div>
+                      <div className={`text-sm font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {showCourseDetailsPopup.durationMin} dəqiqə
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Status Notification */}
+                <div className={`p-4 rounded-xl border-2 ${
+                  courseStatus === 'scheduled' 
+                    ? isDarkMode ? 'bg-blue-900/20 border-blue-700' : 'bg-blue-50 border-blue-200'
+                    : courseStatus === 'ongoing'
+                    ? isDarkMode ? 'bg-green-900/20 border-green-700' : 'bg-green-50 border-green-200'
+                    : courseStatus === 'completed'
+                    ? isDarkMode ? 'bg-gray-800/50 border-gray-600' : 'bg-gray-100 border-gray-300'
+                    : courseStatus === 'cancelled'
+                    ? isDarkMode ? 'bg-red-900/20 border-red-700' : 'bg-red-50 border-red-200'
+                    : isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <Bell className={`w-5 h-5 mt-0.5 ${
+                      courseStatus === 'scheduled' 
+                        ? 'text-blue-500'
+                        : courseStatus === 'ongoing'
+                        ? 'text-green-500'
+                        : courseStatus === 'completed'
+                        ? 'text-gray-500'
+                        : courseStatus === 'cancelled'
+                        ? 'text-red-500'
+                        : 'text-gray-500'
+                    }`} />
+                    <div className="flex-1">
+                      <h4 className={`text-sm font-bold mb-1 ${
+                        courseStatus === 'scheduled'
+                          ? isDarkMode ? 'text-blue-400' : 'text-blue-700'
+                          : courseStatus === 'ongoing'
+                          ? isDarkMode ? 'text-green-400' : 'text-green-700'
+                          : courseStatus === 'completed'
+                          ? isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                          : courseStatus === 'cancelled'
+                          ? isDarkMode ? 'text-red-400' : 'text-red-700'
+                          : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        Bildiriş
+                      </h4>
+                      <p className={`text-xs ${
+                        courseStatus === 'scheduled'
+                          ? isDarkMode ? 'text-blue-300' : 'text-blue-600'
+                          : courseStatus === 'ongoing'
+                          ? isDarkMode ? 'text-green-300' : 'text-green-600'
+                          : courseStatus === 'completed'
+                          ? isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                          : courseStatus === 'cancelled'
+                          ? isDarkMode ? 'text-red-300' : 'text-red-600'
+                          : isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        {getNotificationMessage(courseStatus)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Actions */}
+              <div className={`p-6 pt-2 space-y-3 ${
+                isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+              }`}>
+                {courseStatus === 'ongoing' && (
+                  <button
+                    onClick={() => {
+                      alert('Qoşulma linki (demo)');
+                      setShowCourseDetailsPopup(null);
+                    }}
+                    className="w-full px-6 py-3.5 rounded-2xl font-bold text-base shadow-lg transition-all duration-200 bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 animate-pulse"
+                  >
+                    🔴 Dərsə Qoşul
+                  </button>
+                )}
+                {courseStatus === 'scheduled' && (
+                  <button
+                    onClick={() => {
+                      setNotificationLessons(prev => new Set(prev).add(showCourseDetailsPopup.id));
+                      alert('Bildiriş aktivləşdirildi!');
+                      setShowCourseDetailsPopup(null);
+                    }}
+                    className={`w-full px-6 py-3.5 rounded-2xl font-bold text-base shadow-lg transition-all duration-200 ${
+                      isDarkMode
+                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    }`}
+                  >
+                    🔔 Bildiriş aktivləşdir
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowCourseDetailsPopup(null)}
+                  className={`w-full px-6 py-3 rounded-2xl font-bold text-base border transition-all duration-200 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  Bağla
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
