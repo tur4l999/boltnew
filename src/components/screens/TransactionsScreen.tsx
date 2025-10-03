@@ -124,60 +124,6 @@ export function TransactionsScreen() {
           </div>
         </Card>
 
-        {/* Quick Stats Cards */}
-        <div className="grid grid-cols-3 gap-2">
-          <Card 
-            variant="glass" 
-            padding="sm"
-            className={`text-center ${
-              isDarkMode ? 'border-blue-500/30' : 'border-blue-200/50'
-            }`}
-            hover={false}
-          >
-            <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Əməliyyat
-            </div>
-            <div className={`text-2xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-              {transactions.length}
-            </div>
-          </Card>
-          
-          <Card 
-            variant="glass" 
-            padding="sm"
-            className={`text-center ${
-              isDarkMode ? 'border-purple-500/30' : 'border-purple-200/50'
-            }`}
-            hover={false}
-          >
-            <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Orta çəki
-            </div>
-            <div className={`text-2xl font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
-              {transactions.length > 0 ? Math.round(totalSpent / transactions.filter(t => t.type === 'purchase').length || 0) : 0}
-            </div>
-          </Card>
-          
-          <Card 
-            variant="glass" 
-            padding="sm"
-            className={`text-center ${
-              isDarkMode ? 'border-orange-500/30' : 'border-orange-200/50'
-            }`}
-            hover={false}
-          >
-            <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Bu ay
-            </div>
-            <div className={`text-2xl font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>
-              {transactions.filter(t => {
-                const now = new Date();
-                return t.date.getMonth() === now.getMonth() && t.date.getFullYear() === now.getFullYear();
-              }).length}
-            </div>
-          </Card>
-        </div>
-
         {/* Add Balance Section - Collapsible */}
         {showAddBalance && (
           <Card 
