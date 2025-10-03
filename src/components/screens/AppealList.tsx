@@ -111,13 +111,18 @@ export function AppealList({ appeals }: AppealListProps) {
             className="cursor-pointer"
           >
             <div className="space-y-4">
-              {/* Header with Source and Status */}
+              {/* Header with Source, Code and Status */}
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-sm">{getSourceIcon(appeal.questionSource)}</span>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {getSourceLabel(appeal.questionSource, appeal.questionSourceId)}
+                    </span>
+                    <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                      isDarkMode ? 'bg-gray-700 text-emerald-400' : 'bg-gray-100 text-emerald-600'
+                    }`}>
+                      #{appeal.code}
                     </span>
                   </div>
                   <h4 className="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 mb-2">
@@ -241,9 +246,16 @@ export function AppealList({ appeals }: AppealListProps) {
                       {getSourceIcon(selectedAppeal.questionSource)}
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                        {t.appealDetails}
-                      </h2>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                          {t.appealDetails}
+                        </h2>
+                        <span className={`px-3 py-1 rounded-lg text-sm font-bold ${
+                          isDarkMode ? 'bg-gray-700 text-emerald-400' : 'bg-white text-emerald-600 shadow-md'
+                        }`}>
+                          #{selectedAppeal.code}
+                        </span>
+                      </div>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {getSourceLabel(selectedAppeal.questionSource, selectedAppeal.questionSourceId)}
                       </p>

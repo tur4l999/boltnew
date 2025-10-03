@@ -512,12 +512,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setExamResults(prev => [newResult, ...prev]);
   };
 
+  // Generate unique 5-character code (letters + numbers)
+  const generateAppealCode = (): string => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+    for (let i = 0; i < 5; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  };
+
   const submitAppeal = (formData: AppealFormData): boolean => {
     try {
       const newAppeal: Appeal = {
         id: Date.now().toString(),
+        code: generateAppealCode(),
         questionId: formData.questionId,
         questionText: formData.questionText,
+        questionImageUrl: formData.questionImageUrl,
+        questionOptions: [],
+        questionCorrectOptionId: '',
+        questionExplanation: '',
+        questionSource: formData.questionSource,
+        questionSourceId: formData.questionSourceId,
         userComment: formData.userComment,
         status: 'pending',
         submittedDate: new Date(),
