@@ -4,6 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { EmojiIcon } from '../ui/EmojiIcon';
 import { VideoPlayer } from '../media/VideoPlayer';
+import { AppealSubmitModal } from './AppealSubmitModal';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import type { StoredExamResult, Question } from '../../lib/types';
 
@@ -13,6 +14,9 @@ export function ResultDetailScreen() {
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showExplanation, setShowExplanation] = useState<boolean[]>([]);
+  const [showAppealModal, setShowAppealModal] = useState(false);
+  const [showTeacherQuestionModal, setShowTeacherQuestionModal] = useState(false);
+  const [teacherQuestionText, setTeacherQuestionText] = useState('');
 
   // Get the questions for this exam result
   const examQuestions = useMemo(() => {
@@ -356,6 +360,40 @@ export function ResultDetailScreen() {
               </div>
             )}
           </div>
+
+          {/* Action Buttons - Teacher Question & Appeal */}
+          <div className="border-t pt-4 mt-4">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => setShowTeacherQuestionModal(true)}
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <EmojiIcon emoji="👨‍🏫" size={16} />
+                  Müəllimə sual ver
+                </Button>
+                
+                <Button
+                  onClick={() => setShowAppealModal(true)}
+                  variant="ghost"
+                  className={`flex-1 flex items-center justify-center gap-2 ${
+                    isDarkMode 
+                      ? 'border-orange-600 text-orange-400 hover:bg-orange-900/20' 
+                      : 'border-orange-500 text-orange-600 hover:bg-orange-50'
+                  }`}
+                >
+                  <EmojiIcon emoji="📝" size={16} />
+                  Apellyasiya
+                </Button>
+              </div>
+              
+              <div className={`text-xs text-center ${
+                isDarkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}>
+                Sualınızı və ya etirazınızı bildirin
+              </div>
+            </div>
+          </div>
         </Card>
 
         {/* Navigation Buttons */}
@@ -391,6 +429,96 @@ export function ResultDetailScreen() {
           </Button>
         </div>
       </div>
+
+      {/* Teacher Question Modal */}
+      {showTeacherQuestionModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowTeacherQuestionModal(false)} />
+          <div className={`relative z-10 w-full max-w-md rounded-2xl p-6 shadow-xl transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+          }`}>
+            <div className={`text-lg font-bold mb-4 transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-100' : 'text-gray-900'
+            }`}>
+              Müəllimə sual ver
+            </div>
+            
+            <div className={`text-sm mb-4 transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              Bu sual haqqında müəllimə sualınızı yazın:
+            </div>
+
+            {/* Question Context */}
+            <div className={`p-3 rounded-lg mb-4 text-sm ${
+              isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'
+            }`}>
+              <strong>Sual:</strong> {currentQuestion?.text}
+            </div>
+
+            <textarea
+              value={teacherQuestionText}
+              onChange={(e) => setTeacherQuestionText(e.target.value)}
+              placeholder="Sualınızı buraya yazın..."
+              className={`w-full h-32 p-3 rounded-xl border resize-none transition-colors duration-200 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              } focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            />
+
+            <div className="flex items-center gap-3 mt-4">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setShowTeacherQuestionModal(false);
+                  setTeacherQuestionText('');
+                }}
+                className="flex-1"
+              >
+                Ləğv et
+              </Button>
+              <Button
+                onClick={() => {
+                  // Here you would implement the actual submission logic
+                  console.log('Teacher question submitted:', {
+                    questionId: currentQuestion?.id,
+                    questionText: currentQuestion?.text,
+                    userQuestion: teacherQuestionText,
+                    resultId: result.id
+                  });
+                  
+                  // Show success message or navigate to teacher contact
+                  navigate('TeacherContact', { 
+                    questionId: currentQuestion?.id,
+                    prefilledMessage: `Sual: ${currentQuestion?.text}\n\nMənim sualım: ${teacherQuestionText}`
+                  });
+                  
+                  setShowTeacherQuestionModal(false);
+                  setTeacherQuestionText('');
+                }}
+                disabled={!teacherQuestionText.trim()}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Göndər
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Appeal Submit Modal */}
+      <AppealSubmitModal
+        isOpen={showAppealModal}
+        onClose={() => setShowAppealModal(false)}
+        question={{
+          id: currentQuestion?.id || '',
+          text: currentQuestion?.text || '',
+          imageUrl: currentQuestion?.imageUrl,
+          source: result.type === 'tickets' ? 'ticket' : result.type === 'topics' ? 'topic' : 'simulator',
+          sourceId: result.details?.ticketNumber?.toString() || result.details?.moduleId
+        }}
+      />
     </div>
   );
 }
