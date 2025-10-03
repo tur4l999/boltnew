@@ -72,6 +72,7 @@ export type AppealStatus = 'pending' | 'under_review' | 'accepted' | 'rejected' 
 
 export interface Appeal {
   id: string;
+  code: string; // Unique 5-character code (letters + numbers)
   questionId: string;
   questionText: string;
   questionImageUrl?: string;
