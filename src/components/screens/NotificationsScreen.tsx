@@ -9,6 +9,7 @@ import { EmojiIcon } from '../ui/EmojiIcon';
 export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
+  const [showMenu, setShowMenu] = useState(false);
   
   // Demo notification data with various types
   const notifications = [
@@ -211,19 +212,106 @@ export function NotificationsScreen() {
               )}
             </div>
 
-            {/* Mark all as read button */}
-            {unreadCount > 0 && (
+            {/* Settings Menu Button */}
+            <div className="relative">
               <button
-                onClick={() => alert('Hamısı oxundu kimi işarələndi (demo)')}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                onClick={() => setShowMenu(!showMenu)}
+                className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                   isDarkMode 
-                    ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' 
-                    : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                }`}
+                    ? 'bg-gray-700/50 text-gray-100 hover:bg-gray-600/50' 
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                } ${showMenu ? 'ring-2 ring-emerald-500' : ''}`}
               >
-                Hamısını oxu
+                <EmojiIcon emoji="⚙️" size={18} />
               </button>
-            )}
+
+              {/* Dropdown Menu */}
+              {showMenu && (
+                <>
+                  {/* Backdrop */}
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setShowMenu(false)}
+                  />
+                  
+                  {/* Menu */}
+                  <div className={`absolute right-0 mt-2 w-56 rounded-2xl shadow-2xl border-2 overflow-hidden z-50 transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {/* Mark all as read */}
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={() => {
+                          alert('Hamısı oxundu kimi işarələndi (demo)');
+                          setShowMenu(false);
+                        }}
+                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                          isDarkMode 
+                            ? 'hover:bg-gray-700 text-gray-200' 
+                            : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                          isDarkMode ? 'bg-emerald-700/50' : 'bg-emerald-100'
+                        }`}>
+                          <EmojiIcon emoji="✓" size={16} />
+                        </div>
+                        <span className="text-sm font-bold">Hamısını oxu</span>
+                      </button>
+                    )}
+
+                    {/* Delete all notifications */}
+                    {filteredNotifications.length > 0 && (
+                      <button
+                        onClick={() => {
+                          if (confirm('Bütün bildirişləri silmək istədiyinizdən əminsiniz?')) {
+                            alert('Bütün bildirişlər silindi (demo)');
+                            setShowMenu(false);
+                          }
+                        }}
+                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                          isDarkMode 
+                            ? 'hover:bg-red-900/20 text-red-400' 
+                            : 'hover:bg-red-50 text-red-600'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                          isDarkMode ? 'bg-red-900/50' : 'bg-red-100'
+                        }`}>
+                          <EmojiIcon emoji="🗑️" size={16} />
+                        </div>
+                        <span className="text-sm font-bold">Bildirişləri sil</span>
+                      </button>
+                    )}
+
+                    {/* Divider */}
+                    <div className={`h-px ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+
+                    {/* Notification settings */}
+                    <button
+                      onClick={() => {
+                        navigate('Settings');
+                        setShowMenu(false);
+                      }}
+                      className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                        isDarkMode 
+                          ? 'hover:bg-gray-700 text-gray-200' 
+                          : 'hover:bg-gray-50 text-gray-800'
+                      }`}
+                    >
+                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
+                      }`}>
+                        <EmojiIcon emoji="🔔" size={16} />
+                      </div>
+                      <span className="text-sm font-bold">Bildiriş ayarları</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Tabs */}
