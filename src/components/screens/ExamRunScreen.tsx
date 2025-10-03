@@ -16,6 +16,8 @@ export function ExamRunScreen() {
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>({});
   // Outcome per question after confirmation: 'correct' | 'wrong'
   const [outcomes, setOutcomes] = useState<Record<string, 'correct' | 'wrong' | undefined>>({});
+  // Store user answers for each question
+  const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
   const [view, setView] = useState<'grid' | 'question'>('grid');
   // Center overlay state
   const [showOverlay, setShowOverlay] = useState(false);
@@ -105,7 +107,8 @@ export function ExamRunScreen() {
       {
         ticketNumber: config?.ticket,
         moduleId: config?.moduleId,
-        questions: questions.map(q => q.id)
+        questions: questions.map(q => q.id),
+        userAnswers
       }
     );
 
@@ -120,6 +123,7 @@ export function ExamRunScreen() {
     const isCorrect = selected === currentQuestion.correctOptionId;
     const outcome: 'correct' | 'wrong' = isCorrect ? 'correct' : 'wrong';
     setOutcomes(prev => ({ ...prev, [currentQuestion.id]: outcome }));
+    setUserAnswers(prev => ({ ...prev, [currentQuestion.id]: selected }));
 
     // Show overlay result in center for 0.5s then go back to grid
     setOverlayText(isCorrect ? 'Cavab doğrudur' : 'Cavab yanlışdır');

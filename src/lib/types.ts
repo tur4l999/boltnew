@@ -56,6 +56,7 @@ export interface StoredExamResult {
     moduleId?: string;
     ticketNumber?: number;
     questions?: string[];
+    userAnswers?: Record<string, string>; // questionId -> selectedOptionId
   };
 }
 

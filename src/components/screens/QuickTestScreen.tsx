@@ -226,6 +226,15 @@ export function QuickTestScreen() {
     const total = questions.length;
     const weakTopics: string[] = [];
     
+    // Create user answers record
+    const userAnswersRecord: Record<string, string> = {};
+    questions.forEach((q, index) => {
+      const answer = selectedAnswers[index];
+      if (answer) {
+        userAnswersRecord[q.id] = answer;
+      }
+    });
+    
     // Add questions with wrong answers to mistakes store and collect weak topics
     questions.forEach((q, index) => {
       if (answerStatuses[index] === 'wrong') {
@@ -247,7 +256,8 @@ export function QuickTestScreen() {
       weakTopics,
       {
         ticketNumber,
-        questions: questions.map(q => q.id)
+        questions: questions.map(q => q.id),
+        userAnswers: userAnswersRecord
       }
     );
 

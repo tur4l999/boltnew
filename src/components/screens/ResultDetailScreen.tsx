@@ -1,0 +1,396 @@
+import React, { useState, useMemo } from 'react';
+import { useApp } from '../../contexts/AppContext';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { EmojiIcon } from '../ui/EmojiIcon';
+import { VideoPlayer } from '../media/VideoPlayer';
+import { SAMPLE_QUESTIONS } from '../../lib/data';
+import type { StoredExamResult, Question } from '../../lib/types';
+
+export function ResultDetailScreen() {
+  const { t, navigate, currentScreen, isDarkMode, goBack } = useApp();
+  const { result } = currentScreen.params as { result: StoredExamResult };
+  
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showExplanation, setShowExplanation] = useState<boolean[]>([]);
+
+  // Get the questions for this exam result
+  const examQuestions = useMemo(() => {
+    if (!result?.details?.questions) {
+      // Fallback to sample questions if no stored questions
+      return Array.from({ length: result.total }, (_, i) => ({
+        ...SAMPLE_QUESTIONS[i % SAMPLE_QUESTIONS.length],
+        id: `q${i + 1}`,
+      }));
+    }
+    
+    // Map stored question IDs to actual questions
+    return result.details.questions.map((questionId, index) => {
+      const sampleQuestion = SAMPLE_QUESTIONS.find(q => q.id === questionId) || 
+                            SAMPLE_QUESTIONS[index % SAMPLE_QUESTIONS.length];
+      return {
+        ...sampleQuestion,
+        id: questionId,
+      };
+    });
+  }, [result]);
+
+  // Get user answers from stored result or simulate if not available
+  const userAnswers = useMemo(() => {
+    // Use stored user answers if available
+    if (result.details?.userAnswers) {
+      return result.details.userAnswers;
+    }
+    
+    // Fallback: simulate user answers based on the result
+    const answers: Record<string, string> = {};
+    const correctCount = result.score;
+    
+    examQuestions.forEach((question, index) => {
+      // Simulate which questions were answered correctly
+      const isCorrect = index < correctCount;
+      if (isCorrect) {
+        answers[question.id] = question.correctOptionId;
+      } else {
+        // Pick a wrong answer
+        const wrongOptions = question.options.filter(opt => opt.id !== question.correctOptionId);
+        answers[question.id] = wrongOptions[0]?.id || question.options[0].id;
+      }
+    });
+    
+    return answers;
+  }, [examQuestions, result]);
+
+  const currentQuestion = examQuestions[currentQuestionIndex];
+  const userAnswer = userAnswers[currentQuestion?.id];
+  const isCorrect = userAnswer === currentQuestion?.correctOptionId;
+  const correctOption = currentQuestion?.options.find(opt => opt.id === currentQuestion.correctOptionId);
+  const userSelectedOption = currentQuestion?.options.find(opt => opt.id === userAnswer);
+
+  const toggleExplanation = (index: number) => {
+    const newShowExplanation = [...showExplanation];
+    newShowExplanation[index] = !newShowExplanation[index];
+    setShowExplanation(newShowExplanation);
+  };
+
+  const goToQuestion = (index: number) => {
+    setCurrentQuestionIndex(index);
+  };
+
+  const getResultTypeLabel = () => {
+    switch (result.type) {
+      case 'tickets': return result.details?.ticketNumber ? `Bilet ${result.details.ticketNumber}` : 'Biletlər üzrə';
+      case 'topics': return result.details?.moduleId ? `${result.details.moduleId} mövzu` : 'Mövzular üzrə';
+      case 'simulator': return 'Simulyator İmtahanı';
+      case 'final': return 'Final İmtahanı';
+      default: return 'İmtahan';
+    }
+  };
+
+  if (!result || !currentQuestion) {
+    return (
+      <div className={`p-4 min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <Card className="text-center py-8">
+          <div className="text-4xl mb-3"><EmojiIcon emoji="❌" size={32} /></div>
+          <div className="font-medium mb-4">Nəticə tapılmadı</div>
+          <Button onClick={() => navigate('Results')}>Geri qayıt</Button>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`min-h-screen transition-colors duration-200 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
+      {/* Header */}
+      <div className={`sticky top-0 z-10 px-4 py-3 border-b transition-colors duration-200 ${
+        isDarkMode 
+          ? 'bg-gray-900/95 backdrop-blur-sm border-gray-700' 
+          : 'bg-white/95 backdrop-blur-sm border-gray-200'
+      }`}>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={goBack}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-colors duration-200 ${
+              isDarkMode 
+                ? 'text-gray-300 hover:bg-gray-800' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="font-medium">Geri</span>
+          </button>
+          
+          <div className="text-center">
+            <h1 className={`font-bold transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-100' : 'text-gray-900'
+            }`}>
+              {getResultTypeLabel()}
+            </h1>
+            <p className={`text-sm transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              {result.score}/{result.total} • {result.passed ? 'Keçdi' : 'Keçmədi'}
+            </p>
+          </div>
+
+          <div className={`px-3 py-1 rounded-xl text-sm font-bold ${
+            result.passed 
+              ? 'bg-emerald-100 text-emerald-700' 
+              : 'bg-red-100 text-red-700'
+          }`}>
+            {Math.round((result.score / result.total) * 100)}%
+          </div>
+        </div>
+      </div>
+
+      {/* Question Navigation Grid */}
+      <div className="px-4 py-4">
+        <div className="grid grid-cols-10 gap-2 mb-4">
+          {examQuestions.map((question, index) => {
+            const questionUserAnswer = userAnswers[question.id];
+            const questionIsCorrect = questionUserAnswer === question.correctOptionId;
+            const isCurrent = index === currentQuestionIndex;
+            
+            return (
+              <button
+                key={question.id}
+                onClick={() => goToQuestion(index)}
+                className={`aspect-square rounded-lg text-sm font-bold transition-all duration-200 ${
+                  isCurrent
+                    ? isDarkMode 
+                      ? 'bg-blue-600 text-white ring-2 ring-blue-400' 
+                      : 'bg-blue-600 text-white ring-2 ring-blue-400'
+                    : questionIsCorrect
+                      ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                      : 'bg-red-500 text-white hover:bg-red-600'
+                }`}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Current Question Detail */}
+      <div className="px-4 pb-6">
+        <Card className="mb-4">
+          {/* Question Image/Video */}
+          {currentQuestion.imageUrl && (
+            <div className="mb-4">
+              <img
+                src={currentQuestion.imageUrl}
+                alt="Sual şəkli"
+                className="w-full h-48 object-cover rounded-lg"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+
+          {/* Question Text */}
+          <div className={`font-bold text-lg mb-4 transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>
+            {currentQuestionIndex + 1}. {currentQuestion.text}
+          </div>
+
+          {/* Answer Options */}
+          <div className="space-y-3 mb-4">
+            {currentQuestion.options.map((option) => {
+              const isUserSelected = option.id === userAnswer;
+              const isCorrectOption = option.id === currentQuestion.correctOptionId;
+              
+              let optionStyle = '';
+              if (isCorrectOption) {
+                optionStyle = 'border-emerald-500 bg-emerald-50 text-emerald-800';
+                if (isDarkMode) {
+                  optionStyle = 'border-emerald-500 bg-emerald-900/30 text-emerald-300';
+                }
+              } else if (isUserSelected && !isCorrect) {
+                optionStyle = 'border-red-500 bg-red-50 text-red-800';
+                if (isDarkMode) {
+                  optionStyle = 'border-red-500 bg-red-900/30 text-red-300';
+                }
+              } else {
+                optionStyle = isDarkMode 
+                  ? 'border-gray-600 bg-gray-700 text-gray-300' 
+                  : 'border-gray-200 bg-gray-50 text-gray-700';
+              }
+
+              return (
+                <div
+                  key={option.id}
+                  className={`flex items-start gap-3 p-4 rounded-xl border-2 transition-colors duration-200 ${optionStyle}`}
+                >
+                  <div className="flex-shrink-0 mt-0.5">
+                    {isCorrectOption ? (
+                      <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    ) : isUserSelected && !isCorrect ? (
+                      <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className={`w-5 h-5 rounded-full border-2 ${
+                        isDarkMode ? 'border-gray-500' : 'border-gray-300'
+                      }`} />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">{option.text}</div>
+                    {isCorrectOption && (
+                      <div className="text-sm mt-1 font-semibold text-emerald-600">
+                        Doğru cavab
+                      </div>
+                    )}
+                    {isUserSelected && !isCorrect && (
+                      <div className="text-sm mt-1 font-semibold text-red-600">
+                        Sizin cavabınız
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Result Summary for this question */}
+          <div className={`p-4 rounded-xl mb-4 ${
+            isCorrect 
+              ? isDarkMode 
+                ? 'bg-emerald-900/30 border border-emerald-700' 
+                : 'bg-emerald-50 border border-emerald-200'
+              : isDarkMode 
+                ? 'bg-red-900/30 border border-red-700' 
+                : 'bg-red-50 border border-red-200'
+          }`}>
+            <div className={`font-bold mb-2 ${
+              isCorrect 
+                ? isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                : isDarkMode ? 'text-red-300' : 'text-red-700'
+            }`}>
+              {isCorrect ? '✅ Doğru cavab' : '❌ Yanlış cavab'}
+            </div>
+            {!isCorrect && (
+              <div className={`text-sm ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                <strong>Doğru cavab:</strong> {correctOption?.text}
+              </div>
+            )}
+            {userSelectedOption && (
+              <div className={`text-sm mt-1 ${
+                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                <strong>Sizin cavabınız:</strong> {userSelectedOption.text}
+              </div>
+            )}
+          </div>
+
+          {/* Explanation Section */}
+          <div className="border-t pt-4">
+            <button
+              onClick={() => toggleExplanation(currentQuestionIndex)}
+              className={`flex items-center gap-2 w-full p-3 rounded-xl transition-colors duration-200 ${
+                isDarkMode 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
+            >
+              <EmojiIcon emoji="💡" size={20} />
+              <span className="font-medium">İzah</span>
+              <svg 
+                className={`w-5 h-5 ml-auto transition-transform duration-200 ${
+                  showExplanation[currentQuestionIndex] ? 'rotate-180' : ''
+                }`} 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {showExplanation[currentQuestionIndex] && (
+              <div className="mt-4 space-y-4">
+                {/* Text Explanation */}
+                <div className={`p-4 rounded-xl ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  <div className={`text-sm leading-relaxed ${
+                    isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                  }`}>
+                    {currentQuestion.explanation}
+                  </div>
+                </div>
+
+                {/* Video Explanation */}
+                {currentQuestion.videoUrl && (
+                  <div className="space-y-2">
+                    <div className={`font-medium flex items-center gap-2 ${
+                      isDarkMode ? 'text-gray-200' : 'text-gray-700'
+                    }`}>
+                      <EmojiIcon emoji="🎥" size={16} />
+                      Video İzah
+                    </div>
+                    <div className="rounded-xl overflow-hidden">
+                      <VideoPlayer 
+                        src={currentQuestion.videoUrl} 
+                        watermark="DDA.az" 
+                        heightClass="h-48"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </Card>
+
+        {/* Navigation Buttons */}
+        <div className="flex items-center justify-between gap-4">
+          <Button
+            variant="ghost"
+            onClick={() => goToQuestion(Math.max(0, currentQuestionIndex - 1))}
+            disabled={currentQuestionIndex === 0}
+            className="flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Əvvəlki
+          </Button>
+
+          <div className={`text-sm font-medium ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            {currentQuestionIndex + 1} / {examQuestions.length}
+          </div>
+
+          <Button
+            variant="ghost"
+            onClick={() => goToQuestion(Math.min(examQuestions.length - 1, currentQuestionIndex + 1))}
+            disabled={currentQuestionIndex === examQuestions.length - 1}
+            className="flex items-center gap-2"
+          >
+            Növbəti
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
