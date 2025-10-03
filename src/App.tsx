@@ -44,6 +44,7 @@ function AppContent() {
     <OnboardingWrapper 
       language={language as 'az' | 'en' | 'ru'}
       isDark={isDarkMode}
+      testMode={true} // ← TEST REJIMI: Production-da false edin!
     >
       <div className={`min-h-screen transition-colors duration-200 ${
         isDarkMode 

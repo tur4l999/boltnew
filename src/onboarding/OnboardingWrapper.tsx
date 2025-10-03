@@ -21,8 +21,17 @@ interface OnboardingWrapperProps {
   /** Dark mode / Qaranlıq rejim */
   isDark?: boolean;
   
-  /** Force show onboarding (for testing) / Onboardingi məcburi göstər */
-  forceShow?: boolean;
+  /** 
+   * TEST MODE: Always show onboarding (ignore localStorage)
+   * TEST REJIMI: Həmişə onboarding göstər (localStorage-ı nəzərə alma)
+   * 
+   * VACIB: Production-da bu FALSE olmalıdır!
+   * IMPORTANT: Set to FALSE in production!
+   * 
+   * true = Hər dəfə onboarding göstərilir (test üçün)
+   * false = 1 dəfə göstərilir (real istifadə)
+   */
+  testMode?: boolean;
   
   /** Loading component / Yükləmə komponenti */
   loadingComponent?: React.ReactNode;
@@ -38,7 +47,7 @@ export function OnboardingWrapper({
   children,
   language = 'az',
   isDark = false,
-  forceShow = false,
+  testMode = false, // ← TEST REJIMI: Production-da FALSE edin!
   loadingComponent = <div className="min-h-screen flex items-center justify-center">Loading...</div>,
 }: OnboardingWrapperProps) {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
@@ -49,8 +58,15 @@ export function OnboardingWrapper({
   useEffect(() => {
     async function checkOnboardingStatus() {
       try {
-        const hasSeen = await getHasSeenOnboarding();
-        setHasSeenOnboarding(hasSeen);
+        // TEST MODE: Həmişə false qaytar (hər dəfə göstər)
+        // PRODUCTION: localStorage-dan oxu (1 dəfə göstər)
+        if (testMode) {
+          console.log('🧪 TEST MODE: Onboarding hər dəfə göstəriləcək');
+          setHasSeenOnboarding(false);
+        } else {
+          const hasSeen = await getHasSeenOnboarding();
+          setHasSeenOnboarding(hasSeen);
+        }
       } catch (error) {
         console.error('Error checking onboarding status:', error);
         setHasSeenOnboarding(false);
@@ -60,18 +76,32 @@ export function OnboardingWrapper({
     }
     
     checkOnboardingStatus();
-  }, []);
+  }, [testMode]);
 
   // Handle onboarding completion
   // AZ: Onboarding tamamlanmasını idarə et
   const handleComplete = () => {
-    setHasSeenOnboarding(true);
+    // TEST MODE-da localStorage-a yazmırıq (növbəti dəfə yenə göstərilsin)
+    // PRODUCTION-da yazırıq (1 dəfə göstərilsin)
+    if (!testMode) {
+      setHasSeenOnboarding(true);
+    } else {
+      console.log('🧪 TEST MODE: localStorage-a yazılmadı (növbəti dəfə yenə göstəriləcək)');
+      setHasSeenOnboarding(true); // UI update üçün
+    }
   };
 
   // Handle onboarding skip
   // AZ: Onboarding keçməni idarə et
   const handleSkip = () => {
-    setHasSeenOnboarding(true);
+    // TEST MODE-da localStorage-a yazmırıq
+    // PRODUCTION-da yazırıq
+    if (!testMode) {
+      setHasSeenOnboarding(true);
+    } else {
+      console.log('🧪 TEST MODE: Skip edildi, amma növbəti dəfə yenə göstəriləcək');
+      setHasSeenOnboarding(true); // UI update üçün
+    }
   };
 
   // Show loading state
@@ -80,9 +110,9 @@ export function OnboardingWrapper({
     return <>{loadingComponent}</>;
   }
 
-  // Show onboarding if not seen (or forced)
-  // AZ: Görünməyibsə (və ya məcburi) onboarding göstər
-  if (!hasSeenOnboarding || forceShow) {
+  // Show onboarding if not seen (or test mode)
+  // AZ: Görünməyibsə (və ya test rejimi) onboarding göstər
+  if (!hasSeenOnboarding) {
     return (
       <OnboardingScreen
         onComplete={handleComplete}
