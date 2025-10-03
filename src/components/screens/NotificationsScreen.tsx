@@ -10,6 +10,9 @@ export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [showMenu, setShowMenu] = useState(false);
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
   
   // Demo notification data with various types
   const notifications = [
@@ -108,6 +111,54 @@ export function NotificationsScreen() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
+  const handleLongPressStart = (notificationId: string) => {
+    const timer = setTimeout(() => {
+      setSelectionMode(true);
+      setSelectedIds(new Set([notificationId]));
+    }, 500); // 500ms long press
+    setLongPressTimer(timer);
+  };
+
+  const handleLongPressEnd = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  };
+
+  const toggleSelection = (notificationId: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(notificationId)) {
+      newSelected.delete(notificationId);
+    } else {
+      newSelected.add(notificationId);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const selectAll = () => {
+    setSelectedIds(new Set(filteredNotifications.map(n => n.id)));
+  };
+
+  const deselectAll = () => {
+    setSelectedIds(new Set());
+  };
+
+  const deleteSelected = () => {
+    if (selectedIds.size > 0) {
+      if (confirm(`${selectedIds.size} bildiriş silinəcək. Əminsiniz?`)) {
+        alert(`${selectedIds.size} bildiriş silindi (demo)`);
+        setSelectedIds(new Set());
+        setSelectionMode(false);
+      }
+    }
+  };
+
+  const cancelSelection = () => {
+    setSelectionMode(false);
+    setSelectedIds(new Set());
+  };
+
   const getColorClasses = (color: string, isRead: boolean) => {
     const opacity = isRead ? '20' : '30';
     const textOpacity = isRead ? '60' : '80';
@@ -187,33 +238,70 @@ export function NotificationsScreen() {
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <button
-              onClick={goBack}
+              onClick={selectionMode ? cancelSelection : goBack}
               className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                 isDarkMode 
                   ? 'bg-gray-700/50 text-gray-100 hover:bg-gray-600/50' 
                   : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
               }`}
             >
-              <span className="text-xl">←</span>
+              <span className="text-xl">{selectionMode ? '✕' : '←'}</span>
             </button>
             
             <div className="flex-1">
               <h1 className={`text-xl font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                {t.notifications}
+                {selectionMode ? `${selectedIds.size} seçildi` : t.notifications}
               </h1>
-              {unreadCount > 0 && (
+              {!selectionMode && unreadCount > 0 && (
                 <p className={`text-sm transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
                   {unreadCount} oxunmamış bildiriş
                 </p>
               )}
+              {selectionMode && (
+                <p className={`text-sm transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  Silmək üçün bildiriş seçin
+                </p>
+              )}
             </div>
 
-            {/* Settings Menu Button */}
-            <div className="relative">
+            {/* Selection Mode Actions */}
+            {selectionMode ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={selectedIds.size === filteredNotifications.length ? deselectAll : selectAll}
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                    isDarkMode 
+                      ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {selectedIds.size === filteredNotifications.length ? 'Ləğv et' : 'Hamısı'}
+                </button>
+                <button
+                  onClick={deleteSelected}
+                  disabled={selectedIds.size === 0}
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                    selectedIds.size === 0
+                      ? isDarkMode 
+                        ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : isDarkMode 
+                        ? 'bg-red-700 text-red-100 hover:bg-red-600' 
+                        : 'bg-red-600 text-white hover:bg-red-700'
+                  }`}
+                >
+                  Sil
+                </button>
+              </div>
+            ) : (
+              /* Settings Menu Button */
+              <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
@@ -311,45 +399,48 @@ export function NotificationsScreen() {
                   </div>
                 </>
               )}
-            </div>
+              </div>
+            )}
           </div>
 
-          {/* Tabs */}
-          <div className="flex gap-2 mt-4">
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                activeTab === 'all'
-                  ? isDarkMode
-                    ? 'bg-emerald-700 text-emerald-100 shadow-lg'
-                    : 'bg-emerald-600 text-white shadow-lg'
-                  : isDarkMode
-                    ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Hamısı ({notifications.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('unread')}
-              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
-                activeTab === 'unread'
-                  ? isDarkMode
-                    ? 'bg-emerald-700 text-emerald-100 shadow-lg'
-                    : 'bg-emerald-600 text-white shadow-lg'
-                  : isDarkMode
-                    ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Oxunmamış ({unreadCount})
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center animate-pulse">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-          </div>
+          {/* Tabs - Hidden in selection mode */}
+          {!selectionMode && (
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => setActiveTab('all')}
+                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                  activeTab === 'all'
+                    ? isDarkMode
+                      ? 'bg-emerald-700 text-emerald-100 shadow-lg'
+                      : 'bg-emerald-600 text-white shadow-lg'
+                    : isDarkMode
+                      ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Hamısı ({notifications.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('unread')}
+                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
+                  activeTab === 'unread'
+                    ? isDarkMode
+                      ? 'bg-emerald-700 text-emerald-100 shadow-lg'
+                      : 'bg-emerald-600 text-white shadow-lg'
+                    : isDarkMode
+                      ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Oxunmamış ({unreadCount})
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -388,59 +479,95 @@ export function NotificationsScreen() {
             {filteredNotifications.map((notification, index) => {
               const colors = getColorClasses(notification.color, notification.isRead);
               
+              const isSelected = selectedIds.has(notification.id);
+              
               return (
                 <SlideTransition key={notification.id} direction="right" delay={index * 50}>
-                  <button
-                    onClick={() => {
-                      if (notification.action) {
-                        notification.action();
-                      }
-                    }}
-                    className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg group relative overflow-hidden ${
-                      isDarkMode
-                        ? `${colors.bg} border-gray-700/50 hover:border-gray-600`
-                        : `${colors.bg} border-gray-200/50 hover:border-gray-300`
-                    }`}
-                  >
-                    {/* Unread indicator */}
-                    {!notification.isRead && (
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                    )}
-
-                    <div className="flex gap-4">
-                      {/* Icon */}
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
-                        <EmojiIcon emoji={notification.emoji} size={24} />
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
-                          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                        } ${notification.isRead ? 'opacity-80' : ''}`}>
-                          {notification.title}
-                        </div>
-                        <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
-                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                        } ${notification.isRead ? 'opacity-70' : ''}`}>
-                          {notification.message}
-                        </div>
-                        <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
-                          <span>⏱</span>
-                          <span>{formatTimestamp(notification.timestamp)}</span>
-                        </div>
-                      </div>
-
-                      {/* Arrow indicator */}
-                      {notification.action && (
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
-                          isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
-                        }`}>
-                          <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
-                        </div>
+                  <div className="relative">
+                    <button
+                      onClick={() => {
+                        if (selectionMode) {
+                          toggleSelection(notification.id);
+                        } else if (notification.action) {
+                          notification.action();
+                        }
+                      }}
+                      onTouchStart={() => !selectionMode && handleLongPressStart(notification.id)}
+                      onTouchEnd={handleLongPressEnd}
+                      onMouseDown={() => !selectionMode && handleLongPressStart(notification.id)}
+                      onMouseUp={handleLongPressEnd}
+                      onMouseLeave={handleLongPressEnd}
+                      className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
+                        isSelected 
+                          ? isDarkMode
+                            ? 'bg-emerald-900/40 border-emerald-600 scale-[0.98]'
+                            : 'bg-emerald-100 border-emerald-500 scale-[0.98]'
+                          : isDarkMode
+                            ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
+                            : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
+                      }`}
+                    >
+                      {/* Unread indicator */}
+                      {!notification.isRead && !selectionMode && (
+                        <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
                       )}
-                    </div>
-                  </button>
+
+                      <div className="flex gap-3">
+                        {/* Selection Checkbox */}
+                        {selectionMode && (
+                          <div className="flex items-center justify-center flex-shrink-0">
+                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
+                              isSelected
+                                ? isDarkMode
+                                  ? 'bg-emerald-600 border-emerald-600'
+                                  : 'bg-emerald-500 border-emerald-500'
+                                : isDarkMode
+                                  ? 'border-gray-600 bg-gray-800/50'
+                                  : 'border-gray-300 bg-white'
+                            }`}>
+                              {isSelected && (
+                                <span className="text-white text-sm font-bold">✓</span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Icon */}
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                          selectionMode ? '' : 'group-hover:scale-110'
+                        } ${colors.icon}`}>
+                          <EmojiIcon emoji={notification.emoji} size={24} />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
+                            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          } ${notification.isRead ? 'opacity-80' : ''}`}>
+                            {notification.title}
+                          </div>
+                          <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
+                            isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                          } ${notification.isRead ? 'opacity-70' : ''}`}>
+                            {notification.message}
+                          </div>
+                          <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
+                            <span>⏱</span>
+                            <span>{formatTimestamp(notification.timestamp)}</span>
+                          </div>
+                        </div>
+
+                        {/* Arrow indicator - only show when not in selection mode */}
+                        {!selectionMode && notification.action && (
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
+                            isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
+                          }`}>
+                            <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  </div>
                 </SlideTransition>
               );
             })}
