@@ -67,9 +67,6 @@ export function TransactionsScreen() {
               <h1 className={`text-xl font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>Daxili Balans</h1>
-              <p className={`text-xs transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}>{currentMonth} ayı üçün xərc</p>
             </div>
           </div>
         </div>
