@@ -382,7 +382,7 @@ export function ResultDetailScreen() {
                       : 'border-orange-500 text-orange-600 hover:bg-orange-50'
                   }`}
                 >
-                  <EmojiIcon emoji="📝" size={16} />
+                  <EmojiIcon emoji="📮" size={16} />
                   Apellyasiya
                 </Button>
               </div>

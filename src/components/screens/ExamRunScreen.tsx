@@ -288,7 +288,7 @@ export function ExamRunScreen() {
                 onClick={() => setShowAppealModal(true)}
                 className="text-white border-white/30 hover:bg-white/10"
               >
-                📝 Apellyasiya
+                📮 Apellyasiya
               </Button>
               {!isConfirmed && selectedOptions[currentQuestion.id] && (
                 <Button onClick={confirmAnswer}>Təsdiq et</Button>
