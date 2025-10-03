@@ -311,7 +311,11 @@ export function TransactionsScreen() {
               <div className={`text-center py-12 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-500'
               }`}>
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
+                <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  isDarkMode 
+                    ? 'bg-gradient-to-br from-gray-700/40 to-gray-600/40' 
+                    : 'bg-gradient-to-br from-gray-200 to-gray-300'
+                }`}>
                   <EmojiIcon emoji="📋" size={40} />
                 </div>
                 <div className="text-base font-semibold mb-1">
