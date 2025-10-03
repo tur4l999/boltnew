@@ -187,7 +187,7 @@ export function TransactionsScreen() {
         {showAddBalance && (
           <Card 
             variant="elevated"
-            className={`transform transition-all duration-300 animate-in fade-in slide-in-from-top-2 ${
+            className={`transform transition-all duration-300 animate-fade-in-up ${
               isDarkMode ? 'bg-gray-800/90' : 'bg-white'
             }`}
           >
