@@ -11,6 +11,7 @@ interface ButtonProps {
   loading?: boolean;
   icon?: ReactNode;
   fullWidth?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function Button({
@@ -22,7 +23,8 @@ export function Button({
   className = '',
   loading = false,
   icon,
-  fullWidth = false
+  fullWidth = false,
+  type = 'button'
 }: ButtonProps) {
   const { isDarkMode } = useApp();
   const baseClasses = 'font-bold rounded-2xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 relative overflow-hidden group';
@@ -70,6 +72,7 @@ export function Button({
   
   return (
     <button
+      type={type}
       onClick={isDisabled ? undefined : onClick}
       disabled={isDisabled}
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className} ${
