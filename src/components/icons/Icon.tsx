@@ -660,6 +660,55 @@ const MailIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<Ic
   </svg>
 );
 
+// Arrow Icons
+const ArrowLeftIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M19 12H5M5 12l7 7M5 12l7-7"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ArrowRightIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M5 12h14M19 12l-7 7M19 12l-7-7"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ChevronRightIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M9 18l6-6-6-6"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ChevronDownIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M6 9l6 6 6-6"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 // Icon mapping
 const iconMap = {
   // Navigation
@@ -690,6 +739,12 @@ const iconMap = {
   x: XIcon,
   close: CloseIcon,
   search: SearchIcon,
+  
+  // Arrows
+  'arrow-left': ArrowLeftIcon,
+  'arrow-right': ArrowRightIcon,
+  'chevron-right': ChevronRightIcon,
+  'chevron-down': ChevronDownIcon,
   
   // Theme
   sun: SunIcon,
@@ -771,6 +826,10 @@ export {
   XIcon,
   CloseIcon,
   SearchIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ChevronRightIcon,
+  ChevronDownIcon,
   SunIcon,
   MoonIcon,
   PhoneIcon,

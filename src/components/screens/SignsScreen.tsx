@@ -160,8 +160,8 @@ export function SignsScreen() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="flex-shrink-0 text-3xl">
-                        {sign.emoji}
+                      <div className="flex-shrink-0">
+                        <EmojiIcon emoji={sign.emoji} size={32} forceEmoji={true} />
                       </div>
                       <div className="flex-1">
                         <div className={`text-xs mb-1 ${

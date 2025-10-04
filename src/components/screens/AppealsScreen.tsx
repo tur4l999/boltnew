@@ -41,7 +41,7 @@ export function AppealsScreen() {
       <div className="px-4 py-6">
         <Card variant="glass" padding="lg">
           <div className="text-center">
-            <EmojiIcon emoji="📝" size={48} className="mx-auto mb-4" />
+            <EmojiIcon emoji="📮" size={48} className="mx-auto mb-4" />
             <h2 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               Müraciətlər
             </h2>

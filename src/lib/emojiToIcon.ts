@@ -7,6 +7,13 @@ export const emojiToIconMap: Record<string, string> = {
   '🛍️': 'shopping-bag',
   '➕': 'plus',
   
+  // Arrow emojis
+  '←': 'arrow-left',
+  '→': 'arrow-right',
+  '➡️': 'arrow-right',
+  '▸': 'chevron-right',
+  '▾': 'chevron-down',
+  
   // Interface emojis
   '🔔': 'bell',
   '🤖': 'robot',
@@ -36,6 +43,7 @@ export const emojiToIconMap: Record<string, string> = {
   '❌': 'x',
   '✕': 'close',
   '🔎': 'search',
+  '🔍': 'search',
   
   // Theme emojis
   '☀️': 'sun',
