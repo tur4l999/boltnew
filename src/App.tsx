@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Routes, Route } from 'react-router-dom';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { StatusBar } from './components/layout/StatusBar';
@@ -9,6 +8,7 @@ import { ScreenRenderer } from './components/navigation/ScreenRenderer';
 import { InspectPage } from './pages/inspect';
 import { LoginScreen } from './components/screens/LoginScreen';
 import { PageTransition } from './components/navigation/PageTransition';
+import { OnboardingWrapper } from './onboarding/OnboardingWrapper';
 
 export default function App() {
   return (
@@ -30,7 +30,7 @@ export default function App() {
 
 function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { currentScreen, isDarkMode } = useApp();
+  const { currentScreen, isDarkMode, language } = useApp();
 
   const isAIChat = currentScreen.screen === 'AIChat';
   const hideHeader = currentScreen.screen !== 'Home';
@@ -41,41 +41,47 @@ function AppContent() {
                      currentScreen.screen === 'QAForm';
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${
-      isDarkMode 
-        ? 'bg-gray-900 text-gray-100' 
-        : 'bg-gray-50 text-gray-900'
-    }`}>
-      <div className="max-w-md mx-auto h-screen relative">
-        <div className={`h-full transition-colors duration-200 ${
-          isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-        } overflow-y-auto ${!hideTabBar ? 'pb-20' : ''}`}
-        id="app-scroll-container"
-        >
-          {/* Sticky iPhone-like status bar inside the scroll container */}
-          <div className="sticky top-0 z-40">
-            <StatusBar />
-          </div>
+    <OnboardingWrapper 
+      language={language as 'az' | 'en' | 'ru'}
+      isDark={isDarkMode}
+      testMode={true} // ← TEST REJIMI: Production-da false edin!
+    >
+      <div className={`min-h-screen transition-colors duration-200 ${
+        isDarkMode 
+          ? 'bg-gray-900 text-gray-100' 
+          : 'bg-gray-50 text-gray-900'
+      }`}>
+        <div className="max-w-md mx-auto h-screen relative">
+          <div className={`h-full transition-colors duration-200 ${
+            isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+          } overflow-y-auto ${!hideTabBar ? 'pb-20' : ''}`}
+          id="app-scroll-container"
+          >
+            {/* Sticky iPhone-like status bar inside the scroll container */}
+            <div className="sticky top-0 z-40">
+              <StatusBar />
+            </div>
 
-          {isLoggedIn ? (
-            isAIChat ? (
-              <ScreenRenderer />
-            ) : (
-              <>
-                {!hideHeader && <Header />}
+            {isLoggedIn ? (
+              isAIChat ? (
                 <ScreenRenderer />
-              </>
-            )
-          ) : (
-            <PageTransition transitionKey="login">
-              <LoginScreen onLogin={() => setIsLoggedIn(true)} />
-            </PageTransition>
-          )}
+              ) : (
+                <>
+                  {!hideHeader && <Header />}
+                  <ScreenRenderer />
+                </>
+              )
+            ) : (
+              <PageTransition transitionKey="login">
+                <LoginScreen onLogin={() => setIsLoggedIn(true)} />
+              </PageTransition>
+            )}
+          </div>
+          
+          {/* TabBar fixed outside the scrollable container */}
+          {isLoggedIn && !isAIChat && !hideTabBar && <TabBar />}
         </div>
-        
-        {/* TabBar fixed outside the scrollable container */}
-        {isLoggedIn && !isAIChat && !hideTabBar && <TabBar />}
       </div>
-    </div>
+    </OnboardingWrapper>
   );
 }
