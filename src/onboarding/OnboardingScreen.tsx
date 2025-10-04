@@ -59,22 +59,42 @@ export function OnboardingScreen({
   const colors = getOnboardingColors(isDark);
   const currentSlide = onboardingSlides[currentIndex];
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const prevIndexRef = useRef(currentIndex);
 
-  // Simple fade animation on slide change
-  // AZ: Sadə fade animasiyası slayd dəyişərkən
+  // Initial mount animation - fade in on first load
+  // AZ: İlk yüklənmədə fade in animasiyası
+  useEffect(() => {
+    // Small delay to ensure DOM is ready, then fade in
+    const mountTimeout = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    
+    return () => clearTimeout(mountTimeout);
+  }, []);
+
+  // Fade animation on slide change
+  // AZ: Slayd dəyişərkən fade animasiyası
   useEffect(() => {
     if (currentIndex !== prevIndexRef.current) {
+      // Fade out
       setIsTransitioning(true);
+      setIsVisible(false);
       
-      // Reset transition after animation completes
-      const timeout = setTimeout(() => {
+      // After fade out, change content and fade in
+      const fadeOutTimeout = setTimeout(() => {
         setIsTransitioning(false);
-      }, 400); // 400ms fade duration
+        prevIndexRef.current = currentIndex;
+        
+        // Fade in new content
+        const fadeInTimeout = setTimeout(() => {
+          setIsVisible(true);
+        }, 50);
+        
+        return () => clearTimeout(fadeInTimeout);
+      }, 400); // 400ms fade out duration
       
-      prevIndexRef.current = currentIndex;
-      
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(fadeOutTimeout);
     }
   }, [currentIndex]);
 
@@ -151,7 +171,7 @@ export function OnboardingScreen({
         <div
           className="w-full max-w-sm mb-12"
           style={{
-            opacity: isTransitioning ? 0 : 1,
+            opacity: isVisible ? 1 : 0,
             transition: 'opacity 400ms ease-in-out',
           }}
         >
@@ -165,7 +185,7 @@ export function OnboardingScreen({
         <div
           className="w-full max-w-md text-center"
           style={{
-            opacity: isTransitioning ? 0 : 1,
+            opacity: isVisible ? 1 : 0,
             transition: 'opacity 400ms ease-in-out',
           }}
         >
