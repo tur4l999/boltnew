@@ -3,6 +3,15 @@
   "startCommand": "npm run dev",
   "env": {
     "NODE_ENV": "stackblitz",
-    "STACKBLITZ": "true"
+    "STACKBLITZ": "true",
+    "VITE_API_BASE_URL": "http://manager.test-domain.co",
+    "VITE_API_LANG": "az",
+    "VITE_API_SUBJECTS_ENDPOINT": "/api/schools/subjects/",
+    "VITE_API_AUTH_TYPE": "Basic",
+    "VITE_API_AUTH_TOKEN": "dHVyYWxxYXJheWV2OTlAZ21haWwuY29tOnR1cmFsMTIzISE=",
+    "VITE_API_CSRF_TOKEN": "SwNfufsB411VAKAtIX7ubrN9fjQBxtWiMv5QNDEgCFzEdBXQlOKocucpWjD8V3ED",
+    "VITE_API_TIMEOUT": "15000",
+    "VITE_CACHE_DURATION": "1800000",
+    "VITE_DEBUG": "false"
   }
 }

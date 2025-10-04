@@ -22,6 +22,7 @@ export interface SchoolSubject {
   is_passed?: string; // readonly
   children?: SchoolSubject[]; // recursive
   progress?: number; // Frontend üçün əlavə
+  video_url?: string; // Video URL (əgər varsa)
 }
 
 export interface QuestionOption {

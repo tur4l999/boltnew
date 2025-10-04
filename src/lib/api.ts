@@ -31,23 +31,38 @@ export interface ApiResponse<T> {
  * Environment variables üçün dəstək
  */
 const API_CONFIG = {
-  baseUrl: import.meta.env.VITE_API_BASE_URL || 'https://api.example.com',
+  baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://manager.test-domain.co',
+  lang: import.meta.env.VITE_API_LANG || 'az',
   endpoints: {
-    subjects: '/api/school-subjects',
+    subjects: import.meta.env.VITE_API_SUBJECTS_ENDPOINT || '/api/schools/subjects/',
   },
-  timeout: 10000, // 10 saniyə
+  authType: import.meta.env.VITE_API_AUTH_TYPE || 'Basic',
+  authToken: import.meta.env.VITE_API_AUTH_TOKEN || '',
+  csrfToken: import.meta.env.VITE_API_CSRF_TOKEN || '',
+  timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || '15000', 10),
   headers: {
     'Content-Type': 'application/json',
+    'accept': 'application/json',
   }
 };
 
 /**
  * Get authentication token
- * LocalStorage və ya session-dan token alır
+ * Basic Auth və ya Bearer token dəstəyi
  */
 function getAuthToken(): string | null {
+  // Əvvəlcə environment-dan Basic Auth token yoxlayırıq
+  if (API_CONFIG.authToken) {
+    return `${API_CONFIG.authType} ${API_CONFIG.authToken}`;
+  }
+  
+  // Sonra localStorage-dan Bearer token yoxlayırıq
   try {
-    return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    const bearerToken = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    if (bearerToken) {
+      return `Bearer ${bearerToken}`;
+    }
+    return null;
   } catch (error) {
     console.error('Token əldə edilə bilmədi:', error);
     return null;
@@ -62,7 +77,12 @@ function createHeaders(): HeadersInit {
   const token = getAuthToken();
   
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers['authorization'] = token; // lowercase 'authorization' üçün
+  }
+  
+  // CSRF token əlavə et
+  if (API_CONFIG.csrfToken) {
+    headers['X-CSRFToken'] = API_CONFIG.csrfToken;
   }
   
   return headers;
@@ -138,7 +158,7 @@ export function handleApiError(error: unknown): ApiError {
  */
 export async function fetchSchoolSubjects(): Promise<SchoolSubject[]> {
   try {
-    const url = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.subjects}`;
+    const url = `${API_CONFIG.baseUrl}/${API_CONFIG.lang}${API_CONFIG.endpoints.subjects}`;
     
     const response = await fetchWithTimeout(url, {
       method: 'GET',
@@ -170,7 +190,7 @@ export async function fetchSchoolSubjects(): Promise<SchoolSubject[]> {
       throw new Error('Yanlış data formatı alındı.');
     }
 
-    // Data transformasiya - progress əlavə edirik
+    // Data transformasiya - progress və video əlavə edirik
     const subjects: SchoolSubject[] = data.map((subject: Record<string, unknown>) => ({
       id: subject.id || '',
       name: subject.name || 'Adsız mövzu',
@@ -180,6 +200,7 @@ export async function fetchSchoolSubjects(): Promise<SchoolSubject[]> {
       is_passed: subject.is_passed || '',
       children: subject.children || [],
       progress: calculateProgress(subject),
+      video_url: subject.video_url as string | undefined, // Video URL
     }));
 
     return subjects;

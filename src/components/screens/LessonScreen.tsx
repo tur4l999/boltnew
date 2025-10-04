@@ -1,27 +1,35 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
-import { EmojiIcon } from '../ui/EmojiIcon';
-import { PracticeInline } from '../practice/PracticeInline';
 import { MODULES } from '../../lib/data';
 
 export function LessonScreen() {
-  const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
+  const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode, schoolSubjects } = useApp();
   const [activeTab, setActiveTab] = useState<string>(
-    (currentScreen.params && (currentScreen.params as any).tab) || 'video'
+    (currentScreen.params && currentScreen.params.tab) || 'video'
   );
   const [offlineDownload, setOfflineDownload] = useState(false);
-  const [contactMessage, setContactMessage] = useState('');
   const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);
   const [showPurchasePopup, setShowPurchasePopup] = useState(false);
-  const [requestedModuleId, setRequestedModuleId] = useState<string | null>(null);
   
   const { moduleId } = currentScreen.params;
   const modules = MODULES;
-  const currentModule = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
-  const displayTitle = currentModule ? currentModule.title : moduleId;
+  
+  // API-dan mövzu tapırıq
+  const apiSubject = useMemo(
+    () => schoolSubjects.find((s) => s.id === moduleId),
+    [schoolSubjects, moduleId]
+  );
+  
+  // API mövzusu varsa, onu istifadə edirik, yoxdursa static MODULES-u
+  const currentModule = useMemo(
+    () => modules.find((m) => m.id === moduleId),
+    [modules, moduleId]
+  );
+  
+  const displayTitle = apiSubject?.name || (currentModule ? currentModule.title : moduleId);
+  const videoUrl = apiSubject?.video_url || 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
   const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
   
   const handleKonspektImgError: React.ReactEventHandler<HTMLImageElement> = (e) => {
@@ -82,7 +90,7 @@ export function LessonScreen() {
               {/* Video Player */}
               <div className="px-4">
                 <VideoPlayer 
-                  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                  src={videoUrl}
                   watermark={watermark}
                   heightClass="h-56"
                   is3D={false}
@@ -292,7 +300,7 @@ export function LessonScreen() {
               {/* Video Player */}
               <div className="px-4">
                 <VideoPlayer 
-                  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                  src={videoUrl}
                   watermark={watermark}
                   heightClass="h-56"
                   is3D={true}
