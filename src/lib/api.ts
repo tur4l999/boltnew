@@ -47,6 +47,18 @@ const API_CONFIG = {
 };
 
 /**
+ * Get user ID from localStorage
+ */
+function getUserId(): string | null {
+  try {
+    return localStorage.getItem('user_id');
+  } catch (error) {
+    console.error('User ID əldə edilə bilmədi:', error);
+    return null;
+  }
+}
+
+/**
  * Get authentication token
  * Basic Auth və ya Bearer token dəstəyi
  */
@@ -70,14 +82,20 @@ function getAuthToken(): string | null {
 }
 
 /**
- * Create headers with authentication
+ * Create headers with authentication and user ID
  */
 function createHeaders(): HeadersInit {
   const headers: HeadersInit = { ...API_CONFIG.headers };
   const token = getAuthToken();
+  const userId = getUserId();
   
   if (token) {
     headers['authorization'] = token; // lowercase 'authorization' üçün
+  }
+  
+  // User ID əlavə et
+  if (userId) {
+    headers['X-User-ID'] = userId;
   }
   
   // CSRF token əlavə et

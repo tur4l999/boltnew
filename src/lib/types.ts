@@ -1,5 +1,20 @@
 export type Language = 'az' | 'ru';
 
+// User Authentication
+export interface User {
+  id: string; // UUID
+  email: string;
+  name?: string;
+  has_active_package: boolean;
+  package_name?: string;
+  package_expiry?: Date;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
 export interface NavigationScreen {
   screen: string;
   params: Record<string, unknown>;

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser, SchoolSubject } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser, SchoolSubject, User, LoginCredentials } from '../lib/types';
 import { fetchSchoolSubjects, getCachedSubjects, setCachedSubjects, buildSubjectHierarchy, flattenSubjectHierarchy, saveSubjectProgress } from '../lib/api';
 
 type ThemeMode = 'light' | 'dark' | 'system';
@@ -25,6 +25,12 @@ interface Transaction {
 }
 
 interface AppContextType {
+  // User Authentication
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (credentials: LoginCredentials) => Promise<boolean>;
+  logout: () => void;
+  
   language: Language;
   setLanguage: (lang: Language) => void;
   theme: ThemeMode;
@@ -85,6 +91,10 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  // User Authentication State
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const [language, setLanguage] = useState<Language>('az');
   const [theme, setTheme] = useState<ThemeMode>('system');
   const [currentTab, setCurrentTab] = useState('Home');
@@ -714,10 +724,122 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return hasActivePackage();
   };
 
+  // User Authentication Functions
+  const login = async (credentials: LoginCredentials): Promise<boolean> => {
+    try {
+      // Test user üçün hard-coded authentication
+      if (credentials.email === 'turalqarayev99@gmail.com') {
+        const testUser: User = {
+          id: '22de39a3-ad84-427a-bca8-3b79f5610285',
+          email: 'turalqarayev99@gmail.com',
+          name: 'Tural Qarayev',
+          has_active_package: true,
+          package_name: 'Premium Paket',
+          package_expiry: new Date('2025-12-31'),
+        };
+        
+        // User məlumatlarını saxla
+        setUser(testUser);
+        setIsAuthenticated(true);
+        
+        // LocalStorage-a saxla
+        localStorage.setItem('user_id', testUser.id);
+        localStorage.setItem('user_email', testUser.email);
+        localStorage.setItem('user_data', JSON.stringify(testUser));
+        
+        // Aktiv paket yarat
+        const now = new Date();
+        const expiryDate = new Date('2025-12-31');
+        setActivePackage({
+          id: 'premium-1',
+          name: 'Premium Paket',
+          price: 50,
+          days: 365,
+          activationDate: now,
+          purchaseDate: now,
+          expiryDate: expiryDate,
+        });
+        
+        // Balance yenilə
+        setBalance(200); // Premium user üçün daha çox balans
+        
+        return true;
+      }
+      
+      // Başqa email üçün demo user (paket yoxdur)
+      const demoUser: User = {
+        id: 'demo-user-id',
+        email: credentials.email,
+        name: 'Demo User',
+        has_active_package: false,
+      };
+      
+      setUser(demoUser);
+      setIsAuthenticated(true);
+      localStorage.setItem('user_id', demoUser.id);
+      localStorage.setItem('user_email', demoUser.email);
+      localStorage.setItem('user_data', JSON.stringify(demoUser));
+      
+      return true;
+    } catch (error) {
+      console.error('Login xətası:', error);
+      return false;
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    setActivePackage(null);
+    
+    // LocalStorage-ı təmizlə
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_data');
+    localStorage.removeItem('auth_token');
+    
+    // Home-a get
+    setNavigationStack([{ screen: 'Home', params: {} }]);
+  };
+
+  // Component mount olduqda saved user yoxla
+  useEffect(() => {
+    try {
+      const savedUserData = localStorage.getItem('user_data');
+      if (savedUserData) {
+        const savedUser = JSON.parse(savedUserData) as User;
+        setUser(savedUser);
+        setIsAuthenticated(true);
+        
+        // Əgər aktiv paket varsa, onu yenilə
+        if (savedUser.has_active_package && savedUser.package_expiry) {
+          const now = new Date();
+          const expiry = new Date(savedUser.package_expiry);
+          
+          if (expiry > now) {
+            setActivePackage({
+              id: 'saved-package',
+              name: savedUser.package_name || 'Premium Paket',
+              price: 50,
+              days: Math.ceil((expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)),
+              activationDate: now,
+              purchaseDate: now,
+              expiryDate: expiry,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Saved user yüklənmədi:', error);
+    }
+  }, []);
+
   // Component mount olduqda mövzuları yükləyirik
   useEffect(() => {
-    loadSchoolSubjects();
-  }, []);
+    if (isAuthenticated) {
+      loadSchoolSubjects();
+    }
+  }, [isAuthenticated]);
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -811,6 +933,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   
   return (
     <AppContext.Provider value={{
+      user,
+      isAuthenticated,
+      login,
+      logout,
       language,
       setLanguage,
       theme,
