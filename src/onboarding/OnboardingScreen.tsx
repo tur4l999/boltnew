@@ -58,26 +58,19 @@ export function OnboardingScreen({
 
   const colors = getOnboardingColors(isDark);
   const currentSlide = onboardingSlides[currentIndex];
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const prevIndexRef = useRef(currentIndex);
 
-  // Track slide direction for animations
-  // AZ: Animasiya üçün slayd istiqamətini izlə
+  // Simple fade animation on slide change
+  // AZ: Sadə fade animasiyası slayd dəyişərkən
   useEffect(() => {
     if (currentIndex !== prevIndexRef.current) {
       setIsTransitioning(true);
       
-      if (currentIndex > prevIndexRef.current) {
-        setSlideDirection('right');
-      } else if (currentIndex < prevIndexRef.current) {
-        setSlideDirection('left');
-      }
-      
       // Reset transition after animation completes
       const timeout = setTimeout(() => {
         setIsTransitioning(false);
-      }, onboardingAnimations.duration.normal);
+      }, 400); // 400ms fade duration
       
       prevIndexRef.current = currentIndex;
       
@@ -110,7 +103,7 @@ export function OnboardingScreen({
       className="min-h-screen flex flex-col relative overflow-hidden"
       style={{
         backgroundColor: isDark ? colors.background : currentSlide.backgroundColor || colors.background,
-        transition: `background-color ${onboardingAnimations.duration.slow}ms ${onboardingAnimations.easing.easeOut}`,
+        transition: 'background-color 500ms ease-in-out',
       }}
     >
       {/* Top Navigation Bar */}
@@ -120,26 +113,11 @@ export function OnboardingScreen({
           <button
             onClick={goToPrevious}
             disabled={isNavigating}
-            className="p-2 rounded-full disabled:opacity-50"
+            className="p-2 rounded-full disabled:opacity-50 transition-opacity duration-200"
             style={{
               minWidth: '44px',
               minHeight: '44px',
               color: isDark ? colors.textPrimary : colors.secondary,
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              transition: `all ${onboardingAnimations.duration.fast}ms ${onboardingAnimations.easing.easeOut}`,
-              transform: isNavigating ? 'scale(0.95)' : 'scale(1)',
-            }}
-            onMouseEnter={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }
             }}
             aria-label={t('onboarding.back')}
           >
@@ -154,27 +132,12 @@ export function OnboardingScreen({
           <button
             onClick={handleSkip}
             disabled={isNavigating}
-            className="px-4 py-2 rounded-lg disabled:opacity-50"
+            className="px-4 py-2 rounded-lg disabled:opacity-50 transition-opacity duration-200"
             style={{
               minHeight: '44px',
               color: isDark ? colors.textSecondary : colors.textSecondary,
               fontSize: onboardingTypography.fontSize.body,
               fontWeight: onboardingTypography.fontWeight.medium,
-              backgroundColor: 'transparent',
-              transition: `all ${onboardingAnimations.duration.fast}ms ${onboardingAnimations.easing.easeOut}`,
-              transform: isNavigating ? 'scale(0.95)' : 'scale(1)',
-            }}
-            onMouseEnter={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)';
-                e.currentTarget.style.transform = 'scale(1.05)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.transform = 'scale(1)';
-              }
             }}
           >
             {t('onboarding.skip')}
@@ -183,19 +146,13 @@ export function OnboardingScreen({
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12 relative overflow-hidden">
-        {/* Illustration - Modern slide animation */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12">
+        {/* Illustration - Simple fade only */}
         <div
           className="w-full max-w-sm mb-12"
           style={{
             opacity: isTransitioning ? 0 : 1,
-            transform: isTransitioning
-              ? slideDirection === 'right'
-                ? 'translateX(60px) scale(0.95)'
-                : 'translateX(-60px) scale(0.95)'
-              : 'translateX(0) scale(1)',
-            transition: `all ${onboardingAnimations.duration.normal}ms ${onboardingAnimations.easing.easeOut}`,
-            filter: isTransitioning ? 'blur(4px)' : 'blur(0)',
+            transition: 'opacity 400ms ease-in-out',
           }}
         >
           {getIllustration(currentSlide.illustration, {
@@ -204,17 +161,12 @@ export function OnboardingScreen({
           })}
         </div>
 
-        {/* Text Content - Staggered animation */}
+        {/* Text Content - Simple fade only */}
         <div
           className="w-full max-w-md text-center"
           style={{
             opacity: isTransitioning ? 0 : 1,
-            transform: isTransitioning
-              ? slideDirection === 'right'
-                ? 'translateX(40px)'
-                : 'translateX(-40px)'
-              : 'translateX(0)',
-            transition: `all ${onboardingAnimations.duration.normal}ms ${onboardingAnimations.easing.easeOut} ${onboardingAnimations.duration.fast}ms`,
+            transition: 'opacity 400ms ease-in-out',
           }}
         >
           {/* Title */}
@@ -258,7 +210,7 @@ export function OnboardingScreen({
           <button
             onClick={handleNext}
             disabled={isNavigating}
-            className="w-full rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-2xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               backgroundColor: colors.primary,
               color: 'white',
@@ -266,23 +218,7 @@ export function OnboardingScreen({
               fontWeight: onboardingTypography.fontWeight.medium,
               padding: `${onboardingSpacing.base} ${onboardingSpacing.xl}`,
               minHeight: '56px',
-              boxShadow: isNavigating 
-                ? '0 2px 8px rgba(16, 185, 129, 0.15)' 
-                : '0 8px 24px rgba(16, 185, 129, 0.35)',
-              transform: isNavigating ? 'scale(0.98)' : 'scale(1)',
-              transition: `all ${onboardingAnimations.duration.fast}ms ${onboardingAnimations.easing.spring}`,
-            }}
-            onMouseEnter={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.transform = 'scale(1.02) translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(16, 185, 129, 0.45)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isNavigating) {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(16, 185, 129, 0.35)';
-              }
+              boxShadow: '0 4px 12px rgba(16, 185, 129, 0.25)',
             }}
           >
             {isLast ? t('onboarding.getStarted') : t('onboarding.next')}
