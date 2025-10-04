@@ -4,22 +4,50 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Progress } from '../ui/Progress';
 import { MODULES } from '../../lib/data';
-import { FadeIn } from '../ui/FadeIn';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import type { SchoolSubject } from '../../lib/types';
 
 export function TopicsScreen() {
-  const { t, navigate, isModuleUnlocked, hasActivePackage, isDarkMode } = useApp();
+  const { 
+    t, 
+    navigate, 
+    isModuleUnlocked, 
+    hasActivePackage, 
+    isDarkMode,
+    schoolSubjects,
+    schoolSubjectsLoading,
+    schoolSubjectsError,
+    refreshSchoolSubjects,
+    isSubjectUnlocked,
+    activePackage
+  } = useApp();
+  
   const [searchQuery, setSearchQuery] = useState('');
   const [showPurchasePopup, setShowPurchasePopup] = useState(false);
+  const useApiSubjects = true; // API data istifadə edəcəyik
   
-  const filteredModules = useMemo(
-    () => MODULES.filter(m => m.title.toLowerCase().includes(searchQuery.toLowerCase())),
-    [searchQuery]
+  // API data varsa, onu istifadə edirik, yoxdursa static MODULES-u
+  const subjects = useApiSubjects && schoolSubjects.length > 0 
+    ? schoolSubjects 
+    : MODULES.map(m => ({
+        id: m.id,
+        name: m.title,
+        progress: m.progress,
+        description: m.description,
+        is_demo: m.id === 'M8' || m.id === 'M11', // Demo mövzular
+        children: []
+      } as SchoolSubject));
+  
+  const filteredSubjects = useMemo(
+    () => subjects.filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    [subjects, searchQuery]
   );
 
-  const handleModuleClick = (module: any) => {
-    if (isModuleUnlocked(module.id)) {
-      navigate('Lesson', { moduleId: module.id });
+  const handleSubjectClick = (subject: SchoolSubject) => {
+    const unlocked = useApiSubjects ? isSubjectUnlocked(subject) : isModuleUnlocked(subject.id);
+    
+    if (unlocked) {
+      navigate('Lesson', { moduleId: subject.id });
     } else {
       setShowPurchasePopup(true);
     }
@@ -30,6 +58,48 @@ export function TopicsScreen() {
     <div className={`p-3 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
+      {/* Loading State */}
+      {schoolSubjectsLoading && (
+        <div className={`mb-4 p-4 rounded-2xl border flex items-center gap-3 ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
+          <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+            Mövzular yüklənir...
+          </span>
+        </div>
+      )}
+
+      {/* Error State */}
+      {schoolSubjectsError && (
+        <div className={`mb-4 p-4 rounded-2xl border-2 ${
+          isDarkMode 
+            ? 'bg-red-900/20 border-red-700/50' 
+            : 'bg-red-50 border-red-200'
+        }`}>
+          <div className="flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
+            <div className="flex-1">
+              <div className={`font-bold text-sm mb-1 ${
+                isDarkMode ? 'text-red-300' : 'text-red-900'
+              }`}>
+                Xəta baş verdi
+              </div>
+              <div className={`text-xs mb-3 ${
+                isDarkMode ? 'text-red-400' : 'text-red-700'
+              }`}>
+                {schoolSubjectsError}
+              </div>
+              <button
+                onClick={refreshSchoolSubjects}
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 hover:bg-red-700 text-white transition-colors"
+              >
+                Yenidən cəhd et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Enhanced Package Status */}
       {!hasActivePackage() && (
         <div
@@ -74,10 +144,10 @@ export function TopicsScreen() {
           </div>
           <div className="flex-1">
             <div className="text-emerald-900 text-xs font-medium">
-              Bütün təlimlər açıq - {useApp().activePackage?.name}
+              Bütün təlimlər açıq - {activePackage?.name}
             </div>
             <div className="text-emerald-700 text-xs">
-              Bitmə tarixi: {useApp().activePackage?.expiryDate.toLocaleDateString('az-AZ')}
+              Bitmə tarixi: {activePackage?.expiryDate.toLocaleDateString('az-AZ')}
             </div>
           </div>
           <div className="text-emerald-600 text-sm">
@@ -97,52 +167,84 @@ export function TopicsScreen() {
         }`}
       />
       <div className="space-y-2">
-        {filteredModules.map((module) => {
-          const unlocked = isModuleUnlocked(module.id);
-          return (
-            <div
-              key={module.id}
-              onClick={() => {
-                if (!unlocked) setShowPurchasePopup(true);
-              }}
-              className={!unlocked ? 'cursor-pointer' : ''}
-            >
-            <Card className={!unlocked ? 'opacity-60' : ''}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  {!unlocked && (
-                    <span className="text-gray-400 text-lg animate-pulse">🔒</span>
-                  )}
-                  <div>
-                  <div className={`font-bold text-sm transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                  }`}>
-                    <span className="block max-w-[240px] truncate">{module.title}</span>
-                  </div>
-                  <div className={`text-xs transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                  }`}>
-                    {t.progress}: {module.progress}%
-                  </div>
-                  </div>
-                </div>
-                <Button 
-                  onClick={() => handleModuleClick(module)}
-                  size="sm"
-                >
-                  {unlocked ? t.startLesson : 'Kilidli'}
-                </Button>
-              </div>
-              <div className="relative overflow-hidden rounded-lg">
-                <Progress value={unlocked ? module.progress : 0} />
-                {unlocked && module.progress > 0 && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-                )}
-              </div>
-            </Card>
+        {filteredSubjects.length === 0 ? (
+          <div className={`p-8 text-center rounded-2xl ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            <span className="text-4xl mb-3 block">🔍</span>
+            <div className={`font-medium ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              {searchQuery ? 'Heç bir mövzu tapılmadı' : 'Mövzular yoxdur'}
             </div>
-          );
-        })}
+          </div>
+        ) : (
+          filteredSubjects.map((subject) => {
+            const unlocked = useApiSubjects ? isSubjectUnlocked(subject) : isModuleUnlocked(subject.id);
+            const progress = subject.progress || 0;
+            
+            return (
+              <div
+                key={subject.id}
+                onClick={() => {
+                  if (!unlocked) setShowPurchasePopup(true);
+                }}
+                className={!unlocked ? 'cursor-pointer' : ''}
+              >
+                <Card className={!unlocked ? 'opacity-60' : ''}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      {!unlocked && (
+                        <span className="text-gray-400 text-lg animate-pulse flex-shrink-0">🔒</span>
+                      )}
+                      {subject.is_demo && unlocked && (
+                        <span className="text-blue-500 text-lg flex-shrink-0" title="Demo mövzu">🎓</span>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className={`font-bold text-sm transition-colors duration-200 ${
+                          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                        }`}>
+                          <span className="block truncate">{subject.name}</span>
+                        </div>
+                        {subject.description && (
+                          <div className={`text-xs mt-0.5 transition-colors duration-200 line-clamp-1 ${
+                            isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                          }`}>
+                            {subject.description}
+                          </div>
+                        )}
+                        <div className={`text-xs transition-colors duration-200 ${
+                          isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          {t.progress}: {progress}%
+                          {subject.is_passed === 'true' && (
+                            <span className="ml-2 text-green-600">✓ Tamamlandı</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSubjectClick(subject);
+                      }}
+                      size="sm"
+                      className="flex-shrink-0 ml-2"
+                    >
+                      {unlocked ? t.startLesson : 'Kilidli'}
+                    </Button>
+                  </div>
+                  <div className="relative overflow-hidden rounded-lg">
+                    <Progress value={unlocked ? progress : 0} />
+                    {unlocked && progress > 0 && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+                    )}
+                  </div>
+                </Card>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
     {showPurchasePopup && (

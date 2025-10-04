@@ -12,6 +12,18 @@ export interface Module {
   description?: string;
 }
 
+// API-dən gələn SchoolSubject strukturu
+export interface SchoolSubject {
+  id: string; // UUID
+  name: string; // Ad
+  parent?: string | null; // Ana mövzu UUID (nullable)
+  description?: string | null; // Təsvir (nullable)
+  is_demo: boolean; // Demo - qeyri-tələbələr üçün
+  is_passed?: string; // readonly
+  children?: SchoolSubject[]; // recursive
+  progress?: number; // Frontend üçün əlavə
+}
+
 export interface QuestionOption {
   id: string;
   text: string;

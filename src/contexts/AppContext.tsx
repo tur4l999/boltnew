@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { dictionaries } from '../lib/i18n';
-import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser } from '../lib/types';
+import type { Language, NavigationScreen, StoredExamResult, ExamType, Appeal, AppealFormData, QAChat, QAMessage, QAUser, SchoolSubject } from '../lib/types';
+import { fetchSchoolSubjects, getCachedSubjects, setCachedSubjects, buildSubjectHierarchy, flattenSubjectHierarchy, saveSubjectProgress } from '../lib/api';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 type DeliveryMethod = 'locker' | 'courier' | 'post' | 'pickup';
@@ -71,6 +72,14 @@ interface AppContextType {
   getChatById: (id: string) => QAChat | undefined;
   markChatAsRead: (chatId: string) => void;
   getActiveChatsList: () => QAChat[];
+  // School Subjects API
+  schoolSubjects: SchoolSubject[];
+  schoolSubjectsLoading: boolean;
+  schoolSubjectsError: string | null;
+  loadSchoolSubjects: () => Promise<void>;
+  refreshSchoolSubjects: () => Promise<void>;
+  updateSubjectProgress: (subjectId: string, progress: number) => void;
+  isSubjectUnlocked: (subject: SchoolSubject) => boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -279,6 +288,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     { id: 'teacher3', name: 'Müəllim Aysel', role: 'teacher', avatar: '👩‍🏫', isOnline: true },
     { id: 'teacher4', name: 'Müəllim Elşad', role: 'teacher', avatar: '👨‍🏫', isOnline: false }
   ]);
+
+  // School Subjects API State
+  const [schoolSubjects, setSchoolSubjects] = useState<SchoolSubject[]>([]);
+  const [schoolSubjectsLoading, setSchoolSubjectsLoading] = useState<boolean>(false);
+  const [schoolSubjectsError, setSchoolSubjectsError] = useState<string | null>(null);
 
   const [qaChats, setQaChats] = useState<QAChat[]>([
     {
@@ -625,6 +639,85 @@ export function AppProvider({ children }: { children: ReactNode }) {
       new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
   };
+
+  // School Subjects Functions
+  const loadSchoolSubjects = async (): Promise<void> => {
+    // Əvvəlcə cache yoxlayırıq
+    const cached = getCachedSubjects();
+    if (cached && cached.length > 0) {
+      setSchoolSubjects(cached);
+      return;
+    }
+
+    setSchoolSubjectsLoading(true);
+    setSchoolSubjectsError(null);
+
+    try {
+      const subjects = await fetchSchoolSubjects();
+      
+      // Hierarxik strukturu qururuq (əgər lazımdırsa)
+      // Lakin flat list də işləyir
+      const flatSubjects = flattenSubjectHierarchy(subjects);
+      
+      setSchoolSubjects(flatSubjects);
+      setCachedSubjects(flatSubjects);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Naməlum xəta baş verdi';
+      setSchoolSubjectsError(errorMessage);
+      console.error('Mövzular yüklənmədi:', error);
+    } finally {
+      setSchoolSubjectsLoading(false);
+    }
+  };
+
+  const refreshSchoolSubjects = async (): Promise<void> => {
+    // Cache-i təmizləyirik və yenidən yükləyirik
+    setSchoolSubjectsLoading(true);
+    setSchoolSubjectsError(null);
+
+    try {
+      const subjects = await fetchSchoolSubjects();
+      const flatSubjects = flattenSubjectHierarchy(subjects);
+      
+      setSchoolSubjects(flatSubjects);
+      setCachedSubjects(flatSubjects);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Naməlum xəta baş verdi';
+      setSchoolSubjectsError(errorMessage);
+      console.error('Mövzular yenilənmədi:', error);
+    } finally {
+      setSchoolSubjectsLoading(false);
+    }
+  };
+
+  const updateSubjectProgress = (subjectId: string, progress: number): void => {
+    // LocalStorage-a saxlayırıq
+    saveSubjectProgress(subjectId, progress);
+    
+    // State-i yeniləyirik
+    setSchoolSubjects(prev => 
+      prev.map(subject => 
+        subject.id === subjectId 
+          ? { ...subject, progress } 
+          : subject
+      )
+    );
+  };
+
+  const isSubjectUnlocked = (subject: SchoolSubject): boolean => {
+    // Əgər demo mövzudursa, həmişə açıqdır
+    if (subject.is_demo) {
+      return true;
+    }
+    
+    // Aktiv paket varsa, bütün mövzular açıqdır
+    return hasActivePackage();
+  };
+
+  // Component mount olduqda mövzuları yükləyirik
+  useEffect(() => {
+    loadSchoolSubjects();
+  }, []);
   
   const currentScreen = navigationStack[navigationStack.length - 1];
 
@@ -748,6 +841,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , examResults, addExamResult
       , appeals, submitAppeal, getAppealsByStatus
       , qaChats, qaUsers, qaTeachers, startNewChat, sendMessage, getChatById, markChatAsRead, getActiveChatsList
+      , schoolSubjects, schoolSubjectsLoading, schoolSubjectsError, loadSchoolSubjects, refreshSchoolSubjects, updateSubjectProgress, isSubjectUnlocked
     }}>
       {children}
     </AppContext.Provider>
