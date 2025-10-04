@@ -2,7 +2,7 @@ export type Language = 'az' | 'ru';
 
 export interface NavigationScreen {
   screen: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
 }
 
 export interface Module {
@@ -22,7 +22,18 @@ export interface SchoolSubject {
   is_passed?: string; // readonly
   children?: SchoolSubject[]; // recursive
   progress?: number; // Frontend üçün əlavə
-  video_url?: string; // Video URL (əgər varsa)
+  
+  // Video URLs
+  video_url?: string; // Klassik video URL
+  video_3d_url?: string; // 3D video URL
+  
+  // Mətn materialları
+  article?: string; // Maddə (HTML və ya mətn)
+  konspekt?: string; // Konspekt (HTML və ya mətn)
+  konspekt_images?: string[]; // Konspekt şəkilləri
+  
+  // Əlavə
+  penalties_info?: string; // Cərimə məlumatları (HTML və ya mətn)
 }
 
 export interface QuestionOption {

@@ -190,7 +190,7 @@ export async function fetchSchoolSubjects(): Promise<SchoolSubject[]> {
       throw new Error('Yanlış data formatı alındı.');
     }
 
-    // Data transformasiya - progress və video əlavə edirik
+    // Data transformasiya - progress, video, maddə, konspekt əlavə edirik
     const subjects: SchoolSubject[] = data.map((subject: Record<string, unknown>) => ({
       id: subject.id || '',
       name: subject.name || 'Adsız mövzu',
@@ -200,7 +200,18 @@ export async function fetchSchoolSubjects(): Promise<SchoolSubject[]> {
       is_passed: subject.is_passed || '',
       children: subject.children || [],
       progress: calculateProgress(subject),
-      video_url: subject.video_url as string | undefined, // Video URL
+      
+      // Video URLs
+      video_url: subject.video_url as string | undefined,
+      video_3d_url: subject.video_3d_url as string | undefined,
+      
+      // Mətn materialları
+      article: subject.article as string | undefined,
+      konspekt: subject.konspekt as string | undefined,
+      konspekt_images: subject.konspekt_images as string[] | undefined,
+      
+      // Əlavə
+      penalties_info: subject.penalties_info as string | undefined,
     }));
 
     return subjects;

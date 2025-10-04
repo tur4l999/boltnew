@@ -6,7 +6,7 @@
     "STACKBLITZ": "true",
     "VITE_API_BASE_URL": "http://manager.test-domain.co",
     "VITE_API_LANG": "az",
-    "VITE_API_SUBJECTS_ENDPOINT": "/api/schools/subjects/",
+    "VITE_API_SUBJECTS_ENDPOINT": "/api/students/subjects/",
     "VITE_API_AUTH_TYPE": "Basic",
     "VITE_API_AUTH_TOKEN": "dHVyYWxxYXJheWV2OTlAZ21haWwuY29tOnR1cmFsMTIzISE=",
     "VITE_API_CSRF_TOKEN": "SwNfufsB411VAKAtIX7ubrN9fjQBxtWiMv5QNDEgCFzEdBXQlOKocucpWjD8V3ED",
