@@ -1,8 +1,23 @@
 export type Language = 'az' | 'ru';
 
+// User Authentication
+export interface User {
+  id: string; // UUID
+  email: string;
+  name?: string;
+  has_active_package: boolean;
+  package_name?: string;
+  package_expiry?: Date;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
 export interface NavigationScreen {
   screen: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
 }
 
 export interface Module {
@@ -10,6 +25,30 @@ export interface Module {
   title: string;
   progress: number;
   description?: string;
+}
+
+// API-dən gələn SchoolSubject strukturu
+export interface SchoolSubject {
+  id: string; // UUID
+  name: string; // Ad
+  parent?: string | null; // Ana mövzu UUID (nullable)
+  description?: string | null; // Təsvir (nullable)
+  is_demo: boolean; // Demo - qeyri-tələbələr üçün
+  is_passed?: string; // readonly
+  children?: SchoolSubject[]; // recursive
+  progress?: number; // Frontend üçün əlavə
+  
+  // Video URLs
+  video_url?: string; // Klassik video URL
+  video_3d_url?: string; // 3D video URL
+  
+  // Mətn materialları
+  article?: string; // Maddə (HTML və ya mətn)
+  konspekt?: string; // Konspekt (HTML və ya mətn)
+  konspekt_images?: string[]; // Konspekt şəkilləri
+  
+  // Əlavə
+  penalties_info?: string; // Cərimə məlumatları (HTML və ya mətn)
 }
 
 export interface QuestionOption {

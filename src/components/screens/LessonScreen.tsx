@@ -1,28 +1,45 @@
 import React, { useMemo, useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
 import { VideoPlayer } from '../media/VideoPlayer';
-import { EmojiIcon } from '../ui/EmojiIcon';
-import { PracticeInline } from '../practice/PracticeInline';
 import { MODULES } from '../../lib/data';
 
 export function LessonScreen() {
-  const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode } = useApp();
+  const { t, navigate, currentScreen, isModuleUnlocked, isDarkMode, schoolSubjects } = useApp();
   const [activeTab, setActiveTab] = useState<string>(
-    (currentScreen.params && (currentScreen.params as any).tab) || 'video'
+    (currentScreen.params && currentScreen.params.tab) || 'video'
   );
   const [offlineDownload, setOfflineDownload] = useState(false);
-  const [contactMessage, setContactMessage] = useState('');
   const [moduleDropdownOpen, setModuleDropdownOpen] = useState(false);
   const [showPurchasePopup, setShowPurchasePopup] = useState(false);
-  const [requestedModuleId, setRequestedModuleId] = useState<string | null>(null);
   
   const { moduleId } = currentScreen.params;
   const modules = MODULES;
-  const currentModule = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
-  const displayTitle = currentModule ? currentModule.title : moduleId;
-  const watermark = `UID-1234 · ${new Date().toLocaleString()}`;
+  
+  // API-dan mövzu tapırıq
+  const apiSubject = useMemo(
+    () => schoolSubjects.find((s) => s.id === moduleId),
+    [schoolSubjects, moduleId]
+  );
+  
+  // API mövzusu varsa, onu istifadə edirik, yoxdursa static MODULES-u
+  const currentModule = useMemo(
+    () => modules.find((m) => m.id === moduleId),
+    [modules, moduleId]
+  );
+  
+  const displayTitle = apiSubject?.name || (currentModule ? currentModule.title : moduleId);
+  
+  // Video URLs - API-dan və ya fallback
+  const videoUrl = apiSubject?.video_url || 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+  const video3dUrl = apiSubject?.video_3d_url || videoUrl;
+  
+  // Mətn materialları - API-dan
+  const article = apiSubject?.article;
+  const konspekt = apiSubject?.konspekt;
+  const konspektImages = apiSubject?.konspekt_images || [];
+  
+  const watermark = `DDA · UID-1234 · ${new Date().toLocaleString()}`;
   
   const handleKonspektImgError: React.ReactEventHandler<HTMLImageElement> = (e) => {
     const target = e.currentTarget;
@@ -82,7 +99,7 @@ export function LessonScreen() {
               {/* Video Player */}
               <div className="px-4">
                 <VideoPlayer 
-                  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                  src={videoUrl}
                   watermark={watermark}
                   heightClass="h-56"
                   is3D={false}
@@ -189,20 +206,52 @@ export function LessonScreen() {
       case 'article':
         return (
           <Card>
-            <div className="font-bold mb-2 text-gray-900">
-              Maddə — Yol nişanlarının mənası
+            <div className={`font-bold mb-2 text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Maddə — {displayTitle}
             </div>
-            <div className="text-sm text-gray-700">
-              Burada qanunun mətnindən parçalar göstəriləcək. (Demo kontent)
-            </div>
+            {article ? (
+              <div 
+                className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+                dangerouslySetInnerHTML={{ __html: article }}
+              />
+            ) : (
+              <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                Bu mövzu üçün maddə məlumatı mövcud deyil.
+              </div>
+            )}
           </Card>
         );
 
       case 'materials':
         return (
           <Card>
-            <div className={`font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Konspekt</div>
-            {moduleId === 'M25' || moduleId === 'M8' ? (
+            <div className={`font-bold mb-2 text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Konspekt — {displayTitle}
+            </div>
+            {konspekt ? (
+              <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                {/* API-dan gələn konspekt */}
+                <div 
+                  dangerouslySetInnerHTML={{ __html: konspekt }}
+                />
+                
+                {/* Konspekt şəkilləri */}
+                {konspektImages.length > 0 && (
+                  <div className="space-y-3 mt-4">
+                    {konspektImages.map((imageUrl, idx) => (
+                      <div key={idx} className="flex justify-center">
+                        <img
+                          src={imageUrl}
+                          alt={`Konspekt şəkil ${idx + 1}`}
+                          className={`max-w-full rounded-xl shadow-md ${isDarkMode ? 'border border-gray-700' : ''}`}
+                          onError={handleKonspektImgError}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : moduleId === 'M25' || moduleId === 'M8' ? (
               <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 <div className="space-y-3">
                   <div>
@@ -289,10 +338,10 @@ export function LessonScreen() {
                 </div>
               </div>
 
-              {/* Video Player */}
+              {/* Video Player - 3D Video */}
               <div className="px-4">
                 <VideoPlayer 
-                  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+                  src={video3dUrl}
                   watermark={watermark}
                   heightClass="h-56"
                   is3D={true}
