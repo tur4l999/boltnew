@@ -48,28 +48,30 @@ export function Pagination({ total, activeIndex, onDotClick, isDark = false }: P
           <button
             key={index}
             onClick={() => onDotClick?.(index)}
-            className="p-2 transition-all duration-300"
+            className="p-2"
             style={{
               minWidth: '44px',
               minHeight: '44px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              transition: 'transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+              transform: isActive ? 'scale(1.1)' : 'scale(1)',
             }}
             role="tab"
             aria-selected={isActive}
             aria-label={`Slide ${index + 1} of ${total}`}
           >
             <div
-              className="rounded-full transition-all duration-300"
+              className="rounded-full"
               style={{
-                width: isActive ? '12px' : '8px',
-                height: isActive ? '12px' : '8px',
+                width: isActive ? '32px' : '8px',
+                height: '8px',
                 backgroundColor: isActive ? activeDotColor : inactiveDotColor,
-                opacity: isActive ? 1 : 0.5,
-                transform: isActive ? 'scale(1)' : 'scale(0.8)',
+                opacity: isActive ? 1 : 0.4,
+                transition: 'all 400ms cubic-bezier(0.34, 1.56, 0.64, 1)',
                 boxShadow: isActive 
-                  ? '0 2px 4px rgba(16, 185, 129, 0.3)' 
+                  ? '0 4px 12px rgba(16, 185, 129, 0.4)' 
                   : 'none',
               }}
             />
