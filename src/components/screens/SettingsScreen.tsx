@@ -73,10 +73,10 @@ export function SettingsScreen() {
 
       <div className="relative z-10 p-4 pb-24">
         {/* Enhanced Header */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 mb-6">
           <button
             onClick={goBack}
-            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+            className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
               isDarkMode 
                 ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
                 : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
@@ -85,7 +85,7 @@ export function SettingsScreen() {
             <span className="text-lg">←</span>
           </button>
           <div>
-            <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
+            <h1 className={`text-xl font-black transition-colors duration-200 bg-gradient-to-r ${
               isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
             } bg-clip-text text-transparent`}>
               Parametrlər
@@ -97,14 +97,14 @@ export function SettingsScreen() {
         </div>
 
         {/* Enhanced Profile Card with Modern Animations */}
-        <Card variant="elevated" padding="lg" className="mb-8 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-6">
+        <Card variant="elevated" padding="md" className="mb-6 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
+          <div className="flex items-center gap-4">
             <div className="relative group">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-2xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                 {userName.charAt(0).toUpperCase()}
               </div>
               {activePackage && (
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-xs leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
                   <span className="font-bold">★</span>
                 </div>
               )}
@@ -112,7 +112,7 @@ export function SettingsScreen() {
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-600 to-green-600 opacity-20 blur-lg scale-110 group-hover:opacity-30 group-hover:scale-125 transition-all duration-300"></div>
             </div>
             <div className="flex-1">
-              <div className={`font-black text-xl mb-1 transition-all duration-200 bg-gradient-to-r ${
+              <div className={`font-bold text-lg mb-1 transition-all duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-900 to-gray-700'
               } bg-clip-text text-transparent`}>
                 {userName}
@@ -122,7 +122,7 @@ export function SettingsScreen() {
               }`}>{userEmail}</div>
               
               <div className="flex items-center gap-2 flex-wrap">
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                <div className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
                   isDarkMode 
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
@@ -151,15 +151,15 @@ export function SettingsScreen() {
         </Card>
 
         {/* Collapsible Theme Settings */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
           <button
             onClick={() => setThemeExpanded(!themeExpanded)}
             className="w-full flex items-center justify-between gap-3 text-left group"
           >
             <div className="flex items-center gap-3">
-              <div className="text-2xl"><EmojiIcon emoji="🎨" size={24} /></div>
+              <div className="text-xl"><EmojiIcon emoji="🎨" size={20} /></div>
               <div>
-                <h3 className={`font-black text-lg transition-colors duration-200 ${
+                <h3 className={`font-bold text-base transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>Tema</h3>
                 <p className={`text-sm transition-colors duration-200 ${
@@ -225,15 +225,15 @@ export function SettingsScreen() {
         </Card>
 
         {/* Collapsible Language Settings */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
           <button
             onClick={() => setLanguageExpanded(!languageExpanded)}
             className="w-full flex items-center justify-between gap-3 text-left group"
           >
             <div className="flex items-center gap-3">
-              <div className="text-2xl">🌐</div>
+              <div className="text-xl">🌐</div>
               <div>
-                <h3 className={`font-black text-lg transition-colors duration-200 ${
+                <h3 className={`font-bold text-base transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>Dil</h3>
                 <p className={`text-sm transition-colors duration-200 ${
@@ -294,10 +294,10 @@ export function SettingsScreen() {
         </Card>
 
         {/* Referral Section */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="text-2xl">🎁</div>
-            <h3 className={`font-black text-lg transition-colors duration-200 ${
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="text-xl">🎁</div>
+            <h3 className={`font-bold text-base transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>Referal proqram</h3>
           </div>
@@ -389,25 +389,25 @@ export function SettingsScreen() {
             className="mb-8 animate-fadeInUp"
             style={{ animationDelay: `${(sectionIndex + 4) * 100}ms` }}
           >
-            <div className="flex items-center gap-4 mb-6 px-2">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+            <div className="flex items-center gap-3 mb-4 px-1">
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
                 isDarkMode ? 'bg-gradient-to-br from-emerald-600/20 to-green-600/20' : 'bg-gradient-to-br from-emerald-100 to-green-100'
               }`}>
                 <EmojiIcon emoji="⚙️" size={20} />
               </div>
-              <h3 className={`font-black text-xl transition-colors duration-200 bg-gradient-to-r ${
+              <h3 className={`font-bold text-base transition-colors duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-800 to-gray-600'
               } bg-clip-text text-transparent`}>
                 {section.section}
               </h3>
             </div>
-            <Card variant="elevated" padding="sm" className="overflow-hidden">
+            <Card variant="elevated" padding="xs" className="overflow-hidden">
               <div className="space-y-1">
                 {section.items.map((item, index) => (
                   <button
                     key={item.key}
                     onClick={item.action}
-                    className={`w-full p-5 flex items-center gap-5 text-left transition-all duration-300 rounded-2xl transform hover:scale-[1.01] active:scale-[0.99] group relative overflow-hidden ${
+                    className={`w-full p-3 flex items-center gap-3 text-left transition-all duration-300 rounded-xl transform hover:scale-[1.01] active:scale-[0.99] group relative overflow-hidden ${
                       isDarkMode 
                         ? 'hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 text-gray-200' 
                         : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100/50 text-gray-900'
@@ -421,18 +421,18 @@ export function SettingsScreen() {
                         : 'bg-gradient-to-r from-emerald-400/5 via-transparent to-blue-400/5'
                     }`}></div>
                     
-                    <div className={`relative w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 ${
+                    <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all duration-300 ${
                       isDarkMode 
                         ? 'bg-gradient-to-br from-gray-700/60 to-gray-600/60 group-hover:from-gray-600/80 group-hover:to-gray-500/80' 
                         : 'bg-gradient-to-br from-gray-100 to-gray-200/80 group-hover:from-gray-200 group-hover:to-gray-300/80'
                     } shadow-lg group-hover:shadow-xl`}>
-                      <EmojiIcon emoji={item.emoji} size={22} />
+                      <EmojiIcon emoji={item.emoji} size={18} />
                     </div>
                     <div className="flex-1 relative">
-                      <div className="font-bold text-lg mb-1">
+                      <div className="font-bold text-sm mb-1">
                         {item.label}
                       </div>
-                      <div className={`text-sm ${
+                      <div className={`text-xs ${
                         isDarkMode ? 'text-gray-400' : 'text-gray-600'
                       }`}>
                         {item.description}
@@ -451,14 +451,14 @@ export function SettingsScreen() {
         ))}
 
         {/* Enhanced Logout Button with Modern Design */}
-        <Card variant="elevated" padding="md" className="mb-8 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
+        <Card variant="elevated" padding="sm" className="mb-6 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
           <button
             onClick={() => {
               if (confirm('Hesabdan çıxmaq istədiyinizə əminsiniz?')) {
                 alert('Çıxış (demo)');
               }
             }}
-            className={`w-full p-5 flex items-center justify-center gap-4 rounded-2xl transition-all duration-300 font-bold text-lg transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
+            className={`w-full p-3 flex items-center justify-center gap-3 rounded-xl transition-all duration-300 font-bold text-sm transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
               isDarkMode 
                 ? 'text-red-400 hover:bg-gradient-to-r hover:from-red-900/30 hover:to-pink-900/30 border-2 border-red-500/30 hover:border-red-400/50' 
                 : 'text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 border-2 border-red-300/30 hover:border-red-400/50'
@@ -471,7 +471,7 @@ export function SettingsScreen() {
                 : 'bg-gradient-to-r from-red-400/10 via-transparent to-pink-400/10'
             }`}></div>
             
-            <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-300 ${
+            <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all duration-300 ${
               isDarkMode 
                 ? 'bg-gradient-to-br from-red-900/40 to-pink-900/40 group-hover:from-red-800/60 group-hover:to-pink-800/60' 
                 : 'bg-gradient-to-br from-red-100 to-pink-100 group-hover:from-red-200 group-hover:to-pink-200'
