@@ -44,7 +44,7 @@ export function SettingsScreen() {
             alert('✅ Keş təmizləndi!\n\n📦 Azad edildi: ~45 MB\n🚀 Tətbiq performansı yaxşılaşdırıldı\n\nTətbiq daha sürətli işləyəcək.');
           }
         } },
-        { key: 'updates', label: 'Yeniləmələr', icon: 'refresh-cw', description: 'Avtomatik yeniləmə və versiya məlumatı', action: () => navigate('Updates') }
+        { key: 'updates', label: 'Versiya', icon: 'info', description: 'Tətbiq versiyası: 2.5.1', action: null }
       ]
     },
     {
