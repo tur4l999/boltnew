@@ -269,39 +269,8 @@ export function SettingsScreen() {
             }`}>Referal proqram</h3>
           </div>
           
-          <div className={`p-4 rounded-2xl border-2 mb-4 ${
-            isDarkMode 
-              ? 'border-purple-500/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20' 
-              : 'border-purple-300/50 bg-gradient-to-r from-purple-50 to-pink-50'
-          }`}>
-            <div className={`text-sm mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
-              Sizin referal kodunuz
-            </div>
-            <div className="flex items-center gap-3">
-              <div className={`flex-1 px-4 py-2 rounded-xl border font-mono text-lg font-bold ${
-                isDarkMode 
-                  ? 'border-purple-500/50 bg-purple-900/30 text-purple-200' 
-                  : 'border-purple-300 bg-purple-100 text-purple-800'
-              }`}>
-                {referralCode}
-              </div>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(referralCode);
-                  alert('Referal kod kopyalandı!');
-                }}
-                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 ${
-                  isDarkMode 
-                    ? 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white' 
-                    : 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white'
-                }`}
-              >
-                📋 Kopyala
-              </button>
-            </div>
-          </div>
-          
-          <div className={`p-4 rounded-2xl ${
+          {/* 1. Əvvəlcə statistika */}
+          <div className={`p-4 rounded-2xl mb-4 ${
             isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
           }`}>
             <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -335,6 +304,44 @@ export function SettingsScreen() {
                 }`}>Qazanılan bonus</div>
               </button>
             </div>
+          </div>
+          
+          {/* 2. Sonra referal kodu */}
+          <div className={`p-4 rounded-2xl ${
+            isDarkMode 
+              ? 'border-purple-500/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-2' 
+              : 'border-purple-300/50 bg-gradient-to-r from-purple-50 to-pink-50 border-2'
+          }`}>
+            <div className={`text-sm mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+              Sizin referal kodunuz
+            </div>
+            <div className="flex items-center gap-3">
+              <div className={`flex-1 px-4 py-2 rounded-xl border font-mono text-lg font-bold ${
+                isDarkMode 
+                  ? 'border-purple-500/50 bg-purple-900/30 text-purple-200' 
+                  : 'border-purple-300 bg-purple-100 text-purple-800'
+              }`}>
+                {referralCode}
+              </div>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(referralCode);
+                  alert('Referal kod kopyalandı!');
+                }}
+                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 ${
+                  isDarkMode 
+                    ? 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white' 
+                    : 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white'
+                }`}
+              >
+                📋 Kopyala
+              </button>
+            </div>
+          </div>
+          
+          <div className={`mt-4 p-4 rounded-2xl ${
+            isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
+          }`}>
             
             <button
               onClick={() => alert('Referal proqram haqqında ətraflı məlumat (demo)')}
