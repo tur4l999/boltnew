@@ -5,8 +5,8 @@ import { EmojiIcon } from '../ui/EmojiIcon';
 
 export function SettingsScreen() {
   const { goBack, navigate, language, setLanguage, theme, setTheme, balance, simulatorBalance, activePackage, isDarkMode } = useApp();
-  const [themeExpanded, setThemeExpanded] = useState(false);
-  const [languageExpanded, setLanguageExpanded] = useState(false);
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [referralCode] = useState('DDA2025TURAL'); // Demo referral code
   const userName = "Tural Qarayev";
   const userEmail = "tural.qarayev@example.com";
@@ -95,32 +95,114 @@ export function SettingsScreen() {
           </div>
           
           {/* Tema və Dil düymələri */}
-          <div className="flex items-center gap-2">
-            {/* Tema toggle */}
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
-                isDarkMode 
-                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-              }`}
-              title={theme === 'dark' ? 'Gündüz rejimi' : 'Gecə rejimi'}
-            >
-              <EmojiIcon emoji={theme === 'dark' ? '☀️' : '🌙'} size={18} />
-            </button>
+          <div className="flex items-center gap-2 relative">
+            {/* Tema menu */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setThemeMenuOpen(!themeMenuOpen);
+                  setLanguageMenuOpen(false);
+                }}
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title="Tema"
+              >
+                <EmojiIcon emoji={theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '📱'} size={18} />
+              </button>
+              
+              {themeMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setThemeMenuOpen(false)}
+                  />
+                  <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl border-2 overflow-hidden z-50 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {themeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setTheme(option.value as any);
+                          setThemeMenuOpen(false);
+                        }}
+                        className={`w-full px-3 py-2.5 flex items-center gap-2 transition-all duration-200 ${
+                          theme === option.value
+                            ? isDarkMode
+                              ? 'bg-emerald-700 text-emerald-100'
+                              : 'bg-emerald-600 text-white'
+                            : isDarkMode
+                              ? 'hover:bg-gray-700 text-gray-200'
+                              : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <span className="text-base">{option.label}</span>
+                        {theme === option.value && <span className="ml-auto">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
             
-            {/* Dil toggle */}
-            <button
-              onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')}
-              className={`px-2 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-xs font-bold ${
-                isDarkMode 
-                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-              }`}
-              title={language === 'az' ? 'Русский' : 'Azərbaycan'}
-            >
-              {language === 'az' ? '🇦🇿' : '🇷🇺'}
-            </button>
+            {/* Dil menu */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setLanguageMenuOpen(!languageMenuOpen);
+                  setThemeMenuOpen(false);
+                }}
+                className={`px-2 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-xs font-bold ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title="Dil"
+              >
+                {language === 'az' ? '🇦🇿' : '🇷🇺'}
+              </button>
+              
+              {languageMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setLanguageMenuOpen(false)}
+                  />
+                  <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl border-2 overflow-hidden z-50 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setLanguage(option.value as any);
+                          setLanguageMenuOpen(false);
+                        }}
+                        className={`w-full px-3 py-2.5 flex items-center gap-2 transition-all duration-200 ${
+                          language === option.value
+                            ? isDarkMode
+                              ? 'bg-emerald-700 text-emerald-100'
+                              : 'bg-emerald-600 text-white'
+                            : isDarkMode
+                              ? 'hover:bg-gray-700 text-gray-200'
+                              : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <span className="text-sm">{option.label}</span>
+                        {language === option.value && <span className="ml-auto">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
