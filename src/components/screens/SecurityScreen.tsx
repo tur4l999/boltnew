@@ -1,17 +1,65 @@
 import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function SecurityScreen() {
   const { goBack, isDarkMode } = useApp();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
   const [biometricEnabled, setBiometricEnabled] = useState(false);
+  
+  // Password change states
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [step, setStep] = useState<'initial' | 'code' | 'newPassword'>('initial');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
 
-  const activeSessions = [
-    { device: 'iPhone 14 Pro', location: 'Bakı, Azərbaycan', lastActive: 'İndi aktiv', current: true },
-    { device: 'iPad Air', location: 'Bakı, Azərbaycan', lastActive: '2 saat əvvəl', current: false },
-  ];
+  const userEmail = "tural.qarayev@example.com";
+  const correctCode = "123456"; // Demo kod
+
+  const handlePasswordChangeClick = () => {
+    setShowPasswordChange(true);
+    setStep('code');
+    setEmailSent(true);
+    // Demo: Email göndərildi mesajı
+    setTimeout(() => setEmailSent(false), 3000);
+  };
+
+  const handleVerifyCode = () => {
+    if (verificationCode === correctCode) {
+      setStep('newPassword');
+    } else {
+      alert('❌ Kod yanlışdır! Demo üçün: 123456');
+    }
+  };
+
+  const handleChangePassword = () => {
+    if (newPassword.length < 8) {
+      alert('❌ Şifrə ən azı 8 simvol olmalıdır!');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      alert('❌ Şifrələr uyğun gəlmir!');
+      return;
+    }
+    alert('✅ Şifrə uğurla dəyişdirildi!');
+    setShowPasswordChange(false);
+    setStep('initial');
+    setVerificationCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  const handleCancel = () => {
+    setShowPasswordChange(false);
+    setStep('initial');
+    setVerificationCode('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setEmailSent(false);
+  };
 
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
@@ -55,32 +103,191 @@ export function SecurityScreen() {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-red-600/20' : 'bg-red-100'
             }`}>
-              <EmojiIcon emoji="🔒" size={20} />
+              <Icon name="lock" size={20} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Şifrə
             </h2>
           </div>
 
-          <button
-            onClick={() => alert('Şifrə dəyişdirmə formu (demo)')}
-            className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
-              isDarkMode 
-                ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-700/50 text-gray-200' 
-                : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-900'
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              <div className="text-2xl">🔑</div>
-              <div className="text-left">
-                <div className="font-bold">Şifrəni dəyişdir</div>
-                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Son dəyişiklik: 30 gün əvvəl
+          {!showPasswordChange ? (
+            <button
+              onClick={handlePasswordChangeClick}
+              className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
+                isDarkMode 
+                  ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-700/50 text-gray-200' 
+                  : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-900'
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
+                }`}>
+                  <Icon name="lock" size={20} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
+                </div>
+                <div className="text-left">
+                  <div className="font-bold">Şifrəni dəyişdir</div>
+                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Son dəyişiklik: 30 gün əvvəl
+                  </div>
                 </div>
               </div>
+              <div className="text-2xl">→</div>
+            </button>
+          ) : (
+            <div className="space-y-4">
+              {/* Email göndərildi mesajı */}
+              {emailSent && (
+                <div className={`p-4 rounded-2xl border-2 animate-fadeInUp ${
+                  isDarkMode 
+                    ? 'border-emerald-500/50 bg-emerald-900/20' 
+                    : 'border-emerald-500/50 bg-emerald-50'
+                }`}>
+                  <div className="flex items-center gap-3">
+                    <Icon name="mail" size={24} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+                    <div>
+                      <div className={`font-bold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                        ✅ Təsdiqləmə kodu göndərildi
+                      </div>
+                      <div className={`text-sm ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                        {userEmail} ünvanına kod göndərildi
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1: Verification Code */}
+              {step === 'code' && (
+                <div className={`p-4 rounded-2xl border-2 ${
+                  isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+                }`}>
+                  <div className="mb-4">
+                    <label className={`block text-sm font-bold mb-2 ${
+                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      Təsdiqləmə kodu
+                    </label>
+                    <input
+                      type="text"
+                      value={verificationCode}
+                      onChange={(e) => setVerificationCode(e.target.value)}
+                      placeholder="6 rəqəmli kodu daxil edin"
+                      maxLength={6}
+                      className={`w-full px-4 py-3 rounded-xl border-2 font-mono text-lg text-center transition-all duration-300 ${
+                        isDarkMode 
+                          ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
+                          : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
+                      } focus:outline-none`}
+                    />
+                    <div className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      💡 Demo üçün kod: <span className="font-bold">123456</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleVerifyCode}
+                      disabled={verificationCode.length !== 6}
+                      className={`flex-1 py-3 rounded-xl font-bold transition-all duration-300 ${
+                        verificationCode.length === 6
+                          ? isDarkMode
+                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                            : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          : isDarkMode
+                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
+                    >
+                      Təsdiqlə
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+                        isDarkMode 
+                          ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                          : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                      }`}
+                    >
+                      Ləğv et
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: New Password */}
+              {step === 'newPassword' && (
+                <div className={`p-4 rounded-2xl border-2 ${
+                  isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+                }`}>
+                  <div className="space-y-4">
+                    <div>
+                      <label className={`block text-sm font-bold mb-2 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        Yeni şifrə
+                      </label>
+                      <input
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Ən azı 8 simvol"
+                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
+                          isDarkMode 
+                            ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
+                            : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
+                        } focus:outline-none`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block text-sm font-bold mb-2 ${
+                        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        Şifrəni təsdiqlə
+                      </label>
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Şifrəni təkrar daxil edin"
+                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
+                          isDarkMode 
+                            ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
+                            : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
+                        } focus:outline-none`}
+                      />
+                    </div>
+                    <div className="flex gap-3 pt-2">
+                      <button
+                        onClick={handleChangePassword}
+                        disabled={newPassword.length < 8 || confirmPassword.length < 8}
+                        className={`flex-1 py-3 rounded-xl font-bold transition-all duration-300 ${
+                          newPassword.length >= 8 && confirmPassword.length >= 8
+                            ? isDarkMode
+                              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                              : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                            : isDarkMode
+                              ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        }`}
+                      >
+                        Şifrəni dəyişdir
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+                          isDarkMode 
+                            ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                            : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                        }`}
+                      >
+                        Ləğv et
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="text-2xl">→</div>
-          </button>
+          )}
         </Card>
 
         {/* Two Factor Authentication */}
@@ -89,7 +296,7 @@ export function SecurityScreen() {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
             }`}>
-              <EmojiIcon emoji="🛡️" size={20} />
+              <Icon name="shield" size={20} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               İki faktorlu autentifikasiya
@@ -127,8 +334,9 @@ export function SecurityScreen() {
             </div>
             {twoFactorEnabled && (
               <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-emerald-900/30' : 'bg-emerald-100'}`}>
-                <div className={`text-sm ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
-                  📱 Təsdiqləmə kodu: +994 XX XXX XX 23
+                <div className={`text-sm flex items-center gap-2 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                  <Icon name="phone" size={16} />
+                  Təsdiqləmə kodu: +994 XX XXX XX 23
                 </div>
               </div>
             )}
@@ -156,120 +364,6 @@ export function SecurityScreen() {
                   biometricEnabled ? 'translate-x-7' : 'translate-x-1'
                 }`}></div>
               </button>
-            </div>
-          </div>
-        </Card>
-
-        {/* Active Sessions */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-            }`}>
-              <EmojiIcon emoji="📱" size={20} />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Aktiv cihazlar
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            {activeSessions.map((session, index) => (
-              <div
-                key={index}
-                className={`p-4 rounded-2xl border-2 ${
-                  session.current
-                    ? isDarkMode
-                      ? 'border-emerald-500/50 bg-emerald-900/20'
-                      : 'border-emerald-500/50 bg-emerald-50'
-                    : isDarkMode
-                      ? 'border-gray-700 bg-gray-800/50'
-                      : 'border-gray-200 bg-gray-50'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <div className="font-bold flex items-center gap-2">
-                      {session.device}
-                      {session.current && (
-                        <span className={`px-2 py-0.5 rounded-full text-xs ${
-                          isDarkMode ? 'bg-emerald-600 text-white' : 'bg-emerald-600 text-white'
-                        }`}>
-                          Cari
-                        </span>
-                      )}
-                    </div>
-                    <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      📍 {session.location}
-                    </div>
-                    <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      🕐 {session.lastActive}
-                    </div>
-                  </div>
-                  {!session.current && (
-                    <button
-                      onClick={() => alert('Sessiya sonlandırıldı')}
-                      className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all duration-300 hover:scale-105 ${
-                        isDarkMode
-                          ? 'bg-red-600/20 text-red-400 hover:bg-red-600/30'
-                          : 'bg-red-100 text-red-600 hover:bg-red-200'
-                      }`}
-                    >
-                      Sonlandır
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Security Tips */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
-            }`}>
-              <EmojiIcon emoji="💡" size={20} />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Təhlükəsizlik məsləhətləri
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">✅</div>
-                <div>
-                  <div className="font-bold mb-1">Güclü şifrə istifadə edin</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Ən azı 8 simvol, böyük və kiçik hərflər, rəqəmlər və xüsusi simvollar
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">✅</div>
-                <div>
-                  <div className="font-bold mb-1">İki faktorlu autentifikasiyanı aktiv edin</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Hesabınıza əlavə təhlükəsizlik təbəqəsi əlavə edin
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">✅</div>
-                <div>
-                  <div className="font-bold mb-1">Aktiv sessiyaları yoxlayın</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Tanımadığınız cihazları dərhal sonlandırın
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </Card>
