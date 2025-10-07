@@ -73,26 +73,54 @@ export function SettingsScreen() {
 
       <div className="relative z-10 p-4 pb-24">
         {/* Enhanced Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={goBack}
-            className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
-              isDarkMode 
-                ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
-                : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
-            }`}
-          >
-            <span className="text-lg">←</span>
-          </button>
-          <div>
-            <h1 className={`text-xl font-black transition-colors duration-200 bg-gradient-to-r ${
-              isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
-            } bg-clip-text text-transparent`}>
-              Parametrlər
-            </h1>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Hesab və tətbiq ayarları
-            </p>
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={goBack}
+              className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                isDarkMode 
+                  ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
+                  : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
+              }`}
+            >
+              <span className="text-lg">←</span>
+            </button>
+            <div>
+              <h1 className={`text-xl font-black transition-colors duration-200 bg-gradient-to-r ${
+                isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
+              } bg-clip-text text-transparent`}>
+                Parametrlər
+              </h1>
+            </div>
+          </div>
+          
+          {/* Tema və Dil düymələri */}
+          <div className="flex items-center gap-2">
+            {/* Tema toggle */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                isDarkMode 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+              title={theme === 'dark' ? 'Gündüz rejimi' : 'Gecə rejimi'}
+            >
+              <EmojiIcon emoji={theme === 'dark' ? '☀️' : '🌙'} size={18} />
+            </button>
+            
+            {/* Dil toggle */}
+            <button
+              onClick={() => setLanguage(language === 'az' ? 'ru' : 'az')}
+              className={`px-2 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 text-xs font-bold ${
+                isDarkMode 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+              title={language === 'az' ? 'Русский' : 'Azərbaycan'}
+            >
+              {language === 'az' ? '🇦🇿' : '🇷🇺'}
+            </button>
           </div>
         </div>
 
@@ -146,149 +174,6 @@ export function SettingsScreen() {
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-        </Card>
-
-        {/* Collapsible Theme Settings */}
-        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
-          <button
-            onClick={() => setThemeExpanded(!themeExpanded)}
-            className="w-full flex items-center justify-between gap-3 text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-xl"><EmojiIcon emoji="🎨" size={20} /></div>
-              <div>
-                <h3 className={`font-bold text-base transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Tema</h3>
-                <p className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {theme === 'light' ? 'Gündüz rejimi' : theme === 'dark' ? 'Gecə rejimi' : 'Sistem ayarı'}
-                </p>
-              </div>
-            </div>
-            <div className={`text-xl transition-transform duration-300 ${
-              themeExpanded ? 'rotate-180' : 'rotate-0'
-            } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              ↓
-            </div>
-          </button>
-          
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            themeExpanded ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}>
-            <div className="space-y-3">
-              {themeOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                    theme === option.value
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/30 shadow-lg'
-                        : 'border-emerald-500 bg-emerald-50 shadow-lg'
-                      : isDarkMode
-                        ? 'border-gray-600/50 bg-gray-700/30 hover:bg-gray-700/50 hover:border-gray-500'
-                        : 'border-gray-300/50 bg-gray-50/50 hover:bg-gray-100/50 hover:border-gray-400'
-                  }`}
-                >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    theme === option.value
-                      ? 'border-emerald-500 bg-emerald-500'
-                      : isDarkMode ? 'border-gray-500' : 'border-gray-400'
-                  }`}>
-                    {theme === option.value && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="theme"
-                    value={option.value}
-                    checked={theme === option.value}
-                    onChange={(e) => setTheme(e.target.value as any)}
-                    className="sr-only"
-                  />
-                  <div className="flex-1">
-                    <div className={`font-bold mb-1 transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                    }`}>{option.label}</div>
-                    <div className={`text-sm transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>{option.description}</div>
-                  </div>
-                </label>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        {/* Collapsible Language Settings */}
-        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
-          <button
-            onClick={() => setLanguageExpanded(!languageExpanded)}
-            className="w-full flex items-center justify-between gap-3 text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-xl">🌐</div>
-              <div>
-                <h3 className={`font-bold text-base transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Dil</h3>
-                <p className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {language === 'az' ? 'Azərbaycan dili' : 'Русский язык'}
-                </p>
-              </div>
-            </div>
-            <div className={`text-xl transition-transform duration-300 ${
-              languageExpanded ? 'rotate-180' : 'rotate-0'
-            } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              ↓
-            </div>
-          </button>
-          
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            languageExpanded ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}>
-            <div className="space-y-3">
-              {languageOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                    language === option.value
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/30 shadow-lg'
-                        : 'border-emerald-500 bg-emerald-50 shadow-lg'
-                      : isDarkMode
-                        ? 'border-gray-600/50 bg-gray-700/30 hover:bg-gray-700/50 hover:border-gray-500'
-                        : 'border-gray-300/50 bg-gray-50/50 hover:bg-gray-100/50 hover:border-gray-400'
-                  }`}
-                >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    language === option.value
-                      ? 'border-emerald-500 bg-emerald-500'
-                      : isDarkMode ? 'border-gray-500' : 'border-gray-400'
-                  }`}>
-                    {language === option.value && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="language"
-                    value={option.value}
-                    checked={language === option.value}
-                    onChange={(e) => setLanguage(e.target.value as any)}
-                    className="sr-only"
-                  />
-                  <div className={`font-bold transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                  }`}>{option.label}</div>
-                </label>
-              ))}
             </div>
           </div>
         </Card>
