@@ -87,25 +87,21 @@ export function OnboardingScreen({
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col relative overflow-hidden"
-      style={{
-        backgroundColor: isDark ? colors.background : currentSlide.backgroundColor || colors.background,
-        transition: 'background-color 500ms ease-in-out',
-      }}
-    >
-      {/* CSS Animation keyframes */}
+    <>
       <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
+        @keyframes fadeInAnim {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
       `}</style>
-      {/* Top Navigation Bar */}
+      <div
+        className="min-h-screen flex flex-col relative overflow-hidden"
+        style={{
+          backgroundColor: isDark ? colors.background : currentSlide.backgroundColor || colors.background,
+          transition: 'background-color 500ms ease-in-out',
+        }}
+      >
+        {/* Top Navigation Bar */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-16 pb-4">
         {/* Back Button (visible from slide 2+) */}
         {!isFirst && (
@@ -149,9 +145,10 @@ export function OnboardingScreen({
         {/* Illustration - Fade in with key change */}
         <div
           key={`illustration-${slideKey}`}
-          className="w-full max-w-sm mb-12 animate-fadeIn"
+          className="w-full max-w-sm mb-12"
           style={{
-            animation: 'fadeIn 600ms ease-in-out',
+            animation: 'fadeInAnim 600ms ease-in-out',
+            opacity: 1,
           }}
         >
           {getIllustration(currentSlide.illustration, {
@@ -163,9 +160,10 @@ export function OnboardingScreen({
         {/* Text Content - Fade in with key change */}
         <div
           key={`text-${slideKey}`}
-          className="w-full max-w-md text-center animate-fadeIn"
+          className="w-full max-w-md text-center"
           style={{
-            animation: 'fadeIn 600ms ease-in-out',
+            animation: 'fadeInAnim 600ms ease-in-out',
+            opacity: 1,
           }}
         >
           {/* Title */}
@@ -233,8 +231,9 @@ export function OnboardingScreen({
         aria-label={`Slide ${currentIndex + 1} of ${totalSlides}`}
       >
         {t(currentSlide.titleKey)}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
