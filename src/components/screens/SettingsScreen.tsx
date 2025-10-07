@@ -241,7 +241,7 @@ export function SettingsScreen() {
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
                 }`}>
-                  <Icon name="dollar-sign" size={12} /> {balance} AZN
+                  ₼ {balance} AZN
                 </div>
                 <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
