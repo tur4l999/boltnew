@@ -1,35 +1,35 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function ContactScreen() {
   const { goBack, isDarkMode } = useApp();
 
   const contactMethods = [
     {
-      icon: '📧',
+      icon: 'mail',
       title: 'Email',
       value: 'support@dda.az',
       action: 'mailto:support@dda.az',
       color: 'blue'
     },
     {
-      icon: '📱',
+      icon: 'phone',
       title: 'Telefon',
       value: '+994 12 XXX XX XX',
       action: 'tel:+994XXXXXXXXX',
       color: 'emerald'
     },
     {
-      icon: '💬',
+      icon: 'message-circle',
       title: 'WhatsApp',
       value: '+994 XX XXX XX XX',
       action: 'https://wa.me/994XXXXXXXXX',
       color: 'green'
     },
     {
-      icon: '📮',
+      icon: 'send',
       title: 'Telegram',
       value: '@dda_support',
       action: 'https://t.me/dda_support',
@@ -38,10 +38,10 @@ export function ContactScreen() {
   ];
 
   const socialMedia = [
-    { icon: '📘', name: 'Facebook', handle: '@dda.az', color: 'blue' },
-    { icon: '📷', name: 'Instagram', handle: '@dda.az', color: 'pink' },
-    { icon: '🐦', name: 'Twitter', handle: '@dda_az', color: 'blue' },
-    { icon: '▶️', name: 'YouTube', handle: 'DDA Azerbaijan', color: 'red' }
+    { icon: 'facebook', name: 'Facebook', handle: '@dda.az', color: 'blue' },
+    { icon: 'instagram', name: 'Instagram', handle: '@dda.az', color: 'pink' },
+    { icon: 'twitter', name: 'Twitter', handle: '@dda_az', color: 'blue' },
+    { icon: 'youtube', name: 'YouTube', handle: 'DDA Azerbaijan', color: 'red' }
   ];
 
   const officeInfo = {
@@ -98,12 +98,16 @@ export function ContactScreen() {
               onClick={() => window.location.href = method.action}
             >
               <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl ${
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
                   isDarkMode 
                     ? `bg-${method.color}-600/20` 
                     : `bg-${method.color}-100`
                 }`}>
-                  {method.icon}
+                  <Icon 
+                    name={method.icon as any} 
+                    size={28}
+                    className={isDarkMode ? `text-${method.color}-400` : `text-${method.color}-600`}
+                  />
                 </div>
                 <div className="flex-1">
                   <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
@@ -125,7 +129,11 @@ export function ContactScreen() {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
             }`}>
-              <EmojiIcon emoji="🏢" size={20} />
+              <Icon 
+                name="building" 
+                size={20}
+                className={isDarkMode ? 'text-purple-400' : 'text-purple-600'}
+              />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Ofis məlumatı
@@ -135,7 +143,15 @@ export function ContactScreen() {
           <div className="space-y-4">
             <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
               <div className="flex items-start gap-3">
-                <div className="text-2xl">📍</div>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
+                  <Icon 
+                    name="map-pin" 
+                    size={20}
+                    className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                  />
+                </div>
                 <div>
                   <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                     Ünvan
@@ -149,7 +165,15 @@ export function ContactScreen() {
 
             <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
               <div className="flex items-start gap-3">
-                <div className="text-2xl">⏰</div>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+                }`}>
+                  <Icon 
+                    name="clock" 
+                    size={20}
+                    className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                  />
+                </div>
                 <div>
                   <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                     İş saatları
@@ -166,13 +190,14 @@ export function ContactScreen() {
 
             <button
               onClick={() => alert('Xəritə açılır... (demo)')}
-              className={`w-full p-4 rounded-2xl border-2 font-bold transition-all duration-300 hover:scale-[1.02] ${
+              className={`w-full p-4 rounded-2xl border-2 font-bold transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 ${
                 isDarkMode 
                   ? 'border-purple-500/50 bg-purple-900/20 hover:bg-purple-900/30 text-purple-300' 
                   : 'border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700'
               }`}
             >
-              🗺️ Xəritədə göstər
+              <Icon name="map" size={20} />
+              Xəritədə göstər
             </button>
           </div>
         </Card>
@@ -183,7 +208,11 @@ export function ContactScreen() {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
             }`}>
-              <EmojiIcon emoji="🌐" size={20} />
+              <Icon 
+                name="globe" 
+                size={20}
+                className={isDarkMode ? 'text-blue-400' : 'text-blue-600'}
+              />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Sosial mediada izləyin
@@ -201,7 +230,15 @@ export function ContactScreen() {
                     : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
                 }`}
               >
-                <div className="text-3xl mb-2">{social.icon}</div>
+                <div className={`w-12 h-12 mx-auto mb-2 rounded-xl flex items-center justify-center ${
+                  isDarkMode ? `bg-${social.color}-600/20` : `bg-${social.color}-100`
+                }`}>
+                  <Icon 
+                    name={social.icon as any} 
+                    size={28}
+                    className={isDarkMode ? `text-${social.color}-400` : `text-${social.color}-600`}
+                  />
+                </div>
                 <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                   {social.name}
                 </div>
@@ -219,7 +256,11 @@ export function ContactScreen() {
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
             }`}>
-              <EmojiIcon emoji="✉️" size={20} />
+              <Icon 
+                name="mail" 
+                size={20}
+                className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}
+              />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Sürətli mesaj
@@ -256,13 +297,14 @@ export function ContactScreen() {
             />
             <button
               onClick={() => alert('Mesajınız göndərildi! (demo)')}
-              className={`w-full p-4 rounded-2xl font-bold transition-all duration-300 hover:scale-[1.02] ${
+              className={`w-full p-4 rounded-2xl font-bold transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 ${
                 isDarkMode 
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white' 
                   : 'bg-emerald-600 hover:bg-emerald-700 text-white'
               }`}
             >
-              📤 Göndər
+              <Icon name="send" size={20} />
+              Göndər
             </button>
           </div>
         </Card>
