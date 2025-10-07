@@ -58,21 +58,13 @@ export function OnboardingScreen({
 
   const colors = getOnboardingColors(isDark);
   const currentSlide = onboardingSlides[currentIndex];
-  const [isVisible, setIsVisible] = useState(false);
+  const [slideKey, setSlideKey] = useState(0);
 
-  // Fade in on every slide change (including initial mount)
-  // AZ: Hər slayd dəyişəndə fade in (ilk açılış daxil)
+  // Trigger re-render with fade on every slide change
+  // AZ: Hər slayd dəyişəndə yenidən render et və fade et
   useEffect(() => {
-    // Start hidden
-    setIsVisible(false);
-    
-    // Then fade in
-    const timeout = setTimeout(() => {
-      setIsVisible(true);
-    }, 50);
-    
-    return () => clearTimeout(timeout);
-  }, [currentIndex]); // Trigger on every slide change!
+    setSlideKey(prev => prev + 1);
+  }, [currentIndex]);
 
   // Translation helper
   // AZ: Tərcümə köməkçisi
@@ -102,6 +94,17 @@ export function OnboardingScreen({
         transition: 'background-color 500ms ease-in-out',
       }}
     >
+      {/* CSS Animation keyframes */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
       {/* Top Navigation Bar */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-16 pb-4">
         {/* Back Button (visible from slide 2+) */}
@@ -143,12 +146,12 @@ export function OnboardingScreen({
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12">
-        {/* Illustration - Simple fade only */}
+        {/* Illustration - Fade in with key change */}
         <div
-          className="w-full max-w-sm mb-12"
+          key={`illustration-${slideKey}`}
+          className="w-full max-w-sm mb-12 animate-fadeIn"
           style={{
-            opacity: isVisible ? 1 : 0,
-            transition: 'opacity 400ms ease-in-out',
+            animation: 'fadeIn 400ms ease-in-out',
           }}
         >
           {getIllustration(currentSlide.illustration, {
@@ -157,12 +160,12 @@ export function OnboardingScreen({
           })}
         </div>
 
-        {/* Text Content - Simple fade only */}
+        {/* Text Content - Fade in with key change */}
         <div
-          className="w-full max-w-md text-center"
+          key={`text-${slideKey}`}
+          className="w-full max-w-md text-center animate-fadeIn"
           style={{
-            opacity: isVisible ? 1 : 0,
-            transition: 'opacity 400ms ease-in-out',
+            animation: 'fadeIn 400ms ease-in-out',
           }}
         >
           {/* Title */}
