@@ -217,7 +217,7 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
         📖
       </div>
       
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
         <h3
           style={{
             fontSize: '15px',
@@ -231,7 +231,13 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
         >
           {title}
         </h3>
-        <p style={{ fontSize: '13px', color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
+        <p style={{ 
+          fontSize: '13px', 
+          color: isDarkMode ? '#9ca3af' : '#6b7280',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}>
           {pages} {language === 'az' ? 'səhifə' : 'pages'}
         </p>
       </div>
@@ -244,6 +250,8 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
           borderRadius: '6px',
           fontSize: '14px',
           fontWeight: '600',
+          flexShrink: 0,
+          whiteSpace: 'nowrap',
         }}
       >
         {language === 'az' ? 'Oxu' : 'Read'}

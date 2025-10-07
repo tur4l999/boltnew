@@ -50,6 +50,14 @@ export const Watermark: React.FC<WatermarkProps> = ({
   const patternWidth = spacing * 2;
   const patternHeight = spacing * 2;
   
+  // Hidden watermark configuration (very subtle)
+  const hiddenOpacity = 0.015; // Çox zəif - demək olar ki görünməz
+  const hiddenFontSize = 6; // Çox kiçik
+  const hiddenSpacing = 80; // Sıx yerləşdirilmiş
+  
+  // Create hidden identifier (device + user fingerprint)
+  const hiddenId = `${config.userId}:${config.deviceId}:${config.currentPage}:${new Date(timestamp).getTime()}`;
+  
   return (
     <div
       className={`watermark-overlay ${className}`}
@@ -65,6 +73,7 @@ export const Watermark: React.FC<WatermarkProps> = ({
         zIndex: 9999,
       }}
     >
+      {/* Görünən watermark */}
       <svg
         width="100%"
         height="100%"
@@ -132,6 +141,106 @@ export const Watermark: React.FC<WatermarkProps> = ({
           style={{
             pointerEvents: 'none',
             userSelect: 'none',
+          }}
+        />
+      </svg>
+      
+      {/* Gizli watermark - çox zəif, demək olar ki görünməz */}
+      <svg
+        width="100%"
+        height="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <defs>
+          <pattern
+            id={`hidden-watermark-${config.currentPage}`}
+            x="0"
+            y="0"
+            width={hiddenSpacing * 3}
+            height={hiddenSpacing * 3}
+            patternUnits="userSpaceOnUse"
+          >
+            {/* Kiçik gizli identifikatorlar - müxtəlif nöqtələrdə */}
+            <text
+              x={10}
+              y={20}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {hiddenId}
+            </text>
+            
+            <text
+              x={hiddenSpacing}
+              y={hiddenSpacing + 30}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              transform={`rotate(45 ${hiddenSpacing} ${hiddenSpacing + 30})`}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {config.userPhone}
+            </text>
+            
+            <text
+              x={hiddenSpacing * 2}
+              y={hiddenSpacing}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              transform={`rotate(-30 ${hiddenSpacing * 2} ${hiddenSpacing})`}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {config.userName}
+            </text>
+            
+            {/* Timestamp-based micro identifier */}
+            <text
+              x={hiddenSpacing + 50}
+              y={hiddenSpacing * 2}
+              fill="#ffffff"
+              fontSize={hiddenFontSize - 1}
+              fontFamily="monospace"
+              opacity={hiddenOpacity * 0.8}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {new Date(timestamp).toISOString()}
+            </text>
+          </pattern>
+        </defs>
+        
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          fill={`url(#hidden-watermark-${config.currentPage})`}
+          style={{
+            pointerEvents: 'none',
+            userSelect: 'none',
+            mixBlendMode: 'multiply',
           }}
         />
       </svg>
