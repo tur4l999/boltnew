@@ -1,329 +1,213 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
-import { Input } from '../ui/Input';
 import { useApp } from '../../contexts/AppContext';
-import { RegistrationScreen } from './RegistrationScreen';
-import { ForgotPasswordScreen } from './ForgotPasswordScreen';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
 export function LoginScreen({ onLogin }: LoginScreenProps) {
+  const { login, isDarkMode } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [errors, setErrors] = useState<{email?: string; password?: string}>({});
-  const { isDarkMode } = useApp();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    setIsLoading(true);
-    // Simulate login delay
-    setTimeout(() => {
-      setIsLoading(false);
-      onLogin();
-    }, 1000);
+    setError('');
+    
+    if (!email) {
+      setError('Email daxil edin');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const success = await login({ email, password });
+      
+      if (success) {
+        onLogin();
+      } else {
+        setError('Giriş uğursuz oldu');
+      }
+    } catch (err) {
+      setError('Xəta baş verdi');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDemoLogin = () => {
-    setEmail('demo@dda.az');
-    setPassword('demo123');
-    setTimeout(handleLogin, 100);
+  const handleTestLogin = async () => {
+    setEmail('turalqarayev99@gmail.com');
+    setPassword('test123');
+    setLoading(true);
+
+    try {
+      const success = await login({ 
+        email: 'turalqarayev99@gmail.com', 
+        password: 'test123' 
+      });
+      
+      if (success) {
+        onLogin();
+      }
+    } finally {
+      setLoading(false);
+    }
   };
-
-  // Handle different screen states
-  if (showRegister) {
-    return (
-      <RegistrationScreen 
-        onBack={() => setShowRegister(false)}
-        onRegister={() => {
-          setShowRegister(false);
-          alert('Qeydiyyat tamamlandı! İndi hesabınıza daxil ola bilərsiniz.');
-        }}
-      />
-    );
-  }
-
-  if (showForgotPassword) {
-    return (
-      <ForgotPasswordScreen 
-        onBack={() => setShowForgotPassword(false)}
-        onSuccess={() => {
-          setShowForgotPassword(false);
-          alert('Şifrəniz uğurla yeniləndi! İndi yeni şifrə ilə daxil ola bilərsiniz.');
-        }}
-      />
-    );
-  }
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 relative transition-all duration-300 ${
-      isDarkMode 
-        ? 'bg-gradient-to-b from-gray-900 via-slate-800 to-gray-900' 
-        : 'bg-gradient-to-b from-gray-50 via-white to-emerald-50/30'
-    } pt-11`}>
-      {/* Soft, calming background elements */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Gentle floating orbs for psychological comfort */}
-        <div className={`absolute top-1/4 left-1/6 w-64 h-64 rounded-full blur-3xl ${
-          isDarkMode ? 'bg-emerald-500/5' : 'bg-emerald-300/20'
-        } animate-pulse`} style={{ animationDuration: '4s' }}></div>
-        <div className={`absolute bottom-1/4 right-1/6 w-80 h-80 rounded-full blur-3xl ${
-          isDarkMode ? 'bg-blue-500/5' : 'bg-blue-200/20'
-        } animate-pulse`} style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
-        
-        {/* Subtle driving-themed floating elements */}
-        <div className="absolute top-16 right-8 opacity-40">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-lg ${
-            isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'
-          } backdrop-blur-sm animate-bounce-subtle`}>
-            🚗
-          </div>
-        </div>
-        <div className="absolute bottom-20 left-8 opacity-40">
-          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${
-            isDarkMode ? 'bg-gray-800/50' : 'bg-white/50'
-          } backdrop-blur-sm animate-bounce-subtle`} style={{ animationDelay: '1s' }}>
-            🚦
-          </div>
-        </div>
-        
-        {/* Minimalist geometric accent */}
-        <div className={`absolute top-1/3 right-1/5 w-1 h-16 ${
-          isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-400/30'
-        } rounded-full rotate-12`}></div>
-      </div>
-      
-      <div className="w-full max-w-md relative z-10 animate-fade-in-up">
-        {/* Enhanced Logo Section with Digital Driving Academy Branding */}
+    <div className={`min-h-screen flex items-center justify-center p-4 ${
+      isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 to-indigo-50'
+    }`}>
+      <div className="w-full max-w-md">
+        {/* Logo və Başlıq */}
         <div className="text-center mb-8">
-          <div className={`w-32 h-32 mx-auto mb-6 rounded-3xl shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${
-            isDarkMode 
-              ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600/50' 
-              : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
-          } backdrop-blur-sm relative overflow-hidden`}>
-            {/* Driving themed background pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-2 left-3 text-2xl">🚗</div>
-              <div className="absolute bottom-3 right-2 text-lg">🚦</div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl opacity-20">📚</div>
-            </div>
-            
-            <img 
-              src="/DDA_logo.png" 
-              alt="Digital Driving Academy Logo" 
-              className="w-20 h-20 object-contain transition-transform duration-300 hover:scale-110 relative z-10"
-              onError={(e) => {
-                // Fallback to styled DDA text logo
-                (e.target as HTMLImageElement).style.display = 'none';
-                const parent = (e.target as HTMLImageElement).parentElement;
-                if (parent) {
-                  parent.innerHTML = `
-                    <div class="relative z-10 text-center">
-                      <div class="text-3xl font-black bg-gradient-to-r ${isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'} bg-clip-text text-transparent">DDA</div>
-                      <div class="text-xs font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} mt-1">ACADEMY</div>
-                    </div>
-                  `;
-                }
-              }}
-            />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500 to-green-600 shadow-2xl mb-4">
+            <span className="text-4xl">🚗</span>
           </div>
-          
-          <div>
-            <h1 className={`text-2xl font-black transition-all duration-300 bg-gradient-to-r ${
-              isDarkMode 
-                ? 'from-emerald-400 via-green-400 to-emerald-500' 
-                : 'from-emerald-600 via-green-600 to-emerald-700'
-            } bg-clip-text text-transparent`}>
-              Digital Driving Academy
-            </h1>
-            <p className={`text-sm font-medium mt-2 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-600'
-            }`}>
-              Modern texnologiya ilə sürücülük təhsili
-            </p>
-          </div>
+          <h1 className={`text-3xl font-bold mb-2 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>
+            DDA Sürücülük
+          </h1>
+          <p className={`text-sm ${
+            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+          }`}>
+            Sürücülük imtahanına hazırlaşın
+          </p>
         </div>
 
-        {/* Enhanced Login Form */}
-        <Card className={`p-8 transition-all duration-300 backdrop-blur-lg ${
+        {/* Login Card */}
+        <div className={`rounded-3xl shadow-2xl p-6 ${
           isDarkMode 
-            ? 'bg-gray-800/90 border-gray-600/30 shadow-2xl' 
-            : 'bg-white/95 border-white/50 shadow-xl'
-        } hover:shadow-2xl`}>
-          <div className="space-y-7">
-            <div className="text-center mb-7">
-              <h2 className={`text-xl font-bold transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-900'
-              }`}>
-                Xoş gəlmisiniz
-              </h2>
-              <p className={`text-sm transition-colors duration-200 mt-2 ${
-                isDarkMode ? 'text-gray-400' : 'text-gray-600'
-              }`}>
-                Təhsilinizi davam etdirmək üçün daxil olun
-              </p>
-            </div>
+            ? 'bg-gray-800 border border-gray-700' 
+            : 'bg-white border border-gray-100'
+        }`}>
+          <h2 className={`text-xl font-bold mb-6 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>
+            Daxil ol
+          </h2>
 
-            <Input
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 rounded-xl bg-red-100 border border-red-200 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Email Input */}
+          <div className="mb-4">
+            <label className={`block text-sm font-medium mb-2 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              Email
+            </label>
+            <input
               type="email"
               value={email}
-              onChange={setEmail}
-              label="E-mail ünvanı"
-              placeholder="E-poçtunuzu daxil edin"
-              icon="📧"
-              error={errors.email}
-              required
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@example.com"
+              disabled={loading}
+              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
+                isDarkMode
+                  ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-emerald-500'
+                  : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
+              } ${loading ? 'opacity-50' : ''}`}
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
             />
-            
-            <Input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={setPassword}
-              label="Şifrə"
-              placeholder="Şifrənizi daxil edin"
-              icon="🔐"
-              error={errors.password}
-              required
-              rightElement={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
-                    isDarkMode 
-                      ? 'text-gray-400 hover:text-gray-200' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {showPassword ? '🙈' : '👁️'}
-                </button>
-              }
-            />
-
-            {/* Enhanced Remember Me Checkbox */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center group">
-                <div className="relative">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-5 h-5 text-emerald-600 bg-gray-100 border-2 border-gray-300 rounded-lg focus:ring-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all duration-200"
-                  />
-                </div>
-                <label htmlFor="remember-me" className={`ml-3 text-sm font-medium cursor-pointer transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-200' : 'text-gray-700'
-                }`}>
-                  Yadda saxla
-                </label>
-              </div>
-              <button 
-                onClick={() => setShowForgotPassword(true)}
-                className={`text-sm font-medium transition-colors duration-200 hover:underline ${
-                  isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
-                }`}
-              >
-                Şifrəni unutmusan?
-              </button>
-            </div>
-
-            <Button
-              onClick={handleLogin}
-              disabled={!email || !password || isLoading}
-              className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
-                isLoading ? 'animate-pulse' : ''
-              } bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center gap-3">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  Giriş edilir...
-                </div>
-              ) : (
-                'Daxil ol'
-              )}
-            </Button>
-
-            {/* Enhanced Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className={`w-full h-px bg-gradient-to-r ${
-                  isDarkMode 
-                    ? 'from-transparent via-gray-600/50 to-transparent' 
-                    : 'from-transparent via-gray-200/70 to-transparent'
-                }`}></div>
-              </div>
-              <div className="relative flex justify-center">
-                <span className={`px-4 py-1.5 text-xs font-medium rounded-full backdrop-blur-sm transition-colors duration-200 ${
-                  isDarkMode 
-                    ? 'bg-gray-800/90 text-gray-400 border border-gray-600/30' 
-                    : 'bg-white/95 text-gray-500 border border-white/50'
-                }`}>və ya</span>
-              </div>
-            </div>
-
-            {/* Enhanced Social Login Buttons */}
-            <div className="space-y-2">
-              <button
-                onClick={() => alert('Google ilə giriş (demo)')}
-                className={`w-full flex items-center justify-center gap-3 px-4 py-3 border rounded-xl transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] group ${
-                  isDarkMode 
-                    ? 'border-gray-600/30 bg-gray-700/40 hover:bg-gray-600/40 text-gray-200 hover:border-gray-500/50' 
-                    : 'border-gray-200/60 bg-white/70 hover:bg-white/90 text-gray-900 hover:border-gray-300/80'
-                } backdrop-blur-sm hover:shadow-md`}
-              >
-                <svg className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span className="font-medium text-sm">Google ilə daxil ol</span>
-              </button>
-              
-              <button
-                onClick={() => alert('Apple ilə giriş (demo)')}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-800/50 rounded-xl transition-all duration-300 transform hover:scale-[1.01] active:scale-[0.99] bg-gradient-to-r from-gray-900/90 to-black/90 hover:from-black/95 hover:to-gray-800/95 text-white hover:shadow-md group backdrop-blur-sm"
-              >
-                <svg className="w-4 h-4 fill-current transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                </svg>
-                <span className="font-medium text-sm">Apple ilə daxil ol</span>
-              </button>
-            </div>
           </div>
-        </Card>
 
-        {/* Enhanced Additional Options */}
-        <div className="mt-10 text-center space-y-4">
-          <div className={`text-base transition-colors duration-200 ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+          {/* Password Input */}
+          <div className="mb-6">
+            <label className={`block text-sm font-medium mb-2 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              Şifrə
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              disabled={loading}
+              className={`w-full px-4 py-3 rounded-xl border outline-none transition-all ${
+                isDarkMode
+                  ? 'bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-emerald-500'
+                  : 'bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
+              } ${loading ? 'opacity-50' : ''}`}
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+            />
+          </div>
+
+          {/* Login Button */}
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className={`w-full py-3 rounded-xl font-bold text-white transition-all shadow-lg mb-3 ${
+              loading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 active:scale-98'
+            }`}
+          >
+            {loading ? 'Yüklənir...' : 'Daxil ol'}
+          </button>
+
+          {/* Test Login Button */}
+          <button
+            onClick={handleTestLogin}
+            disabled={loading}
+            className={`w-full py-3 rounded-xl font-bold transition-all border-2 ${
+              loading
+                ? 'opacity-50 cursor-not-allowed'
+                : isDarkMode
+                  ? 'border-gray-600 text-gray-300 hover:bg-gray-700'
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            Test Hesabı (Premium)
+          </button>
+
+          {/* Test Account Info */}
+          <div className={`mt-6 p-4 rounded-xl ${
+            isDarkMode ? 'bg-gray-700/50' : 'bg-blue-50'
           }`}>
-            Hesabın yoxdur?{' '}
-            <button 
-              onClick={() => setShowRegister(true)}
-              className={`font-bold transition-all duration-300 hover:scale-105 inline-block hover:underline ${
-                isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
-              }`}
-            >
-              Qeydiyyatdan keç
-            </button>
+            <div className={`text-xs font-medium mb-2 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              💎 Test Hesabı:
+            </div>
+            <div className={`text-xs ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              <div className="mb-1">
+                📧 <span className="font-mono">turalqarayev99@gmail.com</span>
+              </div>
+              <div className="mb-1">
+                🆔 <span className="font-mono text-[10px]">22de39a3-ad84-427a-bca8-3b79f5610285</span>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="inline-flex items-center px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 text-xs font-medium">
+                  ✓ Aktiv Paket
+                </span>
+                <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-medium">
+                  Premium
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Enhanced Footer */}
-        <div className={`mt-12 text-center text-sm transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-500' : 'text-gray-400'
-        }`}>
-          <div className="text-xs opacity-70">
-            © 2024 Digital Driving Academy • Bütün hüquqlar qorunur
-          </div>
+        {/* Footer */}
+        <div className="text-center mt-6">
+          <p className={`text-xs ${
+            isDarkMode ? 'text-gray-500' : 'text-gray-500'
+          }`}>
+            © 2025 DDA Sürücülük Məktəbi
+          </p>
         </div>
       </div>
     </div>
