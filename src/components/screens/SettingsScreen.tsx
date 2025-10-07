@@ -248,7 +248,7 @@ export function SettingsScreen() {
                     ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50 hover:bg-blue-900/50 hover:shadow-lg' 
                     : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
                 }`}>
-                  <Icon name="flask-conical" size={12} /> {simulatorBalance} Simulyator
+                  <Icon name="clipboard-check" size={12} /> {simulatorBalance} Simulyator
                 </div>
                 {activePackage && (
                   <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center gap-1 ${
@@ -393,20 +393,27 @@ export function SettingsScreen() {
                 {section.items.map((item, index) => (
                   <button
                     key={item.key}
-                    onClick={item.action}
-                    className={`w-full p-3 flex items-center gap-3 text-left transition-all duration-300 rounded-xl transform hover:scale-[1.01] active:scale-[0.99] group relative overflow-hidden ${
-                      isDarkMode 
-                        ? 'hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 text-gray-200' 
-                        : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100/50 text-gray-900'
+                    onClick={item.action || undefined}
+                    disabled={!item.action}
+                    className={`w-full p-3 flex items-center gap-3 text-left transition-all duration-300 rounded-xl transform group relative overflow-hidden ${
+                      item.action 
+                        ? `hover:scale-[1.01] active:scale-[0.99] cursor-pointer ${
+                            isDarkMode 
+                              ? 'hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 text-gray-200' 
+                              : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100/50 text-gray-900'
+                          }`
+                        : `cursor-default ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`
                     }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {/* Hover gradient effect */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                      isDarkMode 
-                        ? 'bg-gradient-to-r from-emerald-600/5 via-transparent to-blue-600/5' 
-                        : 'bg-gradient-to-r from-emerald-400/5 via-transparent to-blue-400/5'
-                    }`}></div>
+                    {item.action && (
+                      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-emerald-600/5 via-transparent to-blue-600/5' 
+                          : 'bg-gradient-to-r from-emerald-400/5 via-transparent to-blue-400/5'
+                      }`}></div>
+                    )}
                     
                     <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all duration-300 ${
                       isDarkMode 
