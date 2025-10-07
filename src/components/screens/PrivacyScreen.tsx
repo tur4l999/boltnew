@@ -145,72 +145,6 @@ export function PrivacyScreen() {
           </div>
         </Card>
 
-        {/* Data Sharing */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-            }`}>
-              <EmojiIcon emoji="🔗" size={20} />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Məlumat paylaşımı
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            <div className={`p-4 rounded-2xl border-2 ${
-              isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <div className="font-bold mb-1">Üçüncü tərəf paylaşımı</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Tərəfdaş şirkətlərlə məlumat paylaşımı (Tövsiyə edilmir)
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleSetting('thirdPartySharing')}
-                  className={`ml-4 w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                    settings.thirdPartySharing
-                      ? 'bg-red-600'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                    settings.thirdPartySharing ? 'translate-x-7' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-2xl border-2 ${
-              isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <div className="font-bold mb-1">Marketing e-poçtları</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Kampaniya və xüsusi təkliflər haqqında bildirişlər
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleSetting('marketingEmails')}
-                  className={`ml-4 w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                    settings.marketingEmails
-                      ? 'bg-emerald-600'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                    settings.marketingEmails ? 'translate-x-7' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </Card>
-
         {/* Account Visibility */}
         <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-3 mb-6">
@@ -283,26 +217,6 @@ export function PrivacyScreen() {
           </div>
 
           <div className="space-y-3">
-            <button
-              onClick={() => alert('Məlumatlarınız yüklənir... (demo)')}
-              className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
-                isDarkMode 
-                  ? 'border-blue-500/50 bg-blue-900/20 hover:bg-blue-900/30 text-blue-300' 
-                  : 'border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-700'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <div className="text-2xl">📥</div>
-                <div className="text-left">
-                  <div className="font-bold">Məlumatları yüklə</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Bütün məlumatlarınızı JSON formatında yükləyin
-                  </div>
-                </div>
-              </div>
-              <div className="text-2xl">→</div>
-            </button>
-
             <button
               onClick={() => {
                 if (confirm('Bütün məlumatlarınız silinəcək! Bu əməliyyat geri qaytarıla bilməz. Davam etmək istəyirsiniz?')) {
