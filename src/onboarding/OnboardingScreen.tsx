@@ -59,40 +59,16 @@ export function OnboardingScreen({
   const colors = getOnboardingColors(isDark);
   const currentSlide = onboardingSlides[currentIndex];
   const [isVisible, setIsVisible] = useState(false); // İlk dəfə FALSE - fade in ilə başla
-  const prevIndexRef = useRef(currentIndex);
 
-  // Initial fade in on mount
-  // AZ: İlk açılışda fade in
+  // YALNIZ initial fade in on mount - NO SLIDE TRANSITIONS!
+  // AZ: YALNIZ ilk açılışda fade in - Slayd keçidləri effektsiz!
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsVisible(true);
     }, 50);
     
     return () => clearTimeout(timeout);
-  }, []);
-
-  // Fade animation on slide change
-  // AZ: Slayd dəyişəndə fade animasiyası
-  useEffect(() => {
-    if (currentIndex !== prevIndexRef.current) {
-      // Fade out
-      setIsVisible(false);
-      
-      // After fade out, change content and fade in
-      const fadeOutTimeout = setTimeout(() => {
-        prevIndexRef.current = currentIndex;
-        
-        // Fade in new content
-        const fadeInTimeout = setTimeout(() => {
-          setIsVisible(true);
-        }, 50);
-        
-        return () => clearTimeout(fadeInTimeout);
-      }, 400); // 400ms fade out duration
-      
-      return () => clearTimeout(fadeOutTimeout);
-    }
-  }, [currentIndex]);
+  }, []); // Empty deps - only on mount!
 
   // Translation helper
   // AZ: Tərcümə köməkçisi
