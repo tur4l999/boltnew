@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function FeedbackScreen() {
   const { goBack, isDarkMode } = useApp();
   const [rating, setRating] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
   const categories = [
-    { id: 'bug', label: 'Texniki problem', icon: '🐛', color: 'red' },
-    { id: 'feature', label: 'Yeni funksiya təklifi', icon: '💡', color: 'yellow' },
-    { id: 'content', label: 'Məzmun haqqında', icon: '📚', color: 'blue' },
-    { id: 'ui', label: 'Dizayn və interfeys', icon: '🎨', color: 'purple' },
-    { id: 'other', label: 'Digər', icon: '💬', color: 'gray' }
+    { id: 'bug', label: 'Texniki problem', icon: 'alert-circle', color: 'red' },
+    { id: 'feature', label: 'Yeni funksiya təklifi', icon: 'lightbulb', color: 'yellow' },
+    { id: 'content', label: 'Məzmun haqqında', icon: 'book-open', color: 'blue' },
+    { id: 'ui', label: 'Dizayn və interfeys', icon: 'palette', color: 'purple' },
+    { id: 'other', label: 'Digər', icon: 'message-square', color: 'gray' }
   ];
 
   const handleSubmit = () => {
@@ -36,6 +37,8 @@ export function FeedbackScreen() {
     setSelectedCategory('');
     setFeedback('');
   };
+
+  const selectedCategoryObj = categories.find(c => c.id === selectedCategory);
 
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
@@ -73,38 +76,25 @@ export function FeedbackScreen() {
           </div>
         </div>
 
-        {/* Intro */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp">
-          <div className="text-center">
-            <div className="text-5xl mb-4">💭</div>
-            <h2 className={`font-black text-xl mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Sizin fikriniz bizim üçün dəyərlidir
-            </h2>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Tətbiqi daha da yaxşılaşdırmaq üçün rəy və təkliflərinizi bizə çatdırın
-            </p>
-          </div>
-        </Card>
-
         {/* Rating */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
-          <div className="flex items-center gap-3 mb-6">
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp">
+          <div className="flex items-center gap-3 mb-4">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
             }`}>
-              <EmojiIcon emoji="⭐" size={20} />
+              <Icon name="star" size={20} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
             </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <h2 className={`font-bold text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Tətbiqi qiymətləndirin
             </h2>
           </div>
 
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-3 mb-3">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
                 onClick={() => setRating(star)}
-                className={`text-5xl transition-all duration-300 transform hover:scale-125 ${
+                className={`text-4xl transition-all duration-300 transform hover:scale-125 active:scale-95 ${
                   star <= rating ? 'opacity-100' : 'opacity-30'
                 }`}
               >
@@ -114,7 +104,7 @@ export function FeedbackScreen() {
           </div>
 
           {rating > 0 && (
-            <div className={`mt-4 text-center font-bold ${
+            <div className={`text-center text-sm font-bold ${
               rating >= 4 
                 ? isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
                 : isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
@@ -128,74 +118,118 @@ export function FeedbackScreen() {
           )}
         </Card>
 
-        {/* Category */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-            }`}>
-              <EmojiIcon emoji="📋" size={20} />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Kateqoriya seçin
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all duration-300 ${
-                  selectedCategory === category.id
-                    ? isDarkMode
-                      ? 'border-emerald-500 bg-emerald-900/20'
-                      : 'border-emerald-500 bg-emerald-50'
-                    : isDarkMode
-                      ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-700/50'
-                      : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
-                }`}
-              >
-                <div className="text-2xl">{category.icon}</div>
-                <div className="flex-1 text-left">
-                  <div className={`font-bold ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                    {category.label}
-                  </div>
-                </div>
-                {selectedCategory === category.id && (
-                  <div className="text-2xl text-emerald-500">✓</div>
-                )}
-              </button>
-            ))}
-          </div>
-        </Card>
-
-        {/* Feedback Text */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
-          <div className="flex items-center gap-3 mb-6">
+        {/* Combined Category & Feedback */}
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
+          <div className="flex items-center gap-3 mb-4">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
             }`}>
-              <EmojiIcon emoji="✍️" size={20} />
+              <Icon name="message-square" size={20} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
             </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Fikir və təklifləriniz
+            <h2 className={`font-bold text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              Rəyiniz
             </h2>
           </div>
 
+          {/* Category Dropdown */}
+          <div className="mb-4 relative">
+            <button
+              onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+              className={`w-full p-3 rounded-xl border-2 flex items-center justify-between transition-all duration-300 ${
+                selectedCategory
+                  ? isDarkMode
+                    ? 'border-emerald-500/50 bg-emerald-900/20'
+                    : 'border-emerald-500/50 bg-emerald-50'
+                  : isDarkMode
+                    ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-700/50'
+                    : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                {selectedCategoryObj ? (
+                  <>
+                    <Icon 
+                      name={selectedCategoryObj.icon as any} 
+                      size={18}
+                      className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}
+                    />
+                    <span className={`font-medium text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      {selectedCategoryObj.label}
+                    </span>
+                  </>
+                ) : (
+                  <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Kateqoriya seçin
+                  </span>
+                )}
+              </div>
+              <div className={`text-xl transition-transform duration-300 ${
+                categoryDropdownOpen ? 'rotate-180' : 'rotate-0'
+              } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                ↓
+              </div>
+            </button>
+
+            {/* Dropdown menu */}
+            {categoryDropdownOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setCategoryDropdownOpen(false)}
+                />
+                <div className={`absolute top-full left-0 right-0 mt-2 rounded-xl border-2 overflow-hidden z-50 shadow-2xl ${
+                  isDarkMode 
+                    ? 'bg-gray-800 border-gray-700' 
+                    : 'bg-white border-gray-200'
+                }`}>
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => {
+                        setSelectedCategory(category.id);
+                        setCategoryDropdownOpen(false);
+                      }}
+                      className={`w-full p-3 flex items-center gap-3 transition-all duration-200 ${
+                        selectedCategory === category.id
+                          ? isDarkMode
+                            ? 'bg-emerald-700 text-emerald-100'
+                            : 'bg-emerald-600 text-white'
+                          : isDarkMode
+                            ? 'hover:bg-gray-700 text-gray-200'
+                            : 'hover:bg-gray-50 text-gray-800'
+                      }`}
+                    >
+                      <Icon 
+                        name={category.icon as any} 
+                        size={18}
+                        className={selectedCategory === category.id 
+                          ? 'text-white' 
+                          : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                        }
+                      />
+                      <span className="text-sm font-medium">{category.label}</span>
+                      {selectedCategory === category.id && <span className="ml-auto">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Feedback Textarea */}
           <textarea
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Fikir və təkliflərinizi ətraflı yazın..."
-            rows={6}
-            className={`w-full px-4 py-3 rounded-2xl border-2 transition-all duration-300 resize-none ${
+            rows={5}
+            className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 resize-none ${
               isDarkMode
                 ? 'border-gray-700 bg-gray-800 text-gray-100 placeholder-gray-500 focus:border-emerald-500'
                 : 'border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
-            }`}
+            } focus:outline-none`}
           />
 
-          <div className={`mt-2 text-sm text-right ${
+          <div className={`mt-2 text-xs text-right ${
             feedback.length > 500 
               ? 'text-red-500' 
               : isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -205,52 +239,44 @@ export function FeedbackScreen() {
         </Card>
 
         {/* Submit Button */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
-          <button
-            onClick={handleSubmit}
-            className={`w-full p-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-[1.02] ${
-              isDarkMode 
-                ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white' 
-                : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white'
-            } shadow-lg hover:shadow-xl`}
-          >
-            📤 Göndər
-          </button>
-
-          <div className={`mt-4 text-center text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Rəyinizi göndərməklə{' '}
-            <span className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}>
-              Xidmət Şərtləri
-            </span>
-            ni qəbul etmiş olursunuz
-          </div>
-        </Card>
+        <button
+          onClick={handleSubmit}
+          className={`w-full p-4 rounded-xl font-bold text-base transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 mb-4 ${
+            isDarkMode 
+              ? 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white' 
+              : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white'
+          } shadow-lg hover:shadow-xl animate-fadeInUp`}
+          style={{ animationDelay: '200ms' }}
+        >
+          <Icon name="send" size={20} />
+          Göndər
+        </button>
 
         {/* Stats */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
-          <div className="text-center">
-            <div className={`text-3xl font-black mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+        <Card variant="elevated" padding="md" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+          <div className="text-center mb-3">
+            <div className={`text-2xl font-black mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               1,234+
             </div>
-            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               İstifadəçidən alınan rəylər
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 mt-6">
+          <div className="grid grid-cols-2 gap-3">
             <div className={`p-3 rounded-xl text-center ${isDarkMode ? 'bg-emerald-900/20' : 'bg-emerald-50'}`}>
-              <div className={`text-2xl font-black ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+              <div className={`text-xl font-black ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
                 87%
               </div>
               <div className={`text-xs ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                Müsbət rəy
+                Müsbət
               </div>
             </div>
             <div className={`p-3 rounded-xl text-center ${isDarkMode ? 'bg-blue-900/20' : 'bg-blue-50'}`}>
-              <div className={`text-2xl font-black ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+              <div className={`text-xl font-black ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>
                 4.6
               </div>
               <div className={`text-xs ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                Orta reytinq
+                Reytinq
               </div>
             </div>
           </div>

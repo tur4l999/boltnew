@@ -10,30 +10,23 @@ export function ContactScreen() {
     {
       icon: 'mail',
       title: 'Email',
-      value: 'support@dda.az',
-      action: 'mailto:support@dda.az',
+      value: 'info@dda.az',
+      action: 'mailto:info@dda.az',
       color: 'blue'
     },
     {
       icon: 'phone',
       title: 'Telefon',
-      value: '+994 12 XXX XX XX',
-      action: 'tel:+994XXXXXXXXX',
+      value: '+994 51 215 54 54',
+      action: 'tel:+994512155454',
       color: 'emerald'
     },
     {
       icon: 'message-circle',
       title: 'WhatsApp',
-      value: '+994 XX XXX XX XX',
-      action: 'https://wa.me/994XXXXXXXXX',
+      value: '+994 51 215 54 54',
+      action: 'https://wa.me/994512155454',
       color: 'green'
-    },
-    {
-      icon: 'send',
-      title: 'Telegram',
-      value: '@dda_support',
-      action: 'https://t.me/dda_support',
-      color: 'cyan'
     }
   ];
 
@@ -183,27 +176,9 @@ export function ContactScreen() {
           </div>
 
           <div className="space-y-3">
-            <input
-              type="text"
-              placeholder="Adınız"
-              className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
-                isDarkMode
-                  ? 'border-gray-700 bg-gray-800 text-gray-100 focus:border-emerald-500'
-                  : 'border-gray-200 bg-white text-gray-900 focus:border-emerald-500'
-              }`}
-            />
-            <input
-              type="email"
-              placeholder="Email ünvanınız"
-              className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
-                isDarkMode
-                  ? 'border-gray-700 bg-gray-800 text-gray-100 focus:border-emerald-500'
-                  : 'border-gray-200 bg-white text-gray-900 focus:border-emerald-500'
-              }`}
-            />
             <textarea
               placeholder="Mesajınız"
-              rows={4}
+              rows={6}
               className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 resize-none ${
                 isDarkMode
                   ? 'border-gray-700 bg-gray-800 text-gray-100 focus:border-emerald-500'

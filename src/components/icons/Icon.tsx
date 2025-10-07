@@ -804,6 +804,39 @@ const FlaskConicalIcon = ({ size = 24, className = '', color = 'currentColor' }:
   </svg>
 );
 
+const AlertCircleIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <path d="M12 8v4M12 16h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LightbulbIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M9 18h6M10 22h4M15 8a3 3 0 10-6 0c0 2 3 3 3 5v1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 2v1M18.36 5.64l-.7.7M21 12h-1M5.64 5.64l.7.7M3 12h1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const SendIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ClockIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <path d="M12 6v6l4 2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const WifiIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 // Icon mapping
 const iconMap = {
   // Navigation
@@ -891,6 +924,11 @@ const iconMap = {
   'life-buoy': LifeBuoyIcon,
   'dollar-sign': DollarSignIcon,
   'flask-conical': FlaskConicalIcon,
+  'alert-circle': AlertCircleIcon,
+  lightbulb: LightbulbIcon,
+  send: SendIcon,
+  clock: ClockIcon,
+  wifi: WifiIcon,
 };
 
 // Main Icon component
