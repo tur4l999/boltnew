@@ -45,15 +45,15 @@ export const Watermark: React.FC<WatermarkProps> = ({
   // Add timestamp to make it dynamic
   const dynamicText = `${watermarkText} • ${new Date(timestamp).toLocaleTimeString()}`;
   
-  // Calculate pattern spacing
-  const spacing = 200; // pixels between watermarks
-  const patternWidth = spacing * 2;
-  const patternHeight = spacing * 2;
+  // Calculate pattern spacing (mobile-friendly - daha sıx)
+  const spacing = 120; // pixels between watermarks (200-dən 120-yə azaldıldı)
+  const patternWidth = spacing * 2.5; // Daha geniş pattern
+  const patternHeight = spacing * 2.5;
   
   // Hidden watermark configuration (very subtle)
   const hiddenOpacity = 0.015; // Çox zəif - demək olar ki görünməz
   const hiddenFontSize = 6; // Çox kiçik
-  const hiddenSpacing = 80; // Sıx yerləşdirilmiş
+  const hiddenSpacing = 60; // Sıx yerləşdirilmiş (80-dən 60-a azaldıldı)
   
   // Create hidden identifier (device + user fingerprint)
   const hiddenId = `${config.userId}:${config.deviceId}:${config.currentPage}:${new Date(timestamp).getTime()}`;
