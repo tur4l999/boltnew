@@ -236,27 +236,27 @@ export function SettingsScreen() {
               }`}>{userEmail}</div>
               
               <div className="flex items-center gap-2 flex-wrap">
-                <div className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                <div className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
                 }`}>
-                  💰 {balance} AZN
+                  <Icon name="dollar-sign" size={12} /> {balance} AZN
                 </div>
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
                     ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50 hover:bg-blue-900/50 hover:shadow-lg' 
                     : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
                 }`}>
-                  🧪 {simulatorBalance} Simulyator
+                  <Icon name="flask-conical" size={12} /> {simulatorBalance} Simulyator
                 </div>
                 {activePackage && (
-                  <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow ${
+                  <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center gap-1 ${
                     isDarkMode 
                       ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-700/50 hover:bg-yellow-900/50' 
                       : 'bg-yellow-100 text-yellow-700 border border-yellow-200/50 hover:bg-yellow-200'
                   }`}>
-                    👑 {activePackage.name}
+                    <Icon name="crown" size={12} /> {activePackage.name}
                   </div>
                 )}
               </div>
@@ -267,7 +267,11 @@ export function SettingsScreen() {
         {/* Referral Section */}
         <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
           <div className="flex items-center gap-2 mb-3">
-            <div className="text-xl">🎁</div>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+              isDarkMode ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' : 'bg-gradient-to-br from-purple-100 to-pink-100'
+            }`}>
+              <Icon name="gift" size={18} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
+            </div>
             <h3 className={`font-bold text-base transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>Referal proqram</h3>
@@ -277,8 +281,9 @@ export function SettingsScreen() {
           <div className={`p-4 rounded-2xl mb-4 ${
             isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
           }`}>
-            <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              🎯 Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
+            <div className={`text-sm mb-3 flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <Icon name="target" size={16} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+              Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
             </div>
             <div className="grid grid-cols-2 gap-4">
               <button
@@ -332,13 +337,13 @@ export function SettingsScreen() {
                   navigator.clipboard.writeText(referralCode);
                   alert('Referal kod kopyalandı!');
                 }}
-                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 ${
+                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
                   isDarkMode 
                     ? 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white' 
                     : 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white'
                 }`}
               >
-                📋 Kopyala
+                <Icon name="copy" size={16} /> Kopyala
               </button>
             </div>
           </div>
@@ -349,13 +354,13 @@ export function SettingsScreen() {
             
             <button
               onClick={() => alert('Referal proqram haqqında ətraflı məlumat (demo)')}
-              className={`w-full mt-4 p-3 rounded-xl border font-bold transition-all duration-300 transform hover:scale-[1.02] ${
+              className={`w-full mt-4 p-3 rounded-xl border font-bold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 ${
                 isDarkMode 
                   ? 'border-purple-500/50 bg-purple-900/30 hover:bg-purple-900/50 text-purple-300' 
                   : 'border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700'
               }`}
             >
-              📖 Proqram haqqında ətraflı
+              <Icon name="book-open" size={18} /> Proqram haqqında ətraflı
             </button>
           </div>
         </Card>
@@ -462,7 +467,7 @@ export function SettingsScreen() {
                 ? 'bg-gradient-to-br from-red-900/40 to-pink-900/40 group-hover:from-red-800/60 group-hover:to-pink-800/60' 
                 : 'bg-gradient-to-br from-red-100 to-pink-100 group-hover:from-red-200 group-hover:to-pink-200'
             } shadow-lg group-hover:shadow-xl`}>
-              🚪
+              <Icon name="log-out" size={20} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
             </div>
             <span className="relative">
               Hesabdan çıx
