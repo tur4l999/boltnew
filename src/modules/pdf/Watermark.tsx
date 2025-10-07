@@ -93,41 +93,73 @@ export const Watermark: React.FC<WatermarkProps> = ({
             height={patternHeight}
             patternUnits="userSpaceOnUse"
           >
-            {/* First diagonal text */}
-            <text
-              x={spacing / 2}
-              y={spacing / 2}
-              transform={`rotate(${angle} ${spacing / 2} ${spacing / 2})`}
-              fill="currentColor"
-              fontSize={fontSize}
-              fontFamily="system-ui, -apple-system, sans-serif"
-              fontWeight="500"
-              opacity={opacity}
-              style={{
-                userSelect: 'none',
-                pointerEvents: 'none',
-              }}
-            >
-              {dynamicText}
-            </text>
+            {/* First watermark group - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing / 2} ${spacing / 2})`}>
+              <text
+                x={spacing / 2}
+                y={spacing / 2}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={spacing / 2}
+                y={spacing / 2 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
             
-            {/* Second diagonal text (offset) */}
-            <text
-              x={spacing / 2 + patternWidth / 2}
-              y={spacing / 2 + patternHeight / 2}
-              transform={`rotate(${angle} ${spacing / 2 + patternWidth / 2} ${spacing / 2 + patternHeight / 2})`}
-              fill="currentColor"
-              fontSize={fontSize}
-              fontFamily="system-ui, -apple-system, sans-serif"
-              fontWeight="500"
-              opacity={opacity}
-              style={{
-                userSelect: 'none',
-                pointerEvents: 'none',
-              }}
-            >
-              {dynamicText}
-            </text>
+            {/* Second watermark group - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing / 2 + patternWidth / 2} ${spacing / 2 + patternHeight / 2})`}>
+              <text
+                x={spacing / 2 + patternWidth / 2}
+                y={spacing / 2 + patternHeight / 2}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={spacing / 2 + patternWidth / 2}
+                y={spacing / 2 + patternHeight / 2 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
           </pattern>
         </defs>
         
