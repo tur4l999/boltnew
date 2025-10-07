@@ -4,13 +4,14 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
-import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [showMenu, setShowMenu] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['today', 'yesterday']));
+  // Default açıq olan kateqoriyalar: test və dərs
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['test', 'lesson']));
   
   // Demo notification data with various types
   const notifications = [
@@ -21,9 +22,17 @@ export function NotificationsScreen() {
       message: 'Simulyator imtahanından 28/30 bal topladınız. Təbriklər!',
       timestamp: new Date('2025-10-04T10:30:00'),
       isRead: false,
-      emoji: '🎉',
       action: () => navigate('Results'),
-      color: 'emerald'
+      category: 'test'
+    },
+    {
+      id: '10',
+      type: 'test_reminder',
+      title: 'Test xatırlatması',
+      message: 'Bu həftə 3 test tamamlamalısınız. 2 test qalıb.',
+      timestamp: new Date('2025-10-03T08:00:00'),
+      isRead: false,
+      category: 'test'
     },
     {
       id: '2',
@@ -32,31 +41,17 @@ export function NotificationsScreen() {
       message: 'Sabah saat 14:00-da praktiki təcrübəniz var. Hazırlaşın!',
       timestamp: new Date('2025-10-04T09:45:00'),
       isRead: false,
-      emoji: '🚗',
       action: () => navigate('DrivingPractice'),
-      color: 'blue'
+      category: 'practice'
     },
     {
-      id: '3',
-      type: 'package_expiry',
-      title: 'Paket bitir tarixi',
-      message: 'Premium paketiniz 5 gün sonra bitəcək. Yeniləyin!',
-      timestamp: new Date('2025-10-03T09:15:00'),
+      id: '11',
+      type: 'online_lesson',
+      title: 'Onlayn dərs',
+      message: 'Bu gün saat 18:00-da onlayn dərs başlayacaq.',
+      timestamp: new Date('2025-10-04T12:00:00'),
       isRead: false,
-      emoji: '⏰',
-      action: () => navigate('Packages'),
-      color: 'amber'
-    },
-    {
-      id: '4',
-      type: 'appeal_response',
-      title: 'Apellyasiya cavabı',
-      message: 'Apellyasiyanız qəbul edildi və sual yeniləndi.',
-      timestamp: new Date('2025-10-03T14:20:00'),
-      isRead: true,
-      emoji: '✅',
-      action: () => navigate('Appeals'),
-      color: 'green'
+      category: 'lesson'
     },
     {
       id: '5',
@@ -65,9 +60,28 @@ export function NotificationsScreen() {
       message: 'M15: Park qaydaları mövzusunda yeni 3D video dərs əlavə edildi.',
       timestamp: new Date('2025-10-02T11:00:00'),
       isRead: true,
-      emoji: '🎬',
       action: () => navigate('Lesson', { moduleId: 'M15', tab: 'video3d' }),
-      color: 'purple'
+      category: 'lesson'
+    },
+    {
+      id: '3',
+      type: 'package_expiry',
+      title: 'Paket bitir tarixi',
+      message: 'Premium paketiniz 5 gün sonra bitəcək. Yeniləyin!',
+      timestamp: new Date('2025-10-03T09:15:00'),
+      isRead: false,
+      action: () => navigate('Packages'),
+      category: 'package'
+    },
+    {
+      id: '4',
+      type: 'appeal_response',
+      title: 'Apellyasiya cavabı',
+      message: 'Apellyasiyanız qəbul edildi və sual yeniləndi.',
+      timestamp: new Date('2025-10-03T14:20:00'),
+      isRead: true,
+      action: () => navigate('Appeals'),
+      category: 'appeal'
     },
     {
       id: '6',
@@ -76,9 +90,8 @@ export function NotificationsScreen() {
       message: '10 imtahan tamamladınız və "İmtahan ustası" nişanı qazandınız!',
       timestamp: new Date('2025-10-01T18:30:00'),
       isRead: true,
-      emoji: '🏆',
       action: () => navigate('Settings'),
-      color: 'yellow'
+      category: 'achievement'
     },
     {
       id: '7',
@@ -87,8 +100,7 @@ export function NotificationsScreen() {
       message: 'Tətbiq yeniləndi. Yeni funksiyalar və təkmilləşdirmələr əlavə edildi.',
       timestamp: new Date('2025-09-28T08:00:00'),
       isRead: true,
-      emoji: '🔄',
-      color: 'gray'
+      category: 'system'
     },
     {
       id: '8',
@@ -97,9 +109,8 @@ export function NotificationsScreen() {
       message: 'Müəllim Səbinə sualınıza cavab verdi.',
       timestamp: new Date('2025-09-27T16:45:00'),
       isRead: true,
-      emoji: '💬',
       action: () => navigate('QA'),
-      color: 'indigo'
+      category: 'qa'
     },
     {
       id: '9',
@@ -108,9 +119,8 @@ export function NotificationsScreen() {
       message: 'Dostunuz Leyla qeydiyyatdan keçdi. 5 AZN bonus qazandınız!',
       timestamp: new Date('2025-09-25T12:30:00'),
       isRead: true,
-      emoji: '🎁',
       action: () => navigate('ReferralList'),
-      color: 'purple'
+      category: 'referral'
     }
   ];
 
@@ -120,39 +130,24 @@ export function NotificationsScreen() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  // Categorize notifications by date
+  // Categorize notifications by type
   const categorizeNotifications = () => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const weekAgo = new Date(today);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    const monthAgo = new Date(today);
-    monthAgo.setMonth(monthAgo.getMonth() - 1);
-
     const categories: Record<string, typeof notifications> = {
-      today: [],
-      yesterday: [],
-      thisWeek: [],
-      thisMonth: [],
-      older: []
+      test: [],
+      lesson: [],
+      practice: [],
+      package: [],
+      appeal: [],
+      achievement: [],
+      qa: [],
+      referral: [],
+      system: []
     };
 
     filteredNotifications.forEach(notification => {
-      const notifDate = new Date(notification.timestamp);
-      const notifDay = new Date(notifDate.getFullYear(), notifDate.getMonth(), notifDate.getDate());
-
-      if (notifDay.getTime() === today.getTime()) {
-        categories.today.push(notification);
-      } else if (notifDay.getTime() === yesterday.getTime()) {
-        categories.yesterday.push(notification);
-      } else if (notifDate >= weekAgo) {
-        categories.thisWeek.push(notification);
-      } else if (notifDate >= monthAgo) {
-        categories.thisMonth.push(notification);
-      } else {
-        categories.older.push(notification);
+      const category = notification.category;
+      if (categories[category]) {
+        categories[category].push(notification);
       }
     });
 
@@ -161,20 +156,52 @@ export function NotificationsScreen() {
 
   const categories = categorizeNotifications();
 
-  const categoryLabels = {
-    today: 'Bugün',
-    yesterday: 'Dünən',
-    thisWeek: 'Bu həftə',
-    thisMonth: 'Bu ay',
-    older: 'Keçmiş'
-  };
-
-  const categoryIcons = {
-    today: '📅',
-    yesterday: '📆',
-    thisWeek: '📋',
-    thisMonth: '🗓️',
-    older: '📜'
+  const categoryConfig = {
+    test: {
+      label: 'Test və İmtahanlar',
+      icon: 'document',
+      color: 'emerald'
+    },
+    lesson: {
+      label: 'Dərslər',
+      icon: 'video',
+      color: 'purple'
+    },
+    practice: {
+      label: 'Praktiki Təcrübə',
+      icon: 'car',
+      color: 'blue'
+    },
+    package: {
+      label: 'Paket və Ödəniş',
+      icon: 'package',
+      color: 'amber'
+    },
+    appeal: {
+      label: 'Apellyasiya',
+      icon: 'chat',
+      color: 'green'
+    },
+    achievement: {
+      label: 'Nailiyyətlər',
+      icon: 'trophy',
+      color: 'yellow'
+    },
+    qa: {
+      label: 'Sual-Cavab',
+      icon: 'help-circle',
+      color: 'indigo'
+    },
+    referral: {
+      label: 'Referal',
+      icon: 'gift',
+      color: 'pink'
+    },
+    system: {
+      label: 'Sistem',
+      icon: 'settings',
+      color: 'gray'
+    }
   };
 
   const toggleCategory = (categoryKey: string) => {
@@ -187,58 +214,76 @@ export function NotificationsScreen() {
     setExpandedCategories(newExpanded);
   };
 
-  const getColorClasses = (color: string, isRead: boolean) => {
+  const getColorClasses = (colorName: string, isRead: boolean) => {
     const opacity = isRead ? '20' : '30';
-    const textOpacity = isRead ? '60' : '80';
     
-    const colorMap: Record<string, { bg: string; text: string; icon: string }> = {
+    const colorMap: Record<string, { bg: string; border: string; iconBg: string }> = {
       emerald: {
-        bg: isDarkMode ? `bg-emerald-900/${opacity}` : `bg-emerald-50`,
-        text: isDarkMode ? `text-emerald-${textOpacity}` : 'text-emerald-700',
-        icon: isDarkMode ? 'bg-emerald-800/50' : 'bg-emerald-100'
-      },
-      blue: {
-        bg: isDarkMode ? `bg-blue-900/${opacity}` : `bg-blue-50`,
-        text: isDarkMode ? `text-blue-${textOpacity}` : 'text-blue-700',
-        icon: isDarkMode ? 'bg-blue-800/50' : 'bg-blue-100'
-      },
-      amber: {
-        bg: isDarkMode ? `bg-amber-900/${opacity}` : `bg-amber-50`,
-        text: isDarkMode ? `text-amber-${textOpacity}` : 'text-amber-700',
-        icon: isDarkMode ? 'bg-amber-800/50' : 'bg-amber-100'
-      },
-      green: {
-        bg: isDarkMode ? `bg-green-900/${opacity}` : `bg-green-50`,
-        text: isDarkMode ? `text-green-${textOpacity}` : 'text-green-700',
-        icon: isDarkMode ? 'bg-green-800/50' : 'bg-green-100'
+        bg: isDarkMode ? `bg-emerald-900/${opacity}` : 'bg-emerald-50',
+        border: isDarkMode ? 'border-emerald-700/50' : 'border-emerald-200/50',
+        iconBg: isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
       },
       purple: {
-        bg: isDarkMode ? `bg-purple-900/${opacity}` : `bg-purple-50`,
-        text: isDarkMode ? `text-purple-${textOpacity}` : 'text-purple-700',
-        icon: isDarkMode ? 'bg-purple-800/50' : 'bg-purple-100'
+        bg: isDarkMode ? `bg-purple-900/${opacity}` : 'bg-purple-50',
+        border: isDarkMode ? 'border-purple-700/50' : 'border-purple-200/50',
+        iconBg: isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
+      },
+      blue: {
+        bg: isDarkMode ? `bg-blue-900/${opacity}` : 'bg-blue-50',
+        border: isDarkMode ? 'border-blue-700/50' : 'border-blue-200/50',
+        iconBg: isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
+      },
+      amber: {
+        bg: isDarkMode ? `bg-amber-900/${opacity}` : 'bg-amber-50',
+        border: isDarkMode ? 'border-amber-700/50' : 'border-amber-200/50',
+        iconBg: isDarkMode ? 'bg-amber-600/20' : 'bg-amber-100'
+      },
+      green: {
+        bg: isDarkMode ? `bg-green-900/${opacity}` : 'bg-green-50',
+        border: isDarkMode ? 'border-green-700/50' : 'border-green-200/50',
+        iconBg: isDarkMode ? 'bg-green-600/20' : 'bg-green-100'
       },
       yellow: {
-        bg: isDarkMode ? `bg-yellow-900/${opacity}` : `bg-yellow-50`,
-        text: isDarkMode ? `text-yellow-${textOpacity}` : 'text-yellow-700',
-        icon: isDarkMode ? 'bg-yellow-800/50' : 'bg-yellow-100'
-      },
-      gray: {
-        bg: isDarkMode ? `bg-gray-800/${opacity}` : `bg-gray-50`,
-        text: isDarkMode ? `text-gray-${textOpacity}` : 'text-gray-700',
-        icon: isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
+        bg: isDarkMode ? `bg-yellow-900/${opacity}` : 'bg-yellow-50',
+        border: isDarkMode ? 'border-yellow-700/50' : 'border-yellow-200/50',
+        iconBg: isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
       },
       indigo: {
-        bg: isDarkMode ? `bg-indigo-900/${opacity}` : `bg-indigo-50`,
-        text: isDarkMode ? `text-indigo-${textOpacity}` : 'text-indigo-700',
-        icon: isDarkMode ? 'bg-indigo-800/50' : 'bg-indigo-100'
+        bg: isDarkMode ? `bg-indigo-900/${opacity}` : 'bg-indigo-50',
+        border: isDarkMode ? 'border-indigo-700/50' : 'border-indigo-200/50',
+        iconBg: isDarkMode ? 'bg-indigo-600/20' : 'bg-indigo-100'
+      },
+      pink: {
+        bg: isDarkMode ? `bg-pink-900/${opacity}` : 'bg-pink-50',
+        border: isDarkMode ? 'border-pink-700/50' : 'border-pink-200/50',
+        iconBg: isDarkMode ? 'bg-pink-600/20' : 'bg-pink-100'
+      },
+      gray: {
+        bg: isDarkMode ? `bg-gray-800/${opacity}` : 'bg-gray-50',
+        border: isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50',
+        iconBg: isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
       }
     };
 
-    return colorMap[color] || colorMap.gray;
+    return colorMap[colorName] || colorMap.gray;
   };
 
   const formatTimestamp = (date: Date) => {
-    return date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const notifDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    const timeStr = date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
+    
+    if (notifDay.getTime() === today.getTime()) {
+      return `Bugün, ${timeStr}`;
+    } else if (notifDay.getTime() === yesterday.getTime()) {
+      return `Dünən, ${timeStr}`;
+    } else {
+      return date.toLocaleDateString('az-AZ', { day: 'numeric', month: 'short' }) + `, ${timeStr}`;
+    }
   };
 
   return (
@@ -291,7 +336,7 @@ export function NotificationsScreen() {
                     : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                 } ${showMenu ? 'ring-2 ring-emerald-500' : ''}`}
               >
-                <EmojiIcon emoji="⚙️" size={18} />
+                <Icon name="settings" size={18} />
               </button>
 
               {/* Dropdown Menu */}
@@ -325,7 +370,7 @@ export function NotificationsScreen() {
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                           isDarkMode ? 'bg-emerald-700/50' : 'bg-emerald-100'
                         }`}>
-                          <EmojiIcon emoji="✓" size={16} />
+                          <Icon name="check" size={16} />
                         </div>
                         <span className="text-sm font-bold">Hamısını oxu</span>
                       </button>
@@ -349,7 +394,7 @@ export function NotificationsScreen() {
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                           isDarkMode ? 'bg-red-900/50' : 'bg-red-100'
                         }`}>
-                          <EmojiIcon emoji="🗑️" size={16} />
+                          <Icon name="trash" size={16} />
                         </div>
                         <span className="text-sm font-bold">Hamısını sil</span>
                       </button>
@@ -373,7 +418,7 @@ export function NotificationsScreen() {
                       <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
                       }`}>
-                        <EmojiIcon emoji="🔔" size={16} />
+                        <Icon name="bell" size={16} />
                       </div>
                       <span className="text-sm font-bold">Bildiriş ayarları</span>
                     </button>
@@ -435,7 +480,7 @@ export function NotificationsScreen() {
               <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${
                 isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
               }`}>
-                <span className="text-4xl">🔔</span>
+                <Icon name="bell" size={40} />
               </div>
               <h3 className={`text-lg font-bold mb-2 ${
                 isDarkMode ? 'text-gray-200' : 'text-gray-800'
@@ -457,8 +502,10 @@ export function NotificationsScreen() {
             {Object.entries(categories).map(([categoryKey, categoryNotifications], catIndex) => {
               if (categoryNotifications.length === 0) return null;
               
+              const config = categoryConfig[categoryKey as keyof typeof categoryConfig];
               const isExpanded = expandedCategories.has(categoryKey);
               const unreadInCategory = categoryNotifications.filter(n => !n.isRead).length;
+              const colors = getColorClasses(config.color, false);
 
               return (
                 <div key={categoryKey} className="animate-fadeInUp" style={{ animationDelay: `${catIndex * 50}ms` }}>
@@ -472,18 +519,20 @@ export function NotificationsScreen() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
-                      }`}>
-                        <span className="text-xl">{categoryIcons[categoryKey as keyof typeof categoryIcons]}</span>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${colors.iconBg}`}>
+                        <Icon 
+                          name={config.icon as any} 
+                          size={20}
+                          className={isDarkMode ? `text-${config.color}-400` : `text-${config.color}-600`}
+                        />
                       </div>
                       <div className="text-left">
-                        <div className={`font-black text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                          {categoryLabels[categoryKey as keyof typeof categoryLabels]}
+                        <div className={`font-black text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                          {config.label}
                         </div>
                         <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                           {categoryNotifications.length} bildiriş
-                          {unreadInCategory > 0 && ` • ${unreadInCategory} oxunmamış`}
+                          {unreadInCategory > 0 && ` • ${unreadInCategory} yeni`}
                         </div>
                       </div>
                     </div>
@@ -505,7 +554,7 @@ export function NotificationsScreen() {
                   {isExpanded && (
                     <div className="space-y-3 ml-2">
                       {categoryNotifications.map((notification, index) => {
-                        const colors = getColorClasses(notification.color, notification.isRead);
+                        const notifColors = getColorClasses(config.color, notification.isRead);
                         
                         return (
                           <SlideTransition key={notification.id} direction="right" delay={index * 30}>
@@ -517,8 +566,8 @@ export function NotificationsScreen() {
                               }}
                               className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
                                 isDarkMode
-                                  ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
-                                  : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
+                                  ? `${notifColors.bg} ${notifColors.border} hover:border-gray-600 hover:scale-[1.02]`
+                                  : `${notifColors.bg} ${notifColors.border} hover:border-gray-300 hover:scale-[1.02]`
                               }`}
                             >
                               {/* Unread indicator */}
@@ -528,8 +577,12 @@ export function NotificationsScreen() {
 
                               <div className="flex gap-3">
                                 {/* Icon */}
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
-                                  <EmojiIcon emoji={notification.emoji} size={24} />
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${notifColors.iconBg}`}>
+                                  <Icon 
+                                    name={config.icon as any} 
+                                    size={24}
+                                    className={isDarkMode ? `text-${config.color}-400` : `text-${config.color}-600`}
+                                  />
                                 </div>
 
                                 {/* Content */}
@@ -544,8 +597,10 @@ export function NotificationsScreen() {
                                   } ${notification.isRead ? 'opacity-70' : ''}`}>
                                     {notification.message}
                                   </div>
-                                  <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
-                                    <span>⏱</span>
+                                  <div className={`text-xs font-medium flex items-center gap-1 ${
+                                    isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                                  }`}>
+                                    <Icon name="clock" size={12} />
                                     <span>{formatTimestamp(notification.timestamp)}</span>
                                   </div>
                                 </div>
@@ -582,7 +637,7 @@ export function NotificationsScreen() {
                   : 'bg-white/50 border-gray-200/50 text-gray-700 hover:bg-gray-100/50'
               }`}
             >
-              <EmojiIcon emoji="⚙️" size={20} />
+              <Icon name="settings" size={20} />
               <span className="text-sm font-bold">Bildiriş ayarları</span>
             </button>
           </FadeInUp>
