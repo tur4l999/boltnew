@@ -22,6 +22,15 @@ export function SettingsScreen() {
     { value: 'ru', label: '🇷🇺 Русский язык' }
   ];
 
+  const handleResetOnboarding = async () => {
+    if (confirm('Onboarding ekranlarını yenidən görmək istəyirsiniz?')) {
+      const { resetOnboarding } = await import('../../onboarding');
+      await resetOnboarding();
+      alert('Onboarding sıfırlandı! Tətbiqi yenidən açın.');
+      window.location.reload();
+    }
+  };
+
   const settingsItems = [
     {
       section: 'Hesabım',
@@ -37,7 +46,8 @@ export function SettingsScreen() {
       items: [
         { key: 'offline', label: 'Offline məzmun', emoji: '📱', action: () => alert('Offline məzmun (demo)') },
         { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', action: () => alert('Keş təmizləndi (demo)') },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') }
+        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') },
+        { key: 'resetOnboarding', label: 'Onboarding sıfırla', emoji: '🔄', action: handleResetOnboarding }
       ]
     },
     {
