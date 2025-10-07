@@ -5,6 +5,7 @@
 
 import React, { useState } from 'react';
 import { PdfReader } from '../../modules/pdf';
+import { useApp } from '../../contexts/AppContext';
 
 interface SecurePdfScreenProps {
   bookId?: string;
@@ -24,6 +25,7 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
   userEmail = 'ali@example.com',
   language = 'az',
 }) => {
+  const { goBack, isDarkMode } = useApp();
   const [showReader, setShowReader] = useState(false);
   
   if (!showReader) {
@@ -31,21 +33,45 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flexDirection: 'column',
           minHeight: '100vh',
-          backgroundColor: '#f9fafb',
+          backgroundColor: isDarkMode ? '#111827' : '#f9fafb',
           padding: '20px',
         }}
       >
+        {/* Back button */}
+        <button
+          onClick={goBack}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 12px',
+            marginBottom: '20px',
+            backgroundColor: 'transparent',
+            border: 'none',
+            color: isDarkMode ? '#e5e7eb' : '#374151',
+            fontSize: '15px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            alignSelf: 'flex-start',
+          }}
+        >
+          <span style={{ fontSize: '20px' }}>←</span>
+          {language === 'az' ? 'Geri' : 'Back'}
+        </button>
+
         <div
           style={{
             maxWidth: '500px',
             width: '100%',
-            backgroundColor: 'white',
+            backgroundColor: isDarkMode ? '#1f2937' : 'white',
             borderRadius: '16px',
             padding: '32px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            boxShadow: isDarkMode 
+              ? '0 4px 12px rgba(0, 0, 0, 0.3)' 
+              : '0 4px 12px rgba(0, 0, 0, 0.1)',
+            margin: '0 auto',
           }}
         >
           <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>
@@ -58,7 +84,7 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
               fontWeight: '700',
               textAlign: 'center',
               marginBottom: '12px',
-              color: '#1a1a1a',
+              color: isDarkMode ? '#f9fafb' : '#1a1a1a',
             }}
           >
             {language === 'az' ? 'Ödənişli Kitablar' : 'Premium Books'}
@@ -67,7 +93,7 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
           <p
             style={{
               fontSize: '15px',
-              color: '#6b7280',
+              color: isDarkMode ? '#9ca3af' : '#6b7280',
               textAlign: 'center',
               lineHeight: '1.6',
               marginBottom: '24px',
@@ -92,6 +118,7 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
               pages={240}
               language={language}
               onOpen={() => setShowReader(true)}
+              isDarkMode={isDarkMode}
             />
             
             {/* Book 2 */}
@@ -101,17 +128,18 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
               pages={180}
               language={language}
               onOpen={() => setShowReader(true)}
+              isDarkMode={isDarkMode}
             />
           </div>
           
           <div
             style={{
-              backgroundColor: '#eff6ff',
-              border: '1px solid #bfdbfe',
+              backgroundColor: isDarkMode ? '#1e3a8a' : '#eff6ff',
+              border: `1px solid ${isDarkMode ? '#3b82f6' : '#bfdbfe'}`,
               borderRadius: '8px',
               padding: '12px',
               fontSize: '13px',
-              color: '#1e40af',
+              color: isDarkMode ? '#bfdbfe' : '#1e40af',
               lineHeight: '1.5',
             }}
           >
@@ -146,9 +174,10 @@ interface BookCardProps {
   pages: number;
   language: 'az' | 'en';
   onOpen: () => void;
+  isDarkMode?: boolean;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen }) => {
+const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isDarkMode = false }) => {
   return (
     <div
       style={{
@@ -156,20 +185,20 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen }) =
         alignItems: 'center',
         gap: '16px',
         padding: '16px',
-        backgroundColor: '#f9fafb',
+        backgroundColor: isDarkMode ? '#374151' : '#f9fafb',
         borderRadius: '12px',
-        border: '1px solid #e5e7eb',
+        border: `1px solid ${isDarkMode ? '#4b5563' : '#e5e7eb'}`,
         cursor: 'pointer',
         transition: 'all 0.2s',
       }}
       onClick={onOpen}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = '#f3f4f6';
+        e.currentTarget.style.backgroundColor = isDarkMode ? '#4b5563' : '#f3f4f6';
         e.currentTarget.style.borderColor = '#2563eb';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = '#f9fafb';
-        e.currentTarget.style.borderColor = '#e5e7eb';
+        e.currentTarget.style.backgroundColor = isDarkMode ? '#374151' : '#f9fafb';
+        e.currentTarget.style.borderColor = isDarkMode ? '#4b5563' : '#e5e7eb';
       }}
     >
       <div
@@ -193,7 +222,7 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen }) =
           style={{
             fontSize: '15px',
             fontWeight: '600',
-            color: '#1a1a1a',
+            color: isDarkMode ? '#f9fafb' : '#1a1a1a',
             marginBottom: '4px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -202,7 +231,7 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen }) =
         >
           {title}
         </h3>
-        <p style={{ fontSize: '13px', color: '#6b7280' }}>
+        <p style={{ fontSize: '13px', color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
           {pages} {language === 'az' ? 'səhifə' : 'pages'}
         </p>
       </div>

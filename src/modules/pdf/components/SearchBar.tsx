@@ -47,7 +47,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       className="search-bar-container"
       style={{
         position: 'absolute',
-        top: 0,
+        top: '110px', // Header-dən sonra (50px notch + 60px header)
         left: 0,
         right: 0,
         backgroundColor: 'white',

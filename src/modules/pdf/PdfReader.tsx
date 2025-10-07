@@ -368,6 +368,7 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
           backgroundColor: '#ffffff',
           borderBottom: '1px solid #e5e7eb',
           padding: '12px 16px',
+          paddingTop: '50px', // iPhone notch üçün boşluq
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -375,6 +376,23 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
           zIndex: 100,
         }}
       >
+        {/* Back button */}
+        <button
+          onClick={onExit}
+          style={{
+            padding: '8px',
+            fontSize: '20px',
+            color: '#6b7280',
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            lineHeight: 1,
+          }}
+          title={t('exit', language)}
+        >
+          ←
+        </button>
+        
         <div style={{ flex: 1, minWidth: 0 }}>
           <h1
             style={{
@@ -409,21 +427,6 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
             title={t('search', language)}
           >
             🔍
-          </button>
-          
-          <button
-            onClick={handleExit}
-            style={{
-              padding: '8px 12px',
-              fontSize: '14px',
-              color: '#dc2626',
-              backgroundColor: '#fef2f2',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-            }}
-          >
-            {t('exit', language)}
           </button>
         </div>
       </div>
