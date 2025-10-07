@@ -1,330 +1,244 @@
-# DDA.az — Figma-style Inspect & Auto-Handoff
+# DDA.az Secure PDF Reader
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=flat&logo=github)](https://tur4l999.github.io/boltnew/)
-[![StackBlitz](https://img.shields.io/badge/Open-StackBlitz-blue?style=flat&logo=stackblitz)](https://stackblitz.com/github/tur4l999/boltnew)
-[![Deployment](https://img.shields.io/badge/Status-Deployed-success?style=flat)](https://github.com/tur4l999/boltnew/deployments)
+Təhlükəsiz PDF oxuyucu mobil tətbiqi - React Native + Expo ilə hazırlanmış.
 
-Bu layihə avtomatik design handoff sistemi və Figma-style inspector ilə təchiz edilmişdir.
+## 🔒 Təhlükəsizlik Xüsusiyyətləri
 
-## 🌐 Live Deployment
-- **Production**: [https://tur4l999.github.io/boltnew/](https://tur4l999.github.io/boltnew/)
-- **Development**: [StackBlitz](https://stackblitz.com/github/tur4l999/boltnew)
+### Server-side Təhlükəsizlik
+- **Watermarked PDF-lər**: Hər səhifədə görünən diagonal vatermark
+- **Signed URL-lər**: Qısa müddətli (10-30 dəq) imzalı linklər
+- **Fayl Bütövlüyü**: SHA256 checksum yoxlaması
+- **Sessiya İdarəçiliyi**: Avtomatik vaxt bitməsi və ləğv etmə
 
-## 🚀 Quick Start
+### Client-side Təhlükəsizlik
+- **Screenshot Qorunması**: `expo-screen-capture` ilə aşkarlama və qarşısını alma
+- **Screen Recording Qorunması**: Ekran yazısı aşkarlaması və sessiya ləğvi
+- **Dynamic Watermark**: SVG overlay ilə canlı vatermark
+- **Background Blur**: App background-a keçəndə məzmunu gizlətmə
+- **Root/Jailbreak Detection**: Təhlükəsiz olmayan cihazlarda bloklanma
+- **File Integrity**: Fayl korlanması yoxlaması və avtomatik silinmə
 
+## 📱 Xüsusiyyətlər
+
+### PDF Oxuma
+- **Səhifə-səhifə oxuma**: Smooth scroll və navigation
+- **Zoom**: Pinch-to-zoom və double-tap (0.5x - 3.0x)
+- **Page Navigation**: Thumbnail sidebar və page picker
+- **Search**: Mətn axtarışı (local və ya server-side)
+- **Dark Mode**: Sistem rejimi dəstəyi
+
+### İstifadəçi İnterfeysi
+- **Modern UI**: Clean və responsive dizayn
+- **Localization**: AZ/EN dil dəstəyi
+- **Accessibility**: Screen reader və keyboard navigation
+- **Performance**: Virtualized lists və memoization
+
+## 🛠 Quraşdırma
+
+### Tələblər
+- Node.js 18+
+- Expo CLI
+- React Native development environment
+- iOS Simulator və ya Android Emulator
+
+### Addımlar
+
+1. **Repository klonlayın**
+```bash
+git clone <repository-url>
+cd dda-secure-pdf-reader
+```
+
+2. **Dependencies quraşdırın**
 ```bash
 npm install
-npm run tokens    # Generate CSS vars & RN theme
-npm run validate  # Check design files
-npm run dev:inspect  # Start development server with /inspect access
 ```
 
-## 🔍 Design Inspector
+3. **Environment variables**
+```bash
+cp .env.example .env
+# .env faylını redaktə edin
+```
 
-Figma-style inspector səhifəsinə daxil olmaq üçün:
+4. **Development server başladın**
+```bash
+npm start
+```
+
+5. **Platform seçin**
+```bash
+# iOS
+npm run ios
+
+# Android
+npm run android
+
+# Web (development only)
+npm run web
+```
+
+## 🏗 Layihə Strukturu
+
+```
+src/
+├── modules/pdf/
+│   ├── api.ts              # API layer
+│   ├── PdfReader.tsx       # Əsas PDF oxuyucu
+│   ├── Watermark.tsx       # SVG watermark komponenti
+│   ├── usePdfStore.ts      # Zustand store
+│   ├── guards.ts           # Təhlükəsizlik yoxlamaları
+│   ├── utils.ts            # Utility funksiyalar
+│   └── types.ts            # TypeScript tiplər
+├── components/
+│   ├── BlurOverlay.tsx     # Blur overlay komponenti
+│   ├── PageThumbs.tsx      # Səhifə thumbnail-ları
+│   ├── PagePicker.tsx      # Səhifə seçici modal
+│   └── SearchBar.tsx       # Axtarış komponenti
+└── styles/
+    └── tokens.ts           # Dizayn tokenləri və lokalizasiya
+```
+
+## 🔧 Konfiqurasiya
+
+### Environment Variables
 
 ```bash
-npm run dev:inspect
-# Brauzerdə /inspect səhifəsinə keçin
+# API Configuration
+EXPO_PUBLIC_API_URL=https://api.dda.az
+EXPO_PUBLIC_API_TOKEN=your_api_token_here
+EXPO_PUBLIC_USE_MOCK_API=true
+
+# Security Configuration
+EXPO_PUBLIC_ENABLE_ROOT_DETECTION=true
+EXPO_PUBLIC_ENABLE_SCREENSHOT_PROTECTION=true
+EXPO_PUBLIC_SESSION_TIMEOUT_MINUTES=30
 ```
 
-Inspector özəllikləri:
-- **Assets**: İkonlar və şəkillər qruplara görə
-- **Components**: Props, states, events, accessibility
-- **Screens**: Route, params, istifadə olunan komponentlər
-- **Copy buttons**: Path, HTML, React Native require
-- **Grid overlay**: 4px grid vizual yoxlama üçün
+### EAS Build Configuration
 
-## 📦 Handoff Process
-
-```bash
-npm run handoff   # Creates handoff/handoff.zip
-```
-
-Handoff paketi ehtiva edir:
-- `design/tokens.json` - Design tokenləri
-- `design/styles.css` - Web CSS variables (auto-generated)
-- `src/theme.ts` - React Native theme (auto-generated)
-- `design/components.csv` - Komponent dokumentasiyası
-- `design/screens.csv` - Ekran spesifikasiyaları
-- `design/assets.manifest.json` - Asset metadata
-
-## 📁 Sources of Truth
-
-### 1. Design Tokens (`design/tokens.json`)
-Bütün rəng, spacing, typography, shadow və breakpoint dəyərləri.
-
-**⚠️ Qayda**: `design/styles.css` və `src/theme.ts` fayllarını manual redaktə etməyin. Həmişə `npm run tokens` əmri ilə yenidən yaradın.
-
-### 2. Assets (`design/assets.manifest.json`)
-Figma-style asset metadata:
 ```json
 {
-  "name": "home",
-  "title": "Home Tab Icon",
-  "emoji": "🏠",
-  "category": "icon",
-  "group": "navigation",
-  "format": "svg",
-  "usage": "Main bottom navigation home tab",
-  "sizes": [
-    { "width": 16, "height": 16, "scale": "@1x", "path": "assets/icons/navigation/home-16.svg" }
-  ],
-  "pagesUsed": ["Home"],
-  "tokenRef": null
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
+  }
 }
 ```
 
-### 3. Components (`design/components.csv`)
-Komponent spesifikasiyaları:
-- Props (TypeScript format)
-- States və events
-- Accessibility requirements (min 44×44, contrast ≥4.5:1)
-- Usage context
+## 📡 API Endpoints
 
-### 4. Screens (`design/screens.csv`)
-Ekran spesifikasiyaları:
-- Route və parameters
-- İstifadə olunan komponentlər
-- States və status
-
-## 🔧 Web Development
-
-### CSS Variables istifadəsi:
-```css
-/* Auto-generated CSS variables */
-.my-component {
-  background-color: var(--color-primary-500);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
+### PDF Issue
+```
+POST /api/pdf/issue
+Body: { bookId, userId, deviceId }
+Response: { url, checksumSha256, expiresAt, totalPages }
 ```
 
-### Utility classes:
-```css
-.text-primary     /* var(--color-semantic-text-primary) */
-.bg-surface       /* var(--color-semantic-surface) */
-.rounded-lg       /* var(--radius-lg) */
-.shadow-md        /* var(--shadow-md) */
+### Session Revoke
+```
+POST /api/pdf/revoke
+Body: { bookId, userId, deviceId, reason }
+Response: { ok: true }
 ```
 
-## 📱 React Native Development
+### Search (Optional)
+```
+GET /api/pdf/search?bookId=&q=&from=&to=
+Response: [{ page: number, snippet: string }]
+```
 
+## 🧪 Test Ssenariləri
+
+### Təhlükəsizlik Testləri
+- [ ] Screenshot cəhdi → blur + warning + session revoke
+- [ ] Screen recording cəhdi → blur + warning + session revoke
+- [ ] App background → blur overlay
+- [ ] Session expiry → automatic logout
+- [ ] File corruption → automatic deletion + reload
+- [ ] Root/jailbreak detection → access blocked
+
+### Funksionallıq Testləri
+- [ ] PDF yükləmə və göstərmə
+- [ ] Səhifə naviqasiyası (thumbnails, picker, swipe)
+- [ ] Zoom və pan əməliyyatları
+- [ ] Axtarış funksionallığı
+- [ ] Dark/light mode keçidi
+- [ ] Localization (AZ/EN)
+
+## 🚀 Production Deployment
+
+### EAS Build
+```bash
+# Android
+eas build --platform android --profile production
+
+# iOS
+eas build --platform ios --profile production
+```
+
+### Environment Setup
+1. Production API endpoints konfiqurasiyası
+2. SSL sertifikatları
+3. Code signing (iOS)
+4. Play Store/App Store metadata
+
+## 🔍 Debugging
+
+### Development Tools
+- Flipper integration
+- React Native Debugger
+- Expo Dev Tools
+
+### Logging
 ```typescript
-import { theme } from './src/theme';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.primary[500],
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    ...theme.shadows.md,
-  },
+// Security events
+store.logSecurityEvent({
+  type: 'screenshot',
+  timestamp: new Date().toISOString(),
 });
+
+// Error tracking
+console.error('PDF load error:', error);
 ```
 
-## ✅ Validation Rules
+## 📋 Known Limitations
 
-1. **Asset paths**: Hər asset üçün valid path olmalıdır
-2. **Component consistency**: `screens.csv`-də istifadə olunan hər komponent `components.csv`-də mövcud olmalıdır
-3. **Token structure**: `colors`, `spacing`, `typography`, `borderRadius`, `shadows`, `breakpoints` bölmələri məcburidir
+### iOS
+- Tam screenshot bloklanması mümkün deyil
+- Background app switcher görüntüsü blur edilir
+- Screen recording detection mövcuddur
 
-## 🎨 Design System Rules
+### Android
+- FLAG_SECURE istifadə edilir (uyğun cihazlarda)
+- Root detection məhdud funksionallıq
+- Custom ROM-larda fərqli davranış
 
-- **Spacing**: 8px əsaslı sistem (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 20px)
-- **Touch targets**: Minimum 44×44pt
-- **Color contrast**: Minimum 4.5:1 ratio
-- **Naming**: kebab-case (home, video-thumb)
-- **File organization**: Group by category (navigation, actions, system)
+## 🤝 Contributing
 
-## 🔄 Workflow
+1. Fork repository
+2. Feature branch yaradın (`git checkout -b feature/amazing-feature`)
+3. Commit edin (`git commit -m 'Add amazing feature'`)
+4. Push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
 
-1. **Design dəyişiklikləri**: `design/tokens.json` faylını redaktə edin
-2. **Regenerate**: `npm run tokens` əmrini işə salın
-3. **Validate**: `npm run validate` ilə yoxlayın
-4. **Handoff**: `npm run handoff` ilə paketi yaradın
-5. **Inspect**: `/inspect` səhifəsində nəticəni yoxlayın
+## 📄 License
 
-## 📋 NPM Scripts
+Bu layihə müəllif hüquqları ilə qorunur. DDA.az şirkətinin icazəsi olmadan istifadə edilə bilməz.
 
-- `npm run tokens` - Generate CSS vars & RN theme from tokens.json
-- `npm run validate` - Validate design files consistency
-- `npm run handoff` - Create complete handoff package
-- `npm run dev:inspect` - Start dev server with inspector access
+## 📞 Dəstək
+
+- Email: support@dda.az
+- Telefon: +994 XX XXX XX XX
+- Website: https://dda.az
 
 ---
 
-**AZ/EN**: Bu sistem həm Azərbaycan, həm də İngilis dilində şərhlər dəstəkləyir.
-**Stability**: Bütün asset adları və token strukturu sabit saxlanılır.
-**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.
-## 🔍 Design Inspector
-
-Figma-style inspector səhifəsinə daxil olmaq üçün:
-
-```bash
-npm run dev:inspect
-# Brauzerdə /inspect səhifəsinə keçin
-```
-
-Inspector özəllikləri:
-- **Assets**: İkonlar və şəkillər qruplara görə
-- **Components**: Props, states, events, accessibility
-- **Screens**: Route, params, istifadə olunan komponentlər
-- **Copy buttons**: Path, HTML, React Native require
-- **Grid overlay**: 4px grid vizual yoxlama üçün
-
-## 📦 Handoff Process
-
-```bash
-npm run handoff   # Creates handoff/handoff.zip
-```
-
-Handoff paketi ehtiva edir:
-- `design/tokens.json` - Design tokenləri
-- `design/styles.css` - Web CSS variables (auto-generated)
-- `src/theme.ts` - React Native theme (auto-generated)
-- `design/components.csv` - Komponent dokumentasiyası
-- `design/screens.csv` - Ekran spesifikasiyaları
-- `design/assets.manifest.json` - Asset metadata
-
-## 📁 Sources of Truth
-
-### 1. Design Tokens (`design/tokens.json`)
-Bütün rəng, spacing, typography, shadow və breakpoint dəyərləri.
-
-**⚠️ Qayda**: `design/styles.css` və `src/theme.ts` fayllarını manual redaktə etməyin. Həmişə `npm run tokens` əmri ilə yenidən yaradın.
-
-### 2. Assets (`design/assets.manifest.json`)
-Figma-style asset metadata:
-```json
-{
-  "name": "home",
-  "title": "Home Tab Icon",
-  "emoji": "🏠",
-  "category": "icon",
-  "group": "navigation",
-  "format": "svg",
-  "usage": "Main bottom navigation home tab",
-  "sizes": [
-    { "width": 16, "height": 16, "scale": "@1x", "path": "assets/icons/navigation/home-16.svg" }
-  ],
-  "pagesUsed": ["Home"],
-  "tokenRef": null
-}
-```
-
-### 3. Components (`design/components.csv`)
-Komponent spesifikasiyaları:
-- Props (TypeScript format)
-- States və events
-- Accessibility requirements (min 44×44, contrast ≥4.5:1)
-- Usage context
-
-### 4. Screens (`design/screens.csv`)
-Ekran spesifikasiyaları:
-- Route və parameters
-- İstifadə olunan komponentlər
-- States və status
-
-## 🔧 Web Development
-
-### CSS Variables istifadəsi:
-```css
-/* Auto-generated CSS variables */
-.my-component {
-  background-color: var(--color-primary-500);
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-```
-
-### Utility classes:
-```css
-.text-primary     /* var(--color-semantic-text-primary) */
-.bg-surface       /* var(--color-semantic-surface) */
-.rounded-lg       /* var(--radius-lg) */
-.shadow-md        /* var(--shadow-md) */
-```
-
-## 📱 React Native Development
-
-```typescript
-import { theme } from './src/theme';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: theme.colors.primary[500],
-    padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.lg,
-    ...theme.shadows.md,
-  },
-});
-```
-
-## ✅ Validation Rules
-
-1. **Asset paths**: Hər asset üçün valid path olmalıdır
-2. **Component consistency**: `screens.csv`-də istifadə olunan hər komponent `components.csv`-də mövcud olmalıdır
-3. **Token structure**: `colors`, `spacing`, `typography`, `borderRadius`, `shadows`, `breakpoints` bölmələri məcburidir
-
-## 🎨 Design System Rules
-
-- **Spacing**: 8px əsaslı sistem (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 20px)
-- **Touch targets**: Minimum 44×44pt
-- **Color contrast**: Minimum 4.5:1 ratio
-- **Naming**: kebab-case (home, video-thumb)
-- **File organization**: Group by category (navigation, actions, system)
-
-## 🔄 Workflow
-
-1. **Design dəyişiklikləri**: `design/tokens.json` faylını redaktə edin
-2. **Regenerate**: `npm run tokens` əmrini işə salın
-3. **Validate**: `npm run validate` ilə yoxlayın
-4. **Handoff**: `npm run handoff` ilə paketi yaradın
-5. **Inspect**: `/inspect` səhifəsində nəticəni yoxlayın
-
-## 📋 NPM Scripts
-
-- `npm run tokens` - Generate CSS vars & RN theme from tokens.json
-- `npm run validate` - Validate design files consistency
-- `npm run handoff` - Create complete handoff package
-- `npm run dev:inspect` - Start dev server with inspector access
-
----
-
-**AZ/EN**: Bu sistem həm Azərbaycan, həm də İngilis dilində şərhlər dəstəkləyir.
-**Stability**: Bütün asset adları və token strukturu sabit saxlanılır.
-**Accessibility**: WCAG 2.1 AA standartlarına uyğundur.
-
-## 🚀 Deployment
-
-### GitHub Pages
-Proyekt avtomatik olaraq GitHub Pages-də deploy olunur:
-- **URL**: https://tur4l999.github.io/boltnew/
-- **Branch**: main
-- **Auto-deploy**: Hər main branch-a push zamanı
-
-### StackBlitz
-StackBlitz-də işləmək üçün:
-1. Proyekti StackBlitz-ə import edin
-2. Avtomatik olaraq düzgün konfiqurasiya ilə işə düşəcək
-3. `.stackblitzrc` və `stackblitz.json` faylları mühiti idarə edir
-
-### Build Commands
-```bash
-# GitHub Pages üçün build
-npm run build:github
-
-# StackBlitz/Local üçün build  
-npm run build
-
-# Preview GitHub Pages build
-npm run preview:github
-```
-
-### Konfiqurasiya
-- **Vite Config**: Avtomatik olaraq mühiti aşkar edir (GitHub Pages vs StackBlitz)
-- **Base Path**: GitHub Pages üçün `/boltnew/`, StackBlitz üçün `./`
-- **Router**: BrowserRouter hostname əsasında basename təyin edir
+**Qeyd**: Bu demo versiyasıdır. Production istifadəsi üçün real API endpoints və təhlükəsizlik sertifikatları tələb olunur.
