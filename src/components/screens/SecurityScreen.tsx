@@ -7,6 +7,8 @@ export function SecurityScreen() {
   const { goBack, isDarkMode } = useApp();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
   const [biometricEnabled, setBiometricEnabled] = useState(false);
+  const [biometricSupported, setBiometricSupported] = useState(true);
+  const [biometricProcessing, setBiometricProcessing] = useState(false);
   
   // Password change states
   const [showPasswordChange, setShowPasswordChange] = useState(false);
@@ -18,6 +20,127 @@ export function SecurityScreen() {
 
   const userEmail = "tural.qarayev@example.com";
   const correctCode = "123456"; // Demo kod
+
+  // Check if biometric authentication is supported
+  React.useEffect(() => {
+    checkBiometricSupport();
+  }, []);
+
+  const checkBiometricSupport = async () => {
+    // Check if Web Authentication API is available
+    if (!window.PublicKeyCredential) {
+      setBiometricSupported(false);
+      return;
+    }
+
+    try {
+      // Check if platform authenticator (biometric) is available
+      const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      setBiometricSupported(available);
+    } catch (error) {
+      console.error('Biometric support check failed:', error);
+      setBiometricSupported(false);
+    }
+  };
+
+  const handleBiometricToggle = async () => {
+    if (!biometricSupported) {
+      alert('❌ Bu cihazda biometrik autentifikasiya dəstəklənmir!');
+      return;
+    }
+
+    if (biometricEnabled) {
+      // Deactivate biometric - just confirm
+      if (confirm('Biometrik autentifikasiyanı deaktiv etmək istədiyinizə əminsiniz?')) {
+        setBiometricEnabled(false);
+        alert('✅ Biometrik autentifikasiya deaktiv edildi');
+      }
+      return;
+    }
+
+    // Activate biometric - request permission
+    setBiometricProcessing(true);
+    
+    try {
+      await requestBiometricAuthentication();
+      setBiometricEnabled(true);
+      alert('✅ Biometrik autentifikasiya uğurla aktivləşdirildi!\n\n🔐 İndi Face ID, Touch ID və ya barmaq izi ilə giriş edə bilərsiniz.');
+    } catch (error: any) {
+      console.error('Biometric authentication failed:', error);
+      
+      // User-friendly error messages
+      if (error.name === 'NotAllowedError') {
+        alert('❌ İcazə verilmədi!\n\nBiometrik autentifikasiya üçün icazə lazımdır.');
+      } else if (error.name === 'NotSupportedError') {
+        alert('❌ Dəstəklənmir!\n\nBu cihazda biometrik autentifikasiya dəstəklənmir.');
+      } else if (error.name === 'SecurityError') {
+        alert('❌ Təhlükəsizlik xətası!\n\nHTTPS bağlantısı tələb olunur.');
+      } else {
+        alert('❌ Xəta baş verdi!\n\nBiometrik autentifikasiya aktivləşdirilə bilmədi.');
+      }
+      
+      setBiometricEnabled(false);
+    } finally {
+      setBiometricProcessing(false);
+    }
+  };
+
+  const requestBiometricAuthentication = async () => {
+    // Generate a random challenge
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+
+    // User information
+    const user = {
+      id: new Uint8Array(16),
+      name: userEmail,
+      displayName: 'Tural Qarayev'
+    };
+
+    // PublicKeyCredential creation options
+    const publicKeyCredentialCreationOptions: PublicKeyCredentialCreationOptions = {
+      challenge: challenge,
+      rp: {
+        name: 'DDA Sürücülük Tədris Mərkəzi',
+        id: window.location.hostname
+      },
+      user: user,
+      pubKeyCredParams: [
+        {
+          type: 'public-key',
+          alg: -7 // ES256
+        },
+        {
+          type: 'public-key',
+          alg: -257 // RS256
+        }
+      ],
+      authenticatorSelection: {
+        authenticatorAttachment: 'platform', // Use platform authenticator (Face ID, Touch ID, etc.)
+        userVerification: 'required',
+        requireResidentKey: false
+      },
+      timeout: 60000,
+      attestation: 'none'
+    };
+
+    try {
+      // Request credential creation (this will trigger biometric prompt)
+      const credential = await navigator.credentials.create({
+        publicKey: publicKeyCredentialCreationOptions
+      });
+
+      if (!credential) {
+        throw new Error('Credential creation failed');
+      }
+
+      // Success - biometric authentication completed
+      return credential;
+    } catch (error) {
+      // Re-throw to be handled by caller
+      throw error;
+    }
+  };
 
   const handlePasswordChangeClick = () => {
     setShowPasswordChange(true);
@@ -343,21 +466,37 @@ export function SecurityScreen() {
           </div>
 
           <div className={`p-4 rounded-2xl border-2 ${
-            isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
+            biometricEnabled
+              ? isDarkMode
+                ? 'border-emerald-500/50 bg-emerald-900/20'
+                : 'border-emerald-500/50 bg-emerald-50'
+              : isDarkMode
+                ? 'border-gray-700 bg-gray-800/50'
+                : 'border-gray-200 bg-gray-50'
           }`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-bold mb-1">Biometrik autentifikasiya</div>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex-1">
+                <div className="font-bold mb-1 flex items-center gap-2">
+                  Biometrik autentifikasiya
+                  {biometricProcessing && (
+                    <div className="animate-spin">⏳</div>
+                  )}
+                </div>
                 <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Face ID / Touch ID
+                  {biometricSupported 
+                    ? 'Face ID / Touch ID / Barmaq izi'
+                    : '❌ Bu cihazda dəstəklənmir'}
                 </div>
               </div>
               <button
-                onClick={() => setBiometricEnabled(!biometricEnabled)}
+                onClick={handleBiometricToggle}
+                disabled={!biometricSupported || biometricProcessing}
                 className={`w-14 h-8 rounded-full transition-all duration-300 ${
-                  biometricEnabled
-                    ? 'bg-emerald-600'
-                    : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
+                  !biometricSupported || biometricProcessing
+                    ? 'opacity-50 cursor-not-allowed bg-gray-400'
+                    : biometricEnabled
+                      ? 'bg-emerald-600'
+                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
@@ -365,6 +504,39 @@ export function SecurityScreen() {
                 }`}></div>
               </button>
             </div>
+            
+            {biometricEnabled && (
+              <div className={`p-3 rounded-xl border ${
+                isDarkMode 
+                  ? 'bg-emerald-900/30 border-emerald-700/30' 
+                  : 'bg-emerald-100 border-emerald-200'
+              }`}>
+                <div className={`text-sm font-medium flex items-center gap-2 ${
+                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                }`}>
+                  <Icon name="check" size={16} />
+                  <span>Biometrik giriş aktivdir</span>
+                </div>
+                <div className={`text-xs mt-1 ${
+                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                }`}>
+                  Tətbiqə biometrik məlumatlarınızla giriş edə bilərsiniz
+                </div>
+              </div>
+            )}
+            
+            {!biometricSupported && (
+              <div className={`mt-3 p-3 rounded-xl ${
+                isDarkMode ? 'bg-amber-900/20' : 'bg-amber-50'
+              }`}>
+                <div className={`text-xs flex items-start gap-2 ${
+                  isDarkMode ? 'text-amber-300' : 'text-amber-700'
+                }`}>
+                  <Icon name="warning" size={14} className="flex-shrink-0 mt-0.5" />
+                  <span>Bu cihazda biometrik autentifikasiya dəstəklənmir və ya brauzerdə aktiv deyil.</span>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>
