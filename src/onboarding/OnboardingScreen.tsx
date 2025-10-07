@@ -58,29 +58,28 @@ export function OnboardingScreen({
 
   const colors = getOnboardingColors(isDark);
   const currentSlide = onboardingSlides[currentIndex];
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // İlk dəfə TRUE - dərhal görünsün
+  const [isVisible, setIsVisible] = useState(false); // İlk dəfə FALSE - fade in ilə başla
   const prevIndexRef = useRef(currentIndex);
-  const isFirstRenderRef = useRef(true);
 
-  // Fade animation ONLY on slide change (not on initial mount)
-  // AZ: Fade animasiyası YALNIZ slayd dəyişəndə (ilk açılışda yox)
+  // Initial fade in on mount
+  // AZ: İlk açılışda fade in
   useEffect(() => {
-    // Skip animation on first render
-    // İlk render-də animasiya etmə
-    if (isFirstRenderRef.current) {
-      isFirstRenderRef.current = false;
-      return;
-    }
+    const timeout = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+    
+    return () => clearTimeout(timeout);
+  }, []);
 
+  // Fade animation on slide change
+  // AZ: Slayd dəyişəndə fade animasiyası
+  useEffect(() => {
     if (currentIndex !== prevIndexRef.current) {
       // Fade out
-      setIsTransitioning(true);
       setIsVisible(false);
       
       // After fade out, change content and fade in
       const fadeOutTimeout = setTimeout(() => {
-        setIsTransitioning(false);
         prevIndexRef.current = currentIndex;
         
         // Fade in new content
