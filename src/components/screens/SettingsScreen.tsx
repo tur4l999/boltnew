@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function SettingsScreen() {
   const { goBack, navigate, language, setLanguage, theme, setTheme, balance, simulatorBalance, activePackage, isDarkMode } = useApp();
@@ -25,32 +26,35 @@ export function SettingsScreen() {
   const settingsItems = [
     {
       section: 'Hesabım',
+      sectionIcon: 'user',
       items: [
-        { key: 'profile', label: 'Profil məlumatları', emoji: '👤', description: 'Ad, soyad, email və şəxsi məlumatlar', action: () => navigate('Profile') },
-        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔒', description: 'Şifrə dəyişikliyi və təhlükəsizlik ayarları', action: () => navigate('Security') },
-        { key: 'privacy', label: 'Məxfilik', emoji: '🛡️', description: 'Məlumat paylaşımı və məxfilik parametrləri', action: () => navigate('Privacy') },
-        { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', description: 'Push bildirişlər və email ayarları', action: () => navigate('NotificationSettings') }
+        { key: 'profile', label: 'Profil məlumatları', icon: 'user', description: 'Ad, soyad, email və şəxsi məlumatlar', action: () => navigate('Profile') },
+        { key: 'security', label: 'Təhlükəsizlik', icon: 'lock', description: 'Şifrə dəyişikliyi və təhlükəsizlik ayarları', action: () => navigate('Security') },
+        { key: 'privacy', label: 'Məxfilik', icon: 'shield', description: 'Məlumat paylaşımı və məxfilik parametrləri', action: () => navigate('Privacy') },
+        { key: 'notifications', label: 'Bildirişlər', icon: 'bell', description: 'Push bildirişlər və email ayarları', action: () => navigate('NotificationSettings') }
       ]
     },
     {
       section: 'Tətbiq',
+      sectionIcon: 'smartphone',
       items: [
-        { key: 'offline', label: 'Offline məzmun', emoji: '📱', description: 'İnternetsizdə istifadə üçün yükləmələr', action: () => navigate('OfflineContent') },
-        { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', description: 'Yaddaş təmizliyi və optimallaşdırma', action: () => {
+        { key: 'offline', label: 'Offline məzmun', icon: 'download', description: 'İnternetsizdə istifadə üçün yükləmələr', action: () => navigate('OfflineContent') },
+        { key: 'cache', label: 'Keş təmizlə', icon: 'trash-2', description: 'Yaddaş təmizliyi və optimallaşdırma', action: () => {
           if (confirm('Tətbiqin keş məlumatları silinəcək. Davam etmək istəyirsiniz?')) {
             alert('✅ Keş təmizləndi!\n\n📦 Azad edildi: ~45 MB\n🚀 Tətbiq performansı yaxşılaşdırıldı\n\nTətbiq daha sürətli işləyəcək.');
           }
         } },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', description: 'Avtomatik yeniləmə və versiya məlumatı', action: () => navigate('Updates') }
+        { key: 'updates', label: 'Yeniləmələr', icon: 'refresh-cw', description: 'Avtomatik yeniləmə və versiya məlumatı', action: () => navigate('Updates') }
       ]
     },
     {
       section: 'Dəstək',
+      sectionIcon: 'life-buoy',
       items: [
-        { key: 'help', label: 'Kömək mərkəzi', emoji: '❓', description: 'Tez-tez verilən suallar və istifadə təlimatı', action: () => navigate('HelpCenter') },
-        { key: 'contact', label: 'Bizimlə əlaqə', emoji: '📞', description: 'Dəstək komandası ilə əlaqə qurun', action: () => navigate('Contact') },
-        { key: 'feedback', label: 'Rəy bildirin', emoji: '💬', description: 'Təklifinizi və fikirlərinizi paylaşın', action: () => navigate('Feedback') },
-        { key: 'about', label: 'Haqqında', emoji: 'ℹ️', description: 'Tətbiq versiyası və hüquqi məlumatlar', action: () => navigate('About') }
+        { key: 'help', label: 'Kömək mərkəzi', icon: 'help-circle', description: 'Tez-tez verilən suallar və istifadə təlimatı', action: () => navigate('HelpCenter') },
+        { key: 'contact', label: 'Bizimlə əlaqə', icon: 'phone', description: 'Dəstək komandası ilə əlaqə qurun', action: () => navigate('Contact') },
+        { key: 'feedback', label: 'Rəy bildirin', icon: 'message-square', description: 'Təklifinizi və fikirlərinizi paylaşın', action: () => navigate('Feedback') },
+        { key: 'about', label: 'Haqqında', icon: 'info', description: 'Tətbiq versiyası və hüquqi məlumatlar', action: () => navigate('About') }
       ]
     }
   ];
@@ -397,7 +401,11 @@ export function SettingsScreen() {
               <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
                 isDarkMode ? 'bg-gradient-to-br from-emerald-600/20 to-green-600/20' : 'bg-gradient-to-br from-emerald-100 to-green-100'
               }`}>
-                <EmojiIcon emoji="⚙️" size={20} />
+                <Icon 
+                  name={section.sectionIcon as any} 
+                  size={20}
+                  className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}
+                />
               </div>
               <h3 className={`font-bold text-base transition-colors duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-800 to-gray-600'
@@ -430,7 +438,11 @@ export function SettingsScreen() {
                         ? 'bg-gradient-to-br from-gray-700/60 to-gray-600/60 group-hover:from-gray-600/80 group-hover:to-gray-500/80' 
                         : 'bg-gradient-to-br from-gray-100 to-gray-200/80 group-hover:from-gray-200 group-hover:to-gray-300/80'
                     } shadow-lg group-hover:shadow-xl`}>
-                      <EmojiIcon emoji={item.emoji} size={18} />
+                      <Icon 
+                        name={item.icon as any} 
+                        size={18}
+                        className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                      />
                     </div>
                     <div className="flex-1 relative">
                       <div className="font-bold text-sm mb-1">
