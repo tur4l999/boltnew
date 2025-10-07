@@ -24,8 +24,8 @@ export const onboardingTranslations = {
       
       // Slide 2: Exam Simulator
       slide2: {
-        title: 'İmtahan simulyatoru',
-        body: '10 sual, 15 dəqiqə — rəsmi imtahan formatı. Real imtahan şəraitində özünü yoxla.',
+        title: 'Testlər və İmtahanlar',
+        body: 'Biletlər üzrə testlər, mövzu imtahanları və əsl imtahan simulyatoru. Real şəraitdə özünü yoxla və hazırlaş!',
       },
       
       // Slide 3: Packages
@@ -58,8 +58,8 @@ export const onboardingTranslations = {
       
       // Slide 2: Exam Simulator
       slide2: {
-        title: 'Exam simulator',
-        body: '10 questions, 15 minutes — official exam format. Test yourself in real exam conditions.',
+        title: 'Tests and Exams',
+        body: 'Ticket tests, topic exams and real exam simulator. Test yourself in real conditions and get prepared!',
       },
       
       // Slide 3: Packages
@@ -92,8 +92,8 @@ export const onboardingTranslations = {
       
       // Slide 2: Exam Simulator
       slide2: {
-        title: 'Симулятор экзамена',
-        body: '10 вопросов, 15 минут — официальный формат экзамена. Проверьте себя в реальных условиях экзамена.',
+        title: 'Тесты и Экзамены',
+        body: 'Тесты по билетам, тематические экзамены и настоящий симулятор экзамена. Проверьте себя в реальных условиях и подготовьтесь!',
       },
       
       // Slide 3: Packages
