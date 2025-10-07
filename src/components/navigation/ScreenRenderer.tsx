@@ -46,6 +46,7 @@ import { HelpCenterScreen } from '../screens/HelpCenterScreen';
 import { ContactScreen } from '../screens/ContactScreen';
 import { FeedbackScreen } from '../screens/FeedbackScreen';
 import { AboutScreen } from '../screens/AboutScreen';
+import { ReferralListScreen } from '../screens/ReferralListScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -110,9 +111,10 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'Contact' && <ContactScreen />}
       {currentScreen.screen === 'Feedback' && <FeedbackScreen />}
       {currentScreen.screen === 'About' && <AboutScreen />}
+      {currentScreen.screen === 'ReferralList' && <ReferralListScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

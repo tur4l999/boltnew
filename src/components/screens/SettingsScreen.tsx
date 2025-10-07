@@ -341,26 +341,32 @@ export function SettingsScreen() {
               🎯 Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className={`text-center p-3 rounded-xl ${
-                isDarkMode ? 'bg-emerald-900/30' : 'bg-emerald-100'
-              }`}>
+              <button
+                onClick={() => navigate('ReferralList')}
+                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                  isDarkMode ? 'bg-emerald-900/30 hover:bg-emerald-900/40' : 'bg-emerald-100 hover:bg-emerald-200'
+                }`}
+              >
                 <div className={`text-xl font-bold ${
                   isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                }`}>0</div>
+                }`}>5</div>
                 <div className={`text-xs ${
                   isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
                 }`}>Dəvət edilən</div>
-              </div>
-              <div className={`text-center p-3 rounded-xl ${
-                isDarkMode ? 'bg-yellow-900/30' : 'bg-yellow-100'
-              }`}>
+              </button>
+              <button
+                onClick={() => navigate('ReferralList')}
+                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                  isDarkMode ? 'bg-yellow-900/30 hover:bg-yellow-900/40' : 'bg-yellow-100 hover:bg-yellow-200'
+                }`}
+              >
                 <div className={`text-xl font-bold ${
                   isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
-                }`}>0 AZN</div>
+                }`}>80 AZN</div>
                 <div className={`text-xs ${
                   isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
                 }`}>Qazanılan bonus</div>
-              </div>
+              </button>
             </div>
             
             <button
