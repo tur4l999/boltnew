@@ -44,12 +44,6 @@ export function ContactScreen() {
     { icon: 'youtube', name: 'YouTube', handle: 'DDA Azerbaijan', color: 'red' }
   ];
 
-  const officeInfo = {
-    address: 'Bakı şəhəri, Nəsimi rayonu, 28 May küçəsi 15',
-    workHours: 'Bazar ertəsi - Cümə: 09:00 - 18:00',
-    weekend: 'Şənbə - Bazar: İstirahət'
-  };
-
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
       isDarkMode 
@@ -122,85 +116,6 @@ export function ContactScreen() {
             </Card>
           ))}
         </div>
-
-        {/* Office Information */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
-            }`}>
-              <Icon 
-                name="building" 
-                size={20}
-                className={isDarkMode ? 'text-purple-400' : 'text-purple-600'}
-              />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Ofis məlumatı
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-              <div className="flex items-start gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                }`}>
-                  <Icon 
-                    name="map-pin" 
-                    size={20}
-                    className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
-                  />
-                </div>
-                <div>
-                  <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                    Ünvan
-                  </div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {officeInfo.address}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-2xl ${isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-              <div className="flex items-start gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-                }`}>
-                  <Icon 
-                    name="clock" 
-                    size={20}
-                    className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
-                  />
-                </div>
-                <div>
-                  <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                    İş saatları
-                  </div>
-                  <div className={`text-sm mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {officeInfo.workHours}
-                  </div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {officeInfo.weekend}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => alert('Xəritə açılır... (demo)')}
-              className={`w-full p-4 rounded-2xl border-2 font-bold transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2 ${
-                isDarkMode 
-                  ? 'border-purple-500/50 bg-purple-900/20 hover:bg-purple-900/30 text-purple-300' 
-                  : 'border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700'
-              }`}
-            >
-              <Icon name="map" size={20} />
-              Xəritədə göstər
-            </button>
-          </div>
-        </Card>
 
         {/* Social Media */}
         <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
