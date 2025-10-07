@@ -19,7 +19,10 @@ export function NotificationSettingsScreen() {
     system: true         // Sistem (yeniləmə, bonus, paket)
   });
 
-  const [channelsOpen, setChannelsOpen] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
+    channels: false,
+    types: false
+  });
 
   const toggleNotification = (key: string) => {
     setNotifications(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }));
@@ -35,20 +38,17 @@ export function NotificationSettingsScreen() {
     }));
   };
 
-  const notificationGroups = [
-    {
-      key: 'channels',
-      title: 'Bildiriş Kanalları',
-      icon: 'bell',
-      color: 'blue',
-      description: 'Push, Email və SMS bildirişləri',
-      isChannelGroup: true,
-      channels: [
-        { key: 'push', label: 'Push bildirişləri', icon: 'smartphone', description: 'Mobil cihazda bildirişlər' },
-        { key: 'email', label: 'Email bildirişləri', icon: 'mail', description: 'E-poçt vasitəsilə' },
-        { key: 'sms', label: 'SMS bildirişləri', icon: 'message-square', description: 'Telefona mesaj' }
-      ]
-    },
+  const toggleDropdown = (key: string) => {
+    setOpenDropdowns(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const channels = [
+    { key: 'push', label: 'Push bildirişləri', icon: 'smartphone', description: 'Mobil cihazda bildirişlər' },
+    { key: 'email', label: 'Email bildirişləri', icon: 'mail', description: 'E-poçt vasitəsilə' },
+    { key: 'sms', label: 'SMS bildirişləri', icon: 'message-square', description: 'Telefona mesaj' }
+  ];
+
+  const notificationTypes = [
     {
       key: 'education',
       title: 'Təhsil və Təcrübə',
@@ -81,10 +81,6 @@ export function NotificationSettingsScreen() {
 
   const getColorClasses = (color: string) => {
     const colorMap: Record<string, { iconBg: string; iconText: string }> = {
-      blue: {
-        iconBg: isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100',
-        iconText: isDarkMode ? 'text-blue-400' : 'text-blue-600'
-      },
       purple: {
         iconBg: isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100',
         iconText: isDarkMode ? 'text-purple-400' : 'text-purple-600'
@@ -104,6 +100,9 @@ export function NotificationSettingsScreen() {
     };
     return colorMap[color] || colorMap.gray;
   };
+
+  const anyChannelEnabled = Object.values(notifications.channels).some(v => v);
+  const enabledTypesCount = notificationTypes.filter(type => notifications[type.key as keyof typeof notifications] as boolean).length;
 
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
@@ -141,179 +140,227 @@ export function NotificationSettingsScreen() {
           </div>
         </div>
 
-        {/* Notification Groups */}
-        <div className="space-y-4">
-          {notificationGroups.map((group, index) => {
-            const colors = getColorClasses(group.color);
-            const anyChannelEnabled = Object.values(notifications.channels).some(v => v);
+        {/* Bildiriş Kanalları */}
+        <Card variant="elevated" padding="lg" className="mb-4 animate-fadeInUp">
+          <button
+            onClick={() => toggleDropdown('channels')}
+            className="w-full flex items-center justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                anyChannelEnabled
+                  ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
+                  : isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
+              }`}>
+                <Icon 
+                  name="bell" 
+                  size={24} 
+                  className={anyChannelEnabled 
+                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                    : isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                  }
+                />
+              </div>
+              <div className="flex-1 text-left">
+                <h2 className={`font-bold text-lg mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Bildiriş Kanalları
+                </h2>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Push, Email və SMS bildirişləri
+                  {anyChannelEnabled && (
+                    <span className={`ml-2 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                      • {Object.values(notifications.channels).filter(v => v).length} aktiv
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className={`text-2xl transition-transform duration-300 ${
+              openDropdowns.channels ? 'rotate-180' : 'rotate-0'
+            } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              ↓
+            </div>
+          </button>
 
-            return (
-              <Card 
-                key={group.key} 
-                variant="elevated" 
-                padding="lg" 
-                className="animate-fadeInUp"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                {group.isChannelGroup ? (
-                  // Channel group - dropdown handling
-                  <div>
-                    <button
-                      onClick={() => setChannelsOpen(!channelsOpen)}
-                      className="w-full flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                          anyChannelEnabled
+          {/* Channels dropdown */}
+          {openDropdowns.channels && (
+            <div className="mt-4 space-y-3 animate-fadeInUp">
+              {channels.map((channel) => {
+                const channelEnabled = notifications.channels[channel.key as keyof typeof notifications.channels];
+                return (
+                  <div
+                    key={channel.key}
+                    className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
+                      channelEnabled
+                        ? isDarkMode
+                          ? 'border-emerald-500/50 bg-emerald-900/20'
+                          : 'border-emerald-500/50 bg-emerald-50'
+                        : isDarkMode
+                          ? 'border-gray-700 bg-gray-800/50'
+                          : 'border-gray-200 bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          channelEnabled
                             ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
-                            : colors.iconBg
+                            : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
                         }`}>
                           <Icon 
-                            name={group.icon as any} 
-                            size={24} 
-                            className={anyChannelEnabled 
+                            name={channel.icon as any} 
+                            size={20} 
+                            className={channelEnabled 
                               ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                              : colors.iconText
+                              : isDarkMode ? 'text-gray-500' : 'text-gray-400'
                             }
                           />
                         </div>
-                        <div className="flex-1 text-left">
-                          <h2 className={`font-bold text-lg mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                            {group.title}
-                          </h2>
-                          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            {group.description}
-                            {anyChannelEnabled && (
-                              <span className={`ml-2 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                                • {Object.values(notifications.channels).filter(v => v).length} aktiv
-                              </span>
-                            )}
-                          </p>
+                        <div>
+                          <div className={`font-bold text-base ${
+                            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
+                            {channel.label}
+                          </div>
+                          <div className={`text-sm ${
+                            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
+                            {channel.description}
+                          </div>
                         </div>
                       </div>
-                      <div className={`text-2xl transition-transform duration-300 ${
-                        channelsOpen ? 'rotate-180' : 'rotate-0'
-                      } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        ↓
-                      </div>
-                    </button>
-
-                    {/* Channel dropdown */}
-                    {channelsOpen && (
-                      <div className="mt-4 space-y-3 animate-fadeInUp">
-                        {group.channels?.map((channel) => {
-                          const channelEnabled = notifications.channels[channel.key as keyof typeof notifications.channels];
-                          return (
-                            <div
-                              key={channel.key}
-                              className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
-                                channelEnabled
-                                  ? isDarkMode
-                                    ? 'border-emerald-500/50 bg-emerald-900/20'
-                                    : 'border-emerald-500/50 bg-emerald-50'
-                                  : isDarkMode
-                                    ? 'border-gray-700 bg-gray-800/50'
-                                    : 'border-gray-200 bg-gray-50'
-                              }`}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                                    channelEnabled
-                                      ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
-                                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                                  }`}>
-                                    <Icon 
-                                      name={channel.icon as any} 
-                                      size={20} 
-                                      className={channelEnabled 
-                                        ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                                        : isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                                      }
-                                    />
-                                  </div>
-                                  <div>
-                                    <div className={`font-bold text-base ${
-                                      isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                                    }`}>
-                                      {channel.label}
-                                    </div>
-                                    <div className={`text-sm ${
-                                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                                    }`}>
-                                      {channel.description}
-                                    </div>
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() => toggleChannel(channel.key)}
-                                  className={`ml-3 w-14 h-8 rounded-full flex-shrink-0 transition-all duration-300 ${
-                                    channelEnabled
-                                      ? 'bg-emerald-600'
-                                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                                  }`}
-                                >
-                                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                                    channelEnabled ? 'translate-x-7' : 'translate-x-1'
-                                  }`}></div>
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  // Regular group - single toggle
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                        notifications[group.key as keyof typeof notifications] as boolean
-                          ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
-                          : colors.iconBg
-                      }`}>
-                        <Icon 
-                          name={group.icon as any} 
-                          size={24} 
-                          className={notifications[group.key as keyof typeof notifications] as boolean
-                            ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                            : colors.iconText
-                          }
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h2 className={`font-bold text-lg mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                          {group.title}
-                        </h2>
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          {group.description}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
                       <button
-                        onClick={() => toggleNotification(group.key)}
-                        className={`w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                          notifications[group.key as keyof typeof notifications] as boolean
+                        onClick={() => toggleChannel(channel.key)}
+                        className={`ml-3 w-14 h-8 rounded-full flex-shrink-0 transition-all duration-300 ${
+                          channelEnabled
                             ? 'bg-emerald-600'
                             : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
                         }`}
                       >
                         <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                          notifications[group.key as keyof typeof notifications] as boolean ? 'translate-x-7' : 'translate-x-1'
+                          channelEnabled ? 'translate-x-7' : 'translate-x-1'
                         }`}></div>
                       </button>
                     </div>
                   </div>
-                )}
-              </Card>
-            );
-          })}
-        </div>
+                );
+              })}
+            </div>
+          )}
+        </Card>
+
+        {/* Bildiriş Növü */}
+        <Card variant="elevated" padding="lg" className="mb-4 animate-fadeInUp" style={{ animationDelay: '50ms' }}>
+          <button
+            onClick={() => toggleDropdown('types')}
+            className="w-full flex items-center justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                enabledTypesCount > 0
+                  ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
+                  : isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
+              }`}>
+                <Icon 
+                  name="settings" 
+                  size={24} 
+                  className={enabledTypesCount > 0
+                    ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                    : isDarkMode ? 'text-purple-400' : 'text-purple-600'
+                  }
+                />
+              </div>
+              <div className="flex-1 text-left">
+                <h2 className={`font-bold text-lg mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Bildiriş Növü
+                </h2>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Təhsil, imtahan, mesaj və sistem bildirişləri
+                  {enabledTypesCount > 0 && (
+                    <span className={`ml-2 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                      • {enabledTypesCount} aktiv
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className={`text-2xl transition-transform duration-300 ${
+              openDropdowns.types ? 'rotate-180' : 'rotate-0'
+            } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              ↓
+            </div>
+          </button>
+
+          {/* Types dropdown */}
+          {openDropdowns.types && (
+            <div className="mt-4 space-y-3 animate-fadeInUp">
+              {notificationTypes.map((type) => {
+                const colors = getColorClasses(type.color);
+                const typeEnabled = notifications[type.key as keyof typeof notifications] as boolean;
+                return (
+                  <div
+                    key={type.key}
+                    className={`p-4 rounded-2xl border-2 transition-all duration-300 ${
+                      typeEnabled
+                        ? isDarkMode
+                          ? 'border-emerald-500/50 bg-emerald-900/20'
+                          : 'border-emerald-500/50 bg-emerald-50'
+                        : isDarkMode
+                          ? 'border-gray-700 bg-gray-800/50'
+                          : 'border-gray-200 bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          typeEnabled
+                            ? isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
+                            : colors.iconBg
+                        }`}>
+                          <Icon 
+                            name={type.icon as any} 
+                            size={20} 
+                            className={typeEnabled 
+                              ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                              : colors.iconText
+                            }
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <div className={`font-bold text-base ${
+                            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
+                            {type.title}
+                          </div>
+                          <div className={`text-sm ${
+                            isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
+                            {type.description}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => toggleNotification(type.key)}
+                        className={`ml-3 w-14 h-8 rounded-full flex-shrink-0 transition-all duration-300 ${
+                          typeEnabled
+                            ? 'bg-emerald-600'
+                            : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
+                          typeEnabled ? 'translate-x-7' : 'translate-x-1'
+                        }`}></div>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Card>
 
         {/* Quick Actions */}
-        <Card variant="elevated" padding="lg" className="mt-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+        <Card variant="elevated" padding="lg" className="mt-6 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
           <h3 className={`font-bold text-base mb-4 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
             Tez əməliyyatlar
           </h3>
@@ -346,7 +393,7 @@ export function NotificationSettingsScreen() {
                   communication: false,
                   system: false
                 });
-                setChannelsOpen(false);
+                setOpenDropdowns({ channels: false, types: false });
                 alert('🔕 Bütün bildirişlər deaktiv edildi');
               }}
               className={`p-4 rounded-2xl border-2 font-bold transition-all duration-300 hover:scale-[1.02] ${

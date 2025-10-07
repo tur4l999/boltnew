@@ -13,12 +13,6 @@ export function OfflineContentScreen() {
     { id: 2, name: 'Yol nişanları', size: '32 MB', questions: 120, downloaded: true },
   ];
 
-  const availablePacks = [
-    { id: 3, name: 'Təhlükəsizlik qaydaları', size: '28 MB', questions: 100, downloaded: false },
-    { id: 4, name: 'İlk tibbi yardım', size: '22 MB', questions: 80, downloaded: false },
-    { id: 5, name: 'Avtomobil texnikası', size: '35 MB', questions: 110, downloaded: false },
-  ];
-
   const downloadedVideos = [
     { id: 1, name: 'Park etmə texnikası', size: '120 MB', duration: '15 dəq', downloaded: true },
   ];
@@ -248,69 +242,6 @@ export function OfflineContentScreen() {
                     }`}
                   >
                     <Icon name="trash" size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Available to Download */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
-              }`}>
-                <Icon name="download" size={20} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
-              </div>
-              <h2 className={`font-bold text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                Yükləmək üçün hazır
-              </h2>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {availablePacks.map(pack => (
-              <div
-                key={pack.id}
-                className={`p-4 rounded-xl border-2 transition-all duration-300 hover:scale-[1.01] ${
-                  isDarkMode 
-                    ? 'border-gray-700 bg-gray-800/50 hover:border-blue-700/50' 
-                    : 'border-gray-200 bg-gray-50 hover:border-blue-300/50'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
-                  }`}>
-                    <Icon name="document" size={20} className={isDarkMode ? 'text-gray-400' : 'text-gray-600'} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                      {pack.name}
-                    </div>
-                    <div className={`text-xs flex items-center gap-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      <span className="flex items-center gap-1">
-                        <Icon name="help-circle" size={12} />
-                        {pack.questions} sual
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Icon name="package" size={12} />
-                        {pack.size}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => alert(`"${pack.name}" yüklənir... (demo)`)}
-                    className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-all duration-300 hover:scale-105 ${
-                      isDarkMode
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
-                    }`}
-                  >
-                    <Icon name="download" size={14} />
-                    Yüklə
                   </button>
                 </div>
               </div>
