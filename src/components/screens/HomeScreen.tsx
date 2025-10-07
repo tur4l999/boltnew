@@ -7,6 +7,7 @@ import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
@@ -220,7 +221,7 @@ export function HomeScreen() {
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             
             <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 relative z-10">
-              <EmojiIcon emoji="🧪" size={24} className="text-white" />
+              <Icon name="clipboard-check" size={28} className="text-white" />
             </div>
             <div className="text-left font-black text-lg leading-tight relative z-10">
               {`${t.examSimulator}`}

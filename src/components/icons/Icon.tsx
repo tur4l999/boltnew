@@ -837,6 +837,14 @@ const WifiIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<Ic
   </svg>
 );
 
+const ClipboardCheckIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="8" y="2" width="8" height="4" rx="1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M9 12l2 2 4-4" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 // Icon mapping
 const iconMap = {
   // Navigation
@@ -929,6 +937,7 @@ const iconMap = {
   send: SendIcon,
   clock: ClockIcon,
   wifi: WifiIcon,
+  'clipboard-check': ClipboardCheckIcon,
 };
 
 // Main Icon component
