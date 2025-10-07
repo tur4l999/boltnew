@@ -10,6 +10,7 @@ import { BlurOverlay } from './components/BlurOverlay';
 import { PagePicker } from './components/PagePicker';
 import { SearchBar } from './components/SearchBar';
 import { PageThumbs } from './components/PageThumbs';
+import { ScreenshotProtection } from './components/ScreenshotProtection';
 import { issueSecuredPdf, revokeSession, searchInPdf, logPdfEvent } from './api';
 import {
   startScreenshotMonitoring,
@@ -49,6 +50,7 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
   const [showSearch, setShowSearch] = useState(false);
   const [showCopyright, setShowCopyright] = useState(showCopyrightNotice);
   const [expiryWarning, setExpiryWarning] = useState(false);
+  const [screenshotBlackout, setScreenshotBlackout] = useState(false);
   const cleanupRef = useRef<(() => void)[]>([]);
   
   // Initialize PDF session
@@ -168,6 +170,8 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
   };
   
   const handleSecurityViolation = async (reason: 'screenshot' | 'jailbreak') => {
+    // Dərhal ekranı qaralt
+    setScreenshotBlackout(true);
     store.markScreenshotDetected();
     
     // Revoke session
@@ -361,6 +365,10 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
         display: 'flex',
         flexDirection: 'column',
       }}
+      onCopy={(e) => e.preventDefault()}
+      onCut={(e) => e.preventDefault()}
+      onPaste={(e) => e.preventDefault()}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {/* Header */}
       <div
@@ -642,6 +650,42 @@ export const PdfReader: React.FC<PdfReaderProps> = ({
         language={language}
         onDismiss={() => store.setBlur(false)}
       />
+      
+      {/* Screenshot Protection - Real-time black screen */}
+      <ScreenshotProtection
+        active={!!store.session && !store.sessionRevoked}
+        onDetected={() => handleSecurityViolation('screenshot')}
+      />
+      
+      {/* Screenshot Detection - Permanent Black Screen After Violation */}
+      {screenshotBlackout && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: '#000000',
+            zIndex: 999999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <div style={{ textAlign: 'center', color: '#ef4444' }}>
+            <div style={{ fontSize: '64px', marginBottom: '16px' }}>⚠️</div>
+            <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px' }}>
+              {language === 'az' ? 'Qadağan!' : 'Prohibited!'}
+            </div>
+            <div style={{ fontSize: '14px', opacity: 0.8 }}>
+              {language === 'az' 
+                ? 'Ekran şəkli aşkarlandı' 
+                : 'Screenshot detected'}
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Copyright Notice */}
       {showCopyright && (

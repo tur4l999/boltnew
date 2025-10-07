@@ -37,11 +37,30 @@ export function startScreenshotMonitoring(
       // Windows: Win + PrintScreen, PrintScreen
       e.key === 'PrintScreen' ||
       // Mac: Cmd + Shift + 3/4/5
-      (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key));
+      (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) ||
+      // Windows: Win + Shift + S (Snipping Tool)
+      (e.key === 'S' && e.shiftKey && (e.metaKey || e.ctrlKey));
+    
+    // Block developer tools
+    const isDevToolsShortcut =
+      // F12
+      e.key === 'F12' ||
+      // Ctrl+Shift+I / Cmd+Option+I
+      (e.key === 'I' && e.shiftKey && (e.ctrlKey || e.metaKey)) ||
+      // Ctrl+Shift+C / Cmd+Option+C
+      (e.key === 'C' && e.shiftKey && (e.ctrlKey || e.metaKey)) ||
+      // Ctrl+Shift+J / Cmd+Option+J
+      (e.key === 'J' && e.shiftKey && (e.ctrlKey || e.metaKey));
     
     if (isScreenshotShortcut) {
+      e.preventDefault();
       console.warn('[Security] Screenshot shortcut detected');
       onScreenshotDetected();
+    }
+    
+    if (isDevToolsShortcut) {
+      e.preventDefault();
+      console.warn('[Security] Developer tools shortcut blocked');
     }
   };
   
@@ -98,12 +117,32 @@ export async function preventScreenCapture(): Promise<void> {
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      -webkit-user-drag: none;
+      user-drag: none;
+    }
+    
+    /* Print qadağası */
+    @media print {
+      .pdf-reader-protected {
+        display: none !important;
+      }
     }
   `;
   
   if (!document.getElementById('pdf-security-style')) {
     document.head.appendChild(style);
   }
+  
+  // Disable right-click context menu globally for PDF
+  const preventContextMenu = (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (target?.closest('.pdf-reader-protected')) {
+      e.preventDefault();
+      return false;
+    }
+  };
+  
+  document.addEventListener('contextmenu', preventContextMenu);
   
   // React Native implementation:
   // import * as ScreenCapture from 'expo-screen-capture';

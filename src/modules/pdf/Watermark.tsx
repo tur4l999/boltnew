@@ -46,9 +46,9 @@ export const Watermark: React.FC<WatermarkProps> = ({
   const dynamicText = `${watermarkText} • ${new Date(timestamp).toLocaleTimeString()}`;
   
   // Calculate pattern spacing (mobile-friendly - daha sıx)
-  const spacing = 120; // pixels between watermarks (200-dən 120-yə azaldıldı)
-  const patternWidth = spacing * 2.5; // Daha geniş pattern
-  const patternHeight = spacing * 2.5;
+  const spacing = 150; // pixels between watermarks
+  const patternWidth = spacing * 2; // Pattern eni
+  const patternHeight = spacing * 2.5; // Pattern hündürlüyü
   
   // Hidden watermark configuration (very subtle)
   const hiddenOpacity = 0.015; // Çox zəif - demək olar ki görünməz
@@ -93,10 +93,10 @@ export const Watermark: React.FC<WatermarkProps> = ({
             height={patternHeight}
             patternUnits="userSpaceOnUse"
           >
-            {/* First watermark group - 2 lines */}
-            <g transform={`rotate(${angle} ${spacing / 2} ${spacing / 2})`}>
+            {/* First watermark group (top-left) - 2 lines */}
+            <g transform={`rotate(${angle} 30 ${spacing / 2})`}>
               <text
-                x={spacing / 2}
+                x={30}
                 y={spacing / 2}
                 fill="currentColor"
                 fontSize={fontSize}
@@ -111,7 +111,7 @@ export const Watermark: React.FC<WatermarkProps> = ({
                 DDA.az • {config.userName}
               </text>
               <text
-                x={spacing / 2}
+                x={30}
                 y={spacing / 2 + fontSize + 4}
                 fill="currentColor"
                 fontSize={fontSize}
@@ -127,11 +127,11 @@ export const Watermark: React.FC<WatermarkProps> = ({
               </text>
             </g>
             
-            {/* Second watermark group - 2 lines */}
-            <g transform={`rotate(${angle} ${spacing / 2 + patternWidth / 2} ${spacing / 2 + patternHeight / 2})`}>
+            {/* Second watermark group (center) - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing * 1.2} ${spacing * 1.3})`}>
               <text
-                x={spacing / 2 + patternWidth / 2}
-                y={spacing / 2 + patternHeight / 2}
+                x={spacing * 1.2}
+                y={spacing * 1.3}
                 fill="currentColor"
                 fontSize={fontSize}
                 fontFamily="system-ui, -apple-system, sans-serif"
@@ -145,8 +145,42 @@ export const Watermark: React.FC<WatermarkProps> = ({
                 DDA.az • {config.userName}
               </text>
               <text
-                x={spacing / 2 + patternWidth / 2}
-                y={spacing / 2 + patternHeight / 2 + fontSize + 4}
+                x={spacing * 1.2}
+                y={spacing * 1.3 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
+            
+            {/* Third watermark group (right) - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing * 2.2} ${spacing * 0.4})`}>
+              <text
+                x={spacing * 2.2}
+                y={spacing * 0.4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={spacing * 2.2}
+                y={spacing * 0.4 + fontSize + 4}
                 fill="currentColor"
                 fontSize={fontSize}
                 fontFamily="system-ui, -apple-system, sans-serif"

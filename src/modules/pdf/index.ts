@@ -12,6 +12,7 @@ export { BlurOverlay } from './components/BlurOverlay';
 export { PagePicker } from './components/PagePicker';
 export { SearchBar } from './components/SearchBar';
 export { PageThumbs } from './components/PageThumbs';
+export { ScreenshotProtection } from './components/ScreenshotProtection';
 
 // Store & hooks
 export { usePdfStore, usePdfSession, usePdfPage, usePdfZoom, usePdfLoading, usePdfError, usePdfSearch, usePdfSecurity } from './usePdfStore';
