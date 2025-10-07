@@ -48,6 +48,9 @@ interface AppContextType {
   hasActivePackage: () => boolean;
   isModuleUnlocked: (moduleId: string) => boolean;
   activatePackageNow: () => void;
+  purchasedBooks: string[];
+  purchaseBook: (bookId: string, bookTitle: string, price: number) => boolean;
+  isBookPurchased: (bookId: string) => boolean;
   cart: CartItem[];
   addToCart: (productId: string, qty?: number) => void;
   removeFromCart: (productId: string) => void;
@@ -90,6 +93,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>('locker');
+  const [purchasedBooks, setPurchasedBooks] = useState<string[]>([]); // Purchased book IDs
   const [examResults, setExamResults] = useState<StoredExamResult[]>([
     // Demo data
     {
@@ -502,6 +506,35 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setActivePackage({ ...activePackage, activationDate: now, expiryDate: newExpiry });
   };
 
+  const purchaseBook = (bookId: string, bookTitle: string, price: number): boolean => {
+    if (balance < price) {
+      return false; // Insufficient balance
+    }
+    
+    if (purchasedBooks.includes(bookId)) {
+      return true; // Already purchased
+    }
+    
+    const purchaseDate = new Date();
+    const transaction: Transaction = {
+      id: Date.now().toString(),
+      type: 'purchase',
+      amount: price,
+      description: `Kitab: ${bookTitle}`,
+      date: purchaseDate
+    };
+    
+    setBalance(prev => prev - price);
+    setPurchasedBooks(prev => [...prev, bookId]);
+    setTransactions(prev => [transaction, ...prev]);
+    
+    return true;
+  };
+
+  const isBookPurchased = (bookId: string): boolean => {
+    return purchasedBooks.includes(bookId);
+  };
+
   const addExamResult = (type: ExamType, score: number, total: number, timeSpent: number, weakTopics: string[], details: any = {}): void => {
     const newResult: StoredExamResult = {
       id: Date.now().toString(),
@@ -748,6 +781,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       , examResults, addExamResult
       , appeals, submitAppeal, getAppealsByStatus
       , qaChats, qaUsers, qaTeachers, startNewChat, sendMessage, getChatById, markChatAsRead, getActiveChatsList
+      , purchasedBooks, purchaseBook, isBookPurchased
     }}>
       {children}
     </AppContext.Provider>
