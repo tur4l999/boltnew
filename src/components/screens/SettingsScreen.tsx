@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function SettingsScreen() {
-  const { goBack, language, setLanguage, theme, setTheme, balance, simulatorBalance, activePackage, isDarkMode } = useApp();
-  const [themeExpanded, setThemeExpanded] = useState(false);
-  const [languageExpanded, setLanguageExpanded] = useState(false);
+  const { goBack, navigate, language, setLanguage, theme, setTheme, balance, simulatorBalance, activePackage, isDarkMode } = useApp();
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [referralCode] = useState('DDA2025TURAL'); // Demo referral code
   const userName = "Tural Qarayev";
   const userEmail = "tural.qarayev@example.com";
@@ -34,29 +35,36 @@ export function SettingsScreen() {
   const settingsItems = [
     {
       section: 'Hesabım',
+      sectionIcon: 'user',
       items: [
-        { key: 'profile', label: 'Profil məlumatları', emoji: '👤', action: () => alert('Profil məlumatları (demo)') },
-        { key: 'security', label: 'Təhlükəsizlik', emoji: '🔒', action: () => alert('Təhlükəsizlik (demo)') },
-        { key: 'privacy', label: 'Məxfilik', emoji: '🛡️', action: () => alert('Məxfilik (demo)') },
-        { key: 'notifications', label: 'Bildirişlər', emoji: '🔔', action: () => alert('Bildiriş ayarları (demo)') }
+        { key: 'profile', label: 'Profil məlumatları', icon: 'user', description: 'Ad, soyad, email və şəxsi məlumatlar', action: () => navigate('Profile') },
+        { key: 'security', label: 'Təhlükəsizlik', icon: 'lock', description: 'Şifrə dəyişikliyi və təhlükəsizlik ayarları', action: () => navigate('Security') },
+        { key: 'privacy', label: 'Məxfilik', icon: 'shield', description: 'Məlumat paylaşımı və məxfilik parametrləri', action: () => navigate('Privacy') },
+        { key: 'notifications', label: 'Bildirişlər', icon: 'bell', description: 'Push bildirişlər və email ayarları', action: () => navigate('NotificationSettings') }
       ]
     },
     {
       section: 'Tətbiq',
+      sectionIcon: 'smartphone',
       items: [
-        { key: 'offline', label: 'Offline məzmun', emoji: '📱', action: () => alert('Offline məzmun (demo)') },
-        { key: 'cache', label: 'Keş təmizlə', emoji: '🗑️', action: () => alert('Keş təmizləndi (demo)') },
-        { key: 'updates', label: 'Yeniləmələr', emoji: '🔄', action: () => alert('Yeniləmələr (demo)') },
-        { key: 'resetOnboarding', label: 'Onboarding sıfırla', emoji: '🔄', action: handleResetOnboarding }
+        { key: 'offline', label: 'Offline məzmun', icon: 'download', description: 'İnternetsizdə istifadə üçün yükləmələr', action: () => navigate('OfflineContent') },
+        { key: 'cache', label: 'Keş təmizlə', icon: 'trash-2', description: 'Yaddaş təmizliyi və optimallaşdırma', action: () => {
+          if (confirm('Tətbiqin keş məlumatları silinəcək. Davam etmək istəyirsiniz?')) {
+            alert('✅ Keş təmizləndi!\n\n📦 Azad edildi: ~45 MB\n🚀 Tətbiq performansı yaxşılaşdırıldı\n\nTətbiq daha sürətli işləyəcək.');
+          }
+        } },
+        { key: 'resetOnboarding', label: 'Onboarding sıfırla', icon: 'refresh-cw', description: 'Giriş ekranlarını yenidən göstər', action: handleResetOnboarding },
+        { key: 'updates', label: 'Versiya', icon: 'info', description: 'Tətbiq versiyası: 2.5.1', action: null }
       ]
     },
     {
       section: 'Dəstək',
+      sectionIcon: 'life-buoy',
       items: [
-        { key: 'help', label: 'Kömək mərkəzi', emoji: '❓', action: () => alert('Kömək mərkəzi (demo)') },
-        { key: 'contact', label: 'Bizimlə əlaqə', emoji: '📞', action: () => alert('Əlaqə (demo)') },
-        { key: 'feedback', label: 'Rəy bildirin', emoji: '💬', action: () => alert('Rəy bildirin (demo)') },
-        { key: 'about', label: 'Haqqında', emoji: 'ℹ️', action: () => alert('DDA.az v1.0.0 (demo)') }
+        { key: 'help', label: 'Kömək mərkəzi', icon: 'help-circle', description: 'Tez-tez verilən suallar və istifadə təlimatı', action: () => navigate('HelpCenter') },
+        { key: 'contact', label: 'Bizimlə əlaqə', icon: 'phone', description: 'Dəstək komandası ilə əlaqə qurun', action: () => navigate('Contact') },
+        { key: 'feedback', label: 'Rəy bildirin', icon: 'message-square', description: 'Təklifinizi və fikirlərinizi paylaşın', action: () => navigate('Feedback') },
+        { key: 'about', label: 'Haqqında', icon: 'info', description: 'Tətbiq versiyası və hüquqi məlumatlar', action: () => navigate('About') }
       ]
     }
   ];
@@ -79,38 +87,148 @@ export function SettingsScreen() {
 
       <div className="relative z-10 p-4 pb-24">
         {/* Enhanced Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={goBack}
-            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
-              isDarkMode 
-                ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
-                : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
-            }`}
-          >
-            <span className="text-lg">←</span>
-          </button>
-          <div>
-            <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
-              isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
-            } bg-clip-text text-transparent`}>
-              Parametrlər
-            </h1>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Hesab və tətbiq ayarları
-            </p>
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={goBack}
+              className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                isDarkMode 
+                  ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
+                  : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
+              }`}
+            >
+              <span className="text-lg">←</span>
+            </button>
+            <div>
+              <h1 className={`text-xl font-black transition-colors duration-200 bg-gradient-to-r ${
+                isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
+              } bg-clip-text text-transparent`}>
+                Parametrlər
+              </h1>
+            </div>
+          </div>
+          
+          {/* Tema və Dil düymələri */}
+          <div className="flex items-center gap-2 relative">
+            {/* Tema menu */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setThemeMenuOpen(!themeMenuOpen);
+                  setLanguageMenuOpen(false);
+                }}
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title="Tema"
+              >
+                <Icon name="palette" size={18} />
+              </button>
+              
+              {themeMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setThemeMenuOpen(false)}
+                  />
+                  <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl border-2 overflow-hidden z-50 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {themeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setTheme(option.value as any);
+                          setThemeMenuOpen(false);
+                        }}
+                        className={`w-full px-3 py-2.5 flex items-center gap-2 transition-all duration-200 ${
+                          theme === option.value
+                            ? isDarkMode
+                              ? 'bg-emerald-700 text-emerald-100'
+                              : 'bg-emerald-600 text-white'
+                            : isDarkMode
+                              ? 'hover:bg-gray-700 text-gray-200'
+                              : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <span className="text-base">{option.label}</span>
+                        {theme === option.value && <span className="ml-auto">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            
+            {/* Dil menu */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setLanguageMenuOpen(!languageMenuOpen);
+                  setThemeMenuOpen(false);
+                }}
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+                title="Dil"
+              >
+                <Icon name="globe" size={18} />
+              </button>
+              
+              {languageMenuOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setLanguageMenuOpen(false)}
+                  />
+                  <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl border-2 overflow-hidden z-50 ${
+                    isDarkMode 
+                      ? 'bg-gray-800 border-gray-700' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setLanguage(option.value as any);
+                          setLanguageMenuOpen(false);
+                        }}
+                        className={`w-full px-3 py-2.5 flex items-center gap-2 transition-all duration-200 ${
+                          language === option.value
+                            ? isDarkMode
+                              ? 'bg-emerald-700 text-emerald-100'
+                              : 'bg-emerald-600 text-white'
+                            : isDarkMode
+                              ? 'hover:bg-gray-700 text-gray-200'
+                              : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <span className="text-sm">{option.label}</span>
+                        {language === option.value && <span className="ml-auto">✓</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Enhanced Profile Card with Modern Animations */}
-        <Card variant="elevated" padding="lg" className="mb-8 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-6">
+        <Card variant="elevated" padding="md" className="mb-6 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
+          <div className="flex items-center gap-4">
             <div className="relative group">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-2xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                 {userName.charAt(0).toUpperCase()}
               </div>
               {activePackage && (
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-xs leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
                   <span className="font-bold">★</span>
                 </div>
               )}
@@ -118,7 +236,7 @@ export function SettingsScreen() {
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-600 to-green-600 opacity-20 blur-lg scale-110 group-hover:opacity-30 group-hover:scale-125 transition-all duration-300"></div>
             </div>
             <div className="flex-1">
-              <div className={`font-black text-xl mb-1 transition-all duration-200 bg-gradient-to-r ${
+              <div className={`font-bold text-lg mb-1 transition-all duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-900 to-gray-700'
               } bg-clip-text text-transparent`}>
                 {userName}
@@ -128,27 +246,27 @@ export function SettingsScreen() {
               }`}>{userEmail}</div>
               
               <div className="flex items-center gap-2 flex-wrap">
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                <div className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
                 }`}>
-                  💰 {balance} AZN
+                  ₼ {balance} AZN
                 </div>
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 ${
+                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
                     ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50 hover:bg-blue-900/50 hover:shadow-lg' 
                     : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
                 }`}>
-                  🧪 {simulatorBalance} Simulyator
+                  <Icon name="clipboard-check" size={12} /> {simulatorBalance} Simulyator
                 </div>
                 {activePackage && (
-                  <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow ${
+                  <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center gap-1 ${
                     isDarkMode 
                       ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-700/50 hover:bg-yellow-900/50' 
                       : 'bg-yellow-100 text-yellow-700 border border-yellow-200/50 hover:bg-yellow-200'
                   }`}>
-                    👑 {activePackage.name}
+                    <Icon name="crown" size={12} /> {activePackage.name}
                   </div>
                 )}
               </div>
@@ -156,162 +274,62 @@ export function SettingsScreen() {
           </div>
         </Card>
 
-        {/* Collapsible Theme Settings */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
-          <button
-            onClick={() => setThemeExpanded(!themeExpanded)}
-            className="w-full flex items-center justify-between gap-3 text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-2xl"><EmojiIcon emoji="🎨" size={24} /></div>
-              <div>
-                <h3 className={`font-black text-lg transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Tema</h3>
-                <p className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {theme === 'light' ? 'Gündüz rejimi' : theme === 'dark' ? 'Gecə rejimi' : 'Sistem ayarı'}
-                </p>
-              </div>
-            </div>
-            <div className={`text-xl transition-transform duration-300 ${
-              themeExpanded ? 'rotate-180' : 'rotate-0'
-            } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} group-hover:scale-110`}>
-              ↓
-            </div>
-          </button>
-          
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            themeExpanded ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}>
-            <div className="space-y-3">
-              {themeOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                    theme === option.value
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/30 shadow-lg'
-                        : 'border-emerald-500 bg-emerald-50 shadow-lg'
-                      : isDarkMode
-                        ? 'border-gray-600/50 bg-gray-700/30 hover:bg-gray-700/50 hover:border-gray-500'
-                        : 'border-gray-300/50 bg-gray-50/50 hover:bg-gray-100/50 hover:border-gray-400'
-                  }`}
-                >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    theme === option.value
-                      ? 'border-emerald-500 bg-emerald-500'
-                      : isDarkMode ? 'border-gray-500' : 'border-gray-400'
-                  }`}>
-                    {theme === option.value && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="theme"
-                    value={option.value}
-                    checked={theme === option.value}
-                    onChange={(e) => setTheme(e.target.value as any)}
-                    className="sr-only"
-                  />
-                  <div className="flex-1">
-                    <div className={`font-bold mb-1 transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                    }`}>{option.label}</div>
-                    <div className={`text-sm transition-colors duration-200 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}>{option.description}</div>
-                  </div>
-                </label>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        {/* Collapsible Language Settings */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
-          <button
-            onClick={() => setLanguageExpanded(!languageExpanded)}
-            className="w-full flex items-center justify-between gap-3 text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-2xl">🌐</div>
-              <div>
-                <h3 className={`font-black text-lg transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                }`}>Dil</h3>
-                <p className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  {language === 'az' ? 'Azərbaycan dili' : 'Русский язык'}
-                </p>
-              </div>
-            </div>
-            <div className={`text-xl transition-transform duration-300 ${
-              languageExpanded ? 'rotate-180' : 'rotate-0'
-            } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} group-hover:scale-110`}>
-              ↓
-            </div>
-          </button>
-          
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            languageExpanded ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}>
-            <div className="space-y-3">
-              {languageOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 transform hover:scale-[1.02] ${
-                    language === option.value
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-900/30 shadow-lg'
-                        : 'border-emerald-500 bg-emerald-50 shadow-lg'
-                      : isDarkMode
-                        ? 'border-gray-600/50 bg-gray-700/30 hover:bg-gray-700/50 hover:border-gray-500'
-                        : 'border-gray-300/50 bg-gray-50/50 hover:bg-gray-100/50 hover:border-gray-400'
-                  }`}
-                >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    language === option.value
-                      ? 'border-emerald-500 bg-emerald-500'
-                      : isDarkMode ? 'border-gray-500' : 'border-gray-400'
-                  }`}>
-                    {language === option.value && (
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="language"
-                    value={option.value}
-                    checked={language === option.value}
-                    onChange={(e) => setLanguage(e.target.value as any)}
-                    className="sr-only"
-                  />
-                  <div className={`font-bold transition-colors duration-200 ${
-                    isDarkMode ? 'text-gray-200' : 'text-gray-900'
-                  }`}>{option.label}</div>
-                </label>
-              ))}
-            </div>
-          </div>
-        </Card>
-
         {/* Referral Section */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
-          <div className="flex items-center gap-3 mb-4">
-            <div className="text-2xl">🎁</div>
-            <h3 className={`font-black text-lg transition-colors duration-200 ${
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
+          <div className="flex items-center gap-2 mb-3">
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+              isDarkMode ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' : 'bg-gradient-to-br from-purple-100 to-pink-100'
+            }`}>
+              <Icon name="gift" size={18} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
+            </div>
+            <h3 className={`font-bold text-base transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>Referal proqram</h3>
           </div>
           
-          <div className={`p-4 rounded-2xl border-2 mb-4 ${
+          {/* 1. Əvvəlcə statistika */}
+          <div className={`p-4 rounded-2xl mb-4 ${
+            isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
+          }`}>
+            <div className={`text-sm mb-3 flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <Icon name="target" size={16} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+              Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => navigate('ReferralList')}
+                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                  isDarkMode ? 'bg-emerald-900/30 hover:bg-emerald-900/40' : 'bg-emerald-100 hover:bg-emerald-200'
+                }`}
+              >
+                <div className={`text-xl font-bold ${
+                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                }`}>5</div>
+                <div className={`text-xs ${
+                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                }`}>Dəvət edilən</div>
+              </button>
+              <button
+                onClick={() => navigate('ReferralList')}
+                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                  isDarkMode ? 'bg-yellow-900/30 hover:bg-yellow-900/40' : 'bg-yellow-100 hover:bg-yellow-200'
+                }`}
+              >
+                <div className={`text-xl font-bold ${
+                  isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
+                }`}>80 AZN</div>
+                <div className={`text-xs ${
+                  isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
+                }`}>Qazanılan bonus</div>
+              </button>
+            </div>
+          </div>
+          
+          {/* 2. Sonra referal kodu */}
+          <div className={`p-4 rounded-2xl ${
             isDarkMode 
-              ? 'border-purple-500/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20' 
-              : 'border-purple-300/50 bg-gradient-to-r from-purple-50 to-pink-50'
+              ? 'border-purple-500/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-2' 
+              : 'border-purple-300/50 bg-gradient-to-r from-purple-50 to-pink-50 border-2'
           }`}>
             <div className={`text-sm mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
               Sizin referal kodunuz
@@ -329,55 +347,30 @@ export function SettingsScreen() {
                   navigator.clipboard.writeText(referralCode);
                   alert('Referal kod kopyalandı!');
                 }}
-                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 ${
+                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
                   isDarkMode 
                     ? 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white' 
                     : 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white'
                 }`}
               >
-                📋 Kopyala
+                <Icon name="copy" size={16} /> Kopyala
               </button>
             </div>
           </div>
           
-          <div className={`p-4 rounded-2xl ${
+          <div className={`mt-4 p-4 rounded-2xl ${
             isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
           }`}>
-            <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              🎯 Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className={`text-center p-3 rounded-xl ${
-                isDarkMode ? 'bg-emerald-900/30' : 'bg-emerald-100'
-              }`}>
-                <div className={`text-xl font-bold ${
-                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                }`}>0</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                }`}>Dəvət edilən</div>
-              </div>
-              <div className={`text-center p-3 rounded-xl ${
-                isDarkMode ? 'bg-yellow-900/30' : 'bg-yellow-100'
-              }`}>
-                <div className={`text-xl font-bold ${
-                  isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
-                }`}>0 AZN</div>
-                <div className={`text-xs ${
-                  isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
-                }`}>Qazanılan bonus</div>
-              </div>
-            </div>
             
             <button
               onClick={() => alert('Referal proqram haqqında ətraflı məlumat (demo)')}
-              className={`w-full mt-4 p-3 rounded-xl border font-bold transition-all duration-300 transform hover:scale-[1.02] ${
+              className={`w-full mt-4 p-3 rounded-xl border font-bold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 ${
                 isDarkMode 
                   ? 'border-purple-500/50 bg-purple-900/30 hover:bg-purple-900/50 text-purple-300' 
                   : 'border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700'
               }`}
             >
-              📖 Proqram haqqında ətraflı
+              <Icon name="book-open" size={18} /> Proqram haqqında ətraflı
             </button>
           </div>
         </Card>
@@ -389,57 +382,72 @@ export function SettingsScreen() {
             className="mb-8 animate-fadeInUp"
             style={{ animationDelay: `${(sectionIndex + 4) * 100}ms` }}
           >
-            <div className="flex items-center gap-4 mb-6 px-2">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+            <div className="flex items-center gap-3 mb-4 px-1">
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
                 isDarkMode ? 'bg-gradient-to-br from-emerald-600/20 to-green-600/20' : 'bg-gradient-to-br from-emerald-100 to-green-100'
               }`}>
-                <EmojiIcon emoji="⚙️" size={20} />
+                <Icon 
+                  name={section.sectionIcon as any} 
+                  size={20}
+                  className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}
+                />
               </div>
-              <h3 className={`font-black text-xl transition-colors duration-200 bg-gradient-to-r ${
+              <h3 className={`font-bold text-base transition-colors duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-800 to-gray-600'
               } bg-clip-text text-transparent`}>
                 {section.section}
               </h3>
             </div>
-            <Card variant="elevated" padding="sm" className="overflow-hidden">
+            <Card variant="elevated" padding="xs" className="overflow-hidden">
               <div className="space-y-1">
                 {section.items.map((item, index) => (
                   <button
                     key={item.key}
-                    onClick={item.action}
-                    className={`w-full p-5 flex items-center gap-5 text-left transition-all duration-300 rounded-2xl transform hover:scale-[1.01] active:scale-[0.99] group relative overflow-hidden ${
-                      isDarkMode 
-                        ? 'hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 text-gray-200' 
-                        : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100/50 text-gray-900'
+                    onClick={item.action || undefined}
+                    disabled={!item.action}
+                    className={`w-full p-3 flex items-center gap-3 text-left transition-all duration-300 rounded-xl transform group relative overflow-hidden ${
+                      item.action 
+                        ? `hover:scale-[1.01] active:scale-[0.99] cursor-pointer ${
+                            isDarkMode 
+                              ? 'hover:bg-gradient-to-r hover:from-gray-700/30 hover:to-gray-600/30 text-gray-200' 
+                              : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100/50 text-gray-900'
+                          }`
+                        : `cursor-default ${isDarkMode ? 'text-gray-300' : 'text-gray-800'}`
                     }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {/* Hover gradient effect */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-                      isDarkMode 
-                        ? 'bg-gradient-to-r from-emerald-600/5 via-transparent to-blue-600/5' 
-                        : 'bg-gradient-to-r from-emerald-400/5 via-transparent to-blue-400/5'
-                    }`}></div>
+                    {item.action && (
+                      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-emerald-600/5 via-transparent to-blue-600/5' 
+                          : 'bg-gradient-to-r from-emerald-400/5 via-transparent to-blue-400/5'
+                      }`}></div>
+                    )}
                     
-                    <div className={`relative w-14 h-14 rounded-2xl flex items-center justify-center text-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${
+                    <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all duration-300 ${
                       isDarkMode 
                         ? 'bg-gradient-to-br from-gray-700/60 to-gray-600/60 group-hover:from-gray-600/80 group-hover:to-gray-500/80' 
                         : 'bg-gradient-to-br from-gray-100 to-gray-200/80 group-hover:from-gray-200 group-hover:to-gray-300/80'
                     } shadow-lg group-hover:shadow-xl`}>
-                      <EmojiIcon emoji={item.emoji} size={22} />
+                      <Icon 
+                        name={item.icon as any} 
+                        size={18}
+                        className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
+                      />
                     </div>
                     <div className="flex-1 relative">
-                      <div className="font-bold text-lg group-hover:translate-x-1 transition-transform duration-300">
+                      <div className="font-bold text-sm mb-1">
                         {item.label}
                       </div>
-                      <div className={`text-sm mt-1 opacity-0 group-hover:opacity-100 transition-all duration-300 ${
+                      <div className={`text-xs ${
                         isDarkMode ? 'text-gray-400' : 'text-gray-600'
                       }`}>
-                        Ətraflı məlumat və ayarlar
+                        {item.description}
                       </div>
                     </div>
-                    <div className={`relative transition-all duration-300 text-2xl group-hover:translate-x-2 group-hover:scale-110 ${
-                      isDarkMode ? 'text-gray-400 group-hover:text-emerald-400' : 'text-gray-400 group-hover:text-emerald-600'
+                    <div className={`relative transition-all duration-300 text-2xl ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-400'
                     }`}>
                       →
                     </div>
@@ -451,14 +459,14 @@ export function SettingsScreen() {
         ))}
 
         {/* Enhanced Logout Button with Modern Design */}
-        <Card variant="elevated" padding="md" className="mb-8 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
+        <Card variant="elevated" padding="sm" className="mb-6 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
           <button
             onClick={() => {
               if (confirm('Hesabdan çıxmaq istədiyinizə əminsiniz?')) {
                 alert('Çıxış (demo)');
               }
             }}
-            className={`w-full p-5 flex items-center justify-center gap-4 rounded-2xl transition-all duration-300 font-bold text-lg transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
+            className={`w-full p-3 flex items-center justify-center gap-3 rounded-xl transition-all duration-300 font-bold text-sm transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
               isDarkMode 
                 ? 'text-red-400 hover:bg-gradient-to-r hover:from-red-900/30 hover:to-pink-900/30 border-2 border-red-500/30 hover:border-red-400/50' 
                 : 'text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 border-2 border-red-300/30 hover:border-red-400/50'
@@ -471,14 +479,14 @@ export function SettingsScreen() {
                 : 'bg-gradient-to-r from-red-400/10 via-transparent to-pink-400/10'
             }`}></div>
             
-            <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 ${
+            <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all duration-300 ${
               isDarkMode 
                 ? 'bg-gradient-to-br from-red-900/40 to-pink-900/40 group-hover:from-red-800/60 group-hover:to-pink-800/60' 
                 : 'bg-gradient-to-br from-red-100 to-pink-100 group-hover:from-red-200 group-hover:to-pink-200'
             } shadow-lg group-hover:shadow-xl`}>
-              🚪
+              <Icon name="log-out" size={20} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
             </div>
-            <span className="relative group-hover:translate-x-1 transition-transform duration-300">
+            <span className="relative">
               Hesabdan çıx
             </span>
             

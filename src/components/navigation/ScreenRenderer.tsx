@@ -36,6 +36,17 @@ import { QAScreen } from '../screens/QAScreen';
 import { QADetailScreen } from '../screens/QADetailScreen';
 import { QAFormScreen } from '../screens/QAFormScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { SecurityScreen } from '../screens/SecurityScreen';
+import { PrivacyScreen } from '../screens/PrivacyScreen';
+import { NotificationSettingsScreen } from '../screens/NotificationSettingsScreen';
+import { OfflineContentScreen } from '../screens/OfflineContentScreen';
+import { UpdatesScreen } from '../screens/UpdatesScreen';
+import { HelpCenterScreen } from '../screens/HelpCenterScreen';
+import { ContactScreen } from '../screens/ContactScreen';
+import { FeedbackScreen } from '../screens/FeedbackScreen';
+import { AboutScreen } from '../screens/AboutScreen';
+import { ReferralListScreen } from '../screens/ReferralListScreen';
 import { SecurePdfScreen } from '../screens/SecurePdfScreen';
 
 export function ScreenRenderer() {
@@ -91,10 +102,21 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'QADetail' && <QADetailScreen />}
       {currentScreen.screen === 'QAForm' && <QAFormScreen />}
       {currentScreen.screen === 'Notifications' && <NotificationsScreen />}
+      {currentScreen.screen === 'Profile' && <ProfileScreen />}
+      {currentScreen.screen === 'Security' && <SecurityScreen />}
+      {currentScreen.screen === 'Privacy' && <PrivacyScreen />}
+      {currentScreen.screen === 'NotificationSettings' && <NotificationSettingsScreen />}
+      {currentScreen.screen === 'OfflineContent' && <OfflineContentScreen />}
+      {currentScreen.screen === 'Updates' && <UpdatesScreen />}
+      {currentScreen.screen === 'HelpCenter' && <HelpCenterScreen />}
+      {currentScreen.screen === 'Contact' && <ContactScreen />}
+      {currentScreen.screen === 'Feedback' && <FeedbackScreen />}
+      {currentScreen.screen === 'About' && <AboutScreen />}
+      {currentScreen.screen === 'ReferralList' && <ReferralListScreen />}
       {currentScreen.screen === 'SecurePdf' && <SecurePdfScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'SecurePdf'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList', 'SecurePdf'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

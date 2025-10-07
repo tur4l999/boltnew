@@ -15,16 +15,21 @@ export function Header() {
           ? 'bg-gray-800/90 border-gray-700/50 shadow-lg' 
           : 'bg-white/90 border-gray-200/50 shadow-lg'
       }`}>
-        <div className="px-4 py-3 flex items-center gap-4">
-          <div className="relative group">
+        <div className="px-3 py-2 flex items-center gap-3">
+          <div className="relative group z-50">
             <button
-              onClick={() => navigate('Settings')}
-              className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base hover:from-emerald-700 hover:via-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigate('Settings');
+              }}
+              className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base hover:from-emerald-700 hover:via-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer relative z-50"
             >
               {userName.charAt(0).toUpperCase()}
             </button>
             {useApp().hasActivePackage() && (
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
+              <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-pulse">
                 <EmojiIcon emoji="⭐" size={10} />
               </div>
             )}
@@ -34,15 +39,15 @@ export function Header() {
           </div>
           
           <div className="flex-1 leading-tight">
-            <div className={`text-xs font-medium transition-colors duration-200 ${
+            <div className={`text-[10px] font-medium transition-colors duration-200 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
             }`}>
               <span className="bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent font-bold">DDA.az</span>
             </div>
-            <div className={`text-sm font-bold transition-colors duration-200 ${
+            <div className={`text-xs font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName.split(' ')[0]} <EmojiIcon emoji="👋" size={14} className="inline-block" />
+              {t.hello}, {userName.split(' ')[0]} <EmojiIcon emoji="👋" size={12} className="inline-block" />
             </div>
           </div>
           

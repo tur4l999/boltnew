@@ -709,6 +709,142 @@ const ChevronDownIcon = ({ size = 24, className = '', color = 'currentColor' }: 
   </svg>
 );
 
+// Additional missing icons
+const CrownIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M2 20h20M4 16l4-8 4 4 4-4 4 8M6 16h12v4H6z"
+      stroke={color}
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="4" cy="8" r="1.5" fill={color} />
+    <circle cx="12" cy="12" r="1.5" fill={color} />
+    <circle cx="20" cy="8" r="1.5" fill={color} />
+  </svg>
+);
+
+const GiftIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="3" y="8" width="18" height="4" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="3" y="12" width="18" height="9" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 8V21" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8.5 8a2.5 2.5 0 010-5C11 3 12 5 12 5s1-2 3.5-2a2.5 2.5 0 010 5" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const CopyIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const BookOpenIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2V3z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7V3z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LogOutIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16 17l5-5-5-5M21 12H9" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const DownloadIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const SmartphoneIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 18h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LifeBuoyIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <circle cx="12" cy="12" r="4" stroke={color} strokeWidth="2.5" />
+    <path d="M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const DollarSignIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const MessageSquareIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const HelpCircleIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 17h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const FlaskConicalIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M10 2v8L4.5 20.5A2 2 0 006 23h12a2 2 0 001.5-2.5L14 10V2M8.5 2h7" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="10" cy="17" r="1.5" fill={color} />
+    <circle cx="14" cy="15" r="1" fill={color} />
+  </svg>
+);
+
+const AlertCircleIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <path d="M12 8v4M12 16h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LightbulbIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M9 18h6M10 22h4M15 8a3 3 0 10-6 0c0 2 3 3 3 5v1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 2v1M18.36 5.64l-.7.7M21 12h-1M5.64 5.64l.7.7M3 12h1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const SendIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ClockIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2.5" />
+    <path d="M12 6v6l4 2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const WifiIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ClipboardCheckIcon = ({ size = 24, className = '', color = 'currentColor' }: Omit<IconProps, 'name'>) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <rect x="8" y="2" width="8" height="4" rx="1" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M9 12l2 2 4-4" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 // Icon mapping
 const iconMap = {
   // Navigation
@@ -750,6 +886,7 @@ const iconMap = {
   sun: SunIcon,
   moon: MoonIcon,
   phone: PhoneIcon,
+  smartphone: SmartphoneIcon,
   
   // System
   palette: PaletteIcon,
@@ -764,10 +901,14 @@ const iconMap = {
   shield: ShieldIcon,
   user: UserIcon,
   trash: TrashIcon,
+  'trash-2': TrashIcon, // Alias
   refresh: RefreshIcon,
+  'refresh-cw': RefreshIcon, // Alias
   question: QuestionIcon,
+  'help-circle': HelpCircleIcon,
   contact: ContactIcon,
   chat: ChatIcon,
+  'message-square': MessageSquareIcon,
   info: InfoIcon,
   settings: SettingsIcon,
   help: HelpIcon,
@@ -780,6 +921,23 @@ const iconMap = {
   menu: MenuIcon,
   medal: MedalIcon,
   mail: MailIcon,
+  
+  // New icons
+  crown: CrownIcon,
+  gift: GiftIcon,
+  copy: CopyIcon,
+  'book-open': BookOpenIcon,
+  'log-out': LogOutIcon,
+  download: DownloadIcon,
+  'life-buoy': LifeBuoyIcon,
+  'dollar-sign': DollarSignIcon,
+  'flask-conical': FlaskConicalIcon,
+  'alert-circle': AlertCircleIcon,
+  lightbulb: LightbulbIcon,
+  send: SendIcon,
+  clock: ClockIcon,
+  wifi: WifiIcon,
+  'clipboard-check': ClipboardCheckIcon,
 };
 
 // Main Icon component

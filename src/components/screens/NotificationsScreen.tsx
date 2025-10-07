@@ -10,9 +10,7 @@ export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [showMenu, setShowMenu] = useState(false);
-  const [selectionMode, setSelectionMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['today', 'yesterday']));
   
   // Demo notification data with various types
   const notifications = [
@@ -21,7 +19,7 @@ export function NotificationsScreen() {
       type: 'exam_result',
       title: 'İmtahan nəticəsi',
       message: 'Simulyator imtahanından 28/30 bal topladınız. Təbriklər!',
-      timestamp: new Date('2025-10-03T10:30:00'),
+      timestamp: new Date('2025-10-04T10:30:00'),
       isRead: false,
       emoji: '🎉',
       action: () => navigate('Results'),
@@ -32,7 +30,7 @@ export function NotificationsScreen() {
       type: 'practice_reminder',
       title: 'Praktiki təcrübə xatırlatması',
       message: 'Sabah saat 14:00-da praktiki təcrübəniz var. Hazırlaşın!',
-      timestamp: new Date('2025-10-02T16:45:00'),
+      timestamp: new Date('2025-10-04T09:45:00'),
       isRead: false,
       emoji: '🚗',
       action: () => navigate('DrivingPractice'),
@@ -43,8 +41,8 @@ export function NotificationsScreen() {
       type: 'package_expiry',
       title: 'Paket bitir tarixi',
       message: 'Premium paketiniz 5 gün sonra bitəcək. Yeniləyin!',
-      timestamp: new Date('2025-10-02T09:15:00'),
-      isRead: true,
+      timestamp: new Date('2025-10-03T09:15:00'),
+      isRead: false,
       emoji: '⏰',
       action: () => navigate('Packages'),
       color: 'amber'
@@ -54,7 +52,7 @@ export function NotificationsScreen() {
       type: 'appeal_response',
       title: 'Apellyasiya cavabı',
       message: 'Apellyasiyanız qəbul edildi və sual yeniləndi.',
-      timestamp: new Date('2025-10-01T14:20:00'),
+      timestamp: new Date('2025-10-03T14:20:00'),
       isRead: true,
       emoji: '✅',
       action: () => navigate('Appeals'),
@@ -65,7 +63,7 @@ export function NotificationsScreen() {
       type: 'new_lesson',
       title: 'Yeni dərs əlavə edildi',
       message: 'M15: Park qaydaları mövzusunda yeni 3D video dərs əlavə edildi.',
-      timestamp: new Date('2025-09-30T11:00:00'),
+      timestamp: new Date('2025-10-02T11:00:00'),
       isRead: true,
       emoji: '🎬',
       action: () => navigate('Lesson', { moduleId: 'M15', tab: 'video3d' }),
@@ -76,7 +74,7 @@ export function NotificationsScreen() {
       type: 'achievement',
       title: 'Yeni nailiyyət!',
       message: '10 imtahan tamamladınız və "İmtahan ustası" nişanı qazandınız!',
-      timestamp: new Date('2025-09-29T18:30:00'),
+      timestamp: new Date('2025-10-01T18:30:00'),
       isRead: true,
       emoji: '🏆',
       action: () => navigate('Settings'),
@@ -102,6 +100,17 @@ export function NotificationsScreen() {
       emoji: '💬',
       action: () => navigate('QA'),
       color: 'indigo'
+    },
+    {
+      id: '9',
+      type: 'referral_bonus',
+      title: 'Referal bonusu',
+      message: 'Dostunuz Leyla qeydiyyatdan keçdi. 5 AZN bonus qazandınız!',
+      timestamp: new Date('2025-09-25T12:30:00'),
+      isRead: true,
+      emoji: '🎁',
+      action: () => navigate('ReferralList'),
+      color: 'purple'
     }
   ];
 
@@ -111,52 +120,71 @@ export function NotificationsScreen() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  const handleLongPressStart = (notificationId: string) => {
-    const timer = setTimeout(() => {
-      setSelectionMode(true);
-      setSelectedIds(new Set([notificationId]));
-    }, 500); // 500ms long press
-    setLongPressTimer(timer);
-  };
+  // Categorize notifications by date
+  const categorizeNotifications = () => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const weekAgo = new Date(today);
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const monthAgo = new Date(today);
+    monthAgo.setMonth(monthAgo.getMonth() - 1);
 
-  const handleLongPressEnd = () => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  };
+    const categories: Record<string, typeof notifications> = {
+      today: [],
+      yesterday: [],
+      thisWeek: [],
+      thisMonth: [],
+      older: []
+    };
 
-  const toggleSelection = (notificationId: string) => {
-    const newSelected = new Set(selectedIds);
-    if (newSelected.has(notificationId)) {
-      newSelected.delete(notificationId);
-    } else {
-      newSelected.add(notificationId);
-    }
-    setSelectedIds(newSelected);
-  };
+    filteredNotifications.forEach(notification => {
+      const notifDate = new Date(notification.timestamp);
+      const notifDay = new Date(notifDate.getFullYear(), notifDate.getMonth(), notifDate.getDate());
 
-  const selectAll = () => {
-    setSelectedIds(new Set(filteredNotifications.map(n => n.id)));
-  };
-
-  const deselectAll = () => {
-    setSelectedIds(new Set());
-  };
-
-  const deleteSelected = () => {
-    if (selectedIds.size > 0) {
-      if (confirm(`${selectedIds.size} bildiriş silinəcək. Əminsiniz?`)) {
-        alert(`${selectedIds.size} bildiriş silindi (demo)`);
-        setSelectedIds(new Set());
-        setSelectionMode(false);
+      if (notifDay.getTime() === today.getTime()) {
+        categories.today.push(notification);
+      } else if (notifDay.getTime() === yesterday.getTime()) {
+        categories.yesterday.push(notification);
+      } else if (notifDate >= weekAgo) {
+        categories.thisWeek.push(notification);
+      } else if (notifDate >= monthAgo) {
+        categories.thisMonth.push(notification);
+      } else {
+        categories.older.push(notification);
       }
-    }
+    });
+
+    return categories;
   };
 
-  const cancelSelection = () => {
-    setSelectionMode(false);
-    setSelectedIds(new Set());
+  const categories = categorizeNotifications();
+
+  const categoryLabels = {
+    today: 'Bugün',
+    yesterday: 'Dünən',
+    thisWeek: 'Bu həftə',
+    thisMonth: 'Bu ay',
+    older: 'Keçmiş'
+  };
+
+  const categoryIcons = {
+    today: '📅',
+    yesterday: '📆',
+    thisWeek: '📋',
+    thisMonth: '🗓️',
+    older: '📜'
+  };
+
+  const toggleCategory = (categoryKey: string) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryKey)) {
+      newExpanded.delete(categoryKey);
+    } else {
+      newExpanded.add(categoryKey);
+    }
+    setExpandedCategories(newExpanded);
   };
 
   const getColorClasses = (color: string, isRead: boolean) => {
@@ -210,17 +238,7 @@ export function NotificationsScreen() {
   };
 
   const formatTimestamp = (date: Date) => {
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return 'İndi';
-    if (diffMins < 60) return `${diffMins} dəqiqə əvvəl`;
-    if (diffHours < 24) return `${diffHours} saat əvvəl`;
-    if (diffDays < 7) return `${diffDays} gün əvvəl`;
-    return date.toLocaleDateString('az-AZ', { day: 'numeric', month: 'short' });
+    return date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -238,70 +256,33 @@ export function NotificationsScreen() {
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <button
-              onClick={selectionMode ? cancelSelection : goBack}
+              onClick={goBack}
               className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                 isDarkMode 
                   ? 'bg-gray-700/50 text-gray-100 hover:bg-gray-600/50' 
                   : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
               }`}
             >
-              <span className="text-xl">{selectionMode ? '✕' : '←'}</span>
+              <span className="text-xl">←</span>
             </button>
             
             <div className="flex-1">
               <h1 className={`text-xl font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
-                {selectionMode ? `${selectedIds.size} seçildi` : t.notifications}
+                {t.notifications}
               </h1>
-              {!selectionMode && unreadCount > 0 && (
+              {unreadCount > 0 && (
                 <p className={`text-sm transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
                   {unreadCount} oxunmamış bildiriş
                 </p>
               )}
-              {selectionMode && (
-                <p className={`text-sm transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>
-                  Silmək üçün bildiriş seçin
-                </p>
-              )}
             </div>
 
-            {/* Selection Mode Actions */}
-            {selectionMode ? (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={selectedIds.size === filteredNotifications.length ? deselectAll : selectAll}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                    isDarkMode 
-                      ? 'bg-blue-700 text-blue-100 hover:bg-blue-600' 
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  }`}
-                >
-                  {selectedIds.size === filteredNotifications.length ? 'Ləğv et' : 'Hamısı'}
-                </button>
-                <button
-                  onClick={deleteSelected}
-                  disabled={selectedIds.size === 0}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                    selectedIds.size === 0
-                      ? isDarkMode 
-                        ? 'bg-gray-700 text-gray-500 cursor-not-allowed' 
-                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                      : isDarkMode 
-                        ? 'bg-red-700 text-red-100 hover:bg-red-600' 
-                        : 'bg-red-600 text-white hover:bg-red-700'
-                  }`}
-                >
-                  Sil
-                </button>
-              </div>
-            ) : (
-              /* Settings Menu Button */
-              <div className="relative">
+            {/* Settings Menu Button */}
+            <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
@@ -370,7 +351,7 @@ export function NotificationsScreen() {
                         }`}>
                           <EmojiIcon emoji="🗑️" size={16} />
                         </div>
-                        <span className="text-sm font-bold">Bildirişləri sil</span>
+                        <span className="text-sm font-bold">Hamısını sil</span>
                       </button>
                     )}
 
@@ -380,7 +361,7 @@ export function NotificationsScreen() {
                     {/* Notification settings */}
                     <button
                       onClick={() => {
-                        navigate('Settings');
+                        navigate('NotificationSettings');
                         setShowMenu(false);
                       }}
                       className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
@@ -399,48 +380,45 @@ export function NotificationsScreen() {
                   </div>
                 </>
               )}
-              </div>
-            )}
+            </div>
           </div>
 
-          {/* Tabs - Hidden in selection mode */}
-          {!selectionMode && (
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => setActiveTab('all')}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                  activeTab === 'all'
-                    ? isDarkMode
-                      ? 'bg-emerald-700 text-emerald-100 shadow-lg'
-                      : 'bg-emerald-600 text-white shadow-lg'
-                    : isDarkMode
-                      ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Hamısı ({notifications.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('unread')}
-                className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
-                  activeTab === 'unread'
-                    ? isDarkMode
-                      ? 'bg-emerald-700 text-emerald-100 shadow-lg'
-                      : 'bg-emerald-600 text-white shadow-lg'
-                    : isDarkMode
-                      ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Oxunmamış ({unreadCount})
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center animate-pulse">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-            </div>
-          )}
+          {/* Tabs */}
+          <div className="flex gap-2 mt-4">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                activeTab === 'all'
+                  ? isDarkMode
+                    ? 'bg-emerald-700 text-emerald-100 shadow-lg'
+                    : 'bg-emerald-600 text-white shadow-lg'
+                  : isDarkMode
+                    ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Hamısı ({notifications.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('unread')}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
+                activeTab === 'unread'
+                  ? isDarkMode
+                    ? 'bg-emerald-700 text-emerald-100 shadow-lg'
+                    : 'bg-emerald-600 text-white shadow-lg'
+                  : isDarkMode
+                    ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Oxunmamış ({unreadCount})
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center animate-pulse">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -474,101 +452,120 @@ export function NotificationsScreen() {
             </Card>
           </FadeInUp>
         ) : (
-          // Notifications list
-          <div className="space-y-3">
-            {filteredNotifications.map((notification, index) => {
-              const colors = getColorClasses(notification.color, notification.isRead);
+          // Categorized notifications list
+          <div className="space-y-4">
+            {Object.entries(categories).map(([categoryKey, categoryNotifications], catIndex) => {
+              if (categoryNotifications.length === 0) return null;
               
-              const isSelected = selectedIds.has(notification.id);
-              
+              const isExpanded = expandedCategories.has(categoryKey);
+              const unreadInCategory = categoryNotifications.filter(n => !n.isRead).length;
+
               return (
-                <SlideTransition key={notification.id} direction="right" delay={index * 50}>
-                  <div className="relative">
-                    <button
-                      onClick={() => {
-                        if (selectionMode) {
-                          toggleSelection(notification.id);
-                        } else if (notification.action) {
-                          notification.action();
-                        }
-                      }}
-                      onTouchStart={() => !selectionMode && handleLongPressStart(notification.id)}
-                      onTouchEnd={handleLongPressEnd}
-                      onMouseDown={() => !selectionMode && handleLongPressStart(notification.id)}
-                      onMouseUp={handleLongPressEnd}
-                      onMouseLeave={handleLongPressEnd}
-                      className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
-                        isSelected 
-                          ? isDarkMode
-                            ? 'bg-emerald-900/40 border-emerald-600 scale-[0.98]'
-                            : 'bg-emerald-100 border-emerald-500 scale-[0.98]'
-                          : isDarkMode
-                            ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
-                            : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
-                      }`}
-                    >
-                      {/* Unread indicator */}
-                      {!notification.isRead && !selectionMode && (
-                        <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                      )}
-
-                      <div className="flex gap-3">
-                        {/* Selection Checkbox */}
-                        {selectionMode && (
-                          <div className="flex items-center justify-center flex-shrink-0">
-                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-300 ${
-                              isSelected
-                                ? isDarkMode
-                                  ? 'bg-emerald-600 border-emerald-600'
-                                  : 'bg-emerald-500 border-emerald-500'
-                                : isDarkMode
-                                  ? 'border-gray-600 bg-gray-800/50'
-                                  : 'border-gray-300 bg-white'
-                            }`}>
-                              {isSelected && (
-                                <span className="text-white text-sm font-bold">✓</span>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Icon */}
-                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                          selectionMode ? '' : 'group-hover:scale-110'
-                        } ${colors.icon}`}>
-                          <EmojiIcon emoji={notification.emoji} size={24} />
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
-                            isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                          } ${notification.isRead ? 'opacity-80' : ''}`}>
-                            {notification.title}
-                          </div>
-                          <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
-                            isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                          } ${notification.isRead ? 'opacity-70' : ''}`}>
-                            {notification.message}
-                          </div>
-                          <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
-                            <span>⏱</span>
-                            <span>{formatTimestamp(notification.timestamp)}</span>
-                          </div>
-                        </div>
-
-                        {/* Arrow indicator - only show when not in selection mode */}
-                        {!selectionMode && notification.action && (
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
-                            isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
-                          }`}>
-                            <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
-                          </div>
-                        )}
+                <div key={categoryKey} className="animate-fadeInUp" style={{ animationDelay: `${catIndex * 50}ms` }}>
+                  {/* Category Header */}
+                  <button
+                    onClick={() => toggleCategory(categoryKey)}
+                    className={`w-full flex items-center justify-between p-4 rounded-2xl mb-3 transition-all duration-300 ${
+                      isDarkMode
+                        ? 'bg-gray-800/80 hover:bg-gray-700/80 border-2 border-gray-700'
+                        : 'bg-white/80 hover:bg-gray-50 border-2 border-gray-200'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
+                      }`}>
+                        <span className="text-xl">{categoryIcons[categoryKey as keyof typeof categoryIcons]}</span>
                       </div>
-                    </button>
-                  </div>
-                </SlideTransition>
+                      <div className="text-left">
+                        <div className={`font-black text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                          {categoryLabels[categoryKey as keyof typeof categoryLabels]}
+                        </div>
+                        <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          {categoryNotifications.length} bildiriş
+                          {unreadInCategory > 0 && ` • ${unreadInCategory} oxunmamış`}
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`flex items-center gap-2`}>
+                      {unreadInCategory > 0 && (
+                        <div className="w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
+                          {unreadInCategory}
+                        </div>
+                      )}
+                      <div className={`text-2xl transition-transform duration-300 ${
+                        isExpanded ? 'rotate-180' : 'rotate-0'
+                      } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        ↓
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Category Notifications */}
+                  {isExpanded && (
+                    <div className="space-y-3 ml-2">
+                      {categoryNotifications.map((notification, index) => {
+                        const colors = getColorClasses(notification.color, notification.isRead);
+                        
+                        return (
+                          <SlideTransition key={notification.id} direction="right" delay={index * 30}>
+                            <button
+                              onClick={() => {
+                                if (notification.action) {
+                                  notification.action();
+                                }
+                              }}
+                              className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
+                                isDarkMode
+                                  ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
+                                  : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
+                              }`}
+                            >
+                              {/* Unread indicator */}
+                              {!notification.isRead && (
+                                <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+                              )}
+
+                              <div className="flex gap-3">
+                                {/* Icon */}
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
+                                  <EmojiIcon emoji={notification.emoji} size={24} />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex-1 min-w-0">
+                                  <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
+                                    isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                                  } ${notification.isRead ? 'opacity-80' : ''}`}>
+                                    {notification.title}
+                                  </div>
+                                  <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
+                                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                                  } ${notification.isRead ? 'opacity-70' : ''}`}>
+                                    {notification.message}
+                                  </div>
+                                  <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
+                                    <span>⏱</span>
+                                    <span>{formatTimestamp(notification.timestamp)}</span>
+                                  </div>
+                                </div>
+
+                                {/* Arrow indicator */}
+                                {notification.action && (
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
+                                    isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
+                                  }`}>
+                                    <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
+                                  </div>
+                                )}
+                              </div>
+                            </button>
+                          </SlideTransition>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
@@ -578,7 +575,7 @@ export function NotificationsScreen() {
         {filteredNotifications.length > 0 && (
           <FadeInUp delay={300}>
             <button
-              onClick={() => navigate('Settings')}
+              onClick={() => navigate('NotificationSettings')}
               className={`w-full mt-6 p-4 rounded-2xl border-2 flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] ${
                 isDarkMode
                   ? 'bg-gray-800/50 border-gray-700/50 text-gray-300 hover:bg-gray-700/50'
