@@ -140,7 +140,7 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
               color: isDarkMode ? '#f9fafb' : '#1a1a1a',
             }}
           >
-            {language === 'az' ? 'Ödənişli Kitablar' : 'Premium Books'}
+            {language === 'az' ? 'PDF (kitablar)' : 'PDF (books)'}
           </h1>
           
           <p

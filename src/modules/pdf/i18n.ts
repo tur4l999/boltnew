@@ -96,6 +96,10 @@ export const pdfI18n = {
     selectPage: 'Səhifə seç',
     pageNumber: 'Səhifə nömrəsi',
     invalidPage: 'Yanlış səhifə nömrəsi',
+    
+    // Book list
+    premiumBooks: 'PDF (kitablar)',
+    premiumBooksDesc: 'Təhlükəsiz PDF kitablar',
   },
   
   en: {
@@ -188,6 +192,10 @@ export const pdfI18n = {
     selectPage: 'Select Page',
     pageNumber: 'Page Number',
     invalidPage: 'Invalid page number',
+    
+    // Book list
+    premiumBooks: 'PDF (books)',
+    premiumBooksDesc: 'Secure PDF books',
   },
 };
 

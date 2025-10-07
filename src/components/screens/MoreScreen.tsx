@@ -16,7 +16,7 @@ export function MoreScreen() {
   const moreItems: MoreItem[] = [
     { key: 'rules', label: 'Qaydalar', emoji: '📘', action: () => navigate('Rules') },
     { key: 'signs', label: 'Nişanlar', emoji: '🛑', action: () => navigate('Signs') },
-    { key: 'books', label: 'Ödənişli kitablar', emoji: '📚', action: () => navigate('SecurePdf'), badge: 'Premium' },
+    { key: 'books', label: 'PDF (kitablar)', emoji: '📚', action: () => navigate('SecurePdf'), badge: 'Premium' },
     { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
     { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
     { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
