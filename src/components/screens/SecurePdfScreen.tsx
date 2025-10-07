@@ -67,11 +67,12 @@ export const SecurePdfScreen: React.FC<SecurePdfScreenProps> = ({
             width: '100%',
             backgroundColor: isDarkMode ? '#1f2937' : 'white',
             borderRadius: '16px',
-            padding: '32px',
+            padding: '24px',
             boxShadow: isDarkMode 
               ? '0 4px 12px rgba(0, 0, 0, 0.3)' 
               : '0 4px 12px rgba(0, 0, 0, 0.1)',
             margin: '0 auto',
+            boxSizing: 'border-box',
           }}
         >
           <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>
@@ -183,13 +184,16 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
-        padding: '16px',
+        gap: '12px',
+        padding: '12px',
         backgroundColor: isDarkMode ? '#374151' : '#f9fafb',
         borderRadius: '12px',
         border: `1px solid ${isDarkMode ? '#4b5563' : '#e5e7eb'}`,
         cursor: 'pointer',
         transition: 'all 0.2s',
+        width: '100%',
+        boxSizing: 'border-box',
+        maxWidth: '100%',
       }}
       onClick={onOpen}
       onMouseEnter={(e) => {
@@ -203,40 +207,48 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
     >
       <div
         style={{
-          width: '60px',
-          height: '80px',
+          width: '50px',
+          height: '65px',
           backgroundColor: '#2563eb',
           borderRadius: '4px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '28px',
+          fontSize: '24px',
           flexShrink: 0,
         }}
       >
         📖
       </div>
       
-      <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+      <div style={{ 
+        flex: 1, 
+        minWidth: 0,
+        overflow: 'hidden',
+        paddingRight: '8px',
+      }}>
         <h3
           style={{
-            fontSize: '15px',
+            fontSize: '14px',
             fontWeight: '600',
             color: isDarkMode ? '#f9fafb' : '#1a1a1a',
             marginBottom: '4px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            lineHeight: '1.3',
+            maxHeight: '2.6em',
+            wordBreak: 'break-word',
           }}
         >
           {title}
         </h3>
         <p style={{ 
-          fontSize: '13px', 
+          fontSize: '12px', 
           color: isDarkMode ? '#9ca3af' : '#6b7280',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
+          margin: 0,
         }}>
           {pages} {language === 'az' ? 'səhifə' : 'pages'}
         </p>
@@ -244,11 +256,11 @@ const BookCard: React.FC<BookCardProps> = ({ title, pages, language, onOpen, isD
       
       <div
         style={{
-          padding: '8px 16px',
+          padding: '10px 14px',
           backgroundColor: '#2563eb',
           color: 'white',
-          borderRadius: '6px',
-          fontSize: '14px',
+          borderRadius: '8px',
+          fontSize: '13px',
           fontWeight: '600',
           flexShrink: 0,
           whiteSpace: 'nowrap',
