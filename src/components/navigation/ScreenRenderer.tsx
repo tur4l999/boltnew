@@ -36,6 +36,7 @@ import { QAScreen } from '../screens/QAScreen';
 import { QADetailScreen } from '../screens/QADetailScreen';
 import { QAFormScreen } from '../screens/QAFormScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { SecurePdfScreen } from '../screens/SecurePdfScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -90,9 +91,10 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'QADetail' && <QADetailScreen />}
       {currentScreen.screen === 'QAForm' && <QAFormScreen />}
       {currentScreen.screen === 'Notifications' && <NotificationsScreen />}
+      {currentScreen.screen === 'SecurePdf' && <SecurePdfScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'SecurePdf'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }

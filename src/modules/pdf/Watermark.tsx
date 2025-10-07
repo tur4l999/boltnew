@@ -1,0 +1,335 @@
+/**
+ * Dynamic SVG Watermark Overlay Component
+ * Displays diagonal repeating watermark with user identification
+ */
+
+import React, { useEffect, useState } from 'react';
+import type { WatermarkConfig } from './types';
+import { createWatermarkText } from './utils';
+
+interface WatermarkProps {
+  config: WatermarkConfig;
+  refreshInterval?: number; // milliseconds (default: 60000 = 1 min)
+  className?: string;
+}
+
+export const Watermark: React.FC<WatermarkProps> = ({
+  config,
+  refreshInterval = 60000,
+  className = '',
+}) => {
+  const [timestamp, setTimestamp] = useState(Date.now());
+  
+  // Refresh timestamp periodically for "live" effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimestamp(Date.now());
+    }, refreshInterval);
+    
+    return () => clearInterval(interval);
+  }, [refreshInterval]);
+  
+  const {
+    opacity = 0.12,
+    angle = 14,
+    fontSize = 12,
+  } = config;
+  
+  // Create watermark text
+  const watermarkText = createWatermarkText({
+    ...config,
+    currentPage: config.currentPage,
+    totalPages: config.totalPages,
+  });
+  
+  // Add timestamp to make it dynamic
+  const dynamicText = `${watermarkText} • ${new Date(timestamp).toLocaleTimeString()}`;
+  
+  // Calculate pattern spacing (mobile-friendly - daha sıx)
+  const spacing = 150; // pixels between watermarks
+  const patternWidth = spacing * 2; // Pattern eni
+  const patternHeight = spacing * 2.5; // Pattern hündürlüyü
+  
+  // Hidden watermark configuration (very subtle)
+  const hiddenOpacity = 0.015; // Çox zəif - demək olar ki görünməz
+  const hiddenFontSize = 6; // Çox kiçik
+  const hiddenSpacing = 60; // Sıx yerləşdirilmiş (80-dən 60-a azaldıldı)
+  
+  // Create hidden identifier (device + user fingerprint)
+  const hiddenId = `${config.userId}:${config.deviceId}:${config.currentPage}:${new Date(timestamp).getTime()}`;
+  
+  return (
+    <div
+      className={`watermark-overlay ${className}`}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: 'none',
+        userSelect: 'none',
+        overflow: 'hidden',
+        zIndex: 9999,
+      }}
+    >
+      {/* Görünən watermark */}
+      <svg
+        width="100%"
+        height="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <defs>
+          <pattern
+            id={`watermark-pattern-${config.currentPage}`}
+            x="0"
+            y="0"
+            width={patternWidth}
+            height={patternHeight}
+            patternUnits="userSpaceOnUse"
+          >
+            {/* First watermark group (top-left) - 2 lines */}
+            <g transform={`rotate(${angle} 30 ${spacing / 2})`}>
+              <text
+                x={30}
+                y={spacing / 2}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={30}
+                y={spacing / 2 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
+            
+            {/* Second watermark group (center) - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing * 1.2} ${spacing * 1.3})`}>
+              <text
+                x={spacing * 1.2}
+                y={spacing * 1.3}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={spacing * 1.2}
+                y={spacing * 1.3 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
+            
+            {/* Third watermark group (right) - 2 lines */}
+            <g transform={`rotate(${angle} ${spacing * 2.2} ${spacing * 0.4})`}>
+              <text
+                x={spacing * 2.2}
+                y={spacing * 0.4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                DDA.az • {config.userName}
+              </text>
+              <text
+                x={spacing * 2.2}
+                y={spacing * 0.4 + fontSize + 4}
+                fill="currentColor"
+                fontSize={fontSize}
+                fontFamily="system-ui, -apple-system, sans-serif"
+                fontWeight="500"
+                opacity={opacity}
+                style={{
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
+              >
+                {config.userPhone} • {new Date(timestamp).toLocaleTimeString()}
+              </text>
+            </g>
+          </pattern>
+        </defs>
+        
+        {/* Apply pattern to full viewport */}
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          fill={`url(#watermark-pattern-${config.currentPage})`}
+          style={{
+            pointerEvents: 'none',
+            userSelect: 'none',
+          }}
+        />
+      </svg>
+      
+      {/* Gizli watermark - çox zəif, demək olar ki görünməz */}
+      <svg
+        width="100%"
+        height="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <defs>
+          <pattern
+            id={`hidden-watermark-${config.currentPage}`}
+            x="0"
+            y="0"
+            width={hiddenSpacing * 3}
+            height={hiddenSpacing * 3}
+            patternUnits="userSpaceOnUse"
+          >
+            {/* Kiçik gizli identifikatorlar - müxtəlif nöqtələrdə */}
+            <text
+              x={10}
+              y={20}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {hiddenId}
+            </text>
+            
+            <text
+              x={hiddenSpacing}
+              y={hiddenSpacing + 30}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              transform={`rotate(45 ${hiddenSpacing} ${hiddenSpacing + 30})`}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {config.userPhone}
+            </text>
+            
+            <text
+              x={hiddenSpacing * 2}
+              y={hiddenSpacing}
+              fill="#000000"
+              fontSize={hiddenFontSize}
+              fontFamily="monospace"
+              opacity={hiddenOpacity}
+              transform={`rotate(-30 ${hiddenSpacing * 2} ${hiddenSpacing})`}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {config.userName}
+            </text>
+            
+            {/* Timestamp-based micro identifier */}
+            <text
+              x={hiddenSpacing + 50}
+              y={hiddenSpacing * 2}
+              fill="#ffffff"
+              fontSize={hiddenFontSize - 1}
+              fontFamily="monospace"
+              opacity={hiddenOpacity * 0.8}
+              style={{
+                userSelect: 'none',
+                pointerEvents: 'none',
+              }}
+            >
+              {new Date(timestamp).toISOString()}
+            </text>
+          </pattern>
+        </defs>
+        
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          fill={`url(#hidden-watermark-${config.currentPage})`}
+          style={{
+            pointerEvents: 'none',
+            userSelect: 'none',
+            mixBlendMode: 'multiply',
+          }}
+        />
+      </svg>
+    </div>
+  );
+};
+
+/**
+ * Adaptive watermark that adjusts opacity based on zoom level
+ */
+export const AdaptiveWatermark: React.FC<WatermarkProps & { zoomLevel?: number }> = ({
+  zoomLevel = 1.0,
+  config,
+  ...props
+}) => {
+  // Adjust opacity and font size based on zoom
+  const adaptiveConfig = {
+    ...config,
+    opacity: Math.max(0.08, Math.min(0.18, (config.opacity || 0.12) / zoomLevel)),
+    fontSize: Math.max(10, Math.min(16, (config.fontSize || 12) * Math.sqrt(zoomLevel))),
+  };
+  
+  return <Watermark config={adaptiveConfig} {...props} />;
+};
+
+export default Watermark;

@@ -38,7 +38,8 @@ function AppContent() {
                      currentScreen.screen === 'ProductDetail' || 
                      currentScreen.screen === 'Cart' ||
                      currentScreen.screen === 'QADetail' ||
-                     currentScreen.screen === 'QAForm';
+                     currentScreen.screen === 'QAForm' ||
+                     currentScreen.screen === 'SecurePdf';
 
   return (
     <OnboardingWrapper 

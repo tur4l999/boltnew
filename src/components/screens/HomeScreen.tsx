@@ -24,6 +24,7 @@ export function HomeScreen() {
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
 
     // Əlavə bölmələr (secondary):
+    { key: 'premiumBooks', label: 'PDF (kitablar)', action: () => navigate('SecurePdf'), emoji: '📚' },
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
     { key: 'certificate', label: 'Şəhadətnamə', action: () => navigate('CertificateApplication'), emoji: '🎓' },
     { key: 'practiceLab', label: t.drivingPractice, action: () => navigate('DrivingPractice'), emoji: '🚗' },

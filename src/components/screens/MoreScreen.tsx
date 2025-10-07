@@ -2,12 +2,21 @@ import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { EmojiIcon } from '../ui/EmojiIcon';
 
+interface MoreItem {
+  key: string;
+  label: string;
+  emoji: string;
+  action: () => void;
+  badge?: string;
+}
+
 export function MoreScreen() {
   const { navigate, balance, tickets, activePackage, hasActivePackage, isDarkMode } = useApp();
   
-  const moreItems = [
+  const moreItems: MoreItem[] = [
     { key: 'rules', label: 'Qaydalar', emoji: '📘', action: () => navigate('Rules') },
     { key: 'signs', label: 'Nişanlar', emoji: '🛑', action: () => navigate('Signs') },
+    { key: 'books', label: 'PDF (kitablar)', emoji: '📚', action: () => navigate('SecurePdf'), badge: 'Premium' },
     { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
     { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
     { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
@@ -99,7 +108,19 @@ export function MoreScreen() {
             </div>
             <div className="flex-1">
               <div className="font-medium text-sm">{item.label}</div>
+              {item.key === 'books' && (
+                <div className={`text-xs mt-0.5 transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                }`}>
+                  Təhlükəsiz oxuma sistemi
+                </div>
+              )}
             </div>
+            {item.badge && (
+              <div className="px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold rounded-full">
+                {item.badge}
+              </div>
+            )}
             <div className={`text-base transition-colors duration-200 ${
               isDarkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>›</div>

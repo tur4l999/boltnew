@@ -94,6 +94,8 @@ export const dictionaries = {
     language: 'Dil',
     upcomingLessons: 'Davam edən Onlayn dərslər',
     classSchedule: 'Dərs cədvəli',
+    premiumBooks: 'PDF (kitablar)',
+    premiumBooksDesc: 'Təhlükəsiz PDF kitablar',
     
     // Driving Practice
     drivingPractice: 'Praktiki təcrübə',
@@ -289,6 +291,8 @@ export const dictionaries = {
     language: 'Язык',
     upcomingLessons: 'Ближайшие занятия',
     classSchedule: 'Расписание занятий',
+    premiumBooks: 'Платные книги',
+    premiumBooksDesc: 'Безопасная система чтения',
     
     // Driving Practice
     drivingPractice: 'Практические занятия',
