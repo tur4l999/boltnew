@@ -29,7 +29,7 @@ export default function App() {
 }
 
 function AppContent() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Default true for demo
   const { currentScreen, isDarkMode } = useApp();
 
   const isAIChat = currentScreen.screen === 'AIChat';

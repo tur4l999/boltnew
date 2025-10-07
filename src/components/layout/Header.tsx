@@ -16,10 +16,16 @@ export function Header() {
           : 'bg-white/90 border-gray-200/50 shadow-lg'
       }`}>
         <div className="px-4 py-3 flex items-center gap-4">
-          <div className="relative group">
+          <div className="relative group z-50">
             <button
-              onClick={() => navigate('Settings')}
-              className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base hover:from-emerald-700 hover:via-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Profile clicked, navigating to Settings');
+                navigate('Settings');
+              }}
+              className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base hover:from-emerald-700 hover:via-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:scale-110 active:scale-95 shadow-lg hover:shadow-xl cursor-pointer relative z-50"
             >
               {userName.charAt(0).toUpperCase()}
             </button>
