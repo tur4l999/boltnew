@@ -151,7 +151,7 @@ export function OnboardingScreen({
           key={`illustration-${slideKey}`}
           className="w-full max-w-sm mb-12 animate-fadeIn"
           style={{
-            animation: 'fadeIn 400ms ease-in-out',
+            animation: 'fadeIn 600ms ease-in-out',
           }}
         >
           {getIllustration(currentSlide.illustration, {
@@ -165,7 +165,7 @@ export function OnboardingScreen({
           key={`text-${slideKey}`}
           className="w-full max-w-md text-center animate-fadeIn"
           style={{
-            animation: 'fadeIn 400ms ease-in-out',
+            animation: 'fadeIn 600ms ease-in-out',
           }}
         >
           {/* Title */}
