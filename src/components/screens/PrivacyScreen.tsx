@@ -1,21 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function PrivacyScreen() {
   const { goBack, isDarkMode } = useApp();
   const [settings, setSettings] = useState({
-    dataCollection: true,
-    analytics: false,
-    personalization: true,
-    thirdPartySharing: false,
-    marketingEmails: false,
     profileVisibility: 'private'
   });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [countdown, setCountdown] = useState(7);
+  const [canDelete, setCanDelete] = useState(false);
 
-  const toggleSetting = (key: string) => {
-    setSettings(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }));
+  // Countdown effect
+  useEffect(() => {
+    if (showDeleteModal && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showDeleteModal && countdown === 0) {
+      setCanDelete(true);
+    }
+  }, [showDeleteModal, countdown]);
+
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+    setCountdown(7);
+    setCanDelete(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    alert('✅ Hesab silmə sorğusu göndərildi (demo)\n\nBütün məlumatlarınız qalıcı olaraq silinəcək.');
+    setShowDeleteModal(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setCountdown(7);
+    setCanDelete(false);
   };
 
   return (
@@ -54,104 +75,13 @@ export function PrivacyScreen() {
           </div>
         </div>
 
-        {/* Data Collection */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp">
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              isDarkMode ? 'bg-purple-600/20' : 'bg-purple-100'
-            }`}>
-              <EmojiIcon emoji="📊" size={20} />
-            </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-              Məlumat toplanması
-            </h2>
-          </div>
-
-          <div className="space-y-3">
-            <div className={`p-4 rounded-2xl border-2 ${
-              isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <div className="font-bold mb-1">İstifadə statistikası</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Tətbiqdən necə istifadə etdiyinizi görmək üçün anonim məlumat toplanması
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleSetting('dataCollection')}
-                  className={`ml-4 w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                    settings.dataCollection
-                      ? 'bg-emerald-600'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                    settings.dataCollection ? 'translate-x-7' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-2xl border-2 ${
-              isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <div className="font-bold mb-1">Analitika</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Xidmətin keyfiyyətini yaxşılaşdırmaq üçün analitik məlumatların paylaşılması
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleSetting('analytics')}
-                  className={`ml-4 w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                    settings.analytics
-                      ? 'bg-emerald-600'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                    settings.analytics ? 'translate-x-7' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-
-            <div className={`p-4 rounded-2xl border-2 ${
-              isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
-            }`}>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex-1">
-                  <div className="font-bold mb-1">Fərdiləşdirmə</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Sizə uyğun məzmun və tövsiyələr göstərmək üçün məlumat istifadəsi
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleSetting('personalization')}
-                  className={`ml-4 w-14 h-8 rounded-full transition-all duration-300 flex-shrink-0 ${
-                    settings.personalization
-                      ? 'bg-emerald-600'
-                      : isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
-                  }`}
-                >
-                  <div className={`w-6 h-6 rounded-full bg-white transition-transform duration-300 ${
-                    settings.personalization ? 'translate-x-7' : 'translate-x-1'
-                  }`}></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </Card>
-
         {/* Account Visibility */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '200ms' }}>
+        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp">
           <div className="flex items-center gap-3 mb-6">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
             }`}>
-              <EmojiIcon emoji="👁️" size={20} />
+              <Icon name="user" size={20} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Profil görünməsi
@@ -161,7 +91,7 @@ export function PrivacyScreen() {
           <div className="space-y-3">
             <button
               onClick={() => setSettings(prev => ({ ...prev, profileVisibility: 'public' }))}
-              className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 ${
+              className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all duration-300 ${
                 settings.profileVisibility === 'public'
                   ? isDarkMode
                     ? 'border-emerald-500 bg-emerald-900/20'
@@ -171,18 +101,20 @@ export function PrivacyScreen() {
                     : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
               }`}
             >
-              <div>
-                <div className="font-bold mb-1">Açıq</div>
-                <div className={`text-sm text-left ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <div className="text-left flex-1">
+                <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Açıq</div>
+                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   Hər kəs profilinizi görə bilər
                 </div>
               </div>
-              {settings.profileVisibility === 'public' && <div className="text-2xl">✓</div>}
+              {settings.profileVisibility === 'public' && (
+                <div className={`text-2xl ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>✓</div>
+              )}
             </button>
 
             <button
               onClick={() => setSettings(prev => ({ ...prev, profileVisibility: 'private' }))}
-              className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 ${
+              className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 transition-all duration-300 ${
                 settings.profileVisibility === 'private'
                   ? isDarkMode
                     ? 'border-emerald-500 bg-emerald-900/20'
@@ -192,24 +124,26 @@ export function PrivacyScreen() {
                     : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
               }`}
             >
-              <div>
-                <div className="font-bold mb-1">Məxfi</div>
-                <div className={`text-sm text-left ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Yalnız siz profilinizi görə bilərsiniz
+              <div className="text-left flex-1">
+                <div className={`font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Məxfi</div>
+                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Profiliniz digərləri tərəfindən görünməyəcək
                 </div>
               </div>
-              {settings.profileVisibility === 'private' && <div className="text-2xl">✓</div>}
+              {settings.profileVisibility === 'private' && (
+                <div className={`text-2xl ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>✓</div>
+              )}
             </button>
           </div>
         </Card>
 
         {/* Data Export & Delete */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center gap-3 mb-6">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
             }`}>
-              <EmojiIcon emoji="📦" size={20} />
+              <Icon name="shield" size={20} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
             </div>
             <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Məlumatlarınız
@@ -218,11 +152,7 @@ export function PrivacyScreen() {
 
           <div className="space-y-3">
             <button
-              onClick={() => {
-                if (confirm('Bütün məlumatlarınız silinəcək! Bu əməliyyat geri qaytarıla bilməz. Davam etmək istəyirsiniz?')) {
-                  alert('Hesab silmə sorğusu göndərildi (demo)');
-                }
-              }}
+              onClick={handleDeleteClick}
               className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
                 isDarkMode 
                   ? 'border-red-500/50 bg-red-900/20 hover:bg-red-900/30 text-red-300' 
@@ -230,7 +160,7 @@ export function PrivacyScreen() {
               }`}
             >
               <div className="flex items-center gap-3">
-                <div className="text-2xl">🗑️</div>
+                <Icon name="trash" size={24} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
                 <div className="text-left">
                   <div className="font-bold">Hesabı sil</div>
                   <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -243,6 +173,107 @@ export function PrivacyScreen() {
           </div>
         </Card>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          style={{ animation: 'fadeIn 0.3s ease-out' }}
+        >
+          <div 
+            className={`max-w-md w-full rounded-3xl p-6 shadow-2xl ${
+              isDarkMode ? 'bg-gray-800 border-2 border-red-500/30' : 'bg-white border-2 border-red-300'
+            }`}
+            style={{ animation: 'scaleIn 0.3s ease-out' }}
+          >
+            {/* Warning Icon */}
+            <div className="flex justify-center mb-4">
+              <div className={`w-20 h-20 rounded-full flex items-center justify-center ${
+                isDarkMode ? 'bg-red-900/30' : 'bg-red-100'
+              }`}>
+                <Icon name="warning" size={40} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h2 className={`text-2xl font-black text-center mb-4 ${
+              isDarkMode ? 'text-red-300' : 'text-red-700'
+            }`}>
+              Hesabı silmək istəyirsiniz?
+            </h2>
+
+            {/* Warning Message */}
+            <div className={`p-4 rounded-2xl mb-6 ${
+              isDarkMode ? 'bg-red-900/20 border-2 border-red-500/30' : 'bg-red-50 border-2 border-red-200'
+            }`}>
+              <p className={`text-sm font-bold mb-3 ${isDarkMode ? 'text-red-300' : 'text-red-800'}`}>
+                ⚠️ Xəbardarlıq: Bu əməliyyat geri qaytarıla bilməz!
+              </p>
+              <ul className={`text-sm space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <li className="flex items-start gap-2">
+                  <span className={isDarkMode ? 'text-red-400' : 'text-red-600'}>•</span>
+                  <span>Edilən bütün ödənişlər geri qaytarılmayacaq</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className={isDarkMode ? 'text-red-400' : 'text-red-600'}>•</span>
+                  <span>Balansdakı məbləğ ləğv ediləcək</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className={isDarkMode ? 'text-red-400' : 'text-red-600'}>•</span>
+                  <span>Aktiv paket və xidmətlər dayandırılacaq</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className={isDarkMode ? 'text-red-400' : 'text-red-600'}>•</span>
+                  <span>Bütün məlumat və nəticələr silinəcək</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* Countdown Timer */}
+            {!canDelete && (
+              <div className={`text-center mb-6 p-4 rounded-2xl ${
+                isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
+              }`}>
+                <div className={`text-4xl font-black mb-2 ${
+                  isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
+                }`}>
+                  {countdown}
+                </div>
+                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Düyməni aktivləşdirmək üçün gözləyin...
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleDeleteCancel}
+                className={`flex-1 px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:scale-105 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Ləğv et
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={!canDelete}
+                className={`flex-1 px-6 py-4 rounded-2xl font-bold transition-all duration-300 ${
+                  canDelete
+                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white hover:from-red-700 hover:to-red-800 hover:scale-105 cursor-pointer'
+                    : isDarkMode
+                      ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {canDelete ? 'Hesabı sil' : 'Gözləyin...'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
