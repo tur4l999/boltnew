@@ -6,17 +6,60 @@ import { EmojiIcon } from '../ui/EmojiIcon';
 import { SlideTransition } from '../ui/SlideTransition';
 import { AZ_RULES } from '../../lib/rules';
 
+// Traffic signs data for Azerbaijan
+const AZ_SIGNS = [
+  {
+    id: '1',
+    category: 'Qadağan edən',
+    title: 'Dayanmaq qadağandır',
+    description: 'Bu ərazidə nəqliyyat vasitəsini dayanmaq qadağandır.',
+    emoji: '🚫'
+  },
+  {
+    id: '2',
+    category: 'Xəbərdarlıq',
+    title: 'Təhlükəli döngə',
+    description: 'İrəlidə təhlükəli döngə var, sürəti azaldın.',
+    emoji: '⚠️'
+  },
+  {
+    id: '3',
+    category: 'Göstərici',
+    title: 'Piyada keçidi',
+    description: 'Piyada keçidi ərazisi, sürücülər diqqətli olmalıdır.',
+    emoji: '🚶'
+  },
+  {
+    id: '4',
+    category: 'Məcburi',
+    title: 'Sağa dönmək məcburidir',
+    description: 'Bu nişandan sonra yalnız sağa dönmək icazəlidir.',
+    emoji: '➡️'
+  },
+];
+
 export function RulesScreen() {
   const { isDarkMode, goBack, switchTab } = useApp();
+  const [activeTab, setActiveTab] = useState<'rules' | 'signs'>('rules');
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
+  const [selectedSignId, setSelectedSignId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
   const selectedRule = useMemo(() => AZ_RULES.find(r => r.id === selectedRuleId) || null, [selectedRuleId]);
+  const selectedSign = useMemo(() => AZ_SIGNS.find(s => s.id === selectedSignId) || null, [selectedSignId]);
 
   const norm = useCallback((s: string) => s.toLowerCase().trim(), []);
   const q = norm(query);
   const filteredRules = useMemo(
     () => (q ? AZ_RULES.filter(r => norm(r.title).includes(q) || norm(r.content).includes(q)) : AZ_RULES),
+    [q, norm]
+  );
+  const filteredSigns = useMemo(
+    () => (q ? AZ_SIGNS.filter(s => 
+      norm(s.title).includes(q) || 
+      norm(s.description).includes(q) || 
+      norm(s.category).includes(q)
+    ) : AZ_SIGNS),
     [q, norm]
   );
 
@@ -72,7 +115,7 @@ export function RulesScreen() {
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Qaydalar axtarın..."
+                  placeholder={activeTab === 'rules' ? 'Qaydalar axtarın...' : 'Yol nişanları axtarın...'}
                   className={`flex-1 bg-transparent outline-none text-base placeholder:transition-colors duration-300 ${
                     isDarkMode 
                       ? 'text-gray-100 placeholder:text-gray-500' 
@@ -98,18 +141,63 @@ export function RulesScreen() {
       </div>
 
       <div className="px-3 pb-24 pt-4">
-        {/* Rules Section */}
-        <div className="space-y-4">
-          <div className="text-center">
-            <h2 className={`text-lg font-bold transition-colors duration-300 ${
-              isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
-              Maddələr
-            </h2>
+        {/* Tab Switcher */}
+        <div className={`mb-4 p-1.5 rounded-2xl border transition-all duration-300 ${
+          isDarkMode 
+            ? 'bg-gray-800/50 border-gray-700/50' 
+            : 'bg-white/70 border-gray-200/50'
+        } backdrop-blur-sm`}>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                setActiveTab('rules');
+                setQuery('');
+              }}
+              className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                activeTab === 'rules'
+                  ? isDarkMode
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                    : 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                  : isDarkMode
+                  ? 'text-gray-400 hover:text-gray-200'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              📘 Qaydalar
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('signs');
+                setQuery('');
+              }}
+              className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                activeTab === 'signs'
+                  ? isDarkMode
+                    ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                    : 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
+                  : isDarkMode
+                  ? 'text-gray-400 hover:text-gray-200'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              🛑 Nişanlar
+            </button>
           </div>
+        </div>
 
-          <div className="space-y-2">
-            {filteredRules.map((r, index) => (
+        {/* Rules Section */}
+        {activeTab === 'rules' && (
+          <div className="space-y-4">
+            <div className="text-center">
+              <h2 className={`text-lg font-bold transition-colors duration-300 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}>
+                Maddələr
+              </h2>
+            </div>
+
+            <div className="space-y-2">
+              {filteredRules.map((r, index) => (
               <SlideTransition key={r.id} direction="up" delay={index * 30}>
                 <Card 
                   variant="glass"
@@ -183,6 +271,98 @@ export function RulesScreen() {
             )}
           </div>
         </div>
+        )}
+
+        {/* Signs Section */}
+        {activeTab === 'signs' && (
+          <div className="space-y-4">
+            <div className="text-center">
+              <h2 className={`text-lg font-bold transition-colors duration-300 ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}>
+                Yol Nişanları
+              </h2>
+            </div>
+
+            <div className="space-y-2">
+              {filteredSigns.map((sign, index) => (
+                <SlideTransition key={sign.id} direction="up" delay={index * 30}>
+                  <Card 
+                    variant="glass"
+                    padding="md"
+                    onClick={() => setSelectedSignId(prev => prev === sign.id ? null : sign.id)}
+                    className={`group border-0 ${
+                      isDarkMode 
+                        ? 'bg-gray-800/50 hover:bg-gray-700/60' 
+                        : 'bg-white/70 hover:bg-gray-50/80'
+                    } transition-all duration-300 hover:shadow-lg ${
+                      selectedSign?.id === sign.id ? 'shadow-lg' : ''
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-shrink-0">
+                          <EmojiIcon emoji={sign.emoji} size={32} forceEmoji={true} />
+                        </div>
+                        <div className="flex-1">
+                          <div className={`text-xs mb-1 ${
+                            isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                          }`}>
+                            {sign.category}
+                          </div>
+                          <h4 className={`font-semibold text-sm transition-colors duration-300 ${
+                            isDarkMode ? 'text-white' : 'text-gray-900'
+                          }`}>
+                            {sign.title}
+                          </h4>
+                        </div>
+                      </div>
+                      <div className={`flex-shrink-0 transition-all duration-300 ${
+                        selectedSign?.id === sign.id 
+                          ? 'rotate-90 text-emerald-500' 
+                          : 'group-hover:translate-x-1'
+                      } ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <EmojiIcon emoji={selectedSign?.id === sign.id ? '▾' : '▸'} size={14} />
+                      </div>
+                    </div>
+                    
+                    {selectedSign?.id === sign.id && (
+                      <div className={`mt-4 pt-4 border-t transition-all duration-500 ${
+                        isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+                      }`}>
+                        <div className={`text-sm leading-relaxed transition-colors duration-300 ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        }`}>
+                          {sign.description}
+                        </div>
+                      </div>
+                    )}
+                  </Card>
+                </SlideTransition>
+              ))}
+              
+              {filteredSigns.length === 0 && (
+                <div className="text-center py-8">
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100/50'
+                  }`}>
+                    <EmojiIcon emoji="🔍" size={20} />
+                  </div>
+                  <div className={`text-sm font-medium mb-1 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                  }`}>
+                    Heç nə tapılmadı
+                  </div>
+                  <div className={`text-xs ${
+                    isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                  }`}>
+                    Axtarış şərtlərini dəyişin
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
