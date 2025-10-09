@@ -321,28 +321,28 @@ export function PackagesScreen() {
           {/* Main Swipeable Package Card */}
           <div 
             ref={containerRef}
-            className="relative h-full pt-6 pb-24 flex items-center justify-center overflow-hidden"
+            className="relative h-full pt-6 pb-24 overflow-x-hidden"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
             <div 
-              className="relative h-full max-w-md w-full mx-auto transition-transform duration-300 ease-out"
+              className="flex h-full gap-6 transition-transform duration-300 ease-out"
               style={{
-                transform: `translateX(calc(-${currentPackageIndex * 100}% + ${dragOffset}px))`
+                transform: `translateX(calc(-${currentPackageIndex * 100}% - ${currentPackageIndex * 24}px + ${dragOffset}px + 5%))`
               }}
             >
-              <div className="flex h-full gap-4">
-                {packages.map((pkg, index) => {
-                  const isActive = index === currentPackageIndex;
-                  const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
-                  
-                  return (
-                    <div
-                      key={pkg.id}
-                      className="flex-shrink-0 w-full h-full px-4"
-                    >
-                      <div className={`relative h-full rounded-3xl overflow-hidden border-2 transition-all duration-500 ${
+              {packages.map((pkg, index) => {
+                const isActive = index === currentPackageIndex;
+                const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
+                
+                return (
+                  <div
+                    key={pkg.id}
+                    className="flex-shrink-0 h-full"
+                    style={{ width: 'calc(90% - 12px)' }}
+                  >
+                      <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
                         isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-60'
                       } ${
                         pkg.popular
