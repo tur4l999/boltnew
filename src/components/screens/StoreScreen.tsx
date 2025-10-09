@@ -333,7 +333,7 @@ export function StoreScreen() {
           className="fixed z-40 group bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-2xl rounded-2xl px-4 py-3 flex items-center gap-2 transition-all duration-300 transform hover:scale-105"
           style={{
             right: 'calc(env(safe-area-inset-right, 0px) + 20px)',
-            bottom: 'calc(env(safe-area-inset-bottom, 0px) + 84px)'
+            bottom: 'calc(env(safe-area-inset-bottom, 0px) + 100px)'
           }}
         >
           <div className="relative">
