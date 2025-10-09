@@ -664,7 +664,7 @@ export function PackagesScreen() {
             })}
           </div>
         </div>
-      ) : null}
+      )}
 
       {/* Modals */}
       {activationModalOpen && (
