@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
@@ -13,7 +12,7 @@ export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
   
   const gridItems = [
-    // Əsas bölmələr (7 ədəd):
+    // Əsas bölmələr (10 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
     { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👨‍🏫' },
@@ -22,21 +21,20 @@ export function HomeScreen() {
     { key: 'tests', label: t.tests, action: () => navigate('Exam', { defaultTab: 'byTickets' }), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
-
-    // Əlavə bölmələr (secondary):
     { key: 'premiumBooks', label: 'PDF (kitablar)', action: () => navigate('SecurePdf'), emoji: '📚' },
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
+
+    // Əlavə bölmələr (secondary):
     { key: 'certificate', label: 'Şəhadətnamə', action: () => navigate('CertificateApplication'), emoji: '🎓' },
     { key: 'practiceLab', label: t.drivingPractice, action: () => navigate('DrivingPractice'), emoji: '🚗' },
+    { key: 'qa', label: 'Sual-cavab', action: () => navigate('QA'), emoji: '💬' },
     { key: 'appeals', label: 'Apellyasiyalar', action: () => navigate('Appeals'), emoji: '📮' },
+    { key: 'balance', label: 'Daxili balans', action: () => navigate('Balance'), emoji: '💰' },
     { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
-
-    // Bölmə sonu: Yekun imtahan
-    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
-  const primaryItems = gridItems.slice(0, 7);
-  const secondaryItems = gridItems.slice(7);
+  const primaryItems = gridItems.slice(0, 10);
+  const secondaryItems = gridItems.slice(10);
 
   function toRows(items: typeof gridItems) {
     const result = [] as typeof gridItems[];
@@ -139,30 +137,6 @@ export function HomeScreen() {
           </div>
         </ScaleIn>
       )}
-
-      {/* Enhanced Progress Card */}
-      <FadeInUp delay={200}>
-        <Card className={`mb-4 p-5 transition-all duration-300 hover:shadow-lg group ${
-          isDarkMode 
-            ? 'bg-gradient-to-r from-gray-800/80 to-slate-800/80 border-gray-700/50' 
-            : 'bg-gradient-to-r from-white/80 to-gray-50/80 border-gray-200/50'
-        } backdrop-blur-sm`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className={`text-sm font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-              {t.progress}
-            </div>
-            <div className={`text-xs font-medium px-2 py-1 rounded-full ${
-              isDarkMode ? 'bg-emerald-900/50 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
-            }`}>
-              42%
-            </div>
-          </div>
-          <Progress value={42} className="h-2 mb-3" />
-          <div className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            {t.continue} → <span className={`font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>M8: Yol nişanları</span>
-          </div>
-        </Card>
-      </FadeInUp>
 
       {/* Enhanced Primary Section */}
       <Card className={`mb-4 transition-all duration-300 hover:shadow-lg ${
