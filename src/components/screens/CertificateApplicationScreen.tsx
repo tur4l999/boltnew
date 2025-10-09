@@ -1,56 +1,602 @@
-/** @jsxImportSource react */
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
+import { FadeInUp } from '../ui/FadeInUp';
+import { SlideTransition } from '../ui/SlideTransition';
+import { ScaleIn } from '../ui/ScaleIn';
 import { EmojiIcon } from '../ui/EmojiIcon';
+
+// Azerbaijan regions for dropdown
+const AZERBAIJAN_REGIONS = [
+  'Bakı',
+  'Abşeron',
+  'Ağcabədi',
+  'Ağdam',
+  'Ağdaş',
+  'Ağstafa',
+  'Ağsu',
+  'Astara',
+  'Balakən',
+  'Bərdə',
+  'Beyləqan',
+  'Biləsuvar',
+  'Cəbrayıl',
+  'Cəlilabad',
+  'Culfa',
+  'Daşkəsən',
+  'Füzuli',
+  'Gədəbəy',
+  'Gəncə',
+  'Goranboy',
+  'Göyçay',
+  'Göygöl',
+  'Hacıqabul',
+  'Xankəndi',
+  'Xaçmaz',
+  'Xırdalan',
+  'Xocalı',
+  'Xocavənd',
+  'İmişli',
+  'İsmayıllı',
+  'Kəlbəcər',
+  'Kürdəmir',
+  'Laçın',
+  'Lənkəran',
+  'Lerik',
+  'Masallı',
+  'Mingəçevir',
+  'Naftalan',
+  'Naxçıvan',
+  'Neftçala',
+  'Oğuz',
+  'Ordubad',
+  'Qəbələ',
+  'Qax',
+  'Qazax',
+  'Qobustan',
+  'Quba',
+  'Qubadlı',
+  'Qusar',
+  'Saatlı',
+  'Sabirabad',
+  'Şəki',
+  'Salyan',
+  'Şəmkir',
+  'Şirvan',
+  'Siyəzən',
+  'Sumqayıt',
+  'Şuşa',
+  'Tərtər',
+  'Tovuz',
+  'Ucar',
+  'Yardımlı',
+  'Yevlax',
+  'Zəngilan',
+  'Zərdab'
+];
+
+type CertificateType = 'A' | 'B' | 'C' | 'D' | 'E' | 'AB' | 'AC' | 'BC' | 'ABC' | 'BE' | 'CE' | 'DE';
+
+interface ApplicationFormData {
+  selectedTypes: CertificateType[];
+  region: string;
+  fullAddress: string;
+  termsAgreed: boolean;
+}
 
 export function CertificateApplicationScreen() {
   const { isDarkMode, goBack } = useApp();
+  const [selectedTypes, setSelectedTypes] = useState<CertificateType[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState<ApplicationFormData>({
+    selectedTypes: [],
+    region: '',
+    fullAddress: '',
+    termsAgreed: false
+  });
+  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const applicationButtonRef = useRef<HTMLButtonElement>(null);
+
+  const certificateOptions: { type: CertificateType; label: string; description: string; emoji: string }[] = [
+    { type: 'A', label: 'A kateqoriyası', description: 'Motosikl, moped', emoji: '🏍️' },
+    { type: 'B', label: 'B kateqoriyası', description: 'Yüngül avtomobil', emoji: '🚗' },
+    { type: 'C', label: 'C kateqoriyası', description: 'Yük avtomobili', emoji: '🚛' },
+    { type: 'D', label: 'D kateqoriyası', description: 'Avtobus', emoji: '🚌' },
+    { type: 'E', label: 'E kateqoriyası', description: 'Qoşqu ilə', emoji: '🚚' },
+    { type: 'AB', label: 'A+B kateqoriyası', description: 'Motosikl və avtomobil', emoji: '🏍️🚗' },
+    { type: 'AC', label: 'A+C kateqoriyası', description: 'Motosikl və yük avtomobili', emoji: '🏍️🚛' },
+    { type: 'BC', label: 'B+C kateqoriyası', description: 'Avtomobil və yük avtomobili', emoji: '🚗🚛' },
+    { type: 'ABC', label: 'A+B+C kateqoriyası', description: 'Motosikl, avtomobil və yük avtomobili', emoji: '🏍️🚗🚛' },
+    { type: 'BE', label: 'B+E kateqoriyası', description: 'Avtomobil və qoşqu', emoji: '🚗🚚' },
+    { type: 'CE', label: 'C+E kateqoriyası', description: 'Yük avtomobili və qoşqu', emoji: '🚛🚚' },
+    { type: 'DE', label: 'D+E kateqoriyası', description: 'Avtobus və qoşqu', emoji: '🚌🚚' }
+  ];
+
+  const handleTypeSelection = (type: CertificateType) => {
+    setSelectedTypes((prev: CertificateType[]) => {
+      if (prev.includes(type)) {
+        return prev.filter((t: CertificateType) => t !== type);
+      } else {
+        return [...prev, type];
+      }
+    });
+  };
+
+  const handleApplicationClick = () => {
+    setFormData((prev: ApplicationFormData) => ({ ...prev, selectedTypes }));
+    setShowModal(true);
+  };
+
+  const handleTermsRead = () => {
+    setFormData((prev: ApplicationFormData) => ({ ...prev, termsAgreed: true }));
+    setShowTermsModal(false);
+  };
+
+  const handleSubmit = () => {
+    if (!formData.region || !formData.fullAddress || !formData.termsAgreed) {
+      return;
+    }
+    
+    setShowModal(false);
+    setShowSuccessNotification(true);
+    
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setShowSuccessNotification(false);
+    }, 3000);
+    
+    // Reset form
+    setSelectedTypes([]);
+    setFormData({
+      selectedTypes: [],
+      region: '',
+      fullAddress: '',
+      termsAgreed: false
+    });
+  };
+
+  // Auto-scroll to application button when selections are made
+  useEffect(() => {
+    if (selectedTypes.length > 0 && applicationButtonRef.current) {
+      const buttonRect = applicationButtonRef.current.getBoundingClientRect();
+      const isVisible = buttonRect.bottom <= window.innerHeight && buttonRect.top >= 0;
+      
+      if (!isVisible) {
+        applicationButtonRef.current.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }
+  }, [selectedTypes]);
 
   return (
-    <div className={`min-h-screen transition-all duration-300 ${
+    <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
-    }`}>
-      {/* Header */}
-      <div className={`sticky top-0 z-50 backdrop-blur-xl border-b transition-all duration-300 ${
-        isDarkMode 
-          ? 'bg-gray-900/80 border-gray-700/50' 
-          : 'bg-white/80 border-gray-200/50'
-      }`}>
-        <div className="px-4 py-4">
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => goBack()}
-              className={`group relative flex items-center justify-center w-12 h-12 rounded-2xl border transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-gray-800/50 border-gray-700/50 hover:bg-gray-700/50 text-gray-200' 
-                  : 'bg-white/70 border-gray-200/50 hover:bg-gray-50 text-gray-700'
-              } hover:scale-105 hover:shadow-lg backdrop-blur-sm`}
-            >
-              <EmojiIcon emoji="←" size={20} />
-            </button>
-            <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Şəhadətnamə Ərizəsi
-            </h1>
-          </div>
-        </div>
+        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-blue-50'
+    } pt-11`}>
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div className={`absolute top-10 right-10 w-40 h-40 rounded-full blur-3xl animate-pulse ${
+          isDarkMode ? 'bg-blue-500/5' : 'bg-blue-400/10'
+        }`}></div>
+        <div className={`absolute bottom-20 left-10 w-32 h-32 rounded-full blur-2xl animate-pulse ${
+          isDarkMode ? 'bg-emerald-500/5' : 'bg-emerald-400/10'
+        }`} style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <div className="px-4 py-6">
-        <Card variant="glass" padding="lg">
-          <div className="text-center">
-            <EmojiIcon emoji="📜" size={48} className="mx-auto mb-4" />
-            <h2 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              Şəhadətnamə Ərizəsi
-            </h2>
+      <div className="relative z-10 p-4 pb-24">
+        {/* Enhanced Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <button
+            onClick={goBack}
+            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+              isDarkMode 
+                ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
+                : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
+            }`}
+          >
+            <span className="text-lg">←</span>
+          </button>
+          <div>
+            <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
+              isDarkMode ? 'from-blue-400 to-indigo-400' : 'from-blue-600 to-indigo-600'
+            } bg-clip-text text-transparent`}>
+              Şəhadətnamə Müraciəti
+            </h1>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Bu bölmə hazırlanır
+              Kateqoriya seçin və müraciət edin
             </p>
           </div>
-        </Card>
+        </div>
+
+        {/* Certificate Types Selection Header */}
+        <div className="mb-4">
+          <h3 className={`text-xl font-black mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+            Kateqoriya Seçin
+          </h3>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Bir və ya bir neçə kateqoriya seçə bilərsiniz
+          </p>
+        </div>
+
+        {/* Certificate Types Selection */}
+        <SlideTransition direction="up" delay={100}>
+          <div className="mb-6">
+            <div className="grid grid-cols-2 gap-3">
+              {certificateOptions.map((option, index) => (
+                <ScaleIn key={option.type} delay={200 + (index * 30)}>
+                  <button
+                    onClick={() => handleTypeSelection(option.type)}
+                    className={`relative w-full h-32 p-4 rounded-3xl border transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                      selectedTypes.includes(option.type)
+                        ? isDarkMode
+                          ? 'bg-gradient-to-br from-emerald-600 to-green-600 border-emerald-500 shadow-lg text-white'
+                          : 'bg-gradient-to-br from-emerald-500 to-green-500 border-emerald-400 shadow-lg text-white'
+                        : isDarkMode
+                          ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600 text-gray-200'
+                          : 'bg-white/80 border-gray-200 hover:border-gray-300 text-gray-800'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center justify-center gap-1 h-full text-center">
+                      <div className="text-xl">
+                        {option.emoji}
+                      </div>
+                      <div className={`font-bold text-sm leading-tight ${
+                        selectedTypes.includes(option.type)
+                          ? 'text-white'
+                          : isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                      }`}>
+                        {option.label}
+                      </div>
+                      <div className={`text-xs leading-tight opacity-80 ${
+                        selectedTypes.includes(option.type)
+                          ? 'text-white/90'
+                          : isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        {option.description}
+                      </div>
+                    </div>
+                    {selectedTypes.includes(option.type) && (
+                      <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <span className="text-white text-sm">✓</span>
+                      </div>
+                    )}
+                  </button>
+                </ScaleIn>
+              ))}
+            </div>
+          </div>
+        </SlideTransition>
+
+        {/* Application Button */}
+        {selectedTypes.length > 0 && (
+          <ScaleIn delay={500}>
+            <div className="mt-6">
+              <button
+                ref={applicationButtonRef}
+                onClick={handleApplicationClick}
+                className="w-full py-5 rounded-3xl font-bold text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+              >
+                📝 Müraciət Et ({selectedTypes.length} kateqoriya seçildi)
+              </button>
+            </div>
+          </ScaleIn>
+        )}
       </div>
+
+      {/* Application Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-lg"
+            onClick={() => setShowModal(false)}
+          ></div>
+          
+          {/* Modal */}
+          <ScaleIn delay={0}>
+            <div className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl transition-all duration-300 ${
+              isDarkMode 
+                ? 'bg-gradient-to-br from-gray-800 to-slate-800' 
+                : 'bg-gradient-to-br from-white to-gray-50'
+            }`}>
+              {/* Header */}
+              <div className={`sticky top-0 z-10 backdrop-blur-xl border-b p-6 flex items-center justify-between ${
+                isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+              }`}>
+                <div>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    Müraciət Forması
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Məlumatları doldurun
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Form Content */}
+              <div className="p-6 space-y-6">
+                {/* Selected Categories */}
+                <div>
+                  <label className={`block text-sm font-semibold mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Seçilmiş Kateqoriyalar
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {formData.selectedTypes.map((type) => {
+                      const option = certificateOptions.find(o => o.type === type);
+                      return (
+                        <div
+                          key={type}
+                          className={`px-4 py-2 rounded-xl font-medium flex items-center gap-2 ${
+                            isDarkMode 
+                              ? 'bg-emerald-600/30 text-emerald-300 border border-emerald-500/50' 
+                              : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                          }`}
+                        >
+                          <span>{option?.emoji}</span>
+                          <span>{option?.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Region Selection */}
+                <div>
+                  <label className={`block text-sm font-semibold mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Rayon/Şəhər
+                  </label>
+                  <select
+                    value={formData.region}
+                    onChange={(e) => setFormData((prev: ApplicationFormData) => ({ ...prev, region: e.target.value }))}
+                    className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                        : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+                    }`}
+                  >
+                    <option value="">Seçin</option>
+                    {AZERBAIJAN_REGIONS.map(region => (
+                      <option key={region} value={region}>{region}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Full Address */}
+                <div>
+                  <label className={`block text-sm font-semibold mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                    Tam Ünvan
+                  </label>
+                  <textarea
+                    value={formData.fullAddress}
+                    onChange={(e) => setFormData((prev: ApplicationFormData) => ({ ...prev, fullAddress: e.target.value }))}
+                    placeholder="Dəqiq ünvanınızı daxil edin..."
+                    rows={3}
+                    className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 resize-none ${
+                      isDarkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                    }`}
+                  />
+                </div>
+
+                {/* Terms Agreement */}
+                <div className="flex items-start gap-3">
+                  <button
+                    onClick={() => setFormData((prev: ApplicationFormData) => ({ ...prev, termsAgreed: !prev.termsAgreed }))}
+                    className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 ${
+                      formData.termsAgreed
+                        ? 'bg-emerald-500 border-emerald-500'
+                        : isDarkMode ? 'border-gray-600' : 'border-gray-300'
+                    }`}
+                  >
+                    {formData.termsAgreed && (
+                      <span className="text-white text-sm">✓</span>
+                    )}
+                  </button>
+                  <div className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <button
+                      onClick={() => setShowTermsModal(true)}
+                      className={`underline hover:no-underline transition-all duration-200 ${
+                        isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+                      }`}
+                    >
+                      Şərtlərlə
+                    </button>
+                    {' '}tanış oldum və qəbul edirəm
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!formData.region || !formData.fullAddress || !formData.termsAgreed}
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+                      formData.region && formData.fullAddress && formData.termsAgreed
+                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
+                        : isDarkMode 
+                          ? 'bg-gray-700 text-gray-400'
+                          : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
+                  Müraciət Göndər
+                </button>
+              </div>
+            </div>
+          </ScaleIn>
+        </div>
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowTermsModal(false)}
+          ></div>
+          
+          {/* Modal */}
+          <ScaleIn delay={0}>
+            <div className={`relative w-full max-w-lg max-h-[90vh] overflow-hidden rounded-3xl shadow-2xl transition-all duration-300 ${
+              isDarkMode 
+                ? 'bg-gradient-to-br from-gray-800 to-slate-800 border border-gray-700/50' 
+                : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
+            }`}>
+              {/* Modal Header */}
+              <div className={`sticky top-0 z-10 backdrop-blur-lg border-b p-6 flex items-center justify-between ${
+                isDarkMode ? 'border-gray-700/50' : 'border-gray-200/50'
+              }`}>
+                <div>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    İstifadə Şərtləri
+                  </h3>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Şərtləri oxuyun və qəbul edin
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowTermsModal(false)}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Terms Content */}
+              <div className="p-6 overflow-y-auto max-h-[60vh]">
+                <div className={`text-sm leading-relaxed space-y-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      1. Ümumi Şərtlər
+                    </h4>
+                    <p>
+                      Sürücülük şəhadətnaməsi üçün müraciət edərkən, siz aşağıdakı şərtləri qəbul etmiş olursunuz. Bu şərtlər qanunvericilik çərçivəsində hazırlanmışdır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      2. Şəxsi Məlumatların Emalı
+                    </h4>
+                    <p>
+                      Təqdim etdiyiniz şəxsi məlumatlar yalnız sürücülük şəhadətnaməsi verilməsi məqsədi ilə istifadə olunacaq və qanunvericilik çərçivəsində qorunacaqdır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      3. Sənədlərin Düzgünlüyü
+                    </h4>
+                    <p>
+                      Təqdim edilən bütün məlumatların düzgün və həqiqi olması tələb olunur. Yalan məlumat təqdim etmək halında müraciət rədd edilə bilər.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      4. Müraciətin Emalı
+                    </h4>
+                    <p>
+                      Müraciətiniz qəbul edildikdən sonra 15 iş günü ərzində nəticə barədə məlumat veriləcəkdir. Əlavə sənədlər tələb oluna bilər.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      5. Ödəniş Şərtləri
+                    </h4>
+                    <p>
+                      Şəhadətnamə üçün müəyyən edilmiş dövlət rüsumu ödənilməlidir. Ödəniş qəbul edildikdən sonra geri qaytarılmır.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 className={`font-bold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                      6. Məsuliyyət
+                    </h4>
+                    <p>
+                      Bu şərtləri qəbul etməklə, siz bütün tələbləri yerinə yetirməyi və müvafiq cavabdehliyi daşımağı öhdəyə götürürsünüz.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className={`sticky bottom-0 p-6 border-t ${
+                isDarkMode ? 'border-gray-700/50 bg-gray-800/80' : 'border-gray-200/50 bg-white/80'
+              } backdrop-blur-lg`}>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowTermsModal(false)}
+                    className={`flex-1 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    Bağla
+                  </button>
+                  <button
+                    onClick={handleTermsRead}
+                    className="flex-1 py-3 rounded-2xl font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Oxudum
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ScaleIn>
+        </div>
+      )}
+
+      {/* Success Notification */}
+      {showSuccessNotification && (
+        <div className="fixed top-4 left-4 right-4 z-50">
+          <ScaleIn delay={0}>
+            <div className={`p-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 shadow-2xl ${
+              isDarkMode 
+                ? 'bg-gradient-to-r from-emerald-900/90 to-green-900/90 border-emerald-700/50 backdrop-blur-lg' 
+                : 'bg-gradient-to-r from-emerald-50/90 to-green-50/90 border-emerald-200/50 backdrop-blur-lg'
+            }`}>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                isDarkMode ? 'bg-emerald-800/50' : 'bg-emerald-100/80'
+              }`}>
+                <EmojiIcon emoji="✅" size={24} />
+              </div>
+              <div className="flex-1">
+                <div className={`text-sm font-bold mb-1 ${
+                  isDarkMode ? 'text-emerald-200' : 'text-emerald-900'
+                }`}>
+                  Müraciət Göndərildi!
+                </div>
+                <div className={`text-xs ${
+                  isDarkMode ? 'text-emerald-300/80' : 'text-emerald-700/80'
+                }`}>
+                  Müraciətiniz uğurla qəbul edildi və emal ediləcək.
+                </div>
+              </div>
+            </div>
+          </ScaleIn>
+        </div>
+      )}
     </div>
   );
 }
