@@ -545,11 +545,11 @@ export function PackagesScreen() {
                             </div>
                           </div>
                         </button>
-                        </div>
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                );
+              })}
               </div>
             
             {/* Navigation Dots & Tab Switcher */}
