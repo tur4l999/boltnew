@@ -12,7 +12,7 @@ export function HomeScreen() {
   const { t, navigate, hasActivePackage, isDarkMode, activatePackageNow, activePackage } = useApp();
   
   const gridItems = [
-    // Əsas bölmələr (7 ədəd):
+    // Əsas bölmələr (10 ədəd):
     { key: 'video3d', label: t.videoLessons, action: () => navigate('Lesson', { moduleId: 'M8', tab: 'video3d' }), emoji: '🎬' },
     { key: 'quick', label: 'Sürətli test', action: () => navigate('QuickTest', { ticket: 1 }), emoji: '📝' },
     { key: 'onlineLesson', label: t.onlineLesson, action: () => navigate('OnlineLessons'), emoji: '👨‍🏫' },
@@ -21,21 +21,18 @@ export function HomeScreen() {
     { key: 'tests', label: t.tests, action: () => navigate('Exam', { defaultTab: 'byTickets' }), emoji: '📄' },
     { key: 'articles', label: t.articles, action: () => navigate('Rules'), emoji: '📜' },
     { key: 'fines', label: t.fines, action: () => navigate('Fines'), emoji: '💸' },
-
-    // Əlavə bölmələr (secondary):
     { key: 'premiumBooks', label: 'PDF (kitablar)', action: () => navigate('SecurePdf'), emoji: '📚' },
     { key: 'packages', label: 'Təlim paketləri', action: () => navigate('Packages'), emoji: '📦' },
+
+    // Əlavə bölmələr (secondary):
     { key: 'certificate', label: 'Şəhadətnamə', action: () => navigate('CertificateApplication'), emoji: '🎓' },
     { key: 'practiceLab', label: t.drivingPractice, action: () => navigate('DrivingPractice'), emoji: '🚗' },
     { key: 'appeals', label: 'Apellyasiyalar', action: () => navigate('Appeals'), emoji: '📮' },
     { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
-
-    // Bölmə sonu: Yekun imtahan
-    { key: 'finalExam', label: 'Yekun imtahan', action: () => navigate('ExamConfig', { mode: 'final' }), emoji: '📋' },
   ];
   
-  const primaryItems = gridItems.slice(0, 7);
-  const secondaryItems = gridItems.slice(7);
+  const primaryItems = gridItems.slice(0, 10);
+  const secondaryItems = gridItems.slice(10);
 
   function toRows(items: typeof gridItems) {
     const result = [] as typeof gridItems[];
