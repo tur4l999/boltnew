@@ -45,11 +45,34 @@ export function PackagesScreen() {
   const [insufficientTrainingPrice, setInsufficientTrainingPrice] = useState<number>(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState<null | { packageId: string; scheduledAt: Date }>(null);
   const [paymentMethod, setPaymentMethod] = useState<'balance' | 'card'>('balance');
+  
+  // Carousel state
+  const [currentPackageIndex, setCurrentPackageIndex] = useState<number>(1); // Start with popular (standart)
+  const [touchStart, setTouchStart] = useState<number>(0);
+  const [touchEnd, setTouchEnd] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragOffset, setDragOffset] = useState<number>(0);
 
   useEffect(() => {
     const id = setInterval(() => setNowTs(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (activeTab !== 'training') return;
+      
+      if (e.key === 'ArrowLeft') {
+        prevPackage();
+      } else if (e.key === 'ArrowRight') {
+        nextPackage();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentPackageIndex, activeTab]);
 
   function formatRemaining(ms: number): string {
     const totalSeconds = Math.max(0, Math.floor(ms / 1000));
@@ -232,6 +255,87 @@ export function PackagesScreen() {
     return 'w-full';
   }
 
+  // Carousel handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    setTouchEnd(e.touches[0].clientX);
+    const offset = e.touches[0].clientX - touchStart;
+    setDragOffset(offset);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const swipeThreshold = 50;
+    const distance = touchStart - touchEnd;
+    
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0 && currentPackageIndex < packages.length - 1) {
+        // Swipe left - next package
+        setCurrentPackageIndex(prev => prev + 1);
+      } else if (distance < 0 && currentPackageIndex > 0) {
+        // Swipe right - previous package
+        setCurrentPackageIndex(prev => prev - 1);
+      }
+    }
+    
+    setDragOffset(0);
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setTouchStart(e.clientX);
+    setIsDragging(true);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setTouchEnd(e.clientX);
+    const offset = e.clientX - touchStart;
+    setDragOffset(offset);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const swipeThreshold = 50;
+    const distance = touchStart - touchEnd;
+    
+    if (Math.abs(distance) > swipeThreshold) {
+      if (distance > 0 && currentPackageIndex < packages.length - 1) {
+        setCurrentPackageIndex(prev => prev + 1);
+      } else if (distance < 0 && currentPackageIndex > 0) {
+        setCurrentPackageIndex(prev => prev - 1);
+      }
+    }
+    
+    setDragOffset(0);
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
+  const goToPackage = (index: number) => {
+    setCurrentPackageIndex(index);
+  };
+
+  const nextPackage = () => {
+    if (currentPackageIndex < packages.length - 1) {
+      setCurrentPackageIndex(prev => prev + 1);
+    }
+  };
+
+  const prevPackage = () => {
+    if (currentPackageIndex > 0) {
+      setCurrentPackageIndex(prev => prev - 1);
+    }
+  };
+
   return (
     <div className={`relative min-h-screen transition-all duration-300 ${
       isDarkMode 
@@ -336,23 +440,48 @@ export function PackagesScreen() {
         </div>
 
         {activeTab === 'training' && (
-          <div className="grid grid-cols-1 gap-4">
-            {packages.map((pkg, index) => (
-              <div key={pkg.id} className="relative group">
-                {/* Modern Package Card - Enhanced for Basic Package */}
-                <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-2xl ${
-                  pkg.id === 'basic'
-                    ? isDarkMode
-                      ? 'bg-gradient-to-br from-red-900/40 via-orange-900/30 to-red-800/40 border-red-500/50 shadow-red-500/30 shadow-xl min-h-[420px]'
-                      : 'bg-gradient-to-br from-red-50 via-orange-50 to-red-100 border-red-300/50 shadow-red-500/30 shadow-xl min-h-[420px]'
-                    : pkg.popular 
-                      ? isDarkMode 
-                        ? 'bg-gradient-to-br from-emerald-900/40 via-green-900/30 to-emerald-800/40 border-emerald-500/50 shadow-emerald-500/20 shadow-lg'
-                        : 'bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-100 border-emerald-300/50 shadow-emerald-500/20 shadow-lg'
-                      : isDarkMode
-                        ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600/70'
-                        : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70'
-                }`}>
+          <div className="relative">
+            {/* Carousel Container */}
+            <div 
+              className={`relative overflow-hidden transition-all duration-200 ${
+                isDragging ? 'cursor-grabbing scale-[0.98]' : 'cursor-grab'
+              }`}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={() => {
+                if (isDragging) {
+                  handleMouseUp();
+                }
+              }}
+            >
+              <div 
+                className="flex transition-transform duration-500 ease-out"
+                style={{
+                  transform: `translateX(calc(-${currentPackageIndex * 100}% + ${dragOffset}px))`,
+                  transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                }}
+              >
+                {packages.map((pkg, index) => (
+                  <div key={pkg.id} className="w-full flex-shrink-0 px-2">
+                    <div className="relative group">
+                      {/* Modern Package Card - Enhanced for Basic Package */}
+                      <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 ${
+                        pkg.id === 'basic'
+                          ? isDarkMode
+                            ? 'bg-gradient-to-br from-red-900/40 via-orange-900/30 to-red-800/40 border-red-500/50 shadow-red-500/30 shadow-xl min-h-[420px]'
+                            : 'bg-gradient-to-br from-red-50 via-orange-50 to-red-100 border-red-300/50 shadow-red-500/30 shadow-xl min-h-[420px]'
+                          : pkg.popular 
+                            ? isDarkMode 
+                              ? 'bg-gradient-to-br from-emerald-900/40 via-green-900/30 to-emerald-800/40 border-emerald-500/50 shadow-emerald-500/20 shadow-lg'
+                              : 'bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-100 border-emerald-300/50 shadow-emerald-500/20 shadow-lg'
+                            : isDarkMode
+                              ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600/70'
+                              : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70'
+                      }`}>
                   
 
                   {/* Enhanced Popular Badge - INVERTED design with bottom rounded */}
@@ -619,11 +748,100 @@ export function PackagesScreen() {
                       </div>
                     </button>
                   </div>
-                </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-        </div>
-      )}
+            </div>
+
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevPackage}
+              disabled={currentPackageIndex === 0}
+              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                currentPackageIndex === 0
+                  ? 'opacity-0 pointer-events-none'
+                  : isDarkMode
+                    ? 'bg-gray-800/90 hover:bg-gray-700/90 text-gray-200 border-2 border-gray-600/50'
+                    : 'bg-white/90 hover:bg-gray-50/90 text-gray-700 border-2 border-gray-300/50'
+              } backdrop-blur-sm hover:scale-110 active:scale-95 shadow-xl`}
+              aria-label="Əvvəlki paket"
+            >
+              <span className="text-2xl">‹</span>
+            </button>
+
+            <button
+              onClick={nextPackage}
+              disabled={currentPackageIndex === packages.length - 1}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+                currentPackageIndex === packages.length - 1
+                  ? 'opacity-0 pointer-events-none'
+                  : isDarkMode
+                    ? 'bg-gray-800/90 hover:bg-gray-700/90 text-gray-200 border-2 border-gray-600/50'
+                    : 'bg-white/90 hover:bg-gray-50/90 text-gray-700 border-2 border-gray-300/50'
+              } backdrop-blur-sm hover:scale-110 active:scale-95 shadow-xl`}
+              aria-label="Növbəti paket"
+            >
+              <span className="text-2xl">›</span>
+            </button>
+
+            {/* Package Indicators (Dots) */}
+            <div className="flex justify-center items-center gap-2 mt-6">
+              {packages.map((pkg, index) => (
+                <button
+                  key={pkg.id}
+                  onClick={() => goToPackage(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    currentPackageIndex === index
+                      ? pkg.popular
+                        ? 'w-10 h-3 bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30'
+                        : pkg.id === 'basic'
+                          ? 'w-10 h-3 bg-gradient-to-r from-red-500 to-orange-500 shadow-lg shadow-red-500/30'
+                          : 'w-10 h-3 bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/30'
+                      : isDarkMode
+                        ? 'w-3 h-3 bg-gray-600 hover:bg-gray-500'
+                        : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  aria-label={`${pkg.name} paketinə get`}
+                />
+              ))}
+            </div>
+
+            {/* Package Name Indicator */}
+            <div className="text-center mt-4">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 backdrop-blur-sm transition-all duration-300 ${
+                packages[currentPackageIndex]?.popular
+                  ? isDarkMode
+                    ? 'bg-emerald-900/30 border-emerald-500/30 text-emerald-300'
+                    : 'bg-emerald-50 border-emerald-300/50 text-emerald-700'
+                  : packages[currentPackageIndex]?.id === 'basic'
+                    ? isDarkMode
+                      ? 'bg-red-900/30 border-red-500/30 text-red-300'
+                      : 'bg-red-50 border-red-300/50 text-red-700'
+                    : isDarkMode
+                      ? 'bg-gray-800/50 border-gray-600/50 text-gray-300'
+                      : 'bg-white/50 border-gray-300/50 text-gray-700'
+              }`}>
+                <span className="text-lg">
+                  {packages[currentPackageIndex]?.id === 'basic' ? '🎯' : packages[currentPackageIndex]?.id === 'standart' ? '⭐' : '👑'}
+                </span>
+                <span className="font-bold text-sm">
+                  {packages[currentPackageIndex]?.name}
+                </span>
+              </div>
+            </div>
+
+            {/* Swipe Hint */}
+            <div className="text-center mt-3 animate-pulse">
+              <div className={`inline-flex items-center gap-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                <span>←</span>
+                <span>Paketlər arasında keçid üçün sürüşdürün</span>
+                <span>→</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {activeTab === 'other' && (
           <div className="space-y-4">
