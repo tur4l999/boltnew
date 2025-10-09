@@ -523,11 +523,10 @@ export function PackagesScreen() {
                 })}
               </div>
             </div>
-          </div>
-
-          {/* Navigation Dots & Tab Switcher */}
-          <div className="absolute bottom-0 left-0 right-0 z-30 pb-6">
-            <div className={`mx-4 rounded-2xl backdrop-blur-xl border p-4 ${
+            
+            {/* Navigation Dots & Tab Switcher */}
+            <div className="absolute bottom-0 left-0 right-0 z-30 pb-6">
+              <div className={`mx-4 rounded-2xl backdrop-blur-xl border p-4 ${
               isDarkMode 
                 ? 'bg-gray-900/90 border-gray-700/50' 
                 : 'bg-white/90 border-gray-200/50'
@@ -591,6 +590,7 @@ export function PackagesScreen() {
                 </button>
               </div>
             </div>
+          </div>
           </div>
         </div>
       ) : (
