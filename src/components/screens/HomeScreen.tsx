@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
-import { Progress } from '../ui/Progress';
 import { FadeInUp } from '../ui/FadeInUp';
 import { SlideTransition } from '../ui/SlideTransition';
 import { ScaleIn } from '../ui/ScaleIn';
@@ -139,44 +138,6 @@ export function HomeScreen() {
           </div>
         </ScaleIn>
       )}
-
-      {/* Compact Modern Progress Card */}
-      <FadeInUp delay={200}>
-        <Card className={`mb-4 p-3.5 transition-all duration-300 hover:shadow-lg group ${
-          isDarkMode 
-            ? 'bg-gradient-to-r from-emerald-900/20 to-green-900/20 border-emerald-700/40' 
-            : 'bg-gradient-to-r from-emerald-50/50 to-green-50/50 border-emerald-200/40'
-        } backdrop-blur-sm`}>
-          <div className="flex items-center gap-3">
-            {/* Icon */}
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${
-              isDarkMode ? 'bg-emerald-800/40' : 'bg-emerald-100/60'
-            }`}>
-              <span className="text-lg">📈</span>
-            </div>
-            
-            {/* Progress info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className={`text-xs font-bold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
-                  {t.progress}
-                </span>
-                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                  isDarkMode ? 'bg-emerald-800/50 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
-                }`}>
-                  42%
-                </span>
-              </div>
-              
-              <Progress value={42} className="h-1.5 mb-1.5" variant="animated" />
-              
-              <div className={`text-xs font-medium truncate ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <span className={`${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} font-semibold`}>M8: Yol nişanları</span>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </FadeInUp>
 
       {/* Enhanced Primary Section */}
       <Card className={`mb-4 transition-all duration-300 hover:shadow-lg ${
