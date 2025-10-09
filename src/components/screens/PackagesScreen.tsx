@@ -522,7 +522,6 @@ export function PackagesScreen() {
                   );
                 })}
               </div>
-            </div>
             
             {/* Navigation Dots & Tab Switcher */}
             <div className="absolute bottom-0 left-0 right-0 z-30 pb-6">
@@ -590,7 +589,6 @@ export function PackagesScreen() {
                 </button>
               </div>
             </div>
-          </div>
           </div>
         </div>
       ) : (
