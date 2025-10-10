@@ -1470,53 +1470,61 @@ export function PackagesScreen() {
                     <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       💳 Ödəniş üsulu
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-3">
                       <button
                         onClick={() => setOtherPaymentMethod('balance')}
-                        className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                        className={`w-full relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
                           otherPaymentMethod === 'balance'
-                            ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/30 scale-105'
+                            ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/30'
                             : isDarkMode
                               ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-emerald-500/50'
                               : 'bg-white border-gray-200 text-gray-700 hover:border-emerald-400/50'
-                        } hover:scale-105 active:scale-95`}
+                        } hover:scale-[1.02] active:scale-95`}
                       >
-                        <div className="flex flex-col items-center gap-2">
-                          <span className="text-2xl">💰</span>
-                          <span className="text-xs">Balans</span>
-                          <span className={`text-[10px] ${otherPaymentMethod === 'balance' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                            {balance} AZN
-                          </span>
-                        </div>
-                        {otherPaymentMethod === 'balance' && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-xs font-black text-gray-900">✓</span>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="text-3xl">💰</span>
+                            <div className="text-left">
+                              <div className="text-sm font-bold">Balans</div>
+                              <div className={`text-xs ${otherPaymentMethod === 'balance' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                                {balance} AZN mövcuddur
+                              </div>
+                            </div>
                           </div>
-                        )}
+                          {otherPaymentMethod === 'balance' && (
+                            <div className="w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                              <span className="text-sm font-black text-gray-900">✓</span>
+                            </div>
+                          )}
+                        </div>
                       </button>
                       
                       <button
                         onClick={() => setOtherPaymentMethod('card')}
-                        className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                        className={`w-full relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
                           otherPaymentMethod === 'card'
-                            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-400 shadow-xl shadow-blue-500/30 scale-105'
+                            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-400 shadow-xl shadow-blue-500/30'
                             : isDarkMode
                               ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-blue-500/50'
                               : 'bg-white border-gray-200 text-gray-700 hover:border-blue-400/50'
-                        } hover:scale-105 active:scale-95`}
+                        } hover:scale-[1.02] active:scale-95`}
                       >
-                        <div className="flex flex-col items-center gap-2">
-                          <span className="text-2xl">💳</span>
-                          <span className="text-xs">Kart</span>
-                          <span className={`text-[10px] ${otherPaymentMethod === 'card' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                            Visa/Master
-                          </span>
-                        </div>
-                        {otherPaymentMethod === 'card' && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-xs font-black text-gray-900">✓</span>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <span className="text-3xl">💳</span>
+                            <div className="text-left">
+                              <div className="text-sm font-bold">Kart</div>
+                              <div className={`text-xs ${otherPaymentMethod === 'card' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                                Visa / Mastercard
+                              </div>
+                            </div>
                           </div>
-                        )}
+                          {otherPaymentMethod === 'card' && (
+                            <div className="w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                              <span className="text-sm font-black text-gray-900">✓</span>
+                            </div>
+                          )}
+                        </div>
                       </button>
                     </div>
                   </div>
