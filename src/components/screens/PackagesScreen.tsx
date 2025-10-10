@@ -337,76 +337,59 @@ export function PackagesScreen() {
   };
 
   return (
-    <div className={`relative min-h-screen transition-all duration-500 overflow-hidden ${
+    <div className={`relative min-h-screen transition-all duration-300 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-gray-950 via-gray-900 to-black' 
-        : 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
+        ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
     }`}>
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-30 animate-pulse ${
-          isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-300/40'
-        }`} style={{ animationDuration: '4s' }}></div>
-        <div className={`absolute -bottom-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 animate-pulse ${
-          isDarkMode ? 'bg-purple-500/20' : 'bg-purple-300/40'
-        }`} style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
-        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl opacity-10 animate-pulse ${
-          isDarkMode ? 'bg-blue-500/20' : 'bg-blue-300/40'
-        }`} style={{ animationDuration: '5s', animationDelay: '2s' }}></div>
-      </div>
 
-      {/* Ultra Modern Header with Glassmorphism */}
-      <div className={`sticky top-0 z-50 backdrop-blur-2xl border-b transition-all duration-500 ${
+      {/* Modern Header */}
+      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-all duration-300 ${
         isDarkMode 
-          ? 'bg-gray-900/70 border-gray-700/30 shadow-xl shadow-black/20' 
-          : 'bg-white/70 border-gray-200/40 shadow-xl shadow-gray-300/20'
+          ? 'bg-gray-900/80 border-gray-700/50' 
+          : 'bg-white/80 border-gray-200/50'
       }`}>
-        <div className="px-5 py-5">
+        <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={goBack}
-                className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 group backdrop-blur-xl ${
+                className={`w-11 h-11 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 group ${
                   isDarkMode 
-                    ? 'border-gray-600/40 bg-gradient-to-br from-gray-800/60 to-gray-900/60 hover:from-gray-700/80 hover:to-gray-800/80 hover:border-emerald-500/50 text-gray-200 shadow-lg shadow-black/30' 
-                    : 'border-gray-300/40 bg-gradient-to-br from-white/60 to-gray-50/60 hover:from-gray-50/80 hover:to-white/80 hover:border-emerald-400/50 text-gray-700 shadow-lg shadow-gray-400/30'
-                } hover:scale-110 active:scale-95`}
+                    ? 'border-gray-600/50 bg-gray-800/50 hover:bg-gray-700/80 hover:border-gray-500 text-gray-200' 
+                    : 'border-gray-300/50 bg-white/50 hover:bg-gray-50/80 hover:border-gray-400 text-gray-700'
+                } hover:scale-105 active:scale-95`}
               >
-                <span className="text-xl font-bold group-hover:translate-x-[-3px] transition-transform duration-300">←</span>
+                <span className="text-lg group-hover:translate-x-[-2px] transition-transform duration-200">←</span>
               </button>
               <div>
-                <h1 className={`text-2xl font-black tracking-tight transition-colors duration-300 bg-gradient-to-r bg-clip-text ${
-                  isDarkMode 
-                    ? 'from-emerald-400 via-green-400 to-teal-400 text-transparent' 
-                    : 'from-emerald-600 via-green-600 to-teal-600 text-transparent'
+                <h1 className={`text-2xl font-black tracking-tight transition-colors duration-200 ${
+                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
                 }`}>Təlim Paketləri</h1>
-                <p className={`text-sm font-medium transition-colors duration-300 ${
+                <p className={`text-sm transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>✨ Premium təhsil həlləri</p>
+                }`}>Premium təlim həlləri</p>
               </div>
             </div>
             
-            {/* Premium Balance Display */}
-            <div className={`relative px-5 py-3 rounded-2xl border-2 backdrop-blur-xl transition-all duration-500 overflow-hidden group hover:scale-105 ${
+            {/* Balance Display */}
+            <div className={`relative px-4 py-2.5 rounded-2xl border-2 backdrop-blur-sm transition-all duration-300 ${
               isDarkMode 
-                ? 'bg-gradient-to-br from-emerald-900/40 to-green-900/40 border-emerald-500/40 shadow-lg shadow-emerald-500/20' 
-                : 'bg-gradient-to-br from-emerald-50/80 to-green-50/80 border-emerald-300/60 shadow-lg shadow-emerald-500/20'
+                ? 'bg-gradient-to-r from-emerald-900/30 to-green-900/30 border-emerald-500/30' 
+                : 'bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200/50'
             }`}>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-emerald-400/20 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${
-                    isDarkMode ? 'bg-emerald-400 shadow-emerald-400/50' : 'bg-emerald-500 shadow-emerald-500/50'
-                  }`}></div>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${
-                    isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                  }`}>Balans</span>
-                </div>
-                <div className={`text-xl font-black ${
-                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                }`}>
-                  {balance} AZN
-                </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full animate-pulse ${
+                  isDarkMode ? 'bg-emerald-400' : 'bg-emerald-500'
+                }`}></div>
+                <span className={`text-xs font-medium ${
+                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                }`}>Balans</span>
+              </div>
+              <div className={`text-lg font-black ${
+                isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+              }`}>
+                {balance} AZN
               </div>
             </div>
           </div>
@@ -414,43 +397,45 @@ export function PackagesScreen() {
       </div>
 
       <div className="px-3 pb-20 pt-4">
-        {/* Ultra Modern Filter Buttons */}
-        <div className="flex items-center justify-center mb-6 relative z-10">
-          <div className={`flex items-center gap-3 p-1.5 rounded-3xl border-2 backdrop-blur-2xl transition-all duration-500 shadow-2xl ${
+        {/* Filter Buttons */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            {activeTab === 'training' ? 'Təlim Paketləri' : 'Digər Paketlər'}
+          </h2>
+          
+          <div className={`flex items-center gap-2 p-1 rounded-2xl border transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-gray-900/60 border-gray-700/40 shadow-black/30' 
-              : 'bg-white/60 border-gray-200/40 shadow-gray-400/20'
+              ? 'bg-gray-800/50 border-gray-700/50' 
+              : 'bg-white/50 border-gray-200/50'
           }`}>
             <button
               onClick={() => setActiveTab('training')}
-              className={`px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-500 flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                 activeTab === 'training'
                   ? isDarkMode 
-                    ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg shadow-emerald-500/40 scale-105' 
-                    : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-500/40 scale-105'
+                    ? 'bg-emerald-600 text-white shadow-md' 
+                    : 'bg-emerald-500 text-white shadow-md'
                   : isDarkMode
-                    ? 'text-gray-400 hover:text-gray-200 hover:scale-105'
-                    : 'text-gray-600 hover:text-gray-800 hover:scale-105'
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              <span className="text-lg">🎓</span>
-              <span>Təlim</span>
+              🎓 Təlim
             </button>
             
             <button
               onClick={() => setActiveTab('other')}
-              className={`px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-500 flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
                 activeTab === 'other'
                   ? isDarkMode 
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/40 scale-105' 
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/40 scale-105'
+                    ? 'bg-purple-600 text-white shadow-md' 
+                    : 'bg-purple-500 text-white shadow-md'
                   : isDarkMode
-                    ? 'text-gray-400 hover:text-gray-200 hover:scale-105'
-                    : 'text-gray-600 hover:text-gray-800 hover:scale-105'
+                    ? 'text-gray-400 hover:text-gray-200'
+                    : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              <span className="text-lg">🎁</span>
-              <span>Digər</span>
+              📦 Digər
             </button>
           </div>
         </div>
@@ -887,51 +872,51 @@ export function PackagesScreen() {
         )}
 
         {activeTab === 'other' && (
-          <div className="space-y-6 relative z-10">
-            {/* Ultra Modern Other Packages Section */}
-            <div className={`rounded-[2rem] border-2 backdrop-blur-2xl p-6 transition-all duration-500 shadow-2xl ${
+          <div className="space-y-4">
+            {/* Modern Other Packages Section */}
+            <div className={`rounded-2xl border backdrop-blur-sm p-4 transition-all duration-300 ${
               isDarkMode 
-                ? 'bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700/60 shadow-black/30' 
-                : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-300/60 shadow-gray-400/20'
+                ? 'bg-gray-800/60 border-gray-700/50' 
+                : 'bg-white/60 border-gray-200/50'
             }`}>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 {otherItems.map(item => (
-                  <div key={item.id} className={`relative group rounded-2xl border-2 p-4 text-center transition-all duration-500 hover:scale-[1.05] shadow-lg ${
+                  <div key={item.id} className={`relative group rounded-xl border p-3 text-center transition-all duration-300 hover:scale-[1.02] ${
                     isDarkMode 
-                      ? 'bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-purple-700/50 hover:border-purple-500/70 shadow-purple-900/20' 
-                      : 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300/50 hover:border-purple-400/70 shadow-purple-400/20'
+                      ? 'bg-gray-800/40 border-gray-700/40 hover:border-gray-600/60' 
+                      : 'bg-white/40 border-gray-200/40 hover:border-gray-300/60'
                   }`}>
-                    <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">🎟️</div>
-                    <div className={`font-black text-base mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    <div className="text-2xl mb-2">🎟️</div>
+                    <div className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                       {item.title}
                     </div>
                     {item.description && (
-                      <div className={`text-xs mb-3 font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <div className={`text-xs mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         {item.description}
                       </div>
                     )}
                     
-                    <div className="mb-4">
+                    <div className="mb-3">
                       {(() => {
                         const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
                         return (
                           <div className="text-center">
-                            <div className="flex items-center justify-center gap-2 mb-2">
-                              <span className={`text-sm line-through font-semibold ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                            <div className="flex items-center justify-center gap-1 mb-1">
+                              <span className={`text-xs line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                                 {item.oldPrice} AZN
                               </span>
-                              <span className="px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg">
+                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500 text-white">
                                 -{discountPercent}%
                               </span>
                             </div>
                             <div className="flex items-baseline justify-center gap-1">
-                              <span className={`text-3xl font-black drop-shadow-lg ${
+                              <span className={`text-xl font-black ${
                                 isDarkMode ? 'text-purple-400' : 'text-purple-600'
                               }`}>
                                 {item.newPrice}
                               </span>
-                              <span className={`text-sm font-extrabold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                 AZN
                               </span>
                             </div>
@@ -942,14 +927,13 @@ export function PackagesScreen() {
                     
                     <button 
                       onClick={() => handlePurchaseOther(item)}
-                      className={`w-full relative overflow-hidden py-3 px-4 rounded-xl font-black text-sm transition-all duration-500 hover:scale-110 active:scale-95 group shadow-2xl border-2 ${
+                      className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all duration-300 hover:scale-105 active:scale-95 ${
                         isDarkMode
-                          ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white border-purple-400/60 shadow-purple-500/50'
-                          : 'bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 hover:from-purple-600 hover:via-pink-600 hover:to-purple-600 text-white border-purple-300/60 shadow-purple-500/50'
-                      }`}
+                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white'
+                          : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white'
+                      } shadow-md`}
                     >
-                      <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                      <span className="relative">Əldə et ✨</span>
+                      Əldə et
                     </button>
                   </div>
                 ))}
@@ -958,44 +942,40 @@ export function PackagesScreen() {
           </div>
         )}
 
-        {/* Ultra Modern Footer Info */}
-        <div className={`mt-8 rounded-[2rem] border-2 backdrop-blur-2xl p-6 transition-all duration-500 shadow-2xl relative z-10 ${
+        {/* Footer Info */}
+        <div className={`mt-6 rounded-2xl border backdrop-blur-sm p-4 transition-all duration-300 ${
           isDarkMode 
-            ? 'bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700/60 shadow-black/30' 
-            : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-300/60 shadow-gray-400/20'
+            ? 'bg-gray-800/60 border-gray-700/50' 
+            : 'bg-white/60 border-gray-200/50'
         }`}>
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-3 gap-3 mb-3">
             {[
-              { icon: '💳', title: 'Kart', gradient: 'from-blue-500 to-cyan-500' },
-              { icon: '📱', title: 'Mobil', gradient: 'from-purple-500 to-pink-500' },
-              { icon: '🏦', title: 'Bank', gradient: 'from-emerald-500 to-green-500' }
+              { icon: '💳', title: 'Kart' },
+              { icon: '📱', title: 'Mobil' },
+              { icon: '🏦', title: 'Bank' }
             ].map((method, index) => (
-              <div key={index} className={`relative group p-4 rounded-2xl text-center transition-all duration-500 hover:scale-110 border-2 shadow-lg ${
+              <div key={index} className={`p-2 rounded-xl text-center transition-all duration-300 ${
                 isDarkMode 
-                  ? 'bg-gradient-to-br from-gray-800/60 to-gray-900/60 border-gray-700/50 hover:border-gray-600/70 shadow-gray-900/20' 
-                  : 'bg-gradient-to-br from-white/60 to-gray-50/60 border-gray-300/50 hover:border-gray-400/70 shadow-gray-400/20'
+                  ? 'bg-gray-800/40 hover:bg-gray-700/50' 
+                  : 'bg-white/40 hover:bg-gray-50/50'
               }`}>
-                <div className="text-3xl mb-2 group-hover:scale-125 transition-transform duration-300">{method.icon}</div>
-                <div className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <div className="text-xl mb-1">{method.icon}</div>
+                <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   {method.title}
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="flex items-center justify-center flex-wrap gap-4 text-sm">
+          <div className="flex items-center justify-center gap-4 text-xs">
             {[
-              { icon: '🔒', text: 'Təhlükəsiz', color: isDarkMode ? 'text-green-400' : 'text-green-600' },
-              { icon: '⚡', text: 'Ani aktivləşmə', color: isDarkMode ? 'text-yellow-400' : 'text-yellow-600' },
-              { icon: '🎯', text: '7/24 dəstək', color: isDarkMode ? 'text-blue-400' : 'text-blue-600' }
+              { icon: '🔒', text: 'Təhlükəsiz', color: 'text-green-500' },
+              { icon: '⚡', text: 'Ani aktivləşmə', color: 'text-yellow-500' },
+              { icon: '🎯', text: '7/24 dəstək', color: 'text-blue-500' }
             ].map((item, index) => (
-              <div key={index} className={`flex items-center gap-2 px-4 py-2 rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
-                isDarkMode 
-                  ? 'bg-gray-800/60 border-gray-700/50' 
-                  : 'bg-white/60 border-gray-300/50'
-              }`}>
-                <span className={`text-lg ${item.color}`}>{item.icon}</span>
-                <span className={`font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <div key={index} className="flex items-center gap-1">
+                <span className={`${item.color}`}>{item.icon}</span>
+                <span className={`font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {item.text}
                 </span>
               </div>
