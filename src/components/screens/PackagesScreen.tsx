@@ -504,19 +504,49 @@ export function PackagesScreen() {
                           )}
                           
                           {pkg.id === 'basic' && (
-                            <div className="space-y-2 mb-2">
-                              <div className="flex justify-start">
-                                <div className="bg-yellow-400 px-3 py-1 rounded-full animate-pulse">
-                                  <span className="text-xs font-black text-red-900">🔥 ENDİRİM</span>
-                                </div>
-                              </div>
-                              {/* Endirim Vaxtı */}
-                              <div className="bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-lg">
-                                <div className="flex items-center justify-center gap-1.5">
-                                  <span className="text-xs font-bold text-yellow-300">⏰</span>
-                                  <span className="text-xs font-black text-white">
-                                    {formatRemaining(promoEndsAt - nowTs)}
-                                  </span>
+                            <div className="mb-3">
+                              {/* Modern Countdown Timer */}
+                              <div className="bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 p-0.5 rounded-2xl">
+                                <div className="bg-gray-900 rounded-2xl px-4 py-3">
+                                  <div className="flex flex-col items-center gap-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-yellow-400 text-sm">⚡</span>
+                                      <span className="text-xs font-bold text-yellow-300 uppercase tracking-wide">
+                                        Məhdud Təklif
+                                      </span>
+                                      <span className="text-yellow-400 text-sm">⚡</span>
+                                    </div>
+                                    <div className="flex items-center gap-1 mt-1">
+                                      {(() => {
+                                        const ms = promoEndsAt - nowTs;
+                                        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+                                        const days = Math.floor(totalSeconds / (24 * 3600));
+                                        const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+                                        const minutes = Math.floor((totalSeconds % 3600) / 60);
+                                        const seconds = totalSeconds % 60;
+                                        
+                                        return (
+                                          <>
+                                            <div className="bg-white/10 px-2 py-1 rounded-lg min-w-[32px] text-center">
+                                              <span className="text-white text-base font-black">{String(days).padStart(2, '0')}</span>
+                                            </div>
+                                            <span className="text-white/50 text-xs">:</span>
+                                            <div className="bg-white/10 px-2 py-1 rounded-lg min-w-[32px] text-center">
+                                              <span className="text-white text-base font-black">{String(hours).padStart(2, '0')}</span>
+                                            </div>
+                                            <span className="text-white/50 text-xs">:</span>
+                                            <div className="bg-white/10 px-2 py-1 rounded-lg min-w-[32px] text-center">
+                                              <span className="text-white text-base font-black">{String(minutes).padStart(2, '0')}</span>
+                                            </div>
+                                            <span className="text-white/50 text-xs">:</span>
+                                            <div className="bg-white/10 px-2 py-1 rounded-lg min-w-[32px] text-center">
+                                              <span className="text-white text-base font-black">{String(seconds).padStart(2, '0')}</span>
+                                            </div>
+                                          </>
+                                        );
+                                      })()}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
