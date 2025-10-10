@@ -40,6 +40,7 @@ export function PackagesScreen() {
   const [scheduledName, setScheduledName] = useState<string>('');
   const [otherModalOpen, setOtherModalOpen] = useState<null | { id: string; title: string; count: number; newPrice: number }>(null);
   const [otherModalStage, setOtherModalStage] = useState<'confirm' | 'success' | 'insufficient'>('confirm');
+  const [otherPaymentMethod, setOtherPaymentMethod] = useState<'balance' | 'card'>('balance');
   const [insufficientTrainingOpen, setInsufficientTrainingOpen] = useState<boolean>(false);
   const [insufficientTrainingName, setInsufficientTrainingName] = useState<string>('');
   const [insufficientTrainingPrice, setInsufficientTrainingPrice] = useState<number>(0);
@@ -1058,7 +1059,7 @@ export function PackagesScreen() {
                   </div>
                 </div>
 
-                <div className="p-4 overflow-y-auto">
+                <div className="p-4 overflow-y-auto scrollbar-hide">
                   {/* Package Info */}
                   <div className={`p-3 rounded-2xl mb-4 ${
                     isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
@@ -1438,97 +1439,223 @@ export function PackagesScreen() {
         </div>
       )}
 
+      {/* Modern Bilet Purchase Modal */}
       {otherModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setOtherModalOpen(null)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70 backdrop-blur-sm" onClick={() => setOtherModalOpen(null)} />
+          
+          <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+            isDarkMode ? 'bg-gray-900' : 'bg-white'
           }`}>
-            <button
-              onClick={() => setOtherModalOpen(null)}
-              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm border ${
-                isDarkMode ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-600'
-              }`}
-              aria-label="Bağla"
-            >
-              ✕
-            </button>
-
+            
             {otherModalStage === 'confirm' && (
               <>
-                <div className="text-2xl mb-2"><EmojiIcon emoji="🛍️" size={24} /></div>
-                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Alışı təsdiqlə</div>
-                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
-                  Aşağıdakı məhsulu almaq istəyirsiniz?
-                </div>
-                <div className={`p-3 rounded-lg mb-4 ${isDarkMode ? 'bg-gray-900/30 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Məhsul</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>{otherModalOpen.title}</div>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Miqdar</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-xl font-extrabold`}>{otherModalOpen.count} ədəd</div>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Qiymət</div>
-                  <div className={`text-emerald-600 text-lg font-black`}>{otherModalOpen.newPrice} AZN</div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
+                {/* Header with gradient */}
+                <div className="relative p-5 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
                   <button
                     onClick={() => setOtherModalOpen(null)}
-                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                      isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
                   >
-                    Bağla
+                    <span className="text-lg font-bold">✕</span>
                   </button>
-                  <button
-                    onClick={() => {
-                      const success = purchaseTickets(otherModalOpen.count, otherModalOpen.newPrice, otherModalOpen.title);
-                      setOtherModalStage(success ? 'success' : 'insufficient');
-                    }}
-                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
-                  >
-                    Təsdiq et
-                  </button>
+                  
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🎫</div>
+                    <h2 className="text-xl font-black mb-1">Bilet Alışı</h2>
+                    <p className="text-xs opacity-90">Ödəniş üsulunu seçin</p>
+                  </div>
+                </div>
+
+                <div className="p-4">
+                  {/* Bilet Info */}
+                  <div className={`p-3 rounded-2xl mb-4 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+                  }`}>
+                    <div className="text-center">
+                      <div className={`text-xs uppercase tracking-wider mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        Seçilən Məhsul
+                      </div>
+                      <div className={`text-xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {otherModalOpen.title}
+                      </div>
+                      <div className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {otherModalOpen.count} ədəd • {otherModalOpen.newPrice} AZN
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Payment Method Selection */}
+                  <div className="mb-4">
+                    <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      💳 Ödəniş üsulu
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        onClick={() => setOtherPaymentMethod('balance')}
+                        className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                          otherPaymentMethod === 'balance'
+                            ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/30 scale-105'
+                            : isDarkMode
+                              ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-emerald-500/50'
+                              : 'bg-white border-gray-200 text-gray-700 hover:border-emerald-400/50'
+                        } hover:scale-105 active:scale-95`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="text-2xl">💰</span>
+                          <span className="text-xs">Balans</span>
+                          <span className={`text-[10px] ${otherPaymentMethod === 'balance' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                            {balance} AZN
+                          </span>
+                        </div>
+                        {otherPaymentMethod === 'balance' && (
+                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-xs font-black text-gray-900">✓</span>
+                          </div>
+                        )}
+                      </button>
+                      
+                      <button
+                        onClick={() => setOtherPaymentMethod('card')}
+                        className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                          otherPaymentMethod === 'card'
+                            ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-400 shadow-xl shadow-blue-500/30 scale-105'
+                            : isDarkMode
+                              ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-blue-500/50'
+                              : 'bg-white border-gray-200 text-gray-700 hover:border-blue-400/50'
+                        } hover:scale-105 active:scale-95`}
+                      >
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="text-2xl">💳</span>
+                          <span className="text-xs">Kart</span>
+                          <span className={`text-[10px] ${otherPaymentMethod === 'card' ? 'text-white/80' : isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                            Visa/Master
+                          </span>
+                        </div>
+                        {otherPaymentMethod === 'card' && (
+                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-xs font-black text-gray-900">✓</span>
+                          </div>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => {
+                        const success = otherPaymentMethod === 'balance' 
+                          ? purchaseTickets(otherModalOpen.count, otherModalOpen.newPrice, otherModalOpen.title)
+                          : true; // Card payment always succeeds in demo
+                        setOtherModalStage(success ? 'success' : 'insufficient');
+                      }}
+                      className="w-full py-3 rounded-2xl font-black text-base transition-all duration-300 shadow-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white hover:scale-[1.02] active:scale-95 shadow-emerald-500/30"
+                    >
+                      {otherPaymentMethod === 'balance' ? '💰 Balansdan ödə' : '💳 Kartla ödə'}
+                    </button>
+                    
+                    <button
+                      onClick={() => setOtherModalOpen(null)}
+                      className={`w-full py-3 rounded-2xl font-bold transition-all duration-300 ${
+                        isDarkMode
+                          ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Ləğv et
+                    </button>
+                  </div>
                 </div>
               </>
             )}
 
             {otherModalStage === 'success' && (
               <>
-                <div className="text-4xl mb-2">✅</div>
-                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Uğurlu əməliyyat</div>
-                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
-                  {otherModalOpen?.title} ({otherModalOpen?.count} ədəd) alındı.
+                <div className="relative p-5 bg-gradient-to-br from-emerald-500 to-green-600 text-white">
+                  <div className="text-center">
+                    <div className="text-5xl mb-2">✅</div>
+                    <h2 className="text-xl font-black mb-1">Uğurlu əməliyyat</h2>
+                    <p className="text-xs opacity-90">Bilet uğurla əldə edildi</p>
+                  </div>
                 </div>
-                <button
-                  onClick={() => setOtherModalOpen(null)}
-                  className={`w-full px-4 py-2 rounded-xl font-bold min-h-[44px] ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-100' : 'bg-gray-100 hover:bg-gray-200 text-gray-800'}`}
-                >
-                  Bağla
-                </button>
+                
+                <div className="p-4">
+                  <div className={`p-4 rounded-2xl mb-4 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+                  }`}>
+                    <div className="text-center">
+                      <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mb-2`}>
+                        Aldığınız biletlər
+                      </div>
+                      <div className="text-3xl font-black bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                        {otherModalOpen?.count} 🎫
+                      </div>
+                      <div className={`text-xs mt-2 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                        {otherModalOpen?.title}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <button
+                    onClick={() => { setOtherModalOpen(null); setOtherModalStage('confirm'); }}
+                    className="w-full py-3 rounded-2xl font-bold transition-all duration-300 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white"
+                  >
+                    Bağla
+                  </button>
+                </div>
               </>
             )}
 
             {otherModalStage === 'insufficient' && (
               <>
-                <div className="text-4xl mb-2"><EmojiIcon emoji="⚠️" size={32} /></div>
-                <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Balans kifayət etmir</div>
-                <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-4`}>
-                  Balansınızı artırmağınız tövsiyə olunur.
+                <div className="relative p-5 bg-gradient-to-br from-red-500 to-orange-600 text-white">
+                  <div className="text-center">
+                    <div className="text-5xl mb-2">⚠️</div>
+                    <h2 className="text-xl font-black mb-1">Balans kifayət etmir</h2>
+                    <p className="text-xs opacity-90">Hesabınızda kifayət qədər balans yoxdur</p>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setOtherModalOpen(null)}
-                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                      isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Bağla
-                  </button>
-                  <button
-                    onClick={() => { setOtherModalOpen(null); navigate('Transactions'); }}
-                    className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
-                  >
-                    Balans artır
-                  </button>
+                
+                <div className="p-4">
+                  <div className={`p-4 rounded-2xl mb-4 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+                  }`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Mövcud balans:</span>
+                      <span className={`text-base font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>{balance} AZN</span>
+                    </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Lazım olan:</span>
+                      <span className="text-base font-bold text-red-500">{otherModalOpen?.newPrice} AZN</span>
+                    </div>
+                    <div className={`pt-2 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                      <div className="flex items-center justify-between">
+                        <span className={`text-sm font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Çatışmayan:</span>
+                        <span className="text-lg font-black text-red-600">
+                          {otherModalOpen ? (otherModalOpen.newPrice - balance).toFixed(2) : 0} AZN
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => { setOtherModalOpen(null); setOtherModalStage('confirm'); navigate('Transactions'); }}
+                      className="w-full py-3 rounded-2xl font-bold transition-all duration-300 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white"
+                    >
+                      💰 Balans artır
+                    </button>
+                    <button
+                      onClick={() => { setOtherModalOpen(null); setOtherModalStage('confirm'); }}
+                      className={`w-full py-3 rounded-2xl font-bold transition-all duration-300 ${
+                        isDarkMode
+                          ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Bağla
+                    </button>
+                  </div>
                 </div>
               </>
             )}
