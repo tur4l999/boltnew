@@ -1303,6 +1303,12 @@ export function PackagesScreen() {
                       <span className="text-xs opacity-80 uppercase tracking-wider">Müddət</span>
                       <span className="font-bold">{days} gün</span>
                     </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs opacity-80 uppercase tracking-wider">Aktivləşmə</span>
+                      <span className="font-bold text-sm">
+                        {paymentModalOpen?.scheduledAt ? formatDateTime(paymentModalOpen.scheduledAt) : 'İndi'}
+                      </span>
+                    </div>
                     <div className="h-px bg-white/20 my-3"></div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold">Ödəniləcək məbləğ</span>
