@@ -339,126 +339,94 @@ export function PackagesScreen() {
                 return (
                   <div
                     key={pkg.id}
-                    className="flex-shrink-0 h-full px-2"
-                    style={{ width: 'calc(96%)' }}
+                    className="flex-shrink-0 h-full px-3"
+                    style={{ width: 'calc(94%)' }}
                   >
                     <div className={`relative h-full transition-all duration-500 ${
-                      isActive ? 'scale-100 opacity-100' : 'scale-90 opacity-20 blur-sm'
+                      isActive ? 'scale-100 opacity-100' : 'scale-85 opacity-15 blur-md'
                     }`}>
-                      {/* Main Card Container */}
-                      <div className={`relative h-full rounded-[3rem] overflow-hidden ${
+                      {/* Main Card - Two Column Layout */}
+                      <div className={`relative h-full rounded-3xl overflow-hidden shadow-2xl ${
                         isDarkMode ? 'bg-gray-900' : 'bg-white'
-                      } shadow-2xl`}>
+                      }`}>
                         
-                        {/* Top Color Band */}
-                        <div className={`absolute top-0 left-0 right-0 h-32 bg-gradient-to-br ${pkg.gradient}`} />
-                        
-                        {/* Decorative Elements */}
-                        <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-                        <div className="absolute bottom-20 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl" />
-                        
-                        {/* Flash Sale Badge */}
-                        {pkg.id === 'basic' && (
-                          <div className="absolute top-3 right-3 z-20">
-                            <div className="bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg">
-                              🔥 FLASH SALE
-                            </div>
-                          </div>
-                        )}
-                        
-                        {/* Popular Badge */}
-                        {pkg.popular && (
-                          <div className="absolute top-3 left-3 z-20">
-                            <div className="bg-emerald-500 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-lg">
-                              ⭐ ƏN POPULYAR
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Card Content */}
-                        <div className="relative z-10 h-full flex flex-col">
-                          
-                          {/* Header Section with Icon */}
-                          <div className="relative px-8 pt-16 pb-6 text-center">
-                            <div className="text-8xl mb-4 filter drop-shadow-2xl">
+                        {/* Left Side - Color & Icon */}
+                        <div className={`absolute left-0 top-0 bottom-0 w-2/5 bg-gradient-to-br ${pkg.gradient} flex items-center justify-center`}>
+                          <div className="text-center">
+                            <div className="text-9xl mb-6 filter drop-shadow-2xl transform hover:scale-110 transition-transform duration-500">
                               {pkg.icon}
                             </div>
-                            <h2 className={`text-4xl font-black mb-2 ${
+                            {/* Price Badge on Color Side */}
+                            <div className="bg-black/20 backdrop-blur-xl px-6 py-4 rounded-2xl border border-white/30">
+                              <div className="text-white/70 text-sm font-bold line-through mb-1">{oldPrice}</div>
+                              <div className="text-white text-5xl font-black">{newPrice}</div>
+                              <div className="text-white/90 text-lg font-bold">AZN</div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Badges */}
+                        <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
+                          {pkg.popular && (
+                            <div className="bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-black shadow-xl">
+                              ⭐ POPULYAR
+                            </div>
+                          )}
+                          {pkg.id === 'basic' && (
+                            <div className="bg-red-500 text-white px-4 py-2 rounded-xl text-xs font-black shadow-xl animate-pulse">
+                              🔥 -{discountPercent}%
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right Side - Content */}
+                        <div className="absolute left-[40%] right-0 top-0 bottom-0 flex flex-col">
+                          
+                          {/* Header */}
+                          <div className="px-8 pt-8 pb-4">
+                            <h2 className={`text-3xl font-black mb-2 ${
                               isDarkMode ? 'text-white' : 'text-gray-900'
                             }`}>
                               {pkg.name}
                             </h2>
-                          </div>
-
-                          {/* Pricing Section */}
-                          <div className={`px-8 py-8 ${
-                            isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
-                          }`}>
-                            <div className="flex items-end justify-center gap-4 mb-4">
-                              <div className="text-center">
-                                <div className={`text-sm font-medium mb-1 line-through ${
-                                  isDarkMode ? 'text-gray-500' : 'text-gray-400'
-                                }`}>
-                                  {oldPrice} AZN
-                                </div>
-                                <div className={`text-6xl font-black ${
-                                  isDarkMode ? 'text-white' : 'text-gray-900'
-                                }`}>
-                                  {newPrice}
-                                </div>
-                                <div className={`text-xl font-bold ${
-                                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                                }`}>
-                                  AZN
-                                </div>
-                              </div>
-                              <div className={`px-4 py-2 rounded-2xl text-sm font-black mb-4 ${
-                                pkg.popular 
-                                  ? 'bg-emerald-500 text-white'
-                                  : 'bg-red-500 text-white'
-                              }`}>
-                                -{discountPercent}%
-                              </div>
+                            <div className={`text-sm font-medium ${
+                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              {selectedDays[pkg.id]} günlük giriş
                             </div>
                             
-                            {/* Countdown for Basic */}
+                            {/* Timer for Basic Package */}
                             {pkg.id === 'basic' && (
-                              <div className="text-center">
-                                <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
-                                  isDarkMode ? 'bg-gray-900/50' : 'bg-white'
-                                } border border-red-500/30`}>
-                                  <span className="text-xs font-bold text-red-500">⏰ BİTİR:</span>
-                                  <span className="text-xs font-black text-yellow-500">{formatRemaining(promoEndsAt - nowTs)}</span>
-                                </div>
+                              <div className={`mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg ${
+                                isDarkMode ? 'bg-red-900/30' : 'bg-red-50'
+                              } border border-red-500/30`}>
+                                <span className="text-xs font-bold text-red-500">⏰</span>
+                                <span className="text-xs font-black text-red-600">{formatRemaining(promoEndsAt - nowTs)}</span>
                               </div>
                             )}
                           </div>
 
-                          {/* Duration Selection */}
-                          <div className="px-8 py-6">
-                            <div className={`text-xs font-bold mb-3 uppercase tracking-wider ${
-                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              Müddət
-                            </div>
+                          {/* Duration Pills */}
+                          <div className="px-8 py-4">
                             {(() => {
                               const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
                               return (
-                                <div className="grid grid-cols-3 gap-3">
+                                <div className="flex gap-2">
                                   {options.map((option) => (
                                     <button
                                       key={option.days}
                                       onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
-                                      className={`py-4 rounded-2xl font-bold transition-all duration-300 ${
+                                      className={`flex-1 py-2 px-3 rounded-xl font-bold text-sm transition-all duration-300 ${
                                         selectedDays[pkg.id] === option.days
-                                          ? `bg-gradient-to-br ${pkg.gradient} text-white shadow-xl scale-105`
+                                          ? isDarkMode
+                                            ? 'bg-white text-gray-900 shadow-lg'
+                                            : 'bg-gray-900 text-white shadow-lg'
                                           : isDarkMode
                                             ? 'bg-gray-800 text-gray-400 hover:bg-gray-700'
-                                            : 'bg-white text-gray-600 hover:bg-gray-100 border-2 border-gray-200'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                       }`}
                                     >
-                                      <div className="text-2xl font-black">{option.days}</div>
-                                      <div className="text-xs opacity-80">gün</div>
+                                      {option.days} gün
                                     </button>
                                   ))}
                                 </div>
@@ -466,20 +434,17 @@ export function PackagesScreen() {
                             })()}
                           </div>
 
-                          {/* Features List */}
-                          <div className="flex-1 overflow-y-auto px-8 py-6 scrollbar-hide">
-                            <div className={`text-xs font-bold mb-4 uppercase tracking-wider ${
-                              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                            }`}>
-                              Daxil olanlar
-                            </div>
-                            <div className="space-y-3">
+                          {/* Features */}
+                          <div className="flex-1 overflow-y-auto px-8 py-4 scrollbar-hide">
+                            <div className="space-y-2.5">
                               {pkg.features.map((feature, index) => (
-                                <div key={index} className="flex items-start gap-3">
-                                  <div className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center bg-gradient-to-br ${pkg.gradient} text-white text-xs font-black shadow-md`}>
+                                <div key={index} className={`flex items-start gap-2.5 p-2 rounded-lg transition-colors ${
+                                  isDarkMode ? 'hover:bg-gray-800/50' : 'hover:bg-gray-50'
+                                }`}>
+                                  <div className="flex-shrink-0 w-5 h-5 rounded-md bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center text-white text-[10px] font-black">
                                     ✓
                                   </div>
-                                  <span className={`text-sm font-medium leading-relaxed ${
+                                  <span className={`text-xs font-medium leading-snug ${
                                     isDarkMode ? 'text-gray-300' : 'text-gray-700'
                                   }`}>
                                     {feature}
@@ -490,21 +455,27 @@ export function PackagesScreen() {
                           </div>
 
                           {/* CTA Button */}
-                          <div className="p-8">
+                          <div className="px-8 pb-8">
                             <button
                               onClick={() => handlePurchasePackage(pkg.id)}
-                              className={`group w-full relative overflow-hidden rounded-2xl py-6 font-black text-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 bg-gradient-to-r ${pkg.gradient} text-white shadow-2xl`}
+                              className={`group w-full relative overflow-hidden rounded-2xl py-5 font-black text-base transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
+                                isDarkMode
+                                  ? 'bg-white text-gray-900 shadow-xl'
+                                  : 'bg-gray-900 text-white shadow-xl'
+                              }`}
                             >
-                              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-                              <div className="relative flex items-center justify-center gap-3">
-                                <span className="text-3xl">{pkg.icon}</span>
-                                <div>
-                                  <div className="text-sm opacity-90">PAKETI SEÇIN</div>
-                                  <div className="text-2xl">{newPrice} AZN</div>
-                                </div>
+                              <div className={`absolute inset-0 ${
+                                isDarkMode
+                                  ? 'bg-gradient-to-r from-transparent via-gray-200 to-transparent'
+                                  : 'bg-gradient-to-r from-transparent via-white/20 to-transparent'
+                              } translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700`} />
+                              <div className="relative">
+                                <div className="text-sm opacity-80 mb-1">İNDİ ALIN</div>
+                                <div className="text-3xl">{newPrice} AZN</div>
                               </div>
                             </button>
                           </div>
+                        </div>
                       </div>
                     </div>
                   </div>
