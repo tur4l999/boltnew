@@ -75,13 +75,67 @@ const AZERBAIJAN_REGIONS = [
   'Zərdab'
 ];
 
+// License requirements based on Azerbaijani law
+const LICENSE_REQUIREMENTS: Record<CertificateType, LicenseRequirement> = {
+  'A': { age: 18 },
+  'B': { age: 18 },
+  'C': { age: 18 },
+  'D': { 
+    age: 23, 
+    experience: { type: 'B və ya C', years: 5 },
+    additionalRequirements: [
+      { id: 'd_car_ownership', text: 'Son 5 il ərzində adıma avtomobil olub (Etibarnamə qəbul edilir, lakin sonradan başqasına etibarnamə verilməməlidir)' },
+      { id: 'd_no_accidents', text: 'Son 2 il ərzində qəza törədib bədən xəsarəti vurmamışam' },
+      { id: 'd_no_alcohol', text: 'Son 2 il ərzində spirtli içki ilə avtomobil sürməmişəm' },
+      { id: 'd_no_drugs', text: 'Son 2 il ərzində narkotik maddə istifadə edərək avtomobil sürməmişəm' }
+    ]
+  },
+  'E': { age: 18 },
+  'AB': { age: 18 },
+  'AC': { age: 18 },
+  'BC': { age: 18 },
+  'ABC': { age: 18 },
+  'BE': { 
+    age: 19, 
+    experience: { type: 'B', years: 1 }
+  },
+  'CE': { 
+    age: 21, 
+    experience: { type: 'C', years: 3 }
+  },
+  'DE': { 
+    age: 26, 
+    experience: { type: 'D', years: 3 },
+    additionalRequirements: [
+      { id: 'de_bus_ownership', text: 'Adıma avtobus olub və ya təşkilatdan avtobus sürmə haqqında arayış var' }
+    ]
+  }
+};
+
 type CertificateType = 'A' | 'B' | 'C' | 'D' | 'E' | 'AB' | 'AC' | 'BC' | 'ABC' | 'BE' | 'CE' | 'DE';
+
+interface LicenseRequirement {
+  age: number;
+  experience?: {
+    type: string;
+    years: number;
+  };
+  additionalRequirements?: {
+    id: string;
+    text: string;
+  }[];
+}
+
+interface RequirementConfirmations {
+  [key: string]: boolean;
+}
 
 interface ApplicationFormData {
   selectedTypes: CertificateType[];
   region: string;
   fullAddress: string;
   termsAgreed: boolean;
+  requirementConfirmations: RequirementConfirmations;
 }
 
 export function CertificateApplicationScreen() {
@@ -92,7 +146,8 @@ export function CertificateApplicationScreen() {
     selectedTypes: [],
     region: '',
     fullAddress: '',
-    termsAgreed: false
+    termsAgreed: false,
+    requirementConfirmations: {}
   });
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
@@ -138,6 +193,19 @@ export function CertificateApplicationScreen() {
       return;
     }
     
+    // Check if all required checkboxes are checked
+    const allRequirementsConfirmed = formData.selectedTypes.every((type) => {
+      const requirements = LICENSE_REQUIREMENTS[type];
+      if (!requirements.additionalRequirements || requirements.additionalRequirements.length === 0) {
+        return true;
+      }
+      return requirements.additionalRequirements.every((req) => formData.requirementConfirmations[req.id]);
+    });
+    
+    if (!allRequirementsConfirmed) {
+      return;
+    }
+    
     setShowModal(false);
     setShowSuccessNotification(true);
     
@@ -152,7 +220,8 @@ export function CertificateApplicationScreen() {
       selectedTypes: [],
       region: '',
       fullAddress: '',
-      termsAgreed: false
+      termsAgreed: false,
+      requirementConfirmations: {}
     });
   };
 
@@ -354,6 +423,102 @@ export function CertificateApplicationScreen() {
                   </div>
                 </div>
 
+                {/* License Requirements */}
+                {formData.selectedTypes.length > 0 && (
+                  <div className={`rounded-2xl border-2 p-5 ${
+                    isDarkMode 
+                      ? 'bg-blue-900/20 border-blue-700/50' 
+                      : 'bg-blue-50/50 border-blue-200'
+                  }`}>
+                    <h4 className={`text-sm font-bold mb-4 flex items-center gap-2 ${
+                      isDarkMode ? 'text-blue-300' : 'text-blue-800'
+                    }`}>
+                      <span>📋</span>
+                      <span>Tələblər və Şərtlər</span>
+                    </h4>
+                    
+                    <div className="space-y-4">
+                      {formData.selectedTypes.map((type) => {
+                        const requirements = LICENSE_REQUIREMENTS[type];
+                        const hasAdditionalReqs = requirements.additionalRequirements && requirements.additionalRequirements.length > 0;
+                        
+                        return (
+                          <div key={type} className={`rounded-xl p-4 ${
+                            isDarkMode ? 'bg-gray-800/50' : 'bg-white/70'
+                          }`}>
+                            <div className={`font-semibold mb-2 text-sm ${
+                              isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                            }`}>
+                              {type} kateqoriyası üçün:
+                            </div>
+                            
+                            {/* Age requirement */}
+                            <div className={`text-sm mb-1 flex items-start gap-2 ${
+                              isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              <span className="mt-0.5">•</span>
+                              <span>Minimum yaş: <strong>{requirements.age} yaş</strong></span>
+                            </div>
+                            
+                            {/* Experience requirement */}
+                            {requirements.experience && (
+                              <div className={`text-sm mb-1 flex items-start gap-2 ${
+                                isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                              }`}>
+                                <span className="mt-0.5">•</span>
+                                <span>
+                                  <strong>{requirements.experience.type}</strong> üzrə{' '}
+                                  <strong>{requirements.experience.years} il</strong> sürücülük təcrübəsi
+                                </span>
+                              </div>
+                            )}
+                            
+                            {/* Additional requirements with checkboxes */}
+                            {hasAdditionalReqs && (
+                              <div className="mt-3 pt-3 border-t border-gray-600/30 space-y-3">
+                                <div className={`text-xs font-semibold mb-2 ${
+                                  isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
+                                }`}>
+                                  Aşağıdakı şərtləri təsdiqləməlisiniz:
+                                </div>
+                                {requirements.additionalRequirements!.map((req) => (
+                                  <div key={req.id} className="flex items-start gap-3">
+                                    <button
+                                      onClick={() => {
+                                        setFormData((prev: ApplicationFormData) => ({
+                                          ...prev,
+                                          requirementConfirmations: {
+                                            ...prev.requirementConfirmations,
+                                            [req.id]: !prev.requirementConfirmations[req.id]
+                                          }
+                                        }));
+                                      }}
+                                      className={`mt-0.5 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0 ${
+                                        formData.requirementConfirmations[req.id]
+                                          ? 'bg-emerald-500 border-emerald-500'
+                                          : isDarkMode ? 'border-gray-600 hover:border-gray-500' : 'border-gray-400 hover:border-gray-500'
+                                      }`}
+                                    >
+                                      {formData.requirementConfirmations[req.id] && (
+                                        <span className="text-white text-xs">✓</span>
+                                      )}
+                                    </button>
+                                    <span className={`text-xs leading-relaxed ${
+                                      isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                                    }`}>
+                                      {req.text}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 {/* Region Selection */}
                 <div>
                   <label className={`block text-sm font-semibold mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
@@ -421,19 +586,33 @@ export function CertificateApplicationScreen() {
                 </div>
 
                 {/* Submit Button */}
-                  <button
-                    onClick={handleSubmit}
-                    disabled={!formData.region || !formData.fullAddress || !formData.termsAgreed}
-                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
-                      formData.region && formData.fullAddress && formData.termsAgreed
-                        ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
-                        : isDarkMode 
-                          ? 'bg-gray-700 text-gray-400'
-                          : 'bg-gray-200 text-gray-500'
-                    }`}
-                  >
-                  Müraciət Göndər
-                </button>
+                {(() => {
+                  const allRequirementsConfirmed = formData.selectedTypes.every((type) => {
+                    const requirements = LICENSE_REQUIREMENTS[type];
+                    if (!requirements.additionalRequirements || requirements.additionalRequirements.length === 0) {
+                      return true;
+                    }
+                    return requirements.additionalRequirements.every((req) => formData.requirementConfirmations[req.id]);
+                  });
+                  
+                  const isFormValid = formData.region && formData.fullAddress && formData.termsAgreed && allRequirementsConfirmed;
+                  
+                  return (
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!isFormValid}
+                      className={`w-full py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+                        isFormValid
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-400'
+                            : 'bg-gray-200 text-gray-500'
+                      }`}
+                    >
+                      Müraciət Göndər
+                    </button>
+                  );
+                })()}
               </div>
             </div>
           </ScaleIn>
