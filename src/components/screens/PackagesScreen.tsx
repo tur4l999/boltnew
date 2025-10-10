@@ -339,15 +339,15 @@ export function PackagesScreen() {
   return (
     <div className={`relative min-h-screen transition-all duration-300 ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800' 
-        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
+        ? 'bg-gray-900' 
+        : 'bg-gray-50'
     }`}>
 
       {/* Modern Header */}
-      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-all duration-300 ${
+      <div className={`sticky top-0 z-40 border-b transition-all duration-300 ${
         isDarkMode 
-          ? 'bg-gray-900/80 border-gray-700/50' 
-          : 'bg-white/80 border-gray-200/50'
+          ? 'bg-gray-900 border-gray-700/50' 
+          : 'bg-white border-gray-200/50'
       }`}>
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
@@ -356,8 +356,8 @@ export function PackagesScreen() {
                 onClick={goBack}
                 className={`w-11 h-11 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 group ${
                   isDarkMode 
-                    ? 'border-gray-600/50 bg-gray-800/50 hover:bg-gray-700/80 hover:border-gray-500 text-gray-200' 
-                    : 'border-gray-300/50 bg-white/50 hover:bg-gray-50/80 hover:border-gray-400 text-gray-700'
+                    ? 'border-gray-600/50 bg-gray-800 hover:bg-gray-700 hover:border-gray-500 text-gray-200' 
+                    : 'border-gray-300/50 bg-white hover:bg-gray-50 hover:border-gray-400 text-gray-700'
                 } hover:scale-105 active:scale-95`}
               >
                 <span className="text-lg group-hover:translate-x-[-2px] transition-transform duration-200">←</span>
@@ -373,10 +373,10 @@ export function PackagesScreen() {
             </div>
             
             {/* Balance Display */}
-            <div className={`relative px-4 py-2.5 rounded-2xl border-2 backdrop-blur-sm transition-all duration-300 ${
+            <div className={`relative px-4 py-2.5 rounded-2xl border-2 transition-all duration-300 ${
               isDarkMode 
-                ? 'bg-gradient-to-r from-emerald-900/30 to-green-900/30 border-emerald-500/30' 
-                : 'bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200/50'
+                ? 'bg-emerald-900/30 border-emerald-500/40' 
+                : 'bg-emerald-50 border-emerald-300/50'
             }`}>
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full animate-pulse ${
@@ -398,15 +398,15 @@ export function PackagesScreen() {
 
       <div className="px-3 pb-20 pt-4">
         {/* Filter Buttons */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6">
           <h2 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
             {activeTab === 'training' ? 'Təlim Paketləri' : 'Digər Paketlər'}
           </h2>
           
           <div className={`flex items-center gap-2 p-1 rounded-2xl border transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-gray-800/50 border-gray-700/50' 
-              : 'bg-white/50 border-gray-200/50'
+              ? 'bg-gray-800/80 border-gray-700/50' 
+              : 'bg-white border-gray-200/50'
           }`}>
             <button
               onClick={() => setActiveTab('training')}
@@ -441,10 +441,10 @@ export function PackagesScreen() {
         </div>
 
         {activeTab === 'training' && (
-          <div className="relative">
-            {/* Modern Carousel Container with Enhanced Effects */}
+          <div className="relative pb-4">
+            {/* Carousel Container */}
             <div 
-              className={`relative overflow-visible transition-all duration-300 perspective-1000 ${
+              className={`relative overflow-visible transition-all duration-300 ${
                 isDragging ? 'cursor-grabbing' : 'cursor-grab'
               }`}
               onTouchStart={handleTouchStart}
@@ -504,9 +504,20 @@ export function PackagesScreen() {
                           )}
                           
                           {pkg.id === 'basic' && (
-                            <div className="flex justify-start mb-2">
-                              <div className="bg-yellow-400 px-3 py-1 rounded-full animate-pulse">
-                                <span className="text-xs font-black text-red-900">🔥 ENDİRİM</span>
+                            <div className="space-y-2 mb-2">
+                              <div className="flex justify-start">
+                                <div className="bg-yellow-400 px-3 py-1 rounded-full animate-pulse">
+                                  <span className="text-xs font-black text-red-900">🔥 ENDİRİM</span>
+                                </div>
+                              </div>
+                              {/* Endirim Vaxtı */}
+                              <div className="bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <span className="text-xs font-bold text-yellow-300">⏰</span>
+                                  <span className="text-xs font-black text-white">
+                                    {formatRemaining(promoEndsAt - nowTs)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           )}
@@ -612,13 +623,13 @@ export function PackagesScreen() {
             <button
               onClick={prevPackage}
               disabled={currentPackageIndex === 0}
-              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg ${
                 currentPackageIndex === 0
                   ? 'opacity-0 pointer-events-none'
                   : isDarkMode
-                    ? 'bg-gray-800/80 text-gray-200 border border-gray-600/50'
-                    : 'bg-white/80 text-gray-700 border border-gray-300/50'
-              } backdrop-blur-sm hover:scale-110 active:scale-95`}
+                    ? 'bg-gray-800 text-gray-200 border border-gray-600/50'
+                    : 'bg-white text-gray-700 border border-gray-300/50'
+              } hover:scale-110 active:scale-95`}
             >
               <span className="text-xl">‹</span>
             </button>
@@ -626,13 +637,13 @@ export function PackagesScreen() {
             <button
               onClick={nextPackage}
               disabled={currentPackageIndex === packages.length - 1}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg ${
                 currentPackageIndex === packages.length - 1
                   ? 'opacity-0 pointer-events-none'
                   : isDarkMode
-                    ? 'bg-gray-800/80 text-gray-200 border border-gray-600/50'
-                    : 'bg-white/80 text-gray-700 border border-gray-300/50'
-              } backdrop-blur-sm hover:scale-110 active:scale-95`}
+                    ? 'bg-gray-800 text-gray-200 border border-gray-600/50'
+                    : 'bg-white text-gray-700 border border-gray-300/50'
+              } hover:scale-110 active:scale-95`}
             >
               <span className="text-xl">›</span>
             </button>
@@ -659,18 +670,18 @@ export function PackagesScreen() {
         {activeTab === 'other' && (
           <div className="space-y-4">
             {/* Modern Other Packages Section */}
-            <div className={`rounded-2xl border backdrop-blur-sm p-4 transition-all duration-300 ${
+            <div className={`rounded-2xl border p-4 transition-all duration-300 ${
               isDarkMode 
-                ? 'bg-gray-800/60 border-gray-700/50' 
-                : 'bg-white/60 border-gray-200/50'
+                ? 'bg-gray-800 border-gray-700/50' 
+                : 'bg-white border-gray-200/50'
             }`}>
 
               <div className="grid grid-cols-2 gap-3">
                 {otherItems.map(item => (
                   <div key={item.id} className={`relative group rounded-xl border p-3 text-center transition-all duration-300 hover:scale-[1.02] ${
                     isDarkMode 
-                      ? 'bg-gray-800/40 border-gray-700/40 hover:border-gray-600/60' 
-                      : 'bg-white/40 border-gray-200/40 hover:border-gray-300/60'
+                      ? 'bg-gray-700/50 border-gray-600/50 hover:border-gray-500' 
+                      : 'bg-gray-50 border-gray-200/50 hover:border-gray-300'
                   }`}>
                     <div className="text-2xl mb-2">🎟️</div>
                     <div className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
