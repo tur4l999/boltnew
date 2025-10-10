@@ -88,6 +88,15 @@ export function PackagesScreen() {
     return `${dd} gün ${hh}:${mm}:${ss}`;
   }
   
+  function formatDateTime(date: Date): string {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  }
+  
   const dayOptions: DayOption[] = [
     { days: 45, label: '45 gün', multiplier: 1 },
     { days: 60, label: '60 gün', multiplier: 1.25 },
@@ -1023,12 +1032,12 @@ export function PackagesScreen() {
             }
             
             return (
-              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col ${
                 isDarkMode ? 'bg-gray-900' : 'bg-white'
               }`}>
                 
                 {/* Header with gradient */}
-                <div className={`relative p-6 ${
+                <div className={`relative p-5 ${
                   modalPkg?.id === 'basic'
                     ? 'bg-gradient-to-br from-orange-500 to-red-600'
                     : modalPkg?.popular
@@ -1037,21 +1046,21 @@ export function PackagesScreen() {
                 } text-white`}>
                   <button
                     onClick={() => setActivationModalOpen(null)}
-                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
+                    className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
                   >
-                    <span className="text-xl font-bold">✕</span>
+                    <span className="text-lg font-bold">✕</span>
                   </button>
                   
                   <div className="text-center">
-                    <div className="text-5xl mb-3">⚡</div>
-                    <h2 className="text-2xl font-black mb-2">Aktivləşdirmə</h2>
-                    <p className="text-sm opacity-90">Paketin başlama vaxtını seçin</p>
+                    <div className="text-4xl mb-2">⚡</div>
+                    <h2 className="text-xl font-black mb-1">Aktivləşdirmə</h2>
+                    <p className="text-xs opacity-90">Paketin başlama vaxtını seçin</p>
                   </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-4 overflow-y-auto">
                   {/* Package Info */}
-                  <div className={`p-4 rounded-2xl mb-6 ${
+                  <div className={`p-3 rounded-2xl mb-4 ${
                     isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
                   }`}>
                     <div className="text-center">
@@ -1068,10 +1077,10 @@ export function PackagesScreen() {
                   </div>
 
                   {/* Activation Mode Buttons */}
-                  <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="grid grid-cols-2 gap-3 mb-4">
                     <button
                       onClick={() => setActivationMode('now')}
-                      className={`relative p-5 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                      className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
                         activationMode === 'now'
                           ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/30 scale-105'
                           : isDarkMode
@@ -1092,7 +1101,7 @@ export function PackagesScreen() {
                     
                     <button
                       onClick={() => setActivationMode('date')}
-                      className={`relative p-5 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                      className={`relative p-4 rounded-2xl border-2 font-bold transition-all duration-300 ${
                         activationMode === 'date'
                           ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-400 shadow-xl shadow-blue-500/30 scale-105'
                           : isDarkMode
@@ -1113,12 +1122,12 @@ export function PackagesScreen() {
                   </div>
 
                   {activationMode === 'date' && (
-                    <div className="space-y-4 mb-6">
+                    <div className="space-y-3 mb-4">
                       {/* Calendar */}
-                      <div className={`p-4 rounded-2xl border-2 ${
+                      <div className={`p-3 rounded-2xl border-2 ${
                         isDarkMode ? 'border-blue-500/30 bg-gray-800/50' : 'border-blue-300/30 bg-blue-50/30'
                       }`}>
-                        <div className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                        <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
                           📅 Tarix seçin
                         </div>
                         <Calendar
@@ -1129,10 +1138,10 @@ export function PackagesScreen() {
                       </div>
                       
                       {/* Time Picker - Modern */}
-                      <div className={`p-4 rounded-2xl border-2 ${
+                      <div className={`p-3 rounded-2xl border-2 ${
                         isDarkMode ? 'border-purple-500/30 bg-gray-800/50' : 'border-purple-300/30 bg-purple-50/30'
                       }`}>
-                        <div className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                        <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
                           🕐 Saat seçin
                         </div>
                         <div className="flex items-center justify-center gap-3">
@@ -1169,29 +1178,25 @@ export function PackagesScreen() {
                       
                       {/* Selected Date Display */}
                       {activationDate && (
-                        <div className={`p-4 rounded-2xl ${
+                        <div className={`p-3 rounded-2xl ${
                           isDarkMode 
                             ? 'bg-gradient-to-br from-emerald-900/30 to-green-900/30 border-2 border-emerald-500/40' 
                             : 'bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-300/40'
                         }`}>
-                          <div className="flex items-center gap-3">
-                            <div className="text-3xl">✓</div>
+                          <div className="flex items-center gap-2">
+                            <div className="text-2xl">✓</div>
                             <div className="flex-1">
                               <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${
                                 isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
                               }`}>
                                 Aktivləşmə tarixi
                               </div>
-                              <div className={`text-lg font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                                {activationDate.toLocaleDateString('az-AZ', { 
-                                  weekday: 'long',
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric'
-                                })}
-                              </div>
-                              <div className={`text-base font-bold mt-1 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                                🕐 {activationHour}:{activationMinute}
+                              <div className={`text-base font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                                {(() => {
+                                  const dt = new Date(activationDate);
+                                  dt.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
+                                  return formatDateTime(dt);
+                                })()}
                               </div>
                             </div>
                           </div>
@@ -1201,11 +1206,11 @@ export function PackagesScreen() {
                   )}
 
                   {/* Action Buttons */}
-                  <div className="space-y-3">
+                  <div className="space-y-2 pt-2">
                     <button
                       onClick={() => activationModalOpen && openPaymentFor(activationModalOpen.packageId)}
                       disabled={activationMode === 'date' && !activationDate}
-                      className={`w-full py-4 rounded-2xl font-black text-base transition-all duration-300 shadow-xl ${
+                      className={`w-full py-3 rounded-2xl font-black text-base transition-all duration-300 shadow-xl ${
                         activationMode === 'date' && !activationDate
                           ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                           : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white hover:scale-[1.02] active:scale-95 shadow-emerald-500/30'
@@ -1258,7 +1263,7 @@ export function PackagesScreen() {
               <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Seçilən paket</div>
               <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-sm font-semibold`}>{scheduledName || '—'}</div>
               <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Aktivləşdirmə tarixi</div>
-              <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-extrabold`}>{scheduledAt ? scheduledAt.toLocaleString('az-AZ') : '—'}</div>
+              <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-extrabold`}>{scheduledAt ? formatDateTime(scheduledAt) : '—'}</div>
             </div>
             <button
               onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }}
