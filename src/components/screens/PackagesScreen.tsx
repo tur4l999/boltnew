@@ -23,8 +23,8 @@ interface DayOption {
 export function PackagesScreen() {
   const { t, goBack, balance, purchasePackage, purchasePackageByCard, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
-    basic: 30,
-    standart: 30,
+    basic: 45,
+    standart: 45,
     pro: 45
   });
   const [nowTs, setNowTs] = useState<number>(Date.now());
@@ -88,16 +88,16 @@ export function PackagesScreen() {
   }
   
   const dayOptions: DayOption[] = [
-    { days: 30, label: '30 gün', multiplier: 1 },
-    { days: 45, label: '45 gün', multiplier: 1.4 },
-    { days: 60, label: '60 gün', multiplier: 1.8 }
+    { days: 45, label: '45 gün', multiplier: 1 },
+    { days: 60, label: '60 gün', multiplier: 1.25 },
+    { days: 75, label: '75 gün', multiplier: 1.5 }
   ];
   
   const packages: Package[] = [
     {
       id: 'basic',
       name: 'Sadə Paket',
-      basePrice: 15,
+      basePrice: 39.99,
       color: 'gray',
       features: [
         '3D video dərslər',
@@ -112,7 +112,7 @@ export function PackagesScreen() {
     {
       id: 'standart',
       name: 'Standart Paket',
-      basePrice: 25,
+      basePrice: 49.99,
       color: 'emerald',
       features: [
         'Sadə paketdəki hər şey',
@@ -125,7 +125,7 @@ export function PackagesScreen() {
     {
       id: 'pro',
       name: 'Premium Paket',
-      basePrice: 40,
+      basePrice: 200,
       color: 'blue',
       features: [
         'Standart paketdəki hər şey',
@@ -150,12 +150,35 @@ export function PackagesScreen() {
     
     if (!pkg || !dayOption) return 0;
     
-    return Math.round(pkg.basePrice * dayOption.multiplier);
+    return parseFloat((pkg.basePrice * dayOption.multiplier).toFixed(2));
   }
 
   function getPricePair(packageId: string): { oldPrice: number; newPrice: number; discountPercent: number } {
     const newPrice = calculatePrice(packageId);
-    const oldPrice = Math.max(newPrice + 10, Math.round(newPrice * 1.25));
+    const pkg = packages.find(p => p.id === packageId);
+    const days = selectedDays[packageId];
+    
+    let oldPrice = newPrice;
+    
+    // Sadə Paket
+    if (packageId === 'basic') {
+      if (days === 45) oldPrice = 50;
+      else if (days === 60) oldPrice = 79;
+      else if (days === 75) oldPrice = 99;
+    }
+    // Standart Paket
+    else if (packageId === 'standart') {
+      if (days === 45) oldPrice = 70;
+      else if (days === 60) oldPrice = 99;
+      else if (days === 75) oldPrice = 119;
+    }
+    // Premium Paket
+    else if (packageId === 'pro') {
+      if (days === 45) oldPrice = 400;
+      else if (days === 60) oldPrice = 500;
+      else if (days === 75) oldPrice = 600;
+    }
+    
     const discountPercent = Math.max(1, Math.round((1 - newPrice / oldPrice) * 100));
     return { oldPrice, newPrice, discountPercent };
   }
@@ -638,8 +661,6 @@ export function PackagesScreen() {
                                     </span>
                                     <span className="text-2xl font-bold pb-1">AZN</span>
                                   </div>
-                                  
-                                  <p className="text-xs opacity-75 mt-1">{selectedDays[pkg.id]} günlük</p>
                                 </div>
                               );
                             })()}
