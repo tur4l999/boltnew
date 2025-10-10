@@ -470,7 +470,7 @@ export function PackagesScreen() {
                   <div key={pkg.id} className="w-full flex-shrink-0 px-3">
                     <div className="relative group">
                       {/* Tamamilə Yeni Premium Kart Dizaynı */}
-                      <div className={`relative rounded-3xl overflow-y-auto transition-all duration-500 ${
+                      <div className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                         pkg.id === 'basic'
                           ? isDarkMode
                             ? 'bg-gradient-to-b from-orange-600 via-red-600 to-red-700'
@@ -482,7 +482,7 @@ export function PackagesScreen() {
                             : isDarkMode
                               ? 'bg-gradient-to-b from-purple-600 via-blue-700 to-indigo-800'
                               : 'bg-gradient-to-b from-purple-500 via-blue-600 to-indigo-700'
-                      } shadow-2xl max-h-[70vh]`}>
+                      } shadow-2xl`}>
                   
 
                         {/* Dekorativ Pattern */}
@@ -492,53 +492,53 @@ export function PackagesScreen() {
                         </div>
 
                         {/* Məzmun Container */}
-                        <div className="relative flex flex-col p-6 pb-8 text-white">
+                        <div className="relative flex flex-col p-4 text-white">
                           
                           {/* Üst Badge */}
                           {pkg.popular && (
-                            <div className="flex justify-end mb-3">
-                              <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
+                            <div className="flex justify-end mb-2">
+                              <div className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">
                                 <span className="text-xs font-bold text-white">⭐ POPULYAR</span>
                               </div>
                             </div>
                           )}
                           
                           {pkg.id === 'basic' && (
-                            <div className="flex justify-start mb-3">
-                              <div className="bg-yellow-400 px-4 py-2 rounded-full animate-pulse">
+                            <div className="flex justify-start mb-2">
+                              <div className="bg-yellow-400 px-3 py-1 rounded-full animate-pulse">
                                 <span className="text-xs font-black text-red-900">🔥 ENDİRİM</span>
                               </div>
                             </div>
                           )}
                   
                           {/* Paket İnfo */}
-                          <div className="flex flex-col items-center space-y-4">
+                          <div className="flex flex-col items-center space-y-2">
                             
                             {/* Kiçik Emoji İkon */}
-                            <div className="text-5xl drop-shadow-2xl">
+                            <div className="text-4xl drop-shadow-2xl">
                               {pkg.id === 'basic' ? '🎯' : pkg.id === 'standart' ? '⭐' : '👑'}
                             </div>
                             
                             {/* Paket Adı */}
                             <div className="text-center">
-                              <h3 className="text-2xl font-black tracking-tight mb-1 drop-shadow-lg">
+                              <h3 className="text-xl font-black tracking-tight drop-shadow-lg">
                                 {pkg.name}
                               </h3>
                             </div>
 
-                            {/* Müddət Seçimi - Yuxarıda */}
+                            {/* Müddət Seçimi */}
                             <div className="w-full">
-                              <p className="text-center text-sm font-semibold mb-2 opacity-90">Müddət seçin</p>
-                              <div className="flex justify-center gap-2">
+                              <p className="text-center text-xs font-semibold mb-1 opacity-90">Müddət seçin</p>
+                              <div className="flex justify-center gap-1.5">
                                 {(() => {
                                   const options = pkg.id === 'pro' ? dayOptions.filter(o => o.days === 45) : dayOptions;
                                   return options.map((option) => (
                                     <button
                                       key={option.days}
                                       onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
-                                      className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                                         selectedDays[pkg.id] === option.days
-                                          ? 'bg-white text-gray-900 scale-110'
+                                          ? 'bg-white text-gray-900 scale-105'
                                           : 'bg-white/20 border border-white/30 hover:bg-white/30'
                                       }`}
                                     >
@@ -549,57 +549,55 @@ export function PackagesScreen() {
                               </div>
                             </div>
 
-                            {/* Qiymət - Böyük və Aydın */}
+                            {/* Qiymət */}
                             {(() => {
                               const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
                               return (
-                                <div className="text-center space-y-2 w-full">
-                                  {/* Endirim Badge */}
+                                <div className="text-center space-y-1 w-full">
                                   {discountPercent > 0 && (
-                                    <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                                      <span className="text-sm font-bold">
+                                    <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                                      <span className="text-xs font-bold">
                                         <span className="line-through opacity-70">{oldPrice} AZN</span>
                                         <span className="ml-2 text-yellow-300">-{discountPercent}%</span>
                                       </span>
                                     </div>
                                   )}
                                   
-                                  {/* Böyük Qiymət */}
-                                  <div className="flex items-end justify-center gap-2 py-2">
-                                    <span className="text-6xl font-black drop-shadow-2xl">
+                                  <div className="flex items-end justify-center gap-1.5 py-1">
+                                    <span className="text-5xl font-black drop-shadow-2xl">
                                       {newPrice}
                                     </span>
-                                    <span className="text-3xl font-bold pb-2">AZN</span>
+                                    <span className="text-2xl font-bold pb-1">AZN</span>
                                   </div>
                                   
-                                  <p className="text-xs opacity-75">{selectedDays[pkg.id]} günlük paket</p>
+                                  <p className="text-xs opacity-75">{selectedDays[pkg.id]} günlük</p>
                                 </div>
                               );
                             })()}
                           </div>
 
-                          {/* Tam Features Siyahısı */}
-                          <div className="mt-4">
-                            <h4 className="text-center font-bold text-sm mb-3 opacity-90">Daxil olan xidmətlər</h4>
-                            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4">
-                              <div className="space-y-2.5">
+                          {/* Features - Kompakt */}
+                          <div className="mt-3">
+                            <h4 className="text-center font-bold text-xs mb-2 opacity-90">Daxil olan xidmətlər</h4>
+                            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3">
+                              <div className="space-y-1.5">
                                 {pkg.features.map((feature, index) => (
-                                  <div key={index} className="flex items-start gap-2 text-sm">
-                                    <span className="text-white/90 flex-shrink-0 mt-0.5">✓</span>
-                                    <span className="font-medium opacity-95 leading-relaxed">{feature}</span>
+                                  <div key={index} className="flex items-start gap-1.5 text-xs">
+                                    <span className="text-white/90 flex-shrink-0">✓</span>
+                                    <span className="font-medium opacity-95 leading-snug">{feature}</span>
                                   </div>
                                 ))}
                               </div>
                             </div>
                           </div>
 
-                          {/* Böyük CTA Button */}
-                          <div className="mt-6 pb-2">
+                          {/* CTA Button */}
+                          <div className="mt-4">
                             <button
                               onClick={() => handlePurchasePackage(pkg.id)}
-                              className="w-full bg-white text-gray-900 py-4 rounded-2xl font-black text-base hover:scale-105 active:scale-95 transition-all duration-300 shadow-2xl"
+                              className="w-full bg-white text-gray-900 py-3 rounded-xl font-black text-sm hover:scale-105 active:scale-95 transition-all duration-300 shadow-2xl"
                             >
-                              {pkg.id === 'basic' ? '🔥 İndi Al və Qənaət Et' : pkg.popular ? '⭐ Ən Seçilən Paket' : '👑 Premium Al'}
+                              {pkg.id === 'basic' ? '🔥 İndi Al' : pkg.popular ? '⭐ Paketi Al' : '👑 Premium Al'}
                             </button>
                           </div>
                         </div>
