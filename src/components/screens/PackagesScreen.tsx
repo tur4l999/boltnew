@@ -549,9 +549,6 @@ export function PackagesScreen() {
                     >
                       {/* Tamamilə Yeni Premium Kart Dizaynı */}
                       <div 
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onTouchStart={(e) => e.stopPropagation()}
                         className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                         pkg.id === 'basic'
                           ? isDarkMode
