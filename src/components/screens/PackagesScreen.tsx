@@ -256,11 +256,6 @@ export function PackagesScreen() {
   }
 
   // Carousel handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-    setIsDragging(true);
-  };
-
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
     setTouchEnd(e.touches[0].clientX);
@@ -289,7 +284,22 @@ export function PackagesScreen() {
     setTouchEnd(0);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    // Əgər event button və ya interactive elementdən gəlirsə, swipe-i başlatma
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON' || target.closest('button')) {
+      return;
+    }
+    setTouchStart(e.touches[0].clientX);
+    setIsDragging(true);
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Əgər event button və ya interactive elementdən gəlirsə, drag-i başlatma
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'BUTTON' || target.closest('button')) {
+      return;
+    }
     setTouchStart(e.clientX);
     setIsDragging(true);
   };
@@ -468,9 +478,13 @@ export function PackagesScreen() {
               >
                 {packages.map((pkg, index) => (
                   <div key={pkg.id} className="w-full flex-shrink-0 px-3">
-                    <div className="relative group">
+                    <div className="relative group pointer-events-auto">
                       {/* Tamamilə Yeni Premium Kart Dizaynı */}
-                      <div className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
+                      <div 
+                        onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
+                        className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
                         pkg.id === 'basic'
                           ? isDarkMode
                             ? 'bg-gradient-to-b from-orange-600 via-red-600 to-red-700'
@@ -576,7 +590,12 @@ export function PackagesScreen() {
                                   return options.map((option) => (
                                     <button
                                       key={option.days}
-                                      onClick={() => setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }))}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedDays(prev => ({ ...prev, [pkg.id]: option.days }));
+                                      }}
+                                      onMouseDown={(e) => e.stopPropagation()}
+                                      onTouchStart={(e) => e.stopPropagation()}
                                       className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                                         selectedDays[pkg.id] === option.days
                                           ? 'bg-white text-gray-900 scale-105'
@@ -641,7 +660,12 @@ export function PackagesScreen() {
                           {/* CTA Button */}
                           <div className="mt-4">
                             <button
-                              onClick={() => handlePurchasePackage(pkg.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePurchasePackage(pkg.id);
+                              }}
+                              onMouseDown={(e) => e.stopPropagation()}
+                              onTouchStart={(e) => e.stopPropagation()}
                               className="w-full bg-white text-gray-900 py-3 rounded-xl font-black text-sm hover:scale-105 active:scale-95 transition-all duration-300 shadow-2xl"
                             >
                               {pkg.id === 'basic' ? '🔥 İndi Al' : pkg.popular ? '⭐ Paketi Al' : '👑 Premium Al'}
