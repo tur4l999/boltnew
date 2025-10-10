@@ -46,7 +46,7 @@ const LICENSE_REQUIREMENTS: Record<CertificateType, LicenseRequirement> = {
       { id: 'd_no_drugs', text: 'Son 2 il ərzində narkotik maddə istifadə edərək avtomobil sürməmişəm' }
     ]
   },
-  'E': { age: 18 },
+  'E': { age: 18 }, // E tək verilmir, amma type üçün lazımdır
   'AB': { age: 18 },
   'AC': { age: 18 },
   'BC': { age: 18 },
@@ -89,7 +89,7 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
     'B': { label: 'B kateqoriyası', emoji: '🚗' },
     'C': { label: 'C kateqoriyası', emoji: '🚛' },
     'D': { label: 'D kateqoriyası', emoji: '🚌' },
-    'E': { label: 'E kateqoriyası', emoji: '🚚' },
+    'E': { label: 'E kateqoriyası', emoji: '🚚' }, // E tək verilmir
     'AB': { label: 'A+B kateqoriyası', emoji: '🏍️🚗' },
     'AC': { label: 'A+C kateqoriyası', emoji: '🏍️🚛' },
     'BC': { label: 'B+C kateqoriyası', emoji: '🚗🚛' },

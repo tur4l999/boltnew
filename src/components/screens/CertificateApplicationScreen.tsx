@@ -16,7 +16,7 @@ export function CertificateApplicationScreen() {
     { type: 'B', label: 'B kateqoriyası', description: 'Yüngül avtomobil', emoji: '🚗' },
     { type: 'C', label: 'C kateqoriyası', description: 'Yük avtomobili', emoji: '🚛' },
     { type: 'D', label: 'D kateqoriyası', description: 'Avtobus', emoji: '🚌' },
-    { type: 'E', label: 'E kateqoriyası', description: 'Qoşqu ilə', emoji: '🚚' },
+    // E tək verilmir, yalnız kombinasiyalarla
     { type: 'AB', label: 'A+B kateqoriyası', description: 'Motosikl və avtomobil', emoji: '🏍️🚗' },
     { type: 'AC', label: 'A+C kateqoriyası', description: 'Motosikl və yük avtomobili', emoji: '🏍️🚛' },
     { type: 'BC', label: 'B+C kateqoriyası', description: 'Avtomobil və yük avtomobili', emoji: '🚗🚛' },
