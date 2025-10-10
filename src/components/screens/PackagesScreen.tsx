@@ -1034,70 +1034,165 @@ export function PackagesScreen() {
       )}
 
       {paymentModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setPaymentModalOpen(null)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
-            <button
-              onClick={() => setPaymentModalOpen(null)}
-              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center text-sm border ${
-                isDarkMode ? 'border-gray-600 hover:bg-gray-700 text-gray-300' : 'border-gray-300 hover:bg-gray-100 text-gray-600'
-              }`}
-              aria-label="Bağla"
-            >
-              ✕
-            </button>
-            {(() => {
-              const pkg = packages.find(p => p.id === paymentModalOpen.packageId);
-              const price = pkg ? calculatePrice(pkg.id) : 0;
-              const days = pkg ? selectedDays[pkg.id] : 0;
-              return (
-                <>
-                  <div className="text-2xl mb-2">💳</div>
-                  <div className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>Ödəniş üsulu</div>
-                  <div className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} text-sm mb-3`}>
-                    Alacağınız paket: <span className="font-semibold">{pkg?.name}</span> • <span className="font-semibold">{days} gün</span> • <span className="font-semibold">{price} AZN</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" onClick={() => setPaymentModalOpen(null)} />
+          {(() => {
+            const pkg = packages.find(p => p.id === paymentModalOpen.packageId);
+            const price = pkg ? calculatePrice(pkg.id) : 0;
+            const days = pkg ? selectedDays[pkg.id] : 0;
+            
+            return (
+              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+                isDarkMode ? 'bg-gray-900' : 'bg-white'
+              }`}>
+                
+                {/* Header with gradient */}
+                <div className={`relative p-6 ${
+                  pkg?.id === 'basic'
+                    ? 'bg-gradient-to-br from-orange-500 to-red-600'
+                    : pkg?.popular
+                      ? 'bg-gradient-to-br from-emerald-500 to-green-600'
+                      : 'bg-gradient-to-br from-purple-500 to-blue-600'
+                } text-white`}>
+                  <button
+                    onClick={() => setPaymentModalOpen(null)}
+                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
+                  >
+                    <span className="text-xl font-bold">✕</span>
+                  </button>
+                  
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-5xl">💳</div>
+                    <div>
+                      <h3 className="text-2xl font-black">Ödəniş</h3>
+                      <p className="text-sm opacity-90">Ödəniş üsulunu seçin</p>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 mb-3">
-                    <button
-                      onClick={() => setPaymentMethod('card')}
-                      className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm ${paymentMethod === 'card' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800')}`}
-                    >
-                      Kartla ödə
-                    </button>
+                  
+                  {/* Package Info Card */}
+                  <div className="bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs opacity-80 uppercase tracking-wider">Paket</span>
+                      <span className="text-lg font-black">{pkg?.name}</span>
+                    </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs opacity-80 uppercase tracking-wider">Müddət</span>
+                      <span className="font-bold">{days} gün</span>
+                    </div>
+                    <div className="h-px bg-white/20 my-3"></div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold">Ödəniləcək məbləğ</span>
+                      <span className="text-3xl font-black">{price} ₼</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Methods */}
+                <div className="p-6">
+                  <h4 className={`text-sm font-bold mb-4 uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Ödəniş üsulu
+                  </h4>
+                  
+                  <div className="space-y-3 mb-6">
+                    {/* Balance Payment */}
                     <button
                       onClick={() => setPaymentMethod('balance')}
-                      className={`px-3 py-2 rounded-xl font-bold min-h-[40px] text-sm ${paymentMethod === 'balance' ? 'bg-emerald-600 text-white' : (isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800')}`}
-                    >
-                      Balansla ödə
-                    </button>
-                  </div>
-                  {paymentMethod === 'balance' && (
-                    <div className={`mb-3 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      Cari balans: <span className="font-semibold text-emerald-600">{balance} AZN</span>
-                    </div>
-                  )}
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => setPaymentModalOpen(null)}
-                      className={`px-4 py-2 rounded-xl font-bold min-h-[40px] border ${
-                        isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-200 hover:bg-gray-600' : 'bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200'
+                      className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 ${
+                        paymentMethod === 'balance'
+                          ? isDarkMode
+                            ? 'bg-emerald-900/30 border-emerald-500 shadow-lg shadow-emerald-500/20'
+                            : 'bg-emerald-50 border-emerald-500 shadow-lg shadow-emerald-500/20'
+                          : isDarkMode
+                            ? 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                            : 'bg-gray-50 border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      Bağla
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            paymentMethod === 'balance' ? 'bg-emerald-500' : isDarkMode ? 'bg-gray-700' : 'bg-white'
+                          }`}>
+                            <span className="text-2xl">{paymentMethod === 'balance' ? '✓' : '💰'}</span>
+                          </div>
+                          <div className="text-left">
+                            <div className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                              Balansla ödə
+                            </div>
+                            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              Cari balans: <span className="font-bold text-emerald-600">{balance} AZN</span>
+                            </div>
+                          </div>
+                        </div>
+                        {paymentMethod === 'balance' && (
+                          <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        )}
+                      </div>
                     </button>
+
+                    {/* Card Payment */}
                     <button
-                      onClick={handleConfirmPayment}
-                      className={`px-4 py-2 rounded-xl font-bold min-h-[40px] bg-emerald-600 hover:bg-emerald-700 text-white`}
+                      onClick={() => setPaymentMethod('card')}
+                      className={`w-full p-4 rounded-2xl border-2 transition-all duration-300 ${
+                        paymentMethod === 'card'
+                          ? isDarkMode
+                            ? 'bg-blue-900/30 border-blue-500 shadow-lg shadow-blue-500/20'
+                            : 'bg-blue-50 border-blue-500 shadow-lg shadow-blue-500/20'
+                          : isDarkMode
+                            ? 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                            : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                      }`}
                     >
-                      Təsdiq et
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            paymentMethod === 'card' ? 'bg-blue-500' : isDarkMode ? 'bg-gray-700' : 'bg-white'
+                          }`}>
+                            <span className="text-2xl">{paymentMethod === 'card' ? '✓' : '💳'}</span>
+                          </div>
+                          <div className="text-left">
+                            <div className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                              Kartla ödə
+                            </div>
+                            <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              Debet və ya kredit kart
+                            </div>
+                          </div>
+                        </div>
+                        {paymentMethod === 'card' && (
+                          <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
+                            <span className="text-white text-xs">✓</span>
+                          </div>
+                        )}
+                      </div>
                     </button>
                   </div>
-                </>
-              );
-            })()}
-          </div>
+
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleConfirmPayment}
+                      className="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white py-4 rounded-2xl font-black text-base transition-all duration-300 hover:scale-[1.02] active:scale-95 shadow-lg shadow-emerald-500/30"
+                    >
+                      Ödənişi Tamamla
+                    </button>
+                    
+                    <button
+                      onClick={() => setPaymentModalOpen(null)}
+                      className={`w-full py-3 rounded-2xl font-bold transition-all duration-300 ${
+                        isDarkMode
+                          ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Ləğv et
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 
