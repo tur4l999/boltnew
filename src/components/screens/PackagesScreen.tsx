@@ -752,16 +752,17 @@ export function PackagesScreen() {
             {/* Sadə Indikatorlar */}
             <div className="flex justify-center items-center gap-2 mt-3">
               {packages.map((pkg, index) => (
-                <button
+                <div
                   key={pkg.id}
                   onClick={() => goToPackage(index)}
-                  className={`transition-all duration-300 rounded-full ${
+                  className={`transition-all duration-300 cursor-pointer ${
                     currentPackageIndex === index
-                      ? 'w-8 h-2 bg-gradient-to-r from-emerald-400 to-green-500 shadow-lg shadow-emerald-500/50'
+                      ? 'w-8 rounded-lg bg-gradient-to-r from-emerald-400 to-green-500 shadow-lg shadow-emerald-500/50'
                       : isDarkMode
-                        ? 'w-2 h-2 bg-gray-600'
-                        : 'w-2 h-2 bg-gray-400'
+                        ? 'w-2 h-2 rounded-full bg-gray-600'
+                        : 'w-2 h-2 rounded-full bg-gray-400'
                   }`}
+                  style={currentPackageIndex === index ? { height: '4px' } : {}}
                 />
               ))}
             </div>
