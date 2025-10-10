@@ -596,11 +596,17 @@ export function PackagesScreen() {
                               return (
                                 <div className="text-center space-y-1 w-full">
                                   {discountPercent > 0 && (
-                                    <div className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-                                      <span className="text-xs font-bold">
-                                        <span className="line-through opacity-70">{oldPrice} AZN</span>
-                                        <span className="ml-2 text-yellow-300">-{discountPercent}%</span>
-                                      </span>
+                                    <div className="flex items-center justify-center gap-2">
+                                      <span className="text-xs font-bold line-through opacity-70">{oldPrice} AZN</span>
+                                      <div className={`px-2.5 py-1 rounded-lg ${
+                                        pkg.id === 'basic'
+                                          ? 'bg-gradient-to-r from-yellow-400 to-orange-400'
+                                          : pkg.popular
+                                            ? 'bg-gradient-to-r from-green-400 to-emerald-400'
+                                            : 'bg-gradient-to-r from-blue-400 to-purple-400'
+                                      }`}>
+                                        <span className="text-xs font-black text-gray-900">-{discountPercent}%</span>
+                                      </div>
                                     </div>
                                   )}
                                   
