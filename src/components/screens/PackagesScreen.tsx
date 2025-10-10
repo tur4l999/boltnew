@@ -863,25 +863,6 @@ export function PackagesScreen() {
             ? 'bg-gray-800/60 border-gray-700/50' 
             : 'bg-white/60 border-gray-200/50'
         }`}>
-          <div className="grid grid-cols-3 gap-3 mb-3">
-            {[
-              { icon: '💳', title: 'Kart' },
-              { icon: '📱', title: 'Mobil' },
-              { icon: '🏦', title: 'Bank' }
-            ].map((method, index) => (
-              <div key={index} className={`p-2 rounded-xl text-center transition-all duration-300 ${
-                isDarkMode 
-                  ? 'bg-gray-800/40 hover:bg-gray-700/50' 
-                  : 'bg-white/40 hover:bg-gray-50/50'
-              }`}>
-                <div className="text-xl mb-1">{method.icon}</div>
-                <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                  {method.title}
-                </div>
-              </div>
-            ))}
-          </div>
-          
           <div className="flex items-center justify-center gap-4 text-xs">
             {[
               { icon: '🔒', text: 'Təhlükəsiz', color: 'text-green-500' },
