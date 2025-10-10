@@ -32,6 +32,7 @@ import { FinesScreen } from '../screens/FinesScreen';
 import { DrivingPracticeScreen } from '../screens/DrivingPracticeScreen';
 import { AppealsScreen } from '../screens/AppealsScreen';
 import { CertificateApplicationScreen } from '../screens/CertificateApplicationScreen';
+import { ApplicationFormScreen } from '../screens/ApplicationFormScreen';
 import { QAScreen } from '../screens/QAScreen';
 import { QADetailScreen } from '../screens/QADetailScreen';
 import { QAFormScreen } from '../screens/QAFormScreen';
@@ -98,6 +99,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'DrivingPractice' && <DrivingPracticeScreen />}
       {currentScreen.screen === 'Appeals' && <AppealsScreen />}
       {currentScreen.screen === 'CertificateApplication' && <CertificateApplicationScreen />}
+      {currentScreen.screen === 'ApplicationForm' && <ApplicationFormScreen selectedTypes={currentScreen.params.selectedTypes || []} />}
       {currentScreen.screen === 'QA' && <QAScreen />}
       {currentScreen.screen === 'QADetail' && <QADetailScreen />}
       {currentScreen.screen === 'QAForm' && <QAFormScreen />}
@@ -116,7 +118,7 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'SecurePdf' && <SecurePdfScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList', 'SecurePdf'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'ApplicationForm', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList', 'SecurePdf'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
