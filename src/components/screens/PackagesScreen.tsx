@@ -510,11 +510,12 @@ export function PackagesScreen() {
 
         {activeTab === 'training' && (
           <div className="relative pb-4">
-            {/* Carousel Container */}
+            {/* Carousel Container with Edge Previews */}
             <div 
-              className={`relative overflow-visible transition-all duration-300 ${
+              className={`relative transition-all duration-300 ${
                 isDragging ? 'cursor-grabbing' : 'cursor-grab'
               }`}
+              style={{ overflow: 'visible' }}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -530,13 +531,22 @@ export function PackagesScreen() {
               <div 
                 className="flex transition-transform duration-700 ease-out"
                 style={{
-                  transform: `translateX(calc(-${currentPackageIndex * 100}% + ${dragOffset}px))`,
-                  transition: isDragging ? 'none' : 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
+                  transform: `translateX(calc(-${currentPackageIndex * 100}% + ${currentPackageIndex * 24}px + ${dragOffset}px))`,
+                  transition: isDragging ? 'none' : 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  paddingLeft: '12px',
+                  paddingRight: '12px'
                 }}
               >
                 {packages.map((pkg, index) => (
                   <div key={pkg.id} className="w-full flex-shrink-0 px-3">
-                    <div className="relative group pointer-events-auto">
+                    <div 
+                      className="relative group pointer-events-auto transition-all duration-500"
+                      style={{
+                        opacity: index === currentPackageIndex ? 1 : 0.3,
+                        transform: index === currentPackageIndex ? 'scale(1)' : 'scale(0.85)',
+                        filter: index === currentPackageIndex ? 'none' : 'blur(2px)'
+                      }}
+                    >
                       {/* Tamamilə Yeni Premium Kart Dizaynı */}
                       <div 
                         onClick={(e) => e.stopPropagation()}
@@ -738,34 +748,6 @@ export function PackagesScreen() {
               </div>
             </div>
 
-            {/* Sadə Navigation Arrows */}
-            <button
-              onClick={prevPackage}
-              disabled={currentPackageIndex === 0}
-              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg ${
-                currentPackageIndex === 0
-                  ? 'opacity-0 pointer-events-none'
-                  : isDarkMode
-                    ? 'bg-gray-800 text-gray-200 border border-gray-600/50'
-                    : 'bg-white text-gray-700 border border-gray-300/50'
-              } hover:scale-110 active:scale-95`}
-            >
-              <span className="text-xl">‹</span>
-            </button>
-
-            <button
-              onClick={nextPackage}
-              disabled={currentPackageIndex === packages.length - 1}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg ${
-                currentPackageIndex === packages.length - 1
-                  ? 'opacity-0 pointer-events-none'
-                  : isDarkMode
-                    ? 'bg-gray-800 text-gray-200 border border-gray-600/50'
-                    : 'bg-white text-gray-700 border border-gray-300/50'
-              } hover:scale-110 active:scale-95`}
-            >
-              <span className="text-xl">›</span>
-            </button>
 
             {/* Sadə Indikatorlar */}
             <div className="flex justify-center items-center gap-2 mt-3">
