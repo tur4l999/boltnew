@@ -867,7 +867,7 @@ export function PackagesScreen() {
             {[
               { icon: '🔒', text: 'Təhlükəsiz', color: 'text-green-500' },
               { icon: '⚡', text: 'Ani aktivləşmə', color: 'text-yellow-500' },
-              { icon: '🎯', text: '7/24 dəstək', color: 'text-blue-500' }
+              { icon: '💬', text: 'Dəstək xidməti', color: 'text-blue-500' }
             ].map((item, index) => (
               <div key={index} className="flex items-center gap-1">
                 <span className={`${item.color}`}>{item.icon}</span>
