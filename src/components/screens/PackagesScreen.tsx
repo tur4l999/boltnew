@@ -21,7 +21,7 @@ interface DayOption {
 }
 
 export function PackagesScreen() {
-  const { t, goBack, balance, purchasePackage, purchasePackageByCard, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
+  const { t, goBack, balance, simulatorBalance, purchasePackage, purchasePackageByCard, purchaseTickets, isDarkMode, navigate, switchTab } = useApp();
   const [selectedDays, setSelectedDays] = useState<Record<string, number>>({
     basic: 45,
     standart: 45,
@@ -45,6 +45,7 @@ export function PackagesScreen() {
   const [insufficientTrainingPrice, setInsufficientTrainingPrice] = useState<number>(0);
   const [paymentModalOpen, setPaymentModalOpen] = useState<null | { packageId: string; scheduledAt: Date }>(null);
   const [paymentMethod, setPaymentMethod] = useState<'balance' | 'card'>('balance');
+  const [faqOpen, setFaqOpen] = useState<number | null>(null);
   
   // Carousel state
   const [currentPackageIndex, setCurrentPackageIndex] = useState<number>(1); // Start with popular (standart)
@@ -406,23 +407,47 @@ export function PackagesScreen() {
             </div>
             
             {/* Balance Display */}
-            <div className={`relative px-4 py-2.5 rounded-2xl border-2 transition-all duration-300 ${
-              isDarkMode 
-                ? 'bg-emerald-900/30 border-emerald-500/40' 
-                : 'bg-emerald-50 border-emerald-300/50'
-            }`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full animate-pulse ${
-                  isDarkMode ? 'bg-emerald-400' : 'bg-emerald-500'
-                }`}></div>
-                <span className={`text-xs font-medium ${
-                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                }`}>Balans</span>
-              </div>
-              <div className={`text-lg font-black ${
-                isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+            <div className="flex items-center gap-2">
+              {/* Premium Balance */}
+              <div className={`relative px-3 py-2 rounded-2xl border-2 transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-emerald-900/30 border-emerald-500/40' 
+                  : 'bg-emerald-50 border-emerald-300/50'
               }`}>
-                {balance} AZN
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    isDarkMode ? 'bg-emerald-400' : 'bg-emerald-500'
+                  }`}></div>
+                  <span className={`text-[10px] font-medium ${
+                    isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                  }`}>Balans</span>
+                </div>
+                <div className={`text-base font-black ${
+                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                }`}>
+                  {balance} ₼
+                </div>
+              </div>
+              
+              {/* Simulator Balance */}
+              <div className={`relative px-3 py-2 rounded-2xl border-2 transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-blue-900/30 border-blue-500/40' 
+                  : 'bg-blue-50 border-blue-300/50'
+              }`}>
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    isDarkMode ? 'bg-blue-400' : 'bg-blue-500'
+                  }`}></div>
+                  <span className={`text-[10px] font-medium ${
+                    isDarkMode ? 'text-blue-300' : 'text-blue-700'
+                  }`}>Bilet</span>
+                </div>
+                <div className={`text-base font-black ${
+                  isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                }`}>
+                  {simulatorBalance} 🎫
+                </div>
               </div>
             </div>
           </div>
@@ -860,6 +885,127 @@ export function PackagesScreen() {
                 </span>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Modern FAQ Section */}
+        <div className={`mt-6 rounded-3xl border-2 overflow-hidden transition-all duration-300 ${
+          isDarkMode 
+            ? 'bg-gray-800/60 border-gray-700/50' 
+            : 'bg-white/60 border-gray-200/50'
+        }`}>
+          {/* FAQ Header */}
+          <div className={`p-6 border-b-2 ${
+            isDarkMode 
+              ? 'bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-gray-700/50' 
+              : 'bg-gradient-to-br from-purple-50/40 to-blue-50/40 border-gray-200/50'
+          }`}>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="text-3xl">❓</div>
+              <h3 className={`text-2xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Tez-tez verilən suallar
+              </h3>
+            </div>
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Paketlər haqqında ətraflı məlumat
+            </p>
+          </div>
+
+          {/* FAQ Items */}
+          <div className="p-4">
+            {[
+              {
+                question: 'Paket nə vaxt aktivləşir?',
+                answer: 'Paketi satın aldıqdan dərhal sonra və ya seçdiyiniz tarixdə aktivləşə bilər. "İndi başla" seçimi ilə paket dərhal aktivləşir, "Tarixi seç" seçimi ilə istədiyiniz gün və saatı planlaşdıra bilərsiniz.'
+              },
+              {
+                question: 'Paket müddəti necə hesablanır?',
+                answer: 'Paket müddəti aktivləşmə tarixindən etibarən hesablanır. Məsələn, 45 günlük paket seçsəniz, aktivləşmə tarixindən sonra 45 gün ərzində bütün xüsusiyyətlərdən istifadə edə bilərsiniz.'
+              },
+              {
+                question: 'Ödəniş üsulları hansılardır?',
+                answer: 'Balans və ya kartla ödəniş edə bilərsiniz. Balansla ödəniş üçün hesabınızda kifayət qədər məbləğ olmalıdır. Kart ödənişi üçün istənilən bank kartından istifadə edə bilərsiniz.'
+              },
+              {
+                question: 'Endirim nə vaxtadək etibarlıdır?',
+                answer: 'Flash Sale endirimi məhdud müddətlidir. Yuxarıdakı sayğacda qalan vaxtı izləyə bilərsiniz. Endirim başa çatdıqdan sonra qiymətlər normal səviyyəyə qayıdacaq.'
+              },
+              {
+                question: 'Paketi geri qaytara bilərəmmi?',
+                answer: 'Əgər paket hələ aktivləşməyibsə və 24 saat keçməyibsə, ödənilmiş məbləği geri qaytara bilərsiniz. Aktivləşmiş paketlər üçün geri qaytarma mümkün deyil.'
+              },
+              {
+                question: 'Bir neçə paket eyni vaxtda ola bilərmi?',
+                answer: 'Xeyr, eyni anda yalnız bir təlim paketi aktiv ola bilər. Yeni paket almaq istəyirsinizsə, mövcud paketin müddəti bitməlidir və ya ləğv etməlisiniz.'
+              }
+            ].map((faq, index) => (
+              <div
+                key={index}
+                className={`mb-3 rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
+                  isDarkMode 
+                    ? 'bg-gray-900/40 border-gray-700/50' 
+                    : 'bg-white/40 border-gray-200/50'
+                } ${faqOpen === index ? 'shadow-lg' : ''}`}
+              >
+                <button
+                  onClick={() => setFaqOpen(faqOpen === index ? null : index)}
+                  className="w-full p-4 flex items-center justify-between group"
+                >
+                  <div className="flex items-start gap-3 flex-1 text-left">
+                    <div className={`text-xl transition-transform duration-300 ${
+                      faqOpen === index ? 'rotate-90' : ''
+                    }`}>
+                      ▶
+                    </div>
+                    <div className="flex-1">
+                      <div className={`font-bold text-sm ${
+                        isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                      }`}>
+                        {faq.question}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                    faqOpen === index
+                      ? isDarkMode
+                        ? 'bg-purple-500/30 text-purple-400'
+                        : 'bg-purple-100 text-purple-600'
+                      : isDarkMode
+                        ? 'bg-gray-800/50 text-gray-400'
+                        : 'bg-gray-100/50 text-gray-600'
+                  }`}>
+                    {faqOpen === index ? '−' : '+'}
+                  </div>
+                </button>
+                
+                {faqOpen === index && (
+                  <div className={`px-4 pb-4 pl-[52px] ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  } text-sm leading-relaxed animate-in slide-in-from-top-2 duration-300`}>
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* FAQ Footer */}
+          <div className={`p-4 border-t-2 ${
+            isDarkMode 
+              ? 'bg-gray-900/30 border-gray-700/50' 
+              : 'bg-gray-50/30 border-gray-200/50'
+          }`}>
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="text-xl">💬</span>
+              <span className={`font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Başqa sualınız var?
+              </span>
+              <button className={`font-bold underline ${
+                isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-700'
+              }`}>
+                Dəstək ilə əlaqə
+              </button>
+            </div>
           </div>
         </div>
       </div>
