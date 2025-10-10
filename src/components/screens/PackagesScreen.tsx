@@ -864,158 +864,225 @@ export function PackagesScreen() {
         </div>
       </div>
 
-      {/* Modern Activation Modal */}
+      {/* Ultra Modern Activation Modal */}
       {activationModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setActivationModalOpen(null)} />
-          <div className={`relative z-10 w-full max-w-md rounded-3xl p-6 shadow-2xl border-2 backdrop-blur-xl transition-all duration-300 ${
-            isDarkMode 
-              ? 'bg-gray-900/90 border-gray-700/50' 
-              : 'bg-white/90 border-gray-200/50'
-          }`}>
-            {/* Modal Header */}
-            <div className="text-center mb-6">
-              <div className="text-4xl mb-3">⚡</div>
-              <h2 className={`text-2xl font-black mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                Aktivləşdirmə seçimi
-              </h2>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                İndi aktivləşdirin və ya aktivləşdirmə tarixini seçin
-              </p>
-            </div>
-
-            {/* Modern Activation Mode Buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <button
-                onClick={() => setActivationMode('now')}
-                className={`relative p-4 rounded-2xl border-2 font-bold text-sm transition-all duration-300 group ${
-                  activationMode === 'now'
-                    ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/25'
-                    : isDarkMode
-                      ? 'bg-gray-800/50 border-gray-600/50 text-gray-300 hover:bg-gray-700/50 hover:border-emerald-500/50'
-                      : 'bg-white/50 border-gray-300/50 text-gray-700 hover:bg-emerald-50/50 hover:border-emerald-400/50'
-                } hover:scale-105 active:scale-95`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-2xl">🚀</span>
-                  <span>İndi başla</span>
-                </div>
-                {activationMode === 'now' && (
-                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-black">✓</span>
-                  </div>
-                )}
-              </button>
-              
-              <button
-                onClick={() => setActivationMode('date')}
-                className={`relative p-4 rounded-2xl border-2 font-bold text-sm transition-all duration-300 group ${
-                  activationMode === 'date'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white border-blue-400 shadow-lg shadow-blue-500/25'
-                    : isDarkMode
-                      ? 'bg-gray-800/50 border-gray-600/50 text-gray-300 hover:bg-gray-700/50 hover:border-blue-500/50'
-                      : 'bg-white/50 border-gray-300/50 text-gray-700 hover:bg-blue-50/50 hover:border-blue-400/50'
-                } hover:scale-105 active:scale-95`}
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <span className="text-2xl">📅</span>
-                  <span>Tarixi seç</span>
-                </div>
-                {activationMode === 'date' && (
-                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-black">✓</span>
-                  </div>
-                )}
-              </button>
-            </div>
-
-            {activationMode === 'date' && (
-              <div className={`p-2 rounded-xl border mb-3 ${isDarkMode ? 'border-gray-700 bg-gray-900/30' : 'border-gray-200 bg-gray-50'}`}>
-                <Calendar
-                  initialDate={new Date()}
-                  minDate={new Date()}
-                  onChange={(d) => setActivationDate(d)}
-                />
-                <div className="mt-2 flex items-center gap-2">
-                  <select
-                    value={activationHour}
-                    onChange={(e) => setActivationHour(e.target.value)}
-                    className={`px-2 py-1 rounded border text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70 backdrop-blur-sm" onClick={() => setActivationModalOpen(null)} />
+          
+          {(() => {
+            const modalPkg = activationModalOpen ? packages.find(p => p.id === activationModalOpen.packageId) : null;
+            const dt = new Date(activationMode === 'date' && activationDate ? activationDate : new Date());
+            if (activationMode === 'date' && activationDate) {
+              dt.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
+            }
+            
+            return (
+              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+                isDarkMode ? 'bg-gray-900' : 'bg-white'
+              }`}>
+                
+                {/* Header with gradient */}
+                <div className={`relative p-6 ${
+                  modalPkg?.id === 'basic'
+                    ? 'bg-gradient-to-br from-orange-500 to-red-600'
+                    : modalPkg?.popular
+                      ? 'bg-gradient-to-br from-emerald-500 to-green-600'
+                      : 'bg-gradient-to-br from-purple-500 to-blue-600'
+                } text-white`}>
+                  <button
+                    onClick={() => setActivationModalOpen(null)}
+                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
                   >
-                    {Array.from({ length: 24 }).map((_, i) => {
-                      const v = String(i).padStart(2, '0');
-                      return <option key={v} value={v}>{v}</option>;
-                    })}
-                  </select>
-                  <span className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>:</span>
-                  <select
-                    value={activationMinute}
-                    onChange={(e) => setActivationMinute(e.target.value)}
-                    className={`px-2 py-1 rounded border text-sm ${isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
-                  >
-                    {['00','15','30','45'].map((v) => (
-                      <option key={v} value={v}>{v}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mt-3">
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs`}>Seçilən tarix</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-lg font-extrabold`}>
-                    {activationDate ? `${activationDate.toLocaleDateString('az-AZ')} ${activationHour}:${activationMinute}` : '—'}
+                    <span className="text-xl font-bold">✕</span>
+                  </button>
+                  
+                  <div className="text-center">
+                    <div className="text-5xl mb-3">⚡</div>
+                    <h2 className="text-2xl font-black mb-2">Aktivləşdirmə</h2>
+                    <p className="text-sm opacity-90">Paketin başlama vaxtını seçin</p>
                   </div>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>
-                    Paketin aktivləşdiriləcəyi tarix: {activationDate ? `${activationDate.toLocaleDateString('az-AZ')} ${activationHour}:${activationMinute}` : '—'}
+                </div>
+
+                <div className="p-6">
+                  {/* Package Info */}
+                  <div className={`p-4 rounded-2xl mb-6 ${
+                    isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
+                  }`}>
+                    <div className="text-center">
+                      <div className={`text-xs uppercase tracking-wider mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        Seçilən Paket
+                      </div>
+                      <div className={`text-xl font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                        {modalPkg?.name}
+                      </div>
+                      <div className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {modalPkg ? selectedDays[modalPkg.id] : 0} gün • {modalPkg ? calculatePrice(modalPkg.id) : 0} AZN
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Activation Mode Buttons */}
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <button
+                      onClick={() => setActivationMode('now')}
+                      className={`relative p-5 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                        activationMode === 'now'
+                          ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white border-emerald-400 shadow-xl shadow-emerald-500/30 scale-105'
+                          : isDarkMode
+                            ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-emerald-500/50'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-emerald-400/50'
+                      } hover:scale-105 active:scale-95`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl">🚀</span>
+                        <span className="text-sm">İndi başla</span>
+                      </div>
+                      {activationMode === 'now' && (
+                        <div className="absolute -top-2 -right-2 w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                          <span className="text-sm font-black text-gray-900">✓</span>
+                        </div>
+                      )}
+                    </button>
+                    
+                    <button
+                      onClick={() => setActivationMode('date')}
+                      className={`relative p-5 rounded-2xl border-2 font-bold transition-all duration-300 ${
+                        activationMode === 'date'
+                          ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white border-blue-400 shadow-xl shadow-blue-500/30 scale-105'
+                          : isDarkMode
+                            ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-blue-500/50'
+                            : 'bg-white border-gray-200 text-gray-700 hover:border-blue-400/50'
+                      } hover:scale-105 active:scale-95`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="text-3xl">📅</span>
+                        <span className="text-sm">Tarixi seç</span>
+                      </div>
+                      {activationMode === 'date' && (
+                        <div className="absolute -top-2 -right-2 w-7 h-7 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
+                          <span className="text-sm font-black text-gray-900">✓</span>
+                        </div>
+                      )}
+                    </button>
+                  </div>
+
+                  {activationMode === 'date' && (
+                    <div className="space-y-4 mb-6">
+                      {/* Calendar */}
+                      <div className={`p-4 rounded-2xl border-2 ${
+                        isDarkMode ? 'border-blue-500/30 bg-gray-800/50' : 'border-blue-300/30 bg-blue-50/30'
+                      }`}>
+                        <div className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                          📅 Tarix seçin
+                        </div>
+                        <Calendar
+                          initialDate={new Date()}
+                          minDate={new Date()}
+                          onChange={(d) => setActivationDate(d)}
+                        />
+                      </div>
+                      
+                      {/* Time Picker - Modern */}
+                      <div className={`p-4 rounded-2xl border-2 ${
+                        isDarkMode ? 'border-purple-500/30 bg-gray-800/50' : 'border-purple-300/30 bg-purple-50/30'
+                      }`}>
+                        <div className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                          🕐 Saat seçin
+                        </div>
+                        <div className="flex items-center justify-center gap-3">
+                          <select
+                            value={activationHour}
+                            onChange={(e) => setActivationHour(e.target.value)}
+                            className={`flex-1 px-4 py-3 rounded-xl border-2 text-center text-lg font-bold ${
+                              isDarkMode 
+                                ? 'bg-gray-900 border-gray-700 text-gray-100' 
+                                : 'bg-white border-gray-200 text-gray-900'
+                            }`}
+                          >
+                            {Array.from({ length: 24 }).map((_, i) => {
+                              const v = String(i).padStart(2, '0');
+                              return <option key={v} value={v}>{v}</option>;
+                            })}
+                          </select>
+                          <span className={`text-2xl font-black ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>:</span>
+                          <select
+                            value={activationMinute}
+                            onChange={(e) => setActivationMinute(e.target.value)}
+                            className={`flex-1 px-4 py-3 rounded-xl border-2 text-center text-lg font-bold ${
+                              isDarkMode 
+                                ? 'bg-gray-900 border-gray-700 text-gray-100' 
+                                : 'bg-white border-gray-200 text-gray-900'
+                            }`}
+                          >
+                            {['00','15','30','45'].map((v) => (
+                              <option key={v} value={v}>{v}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      
+                      {/* Selected Date Display */}
+                      {activationDate && (
+                        <div className={`p-4 rounded-2xl ${
+                          isDarkMode 
+                            ? 'bg-gradient-to-br from-emerald-900/30 to-green-900/30 border-2 border-emerald-500/40' 
+                            : 'bg-gradient-to-br from-emerald-50 to-green-50 border-2 border-emerald-300/40'
+                        }`}>
+                          <div className="flex items-center gap-3">
+                            <div className="text-3xl">✓</div>
+                            <div className="flex-1">
+                              <div className={`text-xs font-bold uppercase tracking-wider mb-1 ${
+                                isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                              }`}>
+                                Aktivləşmə tarixi
+                              </div>
+                              <div className={`text-lg font-black ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                                {activationDate.toLocaleDateString('az-AZ', { 
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric'
+                                })}
+                              </div>
+                              <div className={`text-base font-bold mt-1 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                                🕐 {activationHour}:{activationMinute}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => activationModalOpen && openPaymentFor(activationModalOpen.packageId)}
+                      disabled={activationMode === 'date' && !activationDate}
+                      className={`w-full py-4 rounded-2xl font-black text-base transition-all duration-300 shadow-xl ${
+                        activationMode === 'date' && !activationDate
+                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                          : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white hover:scale-[1.02] active:scale-95 shadow-emerald-500/30'
+                      }`}
+                    >
+                      {activationMode === 'now' ? '🚀 İndi Aktivləşdir' : '📅 Planlaşdır və Davam et'}
+                    </button>
+                    
+                    <button
+                      onClick={() => setActivationModalOpen(null)}
+                      className={`w-full py-3 rounded-2xl font-bold transition-all duration-300 ${
+                        isDarkMode
+                          ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      Ləğv et
+                    </button>
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* Summary (package and chosen time) */}
-            {(() => {
-              const modalPkg = activationModalOpen ? packages.find(p => p.id === activationModalOpen.packageId) : null;
-              const dt = new Date(activationMode === 'date' && activationDate ? activationDate : new Date());
-              if (activationMode === 'date' && activationDate) {
-                dt.setHours(parseInt(activationHour, 10), parseInt(activationMinute, 10), 0, 0);
-              }
-              const whenStr = dt.toLocaleString('az-AZ');
-              const pkgDays = modalPkg ? selectedDays[modalPkg.id] : undefined;
-              return (
-                <div className={`mt-3 p-3 rounded-lg ${isDarkMode ? 'bg-gray-900/30 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mb-1`}>Seçilən paket</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-base font-semibold`}>
-                    {modalPkg ? `${modalPkg.name}${pkgDays ? ` • ${pkgDays} gün` : ''}` : '—'}
-                  </div>
-                  <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-xs mt-2`}>Aktivləşdirmə</div>
-                  <div className={`${isDarkMode ? 'text-gray-100' : 'text-gray-900'} text-xl font-extrabold`}>{whenStr}</div>
-                </div>
-              );
-            })()}
-
-            {/* Modern Action Buttons */}
-            <div className={`grid grid-cols-2 gap-4 mt-6 pt-6 ${isDarkMode ? 'border-t border-gray-700/50' : 'border-t border-gray-200/50'}`}>
-              <button
-                onClick={() => setActivationModalOpen(null)}
-                className={`px-6 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 active:scale-95 ${
-                  isDarkMode 
-                    ? 'bg-gray-800/80 border-2 border-gray-600/50 text-gray-200 hover:bg-gray-700/80' 
-                    : 'bg-gray-100/80 border-2 border-gray-300/50 text-gray-700 hover:bg-gray-200/80'
-                }`}
-              >
-                Bağla
-              </button>
-              <button
-                onClick={() => activationModalOpen && openPaymentFor(activationModalOpen.packageId)}
-                disabled={activationMode === 'date' && !activationDate}
-                className={`px-6 py-3 rounded-2xl font-bold transition-all duration-300 ${
-                  activationMode === 'date' && !activationDate
-                    ? 'bg-gray-400/50 text-gray-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white hover:scale-105 active:scale-95 shadow-lg shadow-emerald-500/25'
-                }`}
-              >
-                Davam et
-              </button>
-            </div>
-          </div>
+            );
+          })()}
         </div>
       )}
 
