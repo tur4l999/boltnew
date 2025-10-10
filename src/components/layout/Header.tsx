@@ -7,6 +7,7 @@ import { EmojiIcon } from '../ui/EmojiIcon';
 export function Header() {
   const { t, language, setLanguage, navigate, isDarkMode } = useApp();
   const userName = "Tural Qarayev";
+  const schoolName = "DDA"; // School/organization name - can be changed in the future
   
   return (
     <div className="sticky top-0 z-30 mt-0">
@@ -39,15 +40,15 @@ export function Header() {
           </div>
           
           <div className="flex-1 leading-tight">
-            <div className={`text-[10px] font-medium transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              <span className="bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent font-bold">DDA.az</span>
-            </div>
             <div className={`text-xs font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName.split(' ')[0]} <EmojiIcon emoji="👋" size={12} className="inline-block" />
+              {t.hello}, {userName} <EmojiIcon emoji="👋" size={12} className="inline-block" />
+            </div>
+            <div className={`text-[10px] font-medium transition-colors duration-200 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
+              {schoolName}
             </div>
           </div>
           
