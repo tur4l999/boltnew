@@ -337,58 +337,76 @@ export function PackagesScreen() {
   };
 
   return (
-    <div className={`relative min-h-screen transition-all duration-300 ${
+    <div className={`relative min-h-screen transition-all duration-500 overflow-hidden ${
       isDarkMode 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800' 
-        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100'
+        ? 'bg-gradient-to-br from-gray-950 via-gray-900 to-black' 
+        : 'bg-gradient-to-br from-blue-50 via-white to-purple-50'
     }`}>
-      {/* Modern Header with Glass Morphism */}
-      <div className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-all duration-300 ${
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className={`absolute top-20 -right-20 w-72 h-72 rounded-full blur-3xl opacity-30 animate-pulse ${
+          isDarkMode ? 'bg-emerald-500/20' : 'bg-emerald-300/40'
+        }`} style={{ animationDuration: '4s' }}></div>
+        <div className={`absolute -bottom-20 -left-20 w-96 h-96 rounded-full blur-3xl opacity-20 animate-pulse ${
+          isDarkMode ? 'bg-purple-500/20' : 'bg-purple-300/40'
+        }`} style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full blur-3xl opacity-10 animate-pulse ${
+          isDarkMode ? 'bg-blue-500/20' : 'bg-blue-300/40'
+        }`} style={{ animationDuration: '5s', animationDelay: '2s' }}></div>
+      </div>
+
+      {/* Ultra Modern Header with Glassmorphism */}
+      <div className={`sticky top-0 z-50 backdrop-blur-2xl border-b transition-all duration-500 ${
         isDarkMode 
-          ? 'bg-gray-900/80 border-gray-700/50' 
-          : 'bg-white/80 border-gray-200/50'
+          ? 'bg-gray-900/70 border-gray-700/30 shadow-xl shadow-black/20' 
+          : 'bg-white/70 border-gray-200/40 shadow-xl shadow-gray-300/20'
       }`}>
-        <div className="px-4 py-4">
+        <div className="px-5 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={goBack}
-                className={`w-11 h-11 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 group ${
+                className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 group backdrop-blur-xl ${
                   isDarkMode 
-                    ? 'border-gray-600/50 bg-gray-800/50 hover:bg-gray-700/80 hover:border-gray-500 text-gray-200' 
-                    : 'border-gray-300/50 bg-white/50 hover:bg-gray-50/80 hover:border-gray-400 text-gray-700'
-                } hover:scale-105 active:scale-95`}
+                    ? 'border-gray-600/40 bg-gradient-to-br from-gray-800/60 to-gray-900/60 hover:from-gray-700/80 hover:to-gray-800/80 hover:border-emerald-500/50 text-gray-200 shadow-lg shadow-black/30' 
+                    : 'border-gray-300/40 bg-gradient-to-br from-white/60 to-gray-50/60 hover:from-gray-50/80 hover:to-white/80 hover:border-emerald-400/50 text-gray-700 shadow-lg shadow-gray-400/30'
+                } hover:scale-110 active:scale-95`}
               >
-                <span className="text-lg group-hover:translate-x-[-2px] transition-transform duration-200">←</span>
+                <span className="text-xl font-bold group-hover:translate-x-[-3px] transition-transform duration-300">←</span>
               </button>
               <div>
-                <h1 className={`text-2xl font-black tracking-tight transition-colors duration-200 ${
-                  isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                <h1 className={`text-2xl font-black tracking-tight transition-colors duration-300 bg-gradient-to-r bg-clip-text ${
+                  isDarkMode 
+                    ? 'from-emerald-400 via-green-400 to-teal-400 text-transparent' 
+                    : 'from-emerald-600 via-green-600 to-teal-600 text-transparent'
                 }`}>Təlim Paketləri</h1>
-                <p className={`text-sm transition-colors duration-200 ${
+                <p className={`text-sm font-medium transition-colors duration-300 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                }`}>Premium təlim həlləri</p>
+                }`}>✨ Premium təhsil həlləri</p>
               </div>
             </div>
             
-            {/* Enhanced Balance Display */}
-            <div className={`relative px-4 py-2.5 rounded-2xl border-2 backdrop-blur-sm transition-all duration-300 ${
+            {/* Premium Balance Display */}
+            <div className={`relative px-5 py-3 rounded-2xl border-2 backdrop-blur-xl transition-all duration-500 overflow-hidden group hover:scale-105 ${
               isDarkMode 
-                ? 'bg-gradient-to-r from-emerald-900/30 to-green-900/30 border-emerald-500/30' 
-                : 'bg-gradient-to-r from-emerald-50 to-green-50 border-emerald-200/50'
+                ? 'bg-gradient-to-br from-emerald-900/40 to-green-900/40 border-emerald-500/40 shadow-lg shadow-emerald-500/20' 
+                : 'bg-gradient-to-br from-emerald-50/80 to-green-50/80 border-emerald-300/60 shadow-lg shadow-emerald-500/20'
             }`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full animate-pulse ${
-                  isDarkMode ? 'bg-emerald-400' : 'bg-emerald-500'
-                }`}></div>
-                <span className={`text-xs font-medium ${
-                  isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
-                }`}>Balans</span>
-              </div>
-              <div className={`text-lg font-black ${
-                isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-              }`}>
-                {balance} AZN
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-emerald-400/20 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className={`w-2.5 h-2.5 rounded-full animate-pulse shadow-lg ${
+                    isDarkMode ? 'bg-emerald-400 shadow-emerald-400/50' : 'bg-emerald-500 shadow-emerald-500/50'
+                  }`}></div>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${
+                    isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
+                  }`}>Balans</span>
+                </div>
+                <div className={`text-xl font-black ${
+                  isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
+                }`}>
+                  {balance} AZN
+                </div>
               </div>
             </div>
           </div>
@@ -396,55 +414,53 @@ export function PackagesScreen() {
       </div>
 
       <div className="px-3 pb-20 pt-4">
-        {/* Compact Filter Buttons */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-            {activeTab === 'training' ? 'Təlim Paketləri' : 'Digər Paketlər'}
-          </h2>
-          
-          <div className={`flex items-center gap-2 p-1 rounded-2xl border transition-all duration-300 ${
+        {/* Ultra Modern Filter Buttons */}
+        <div className="flex items-center justify-center mb-6 relative z-10">
+          <div className={`flex items-center gap-3 p-1.5 rounded-3xl border-2 backdrop-blur-2xl transition-all duration-500 shadow-2xl ${
             isDarkMode 
-              ? 'bg-gray-800/50 border-gray-700/50' 
-              : 'bg-white/50 border-gray-200/50'
+              ? 'bg-gray-900/60 border-gray-700/40 shadow-black/30' 
+              : 'bg-white/60 border-gray-200/40 shadow-gray-400/20'
           }`}>
             <button
               onClick={() => setActiveTab('training')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
+              className={`px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-500 flex items-center gap-2 ${
                 activeTab === 'training'
                   ? isDarkMode 
-                    ? 'bg-emerald-600 text-white shadow-md' 
-                    : 'bg-emerald-500 text-white shadow-md'
+                    ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg shadow-emerald-500/40 scale-105' 
+                    : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white shadow-lg shadow-emerald-500/40 scale-105'
                   : isDarkMode
-                    ? 'text-gray-400 hover:text-gray-200'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'text-gray-400 hover:text-gray-200 hover:scale-105'
+                    : 'text-gray-600 hover:text-gray-800 hover:scale-105'
               }`}
             >
-              🎓 Təlim
+              <span className="text-lg">🎓</span>
+              <span>Təlim</span>
             </button>
             
             <button
               onClick={() => setActiveTab('other')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
+              className={`px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-500 flex items-center gap-2 ${
                 activeTab === 'other'
                   ? isDarkMode 
-                    ? 'bg-purple-600 text-white shadow-md' 
-                    : 'bg-purple-500 text-white shadow-md'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/40 scale-105' 
+                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/40 scale-105'
                   : isDarkMode
-                    ? 'text-gray-400 hover:text-gray-200'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'text-gray-400 hover:text-gray-200 hover:scale-105'
+                    : 'text-gray-600 hover:text-gray-800 hover:scale-105'
               }`}
             >
-              📦 Digər
+              <span className="text-lg">🎁</span>
+              <span>Digər</span>
             </button>
           </div>
         </div>
 
         {activeTab === 'training' && (
           <div className="relative">
-            {/* Carousel Container */}
+            {/* Modern Carousel Container with Enhanced Effects */}
             <div 
-              className={`relative overflow-hidden transition-all duration-200 ${
-                isDragging ? 'cursor-grabbing scale-[0.98]' : 'cursor-grab'
+              className={`relative overflow-visible transition-all duration-300 perspective-1000 ${
+                isDragging ? 'cursor-grabbing' : 'cursor-grab'
               }`}
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
@@ -459,95 +475,103 @@ export function PackagesScreen() {
               }}
             >
               <div 
-                className="flex transition-transform duration-500 ease-out"
+                className="flex transition-transform duration-700 ease-out"
                 style={{
                   transform: `translateX(calc(-${currentPackageIndex * 100}% + ${dragOffset}px))`,
-                  transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  transition: isDragging ? 'none' : 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
               >
                 {packages.map((pkg, index) => (
-                  <div key={pkg.id} className="w-full flex-shrink-0 px-2">
+                  <div key={pkg.id} className="w-full flex-shrink-0 px-3">
                     <div className="relative group">
-                      {/* Modern Package Card - Enhanced for Basic Package */}
-                      <div className={`relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-500 ${
+                      {/* Ultra Modern Package Card with 3D Effects */}
+                      <div className={`relative overflow-hidden rounded-[2rem] border-2 backdrop-blur-xl transition-all duration-700 transform hover:scale-[1.02] ${
                         pkg.id === 'basic'
                           ? isDarkMode
-                            ? 'bg-gradient-to-br from-red-900/40 via-orange-900/30 to-red-800/40 border-red-500/50 shadow-red-500/30 shadow-xl min-h-[420px]'
-                            : 'bg-gradient-to-br from-red-50 via-orange-50 to-red-100 border-red-300/50 shadow-red-500/30 shadow-xl min-h-[420px]'
+                            ? 'bg-gradient-to-br from-red-950/80 via-orange-950/70 to-red-900/80 border-red-500/60 shadow-2xl shadow-red-500/40 min-h-[420px]'
+                            : 'bg-gradient-to-br from-red-100 via-orange-50 to-red-50 border-red-400/60 shadow-2xl shadow-red-500/40 min-h-[420px]'
                           : pkg.popular 
                             ? isDarkMode 
-                              ? 'bg-gradient-to-br from-emerald-900/40 via-green-900/30 to-emerald-800/40 border-emerald-500/50 shadow-emerald-500/20 shadow-lg'
-                              : 'bg-gradient-to-br from-emerald-50 via-green-50 to-emerald-100 border-emerald-300/50 shadow-emerald-500/20 shadow-lg'
+                              ? 'bg-gradient-to-br from-emerald-950/80 via-green-950/70 to-emerald-900/80 border-emerald-500/60 shadow-2xl shadow-emerald-500/40'
+                              : 'bg-gradient-to-br from-emerald-100 via-green-50 to-emerald-50 border-emerald-400/60 shadow-2xl shadow-emerald-500/40'
                             : isDarkMode
-                              ? 'bg-gray-800/60 border-gray-700/50 hover:border-gray-600/70'
-                              : 'bg-white/60 border-gray-200/50 hover:border-gray-300/70'
+                              ? 'bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-600/50 hover:border-gray-500/70 shadow-xl shadow-gray-900/30'
+                              : 'bg-gradient-to-br from-white to-gray-50 border-gray-300/50 hover:border-gray-400/70 shadow-xl shadow-gray-400/30'
                       }`}>
                   
 
-                  {/* Enhanced Popular Badge - INVERTED design with bottom rounded */}
+                  {/* Ultra Modern Popular Badge */}
                   {pkg.popular && (
                     <>
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className={`px-6 py-2 rounded-t-none rounded-b-2xl text-sm font-black shadow-xl border-2 border-t-0 transition-all duration-300 ${
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-30 animate-pulse">
+                        <div className={`px-8 py-3 rounded-t-none rounded-b-3xl text-sm font-black shadow-2xl border-2 border-t-0 transition-all duration-500 backdrop-blur-xl ${
                           isDarkMode 
-                            ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white border-emerald-400/50'
-                            : 'bg-gradient-to-r from-emerald-500 to-green-500 text-white border-emerald-300/50'
+                            ? 'bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 text-white border-emerald-400/60 shadow-emerald-500/60'
+                            : 'bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-500 text-white border-emerald-300/60 shadow-emerald-500/60'
                         }`}>
-                          <span className="whitespace-nowrap tracking-wide">ƏN POPULYAR</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl animate-bounce">⭐</span>
+                            <span className="whitespace-nowrap tracking-widest">ƏN POPULYAR</span>
+                            <span className="text-xl animate-bounce" style={{ animationDelay: '0.2s' }}>⭐</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="absolute top-4 right-2 text-3xl z-20">
-                        <div className="animate-pulse">🔥</div>
+                      <div className="absolute top-6 right-4 text-4xl z-20">
+                        <div className="animate-bounce" style={{ animationDuration: '1s' }}>🔥</div>
                       </div>
                     </>
                   )}
                   
-                  {/* Enhanced Psychological Discount for Basic Package */}
+                  {/* Ultra Modern Discount for Basic Package */}
                   {pkg.id === 'basic' && (
                     <>
-                      {/* Flash Sale Banner */}
-                      <div className="absolute top-0 left-0 right-0 z-20 overflow-hidden rounded-t-3xl">
-                        <div className="relative bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white text-center py-3 px-4 animate-pulse">
-                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-orange-400/30 to-yellow-400/20 animate-ping"></div>
-                          <div className="relative flex items-center justify-center gap-2">
-                            <span className="text-2xl animate-bounce">🔥</span>
+                      {/* Premium Flash Sale Banner */}
+                      <div className="absolute top-0 left-0 right-0 z-20 overflow-hidden rounded-t-[2rem]">
+                        <div className="relative bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white text-center py-4 px-4 shadow-2xl">
+                          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent)] animate-[shimmer_2s_infinite]"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-orange-400/40 to-yellow-400/20 animate-pulse"></div>
+                          <div className="relative flex items-center justify-center gap-3">
+                            <span className="text-3xl animate-bounce drop-shadow-2xl">🔥</span>
                             <div className="flex flex-col">
-                              <span className="text-sm font-black tracking-wider">FLASH ENDİRİM</span>
-                              <span className="text-xs font-bold opacity-90">MƏHDUD VAXT!</span>
+                              <span className="text-base font-black tracking-[0.2em] drop-shadow-xl">FLASH ENDİRİM</span>
+                              <span className="text-xs font-extrabold opacity-95 tracking-wider">MƏHDUD VAXT!</span>
                             </div>
-                            <span className="text-2xl animate-bounce">⚡</span>
+                            <span className="text-3xl animate-bounce drop-shadow-2xl" style={{ animationDelay: '0.15s' }}>⚡</span>
                           </div>
                         </div>
                       </div>
                       
-                      {/* Countdown Timer */}
-                      <div className="absolute top-16 left-4 right-4 z-20">
-                        <div className="bg-gradient-to-r from-gray-900/90 to-black/90 text-white text-center py-2 px-3 rounded-xl shadow-2xl border border-red-400/50">
-                          <div className="flex items-center justify-center gap-1">
-                            <span className="text-xs font-bold text-red-300">⏰ BİTİR:</span>
-                            <span className="text-sm font-black text-yellow-300 animate-pulse">
+                      {/* Ultra Modern Countdown Timer */}
+                      <div className="absolute top-20 left-4 right-4 z-20">
+                        <div className="bg-gradient-to-br from-gray-950/95 via-black/95 to-gray-900/95 text-white text-center py-3 px-4 rounded-2xl shadow-2xl border-2 border-red-400/60 backdrop-blur-xl">
+                          <div className="flex items-center justify-center gap-2">
+                            <span className="text-sm font-extrabold text-red-400 animate-pulse">⏰ BİTİR:</span>
+                            <span className="text-base font-black text-yellow-300 tracking-wider animate-pulse drop-shadow-lg">
                               {formatRemaining(promoEndsAt - nowTs)}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Scarcity Indicator */}
-                      <div className="absolute top-28 right-4 z-20">
-                        <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-3 py-1 rounded-full text-xs font-black shadow-lg animate-pulse">
-                          <span className="flex items-center gap-1">
-                            <span>⚠️</span>
-                            <span>SON ŞANS</span>
+                      {/* Premium Scarcity Indicator */}
+                      <div className="absolute top-[7.5rem] right-4 z-20">
+                        <div className="bg-gradient-to-r from-orange-600 via-red-600 to-orange-600 text-white px-4 py-2 rounded-full text-xs font-black shadow-2xl border-2 border-yellow-400/60 animate-pulse backdrop-blur-sm">
+                          <span className="flex items-center gap-2">
+                            <span className="text-lg animate-bounce">⚠️</span>
+                            <span className="tracking-wider">SON ŞANS</span>
                           </span>
                         </div>
                       </div>
 
-                      {/* Animated sparkles */}
-                      <div className="absolute top-6 left-6 text-yellow-300 animate-ping z-15">
-                        <span className="text-lg">✨</span>
+                      {/* Enhanced Animated sparkles */}
+                      <div className="absolute top-8 left-6 text-yellow-300 animate-ping z-15 drop-shadow-2xl">
+                        <span className="text-2xl">✨</span>
                       </div>
-                      <div className="absolute top-12 right-6 text-yellow-300 animate-ping z-15" style={{animationDelay: '0.5s'}}>
-                        <span className="text-lg">✨</span>
+                      <div className="absolute top-16 right-8 text-yellow-300 animate-ping z-15 drop-shadow-2xl" style={{animationDelay: '0.5s'}}>
+                        <span className="text-2xl">✨</span>
+                      </div>
+                      <div className="absolute top-[6.5rem] left-8 text-yellow-300 animate-ping z-15 drop-shadow-2xl" style={{animationDelay: '1s'}}>
+                        <span className="text-xl">💫</span>
                       </div>
                     </>
                   )}
@@ -597,33 +621,37 @@ export function PackagesScreen() {
                         </div>
                       </div>
 
-                      {/* Pricing with Compact Discount */}
+                      {/* Ultra Modern Pricing Display */}
                       <div className="relative">
                         {(() => {
                           const { oldPrice, newPrice, discountPercent } = getPricePair(pkg.id);
                           return (
                             <div className="text-center">
-                              <div className="flex items-center justify-center gap-2 mb-2">
-                                <span className={`text-sm line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                              <div className="flex items-center justify-center gap-3 mb-3">
+                                <span className={`text-base line-through font-semibold ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                                   {oldPrice} AZN
                                 </span>
-                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                <span className={`px-4 py-1.5 rounded-full text-sm font-black uppercase tracking-wider shadow-xl ${
                                   pkg.popular 
-                                    ? 'bg-emerald-500 text-white'
-                                    : 'bg-red-500 text-white'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-green-500 text-white'
+                                    : pkg.id === 'basic'
+                                      ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white animate-pulse'
+                                      : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                                 }`}>
                                   -{discountPercent}%
                                 </span>
                               </div>
-                              <div className="flex items-baseline justify-center gap-1">
-                                <span className={`text-3xl font-black tracking-tighter ${
+                              <div className="flex items-baseline justify-center gap-2">
+                                <span className={`text-5xl font-black tracking-tighter drop-shadow-2xl ${
                                   pkg.popular 
                                     ? isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
-                                    : isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                                    : pkg.id === 'basic'
+                                      ? isDarkMode ? 'text-orange-400' : 'text-orange-600'
+                                      : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                                 }`}>
                                   {newPrice}
                                 </span>
-                                <span className={`text-lg font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                <span className={`text-xl font-extrabold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                   AZN
                                 </span>
                               </div>
@@ -694,57 +722,68 @@ export function PackagesScreen() {
                       </div>
                     </div>
 
-                    {/* Enhanced CTA Button with Psychological Triggers */}
+                    {/* Ultra Modern CTA Button with Premium Effects */}
                     <button
                       onClick={() => handlePurchasePackage(pkg.id)}
-                      className={`w-full relative overflow-hidden rounded-xl py-4 px-4 font-bold text-sm transition-all duration-300 group hover:scale-[1.05] active:scale-[0.95] ${
+                      className={`w-full relative overflow-hidden rounded-2xl py-5 px-6 font-black text-base transition-all duration-500 group hover:scale-[1.08] active:scale-[0.92] shadow-2xl ${
                         pkg.popular 
-                          ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white shadow-lg shadow-emerald-500/30'
+                          ? 'bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-600 hover:from-emerald-700 hover:via-green-700 hover:to-emerald-700 text-white shadow-emerald-500/50 border-2 border-emerald-400/60'
                           : pkg.id === 'basic'
                             ? isDarkMode
-                              ? 'bg-gradient-to-r from-red-600 via-orange-600 to-red-600 hover:from-red-700 hover:via-orange-700 hover:to-red-700 text-white shadow-xl shadow-red-500/40'
-                              : 'bg-gradient-to-r from-red-500 via-orange-500 to-red-500 hover:from-red-600 hover:via-orange-600 hover:to-red-600 text-white shadow-xl shadow-red-500/40'
+                              ? 'bg-gradient-to-r from-red-600 via-orange-600 to-red-600 hover:from-red-700 hover:via-orange-700 hover:to-red-700 text-white shadow-red-500/60 border-2 border-yellow-400/60'
+                              : 'bg-gradient-to-r from-red-500 via-orange-500 to-red-500 hover:from-red-600 hover:via-orange-600 hover:to-red-600 text-white shadow-red-500/60 border-2 border-yellow-400/60'
                             : isDarkMode
-                              ? 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white shadow-md'
-                              : 'bg-gradient-to-r from-gray-100 to-white hover:from-gray-200 hover:to-gray-50 text-gray-900 border border-gray-300 shadow-md'
+                              ? 'bg-gradient-to-br from-gray-700 via-gray-800 to-gray-700 hover:from-gray-600 hover:via-gray-700 hover:to-gray-600 text-white shadow-gray-900/40 border-2 border-gray-600/50'
+                              : 'bg-gradient-to-br from-gray-200 via-white to-gray-200 hover:from-gray-300 hover:via-gray-50 hover:to-gray-300 text-gray-900 border-2 border-gray-300 shadow-gray-400/40'
                       }`}
                     >
+                      {/* Premium Shimmer Effect */}
+                      <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                      
                       {/* Enhanced Special overlay for basic package */}
                       {pkg.id === 'basic' && (
                         <>
-                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 via-transparent to-yellow-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                          <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/30 via-transparent to-yellow-400/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                         </>
                       )}
                       
-                      <div className="relative flex items-center justify-center gap-2">
-                        <span className={`text-xl ${pkg.id === 'basic' ? 'animate-pulse' : ''}`}>
+                      {/* Popular package glow */}
+                      {pkg.popular && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 via-green-400/20 to-emerald-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                      )}
+                      
+                      <div className="relative flex items-center justify-center gap-3">
+                        <span className={`text-2xl drop-shadow-2xl ${pkg.id === 'basic' ? 'animate-bounce' : pkg.popular ? 'animate-pulse' : ''}`}>
                           {pkg.id === 'basic' ? '🔥' : pkg.id === 'standart' ? '⭐' : '👑'}
                         </span>
                         <div className="flex flex-col items-center">
-                          <span className={`text-xs font-black tracking-wider ${
+                          <span className={`text-sm font-black tracking-[0.15em] uppercase drop-shadow-xl ${
                             pkg.id === 'basic' 
-                              ? 'text-yellow-200 animate-pulse' 
+                              ? 'text-yellow-100 animate-pulse' 
                               : pkg.popular 
                                 ? 'text-emerald-100' 
-                                : ''
+                                : isDarkMode ? 'text-gray-100' : 'text-gray-900'
                           }`}>
-                            {pkg.id === 'basic' ? 'İNDİ AL - QƏNAƏT ET!' : pkg.popular ? 'ƏN SEÇİLƏN PAKET' : 'Paketi Al'}
+                            {pkg.id === 'basic' ? 'İNDİ AL!' : pkg.popular ? 'ƏN SEÇİLƏN' : 'PAKETİ AL'}
                           </span>
-                          <span className={`text-lg font-black tracking-tight ${
-                            pkg.id === 'basic' ? 'text-yellow-100' : ''
+                          <span className={`text-2xl font-black tracking-tight drop-shadow-2xl ${
+                            pkg.id === 'basic' ? 'text-yellow-50' : pkg.popular ? 'text-white' : ''
                           }`}>
                             {calculatePrice(pkg.id)} AZN
                           </span>
                           {pkg.id === 'basic' && (
-                            <span className="text-xs font-bold text-yellow-200 animate-bounce mt-1">
-                              💰 QƏNAƏT: {(() => {
+                            <span className="text-xs font-extrabold text-yellow-100 animate-bounce mt-1 drop-shadow-lg uppercase tracking-wider">
+                              💰 Qənaət: {(() => {
                                 const { oldPrice, newPrice } = getPricePair(pkg.id);
                                 return `${oldPrice - newPrice} AZN`;
                               })()} 
                             </span>
                           )}
                         </div>
+                        <span className={`text-2xl drop-shadow-2xl ${pkg.id === 'basic' ? 'animate-bounce' : pkg.popular ? 'animate-pulse' : ''}`} style={{ animationDelay: '0.2s' }}>
+                          {pkg.id === 'basic' ? '⚡' : pkg.id === 'standart' ? '✨' : '🌟'}
+                        </span>
                       </div>
                     </button>
                   </div>
@@ -755,140 +794,144 @@ export function PackagesScreen() {
               </div>
             </div>
 
-            {/* Navigation Arrows */}
+            {/* Ultra Modern Navigation Arrows */}
             <button
               onClick={prevPackage}
               disabled={currentPackageIndex === 0}
-              className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+              className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group ${
                 currentPackageIndex === 0
-                  ? 'opacity-0 pointer-events-none'
+                  ? 'opacity-0 pointer-events-none scale-50'
                   : isDarkMode
-                    ? 'bg-gray-800/90 hover:bg-gray-700/90 text-gray-200 border-2 border-gray-600/50'
-                    : 'bg-white/90 hover:bg-gray-50/90 text-gray-700 border-2 border-gray-300/50'
-              } backdrop-blur-sm hover:scale-110 active:scale-95 shadow-xl`}
+                    ? 'bg-gradient-to-br from-gray-800/95 to-gray-900/95 hover:from-emerald-600/95 hover:to-green-600/95 text-gray-200 hover:text-white border-2 border-gray-600/60 hover:border-emerald-400/60'
+                    : 'bg-gradient-to-br from-white/95 to-gray-50/95 hover:from-emerald-500/95 hover:to-green-500/95 text-gray-700 hover:text-white border-2 border-gray-300/60 hover:border-emerald-400/60'
+              } backdrop-blur-2xl hover:scale-125 active:scale-95 shadow-2xl hover:shadow-emerald-500/50`}
               aria-label="Əvvəlki paket"
             >
-              <span className="text-2xl">‹</span>
+              <span className="text-3xl font-black group-hover:translate-x-[-3px] transition-transform duration-300">‹</span>
             </button>
 
             <button
               onClick={nextPackage}
               disabled={currentPackageIndex === packages.length - 1}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
+              className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group ${
                 currentPackageIndex === packages.length - 1
-                  ? 'opacity-0 pointer-events-none'
+                  ? 'opacity-0 pointer-events-none scale-50'
                   : isDarkMode
-                    ? 'bg-gray-800/90 hover:bg-gray-700/90 text-gray-200 border-2 border-gray-600/50'
-                    : 'bg-white/90 hover:bg-gray-50/90 text-gray-700 border-2 border-gray-300/50'
-              } backdrop-blur-sm hover:scale-110 active:scale-95 shadow-xl`}
+                    ? 'bg-gradient-to-br from-gray-800/95 to-gray-900/95 hover:from-emerald-600/95 hover:to-green-600/95 text-gray-200 hover:text-white border-2 border-gray-600/60 hover:border-emerald-400/60'
+                    : 'bg-gradient-to-br from-white/95 to-gray-50/95 hover:from-emerald-500/95 hover:to-green-500/95 text-gray-700 hover:text-white border-2 border-gray-300/60 hover:border-emerald-400/60'
+              } backdrop-blur-2xl hover:scale-125 active:scale-95 shadow-2xl hover:shadow-emerald-500/50`}
               aria-label="Növbəti paket"
             >
-              <span className="text-2xl">›</span>
+              <span className="text-3xl font-black group-hover:translate-x-[3px] transition-transform duration-300">›</span>
             </button>
 
-            {/* Package Indicators (Dots) */}
-            <div className="flex justify-center items-center gap-2 mt-6">
+            {/* Ultra Modern Package Indicators */}
+            <div className="flex justify-center items-center gap-3 mt-8">
               {packages.map((pkg, index) => (
                 <button
                   key={pkg.id}
                   onClick={() => goToPackage(index)}
-                  className={`transition-all duration-300 rounded-full ${
+                  className={`transition-all duration-500 rounded-full hover:scale-110 ${
                     currentPackageIndex === index
                       ? pkg.popular
-                        ? 'w-10 h-3 bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30'
+                        ? 'w-12 h-4 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-500 shadow-2xl shadow-emerald-500/50 border-2 border-emerald-300/60'
                         : pkg.id === 'basic'
-                          ? 'w-10 h-3 bg-gradient-to-r from-red-500 to-orange-500 shadow-lg shadow-red-500/30'
-                          : 'w-10 h-3 bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg shadow-blue-500/30'
+                          ? 'w-12 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-red-500 shadow-2xl shadow-red-500/50 border-2 border-orange-300/60 animate-pulse'
+                          : 'w-12 h-4 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 shadow-2xl shadow-blue-500/50 border-2 border-purple-300/60'
                       : isDarkMode
-                        ? 'w-3 h-3 bg-gray-600 hover:bg-gray-500'
-                        : 'w-3 h-3 bg-gray-300 hover:bg-gray-400'
+                        ? 'w-4 h-4 bg-gray-700 hover:bg-gray-600 border-2 border-gray-600/50'
+                        : 'w-4 h-4 bg-gray-300 hover:bg-gray-400 border-2 border-gray-300/50'
                   }`}
                   aria-label={`${pkg.name} paketinə get`}
                 />
               ))}
             </div>
 
-            {/* Package Name Indicator */}
-            <div className="text-center mt-4">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 backdrop-blur-sm transition-all duration-300 ${
+            {/* Ultra Modern Package Name Indicator */}
+            <div className="text-center mt-6">
+              <div className={`inline-flex items-center gap-3 px-6 py-3 rounded-3xl border-2 backdrop-blur-2xl transition-all duration-500 shadow-xl ${
                 packages[currentPackageIndex]?.popular
                   ? isDarkMode
-                    ? 'bg-emerald-900/30 border-emerald-500/30 text-emerald-300'
-                    : 'bg-emerald-50 border-emerald-300/50 text-emerald-700'
+                    ? 'bg-gradient-to-r from-emerald-900/50 to-green-900/50 border-emerald-500/60 text-emerald-300 shadow-emerald-500/30'
+                    : 'bg-gradient-to-r from-emerald-100 to-green-100 border-emerald-400/60 text-emerald-700 shadow-emerald-500/30'
                   : packages[currentPackageIndex]?.id === 'basic'
                     ? isDarkMode
-                      ? 'bg-red-900/30 border-red-500/30 text-red-300'
-                      : 'bg-red-50 border-red-300/50 text-red-700'
+                      ? 'bg-gradient-to-r from-red-900/50 to-orange-900/50 border-red-500/60 text-red-300 shadow-red-500/30 animate-pulse'
+                      : 'bg-gradient-to-r from-red-100 to-orange-100 border-red-400/60 text-red-700 shadow-red-500/30 animate-pulse'
                     : isDarkMode
-                      ? 'bg-gray-800/50 border-gray-600/50 text-gray-300'
-                      : 'bg-white/50 border-gray-300/50 text-gray-700'
+                      ? 'bg-gray-800/60 border-gray-600/60 text-gray-300 shadow-gray-900/30'
+                      : 'bg-white/60 border-gray-300/60 text-gray-700 shadow-gray-400/30'
               }`}>
-                <span className="text-lg">
+                <span className="text-2xl">
                   {packages[currentPackageIndex]?.id === 'basic' ? '🎯' : packages[currentPackageIndex]?.id === 'standart' ? '⭐' : '👑'}
                 </span>
-                <span className="font-bold text-sm">
+                <span className="font-black text-base tracking-wide">
                   {packages[currentPackageIndex]?.name}
                 </span>
               </div>
             </div>
 
-            {/* Swipe Hint */}
-            <div className="text-center mt-3 animate-pulse">
-              <div className={`inline-flex items-center gap-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                <span>←</span>
-                <span>Paketlər arasında keçid üçün sürüşdürün</span>
-                <span>→</span>
+            {/* Modern Swipe Hint */}
+            <div className="text-center mt-5 animate-pulse">
+              <div className={`inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl backdrop-blur-xl text-sm font-bold shadow-lg ${
+                isDarkMode 
+                  ? 'bg-gray-800/60 text-gray-400 border border-gray-700/50' 
+                  : 'bg-white/60 text-gray-500 border border-gray-300/50'
+              }`}>
+                <span className="text-lg">←</span>
+                <span>Sürüşdürün</span>
+                <span className="text-lg">→</span>
               </div>
             </div>
           </div>
         )}
 
         {activeTab === 'other' && (
-          <div className="space-y-4">
-            {/* Compact Other Packages Section */}
-            <div className={`rounded-2xl border backdrop-blur-sm p-4 transition-all duration-300 ${
+          <div className="space-y-6 relative z-10">
+            {/* Ultra Modern Other Packages Section */}
+            <div className={`rounded-[2rem] border-2 backdrop-blur-2xl p-6 transition-all duration-500 shadow-2xl ${
               isDarkMode 
-                ? 'bg-gray-800/60 border-gray-700/50' 
-                : 'bg-white/60 border-gray-200/50'
+                ? 'bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700/60 shadow-black/30' 
+                : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-300/60 shadow-gray-400/20'
             }`}>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {otherItems.map(item => (
-                  <div key={item.id} className={`relative group rounded-xl border p-3 text-center transition-all duration-300 hover:scale-[1.02] ${
+                  <div key={item.id} className={`relative group rounded-2xl border-2 p-4 text-center transition-all duration-500 hover:scale-[1.05] shadow-lg ${
                     isDarkMode 
-                      ? 'bg-gray-800/40 border-gray-700/40 hover:border-gray-600/60' 
-                      : 'bg-white/40 border-gray-200/40 hover:border-gray-300/60'
+                      ? 'bg-gradient-to-br from-purple-900/30 to-pink-900/30 border-purple-700/50 hover:border-purple-500/70 shadow-purple-900/20' 
+                      : 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-300/50 hover:border-purple-400/70 shadow-purple-400/20'
                   }`}>
-                    <div className="text-2xl mb-2">🎟️</div>
-                    <div className={`font-bold text-sm mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">🎟️</div>
+                    <div className={`font-black text-base mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                       {item.title}
                     </div>
                     {item.description && (
-                      <div className={`text-xs mb-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <div className={`text-xs mb-3 font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         {item.description}
                       </div>
                     )}
                     
-                    <div className="mb-3">
+                    <div className="mb-4">
                       {(() => {
                         const discountPercent = Math.max(1, Math.round((1 - item.newPrice / item.oldPrice) * 100));
                         return (
                           <div className="text-center">
-                            <div className="flex items-center justify-center gap-1 mb-1">
-                              <span className={`text-xs line-through ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                            <div className="flex items-center justify-center gap-2 mb-2">
+                              <span className={`text-sm line-through font-semibold ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                                 {item.oldPrice} AZN
                               </span>
-                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500 text-white">
+                              <span className="px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg">
                                 -{discountPercent}%
                               </span>
                             </div>
                             <div className="flex items-baseline justify-center gap-1">
-                              <span className={`text-xl font-black ${
+                              <span className={`text-3xl font-black drop-shadow-lg ${
                                 isDarkMode ? 'text-purple-400' : 'text-purple-600'
                               }`}>
                                 {item.newPrice}
                               </span>
-                              <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              <span className={`text-sm font-extrabold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                                 AZN
                               </span>
                             </div>
@@ -899,13 +942,14 @@ export function PackagesScreen() {
                     
                     <button 
                       onClick={() => handlePurchaseOther(item)}
-                      className={`w-full py-2 px-3 rounded-lg font-bold text-xs transition-all duration-300 hover:scale-105 active:scale-95 ${
+                      className={`w-full relative overflow-hidden py-3 px-4 rounded-xl font-black text-sm transition-all duration-500 hover:scale-110 active:scale-95 group shadow-2xl border-2 ${
                         isDarkMode
-                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white'
-                          : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white'
-                      } shadow-md`}
+                          ? 'bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 hover:from-purple-700 hover:via-pink-700 hover:to-purple-700 text-white border-purple-400/60 shadow-purple-500/50'
+                          : 'bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 hover:from-purple-600 hover:via-pink-600 hover:to-purple-600 text-white border-purple-300/60 shadow-purple-500/50'
+                      }`}
                     >
-                      Əldə et
+                      <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4),transparent)] translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                      <span className="relative">Əldə et ✨</span>
                     </button>
                   </div>
                 ))}
@@ -914,40 +958,44 @@ export function PackagesScreen() {
           </div>
         )}
 
-        {/* Compact Footer Info */}
-        <div className={`mt-6 rounded-2xl border backdrop-blur-sm p-4 transition-all duration-300 ${
+        {/* Ultra Modern Footer Info */}
+        <div className={`mt-8 rounded-[2rem] border-2 backdrop-blur-2xl p-6 transition-all duration-500 shadow-2xl relative z-10 ${
           isDarkMode 
-            ? 'bg-gray-800/60 border-gray-700/50' 
-            : 'bg-white/60 border-gray-200/50'
+            ? 'bg-gradient-to-br from-gray-900/80 to-gray-800/80 border-gray-700/60 shadow-black/30' 
+            : 'bg-gradient-to-br from-white/80 to-gray-50/80 border-gray-300/60 shadow-gray-400/20'
         }`}>
-          <div className="grid grid-cols-3 gap-3 mb-3">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {[
-              { icon: '💳', title: 'Kart' },
-              { icon: '📱', title: 'Mobil' },
-              { icon: '🏦', title: 'Bank' }
+              { icon: '💳', title: 'Kart', gradient: 'from-blue-500 to-cyan-500' },
+              { icon: '📱', title: 'Mobil', gradient: 'from-purple-500 to-pink-500' },
+              { icon: '🏦', title: 'Bank', gradient: 'from-emerald-500 to-green-500' }
             ].map((method, index) => (
-              <div key={index} className={`p-2 rounded-xl text-center transition-all duration-300 ${
+              <div key={index} className={`relative group p-4 rounded-2xl text-center transition-all duration-500 hover:scale-110 border-2 shadow-lg ${
                 isDarkMode 
-                  ? 'bg-gray-800/40 hover:bg-gray-700/50' 
-                  : 'bg-white/40 hover:bg-gray-50/50'
+                  ? 'bg-gradient-to-br from-gray-800/60 to-gray-900/60 border-gray-700/50 hover:border-gray-600/70 shadow-gray-900/20' 
+                  : 'bg-gradient-to-br from-white/60 to-gray-50/60 border-gray-300/50 hover:border-gray-400/70 shadow-gray-400/20'
               }`}>
-                <div className="text-xl mb-1">{method.icon}</div>
-                <div className={`text-xs font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <div className="text-3xl mb-2 group-hover:scale-125 transition-transform duration-300">{method.icon}</div>
+                <div className={`text-xs font-black uppercase tracking-wider ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   {method.title}
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="flex items-center justify-center gap-4 text-xs">
+          <div className="flex items-center justify-center flex-wrap gap-4 text-sm">
             {[
-              { icon: '🔒', text: 'Təhlükəsiz', color: 'text-green-500' },
-              { icon: '⚡', text: 'Ani aktivləşmə', color: 'text-yellow-500' },
-              { icon: '🎯', text: '7/24 dəstək', color: 'text-blue-500' }
+              { icon: '🔒', text: 'Təhlükəsiz', color: isDarkMode ? 'text-green-400' : 'text-green-600' },
+              { icon: '⚡', text: 'Ani aktivləşmə', color: isDarkMode ? 'text-yellow-400' : 'text-yellow-600' },
+              { icon: '🎯', text: '7/24 dəstək', color: isDarkMode ? 'text-blue-400' : 'text-blue-600' }
             ].map((item, index) => (
-              <div key={index} className="flex items-center gap-1">
-                <span className={`${item.color}`}>{item.icon}</span>
-                <span className={`font-medium ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <div key={index} className={`flex items-center gap-2 px-4 py-2 rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-110 ${
+                isDarkMode 
+                  ? 'bg-gray-800/60 border-gray-700/50' 
+                  : 'bg-white/60 border-gray-300/50'
+              }`}>
+                <span className={`text-lg ${item.color}`}>{item.icon}</span>
+                <span className={`font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                   {item.text}
                 </span>
               </div>
