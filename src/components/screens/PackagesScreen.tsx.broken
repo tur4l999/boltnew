@@ -269,7 +269,6 @@ export function PackagesScreen() {
   const currentPackage = packages[currentPackageIndex];
   const { oldPrice, newPrice, discountPercent } = getPricePair(currentPackage.id);
 
-
   return (
     <div className={`relative min-h-screen transition-all duration-300 ${
       isDarkMode 
@@ -316,6 +315,7 @@ export function PackagesScreen() {
           </div>
         </div>
       </div>
+
       {activeTab === 'training' && (
         <div className="relative h-[calc(100vh-120px)]">
           {/* Main Swipeable Package Card */}
@@ -552,6 +552,7 @@ export function PackagesScreen() {
           </div>
         </div>
       )}
+
       {activeTab === 'other' && (
         <div className="px-4 py-6 pb-20">
           <div className="flex items-center justify-between mb-4">
