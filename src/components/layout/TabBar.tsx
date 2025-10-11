@@ -60,7 +60,7 @@ export function TabBar() {
                 )}
                 
                 {tab.useIcon ? (
-                  <Icon name={tab.icon!} size={18} className="relative z-10" />
+                  <Icon name={tab.icon!} size={18} color="currentColor" className="relative z-10" />
                 ) : (
                   <EmojiIcon emoji={tab.emoji!} size={18} className="relative z-10" />
                 )}

@@ -51,7 +51,6 @@ export function ExamConfigScreen() {
         {!mode && (
           <div>
             <div className="text-center mb-8">
-              <div className="text-4xl mb-4">🧪</div>
               <h1 className="text-2xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 İmtahan Mərkəzi
               </h1>
@@ -88,7 +87,6 @@ export function ExamConfigScreen() {
         {mode && (
           <div>
             <div className="text-center mb-8">
-              <div className="text-4xl mb-4">{mode === 'final' ? '📋' : '🧪'}</div>
               <h1 className="text-2xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {header}
               </h1>
@@ -132,16 +130,16 @@ export function ExamConfigScreen() {
                 </div>
 
                 <div className={`p-4 rounded-2xl ${
-                  isDarkMode ? 'bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-700/50' : 'bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200/50'
+                  isDarkMode ? 'bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700/50' : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200/50'
                 }`}>
                   <div className="flex items-start gap-3">
-                    <div className="text-2xl">💰</div>
+                    <div className="text-2xl">📚</div>
                     <div>
-                      <div className={`text-sm font-bold mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
-                        Ödəniş məlumatı
+                      <div className={`text-sm font-bold mb-2 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
+                        Müəllif hüququnun qorunması
                       </div>
-                      <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-orange-300' : 'text-orange-700'}`}>
-                        "İMTAHAN BAŞLA" düyməsinə klik etdikdə "Simulyator bileti" hesabından 1 bilet, bu hesab boş olduqda isə "BALANSDAN" 2 azn silinəcəkdir.
+                      <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                        Platformamızda yerləşdirilən bütün test sualları müəllif hüququ ilə qorunur. İcazəsiz surətçıxarma, yayma və ya kommersiya məqsədilə istifadə qəti qadağandır.
                       </div>
                     </div>
                   </div>
