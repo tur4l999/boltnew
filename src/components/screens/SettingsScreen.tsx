@@ -222,7 +222,7 @@ export function SettingsScreen() {
         </div>
 
         {/* Enhanced Profile Card with Modern Animations */}
-        <Card variant="elevated" padding="md" className="mb-6 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
+        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-4">
             <div className="relative group">
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
@@ -250,49 +250,63 @@ export function SettingsScreen() {
               >
                 Məktəb/Kurs: {schoolName} <span className="text-[10px]">→</span>
               </button>
-              <div className={`text-sm mb-3 transition-colors duration-200 ${
+              <div className={`text-sm transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>{userEmail}</div>
-              
-              <div className="grid grid-cols-2 gap-2">
-                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
-                  isDarkMode 
-                    ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
-                    : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
-                }`}>
-                  <Icon name="dollar-sign" size={14} />
-                  <span>{balance} AZN</span>
-                </div>
-                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
-                  isDarkMode 
-                    ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50 hover:bg-blue-900/50 hover:shadow-lg' 
-                    : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
-                }`}>
-                  <Icon name="clipboard-check" size={14} />
-                  <span>{simulatorBalance} Bilet</span>
-                </div>
-                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
-                  isDarkMode 
-                    ? 'bg-orange-900/30 text-orange-300 border border-orange-700/50 hover:bg-orange-900/50 hover:shadow-lg' 
-                    : 'bg-orange-100 text-orange-700 border border-orange-200/50 hover:bg-orange-200 hover:shadow-lg'
-                }`}>
-                  <Icon name="navigation" size={14} />
-                  <span>{drivingLessons} Sürmə</span>
-                </div>
-                {activePackage && (
-                  <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center justify-center gap-1.5 ${
-                    isDarkMode 
-                      ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-700/50 hover:bg-yellow-900/50' 
-                      : 'bg-yellow-100 text-yellow-700 border border-yellow-200/50 hover:bg-yellow-200'
-                  }`}>
-                    <Icon name="crown" size={14} />
-                    <span>{activePackage.name}</span>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </Card>
+
+        {/* Balance, Tickets, and Driving Lessons Cards */}
+        <div className="grid grid-cols-3 gap-3 mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+          <Card variant="elevated" padding="sm">
+            <div className="flex flex-col items-center justify-center py-2">
+              <Icon name="dollar-sign" size={20} className={isDarkMode ? 'text-emerald-400 mb-2' : 'text-emerald-600 mb-2'} />
+              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {balance}
+              </div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                AZN
+              </div>
+            </div>
+          </Card>
+          <Card variant="elevated" padding="sm">
+            <div className="flex flex-col items-center justify-center py-2">
+              <Icon name="clipboard-check" size={20} className={isDarkMode ? 'text-blue-400 mb-2' : 'text-blue-600 mb-2'} />
+              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {simulatorBalance}
+              </div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Bilet
+              </div>
+            </div>
+          </Card>
+          <Card variant="elevated" padding="sm">
+            <div className="flex flex-col items-center justify-center py-2">
+              <Icon name="navigation" size={20} className={isDarkMode ? 'text-orange-400 mb-2' : 'text-orange-600 mb-2'} />
+              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {drivingLessons}
+              </div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Sürmə
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Active Package Badge */}
+        {activePackage && (
+          <div className="mb-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
+            <Card variant="elevated" padding="md">
+              <div className="flex items-center justify-center gap-2">
+                <Icon name="crown" size={18} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
+                <span className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  {activePackage.name}
+                </span>
+              </div>
+            </Card>
+          </div>
+        )}
 
         {/* Referral Section */}
         <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
