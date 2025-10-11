@@ -11,6 +11,7 @@ export function SettingsScreen() {
   const [referralCode] = useState('DDA2025TURAL'); // Demo referral code
   const userName = "Tural Qarayev";
   const userEmail = "tural.qarayev@example.com";
+  const schoolName = "DDA"; // School/organization name
 
   const themeOptions = [
     { value: 'light', label: <><EmojiIcon emoji="☀️" size={16} className="inline-block mr-2" />Gündüz</>, description: 'Açıq tema' },
@@ -241,6 +242,9 @@ export function SettingsScreen() {
               } bg-clip-text text-transparent`}>
                 {userName}
               </div>
+              <div className={`text-xs mb-1 transition-colors duration-200 ${
+                isDarkMode ? 'text-gray-500' : 'text-gray-500'
+              }`}>{schoolName}</div>
               <div className={`text-sm mb-3 transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>{userEmail}</div>
