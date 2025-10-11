@@ -10,7 +10,6 @@ export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [showMenu, setShowMenu] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   
   // Demo notification data with various types
   const notifications = [
@@ -305,48 +304,6 @@ export function NotificationsScreen() {
                       </button>
                     )}
 
-                    {/* Divider */}
-                    <div className={`h-px ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
-
-                    {/* Notification settings - Collapsed/Expandable */}
-                    <div>
-                      <button
-                        onClick={() => setShowSettings(!showSettings)}
-                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
-                          isDarkMode 
-                            ? 'hover:bg-gray-700 text-gray-200' 
-                            : 'hover:bg-gray-50 text-gray-800'
-                        }`}
-                      >
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                          isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
-                        }`}>
-                          <EmojiIcon emoji="🔔" size={16} />
-                        </div>
-                        <span className="text-sm font-bold flex-1 text-left">Bildiriş ayarları</span>
-                        <span className={`text-lg transition-transform duration-300 ${
-                          showSettings ? 'rotate-180' : 'rotate-0'
-                        }`}>▼</span>
-                      </button>
-                      
-                      {showSettings && (
-                        <div className={`px-4 pb-3 space-y-2`}>
-                          <button
-                            onClick={() => {
-                              navigate('NotificationSettings');
-                              setShowMenu(false);
-                            }}
-                            className={`w-full px-3 py-2 rounded-xl text-left text-sm transition-all duration-200 ${
-                              isDarkMode 
-                                ? 'hover:bg-gray-700/50 text-gray-300' 
-                                : 'hover:bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            → Ayarlara keç
-                          </button>
-                        </div>
-                      )}
-                    </div>
                   </div>
                 </>
               )}
