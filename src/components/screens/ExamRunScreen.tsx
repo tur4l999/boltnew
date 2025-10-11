@@ -9,7 +9,7 @@ import { AppealSubmitModal } from './AppealSubmitModal';
 import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 
 export function ExamRunScreen() {
-  const { navigate, currentScreen, isDarkMode, goBack, addExamResult } = useApp();
+  const { navigate, currentScreen, isDarkMode, goBack, addExamResult, switchTab } = useApp();
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,7 +204,7 @@ export function ExamRunScreen() {
             {finalState === 'pass' ? 'İmtahandan keçdiniz' : 'İmtahandan kəsildiniz'}
           </div>
           <div className="w-full max-w-xs space-y-2 px-4">
-            <Button onClick={() => navigate('Exam')} className="w-full" variant="secondary">Geri qayıt</Button>
+            <Button onClick={() => { switchTab('Home'); navigate('Exam'); }} className="w-full" variant="secondary">Geri qayıt</Button>
             <Button onClick={finishExam} className="w-full">Nəticələr</Button>
             <Button onClick={() => navigate('Lesson', { moduleId: 'M1' })} className="w-full" variant="ghost">Dərsə Başla</Button>
           </div>
