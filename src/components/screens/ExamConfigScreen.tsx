@@ -193,7 +193,7 @@ export function ExamConfigScreen() {
                       value={promoCode}
                       onChange={(e) => { setPromoCode(e.target.value); setPromoStatus('idle'); }}
                       placeholder="Kod daxil edin"
-                      className={`flex-1 px-3 py-2 text-sm rounded-xl border outline-none transition-all duration-300 ${
+                      className={`flex-1 min-w-0 px-2.5 py-1.5 text-sm rounded-lg border outline-none transition-all duration-300 ${
                         isDarkMode 
                           ? 'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500 focus:border-emerald-500' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
@@ -201,7 +201,7 @@ export function ExamConfigScreen() {
                     />
                     <button 
                       onClick={applyPromo}
-                      className={`px-3 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors ${
+                      className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-colors ${
                         isDarkMode
                           ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                           : 'bg-emerald-600 hover:bg-emerald-700 text-white'
