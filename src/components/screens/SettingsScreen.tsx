@@ -265,7 +265,7 @@ export function SettingsScreen() {
         <div className="grid grid-cols-3 gap-2 mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
           <Card variant="elevated" padding="sm">
             <div className="flex items-center justify-center gap-1 py-1">
-              <Icon name="dollar-sign" size={14} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+              <span className={`text-sm font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>₼</span>
               <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                 {balance} AZN
               </div>
@@ -275,7 +275,7 @@ export function SettingsScreen() {
             <div className="flex items-center justify-center gap-1 py-1">
               <Icon name="clipboard-check" size={14} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
               <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                {simulatorBalance} Bilet
+                {simulatorBalance} Simulyator
               </div>
             </div>
           </Card>
@@ -283,7 +283,7 @@ export function SettingsScreen() {
             <div className="flex items-center justify-center gap-1 py-1">
               <Icon name="navigation" size={14} className={isDarkMode ? 'text-orange-400' : 'text-orange-600'} />
               <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                {drivingLessons} Sürmə
+                {drivingLessons} Sürmə təlimi
               </div>
             </div>
           </Card>
