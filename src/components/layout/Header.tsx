@@ -40,12 +40,12 @@ export function Header() {
           </div>
           
           <div className="flex-1 leading-tight">
-            <div className={`text-xs font-bold transition-colors duration-200 ${
+            <div className={`text-sm font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {userName} <EmojiIcon emoji="👋" size={12} className="inline-block" />
+              {userName} <EmojiIcon emoji="👋" size={14} className="inline-block" />
             </div>
-            <div className={`text-[10px] font-medium transition-colors duration-200 ${
+            <div className={`text-xs font-medium transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
               {schoolName}
