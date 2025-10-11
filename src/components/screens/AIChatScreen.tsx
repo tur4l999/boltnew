@@ -24,7 +24,7 @@ export function AIChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Salam! Mən DDA.az AI köməkçisiyəm. Sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınızı verə bilərsiniz.',
+      text: 'Salam! Mən DDA.az AI köməkçisiyəm. Hal-hazırda tam fəaliyyət göstərmirəm, lakin gələcəkdə sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınıza cavab verə biləcəyəm. Hazırda test rejimindəyəm.',
       isUser: false,
       timestamp: new Date()
     }
@@ -66,7 +66,15 @@ export function AIChatScreen() {
   ]);
 
   useEffect(() => {
-    scrollToBottom();
+    // Scroll to top on initial mount to start from beginning
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
+  useEffect(() => {
+    // Only scroll to bottom for new messages, not on initial load
+    if (messages.length > 1) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const scrollToBottom = () => {
@@ -101,14 +109,7 @@ export function AIChatScreen() {
   };
 
   const getAIResponse = (question: string): string => {
-    const responses = [
-      'Bu sual çox maraqlıdır! Sürücülük qaydalarına görə...',
-      'Yol hərəkəti qaydalarında bu məsələ belə izah olunur...',
-      'İmtahan hazırlığı üçün bu mövzunu yaxşı öyrənmək vacibdir...',
-      'DDA.az platformasında bu mövzu haqqında ətraflı video dərslər var...',
-      'Bu sualın cavabı yol hərəkəti qaydalarının müvafiq bəndində verilmişdir...'
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
+    return 'Təşəkkür edirəm! Hal-hazırda mən tam fəaliyyət göstərmirəm və test rejimindəyəm. Yaxın gələcəkdə sizə daha ətraflı və faydalı cavablar verə biləcəyəm. Bu vaxt ərzində DDA.az platformasındakı digər resurslardan - video dərslər, test sualları və qaydalar bölməsindən istifadə edə bilərsiniz.';
   };
 
   const loadChatHistory = (chatId: string) => {
@@ -124,7 +125,7 @@ export function AIChatScreen() {
     setMessages([
       {
         id: '1',
-        text: 'Salam! Mən DDA.az AI köməkçisiyəm. Sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınızı verə bilərsiniz.',
+        text: 'Salam! Mən DDA.az AI köməkçisiyəm. Hal-hazırda tam fəaliyyət göstərmirəm, lakin gələcəkdə sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınıza cavab verə biləcəyəm. Hazırda test rejimindəyəm.',
         isUser: false,
         timestamp: new Date()
       }
@@ -289,7 +290,7 @@ export function AIChatScreen() {
             </Button>
           </div>
           <div className="text-xs text-gray-500 mt-2 text-center">
-            AI köməkçi sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınıza cavab verir
+            ⚠️ AI köməkçi hal-hazırda test rejimindədir və tam fəaliyyət göstərmir
           </div>
         </div>
       </div>
