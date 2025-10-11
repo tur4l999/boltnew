@@ -1,15 +1,16 @@
 import React from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import { Icon } from '../icons/Icon';
 
 export function TabBar() {
   const { t, currentTab, switchTab, navigate, currentScreen, setMoreSheetVisible, isDarkMode } = useApp();
   
   const tabs = [
-    { key: 'Home', label: t.home, emoji: '🏠', gradient: 'from-emerald-500 to-green-500' },
-    { key: 'Topics', label: 'Mövzular', emoji: '📚', gradient: 'from-blue-500 to-cyan-500' },
-    { key: 'Exam', label: t.exam, emoji: '🧪', gradient: 'from-purple-500 to-pink-500' },
-    { key: 'Store', label: t.store, emoji: '🛍️', gradient: 'from-orange-500 to-red-500' },
+    { key: 'Home', label: t.home, emoji: '🏠', gradient: 'from-emerald-500 to-green-500', useIcon: false },
+    { key: 'Topics', label: 'Mövzular', emoji: '📚', gradient: 'from-blue-500 to-cyan-500', useIcon: false },
+    { key: 'Exam', label: t.exam, icon: 'test-tube', gradient: 'from-purple-500 to-pink-500', useIcon: true },
+    { key: 'Store', label: t.store, emoji: '🛍️', gradient: 'from-orange-500 to-red-500', useIcon: false },
   ];
 
   // Hide TabBar on Quick Test screen
@@ -58,7 +59,11 @@ export function TabBar() {
                   <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${tab.gradient} opacity-30 blur-md scale-125 group-hover:opacity-50 transition-opacity duration-300`}></div>
                 )}
                 
-                <EmojiIcon emoji={tab.emoji} size={18} className="relative z-10" />
+                {tab.useIcon ? (
+                  <Icon name={tab.icon!} size={18} className="relative z-10" />
+                ) : (
+                  <EmojiIcon emoji={tab.emoji!} size={18} className="relative z-10" />
+                )}
               </div>
               
               <div className={`text-xs font-bold transition-all duration-200 ${
