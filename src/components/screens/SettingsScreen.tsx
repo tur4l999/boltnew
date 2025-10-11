@@ -254,35 +254,39 @@ export function SettingsScreen() {
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>{userEmail}</div>
               
-              <div className="flex items-center gap-2 flex-wrap">
-                <div className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
+              <div className="grid grid-cols-2 gap-2">
+                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
                   isDarkMode 
                     ? 'bg-emerald-900/30 text-emerald-300 border border-emerald-700/50 hover:bg-emerald-900/50 hover:shadow-lg' 
                     : 'bg-emerald-100 text-emerald-700 border border-emerald-200/50 hover:bg-emerald-200 hover:shadow-lg'
                 }`}>
-                  ₼ {balance} AZN
+                  <Icon name="dollar-sign" size={14} />
+                  <span>{balance} AZN</span>
                 </div>
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
+                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
                   isDarkMode 
                     ? 'bg-blue-900/30 text-blue-300 border border-blue-700/50 hover:bg-blue-900/50 hover:shadow-lg' 
                     : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
                 }`}>
-                  <Icon name="clipboard-check" size={12} /> {simulatorBalance} Simulyator
+                  <Icon name="clipboard-check" size={14} />
+                  <span>{simulatorBalance} Bilet</span>
                 </div>
-                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
+                <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-1.5 ${
                   isDarkMode 
                     ? 'bg-orange-900/30 text-orange-300 border border-orange-700/50 hover:bg-orange-900/50 hover:shadow-lg' 
                     : 'bg-orange-100 text-orange-700 border border-orange-200/50 hover:bg-orange-200 hover:shadow-lg'
                 }`}>
-                  <EmojiIcon emoji="🚗" size={12} /> {drivingLessons} Sürmə təlimi
+                  <Icon name="navigation" size={14} />
+                  <span>{drivingLessons} Sürmə</span>
                 </div>
                 {activePackage && (
-                  <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center gap-1 ${
+                  <div className={`px-3 py-2 rounded-xl text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center justify-center gap-1.5 ${
                     isDarkMode 
                       ? 'bg-yellow-900/30 text-yellow-300 border border-yellow-700/50 hover:bg-yellow-900/50' 
                       : 'bg-yellow-100 text-yellow-700 border border-yellow-200/50 hover:bg-yellow-200'
                   }`}>
-                    <Icon name="crown" size={12} /> {activePackage.name}
+                    <Icon name="crown" size={14} />
+                    <span>{activePackage.name}</span>
                   </div>
                 )}
               </div>
