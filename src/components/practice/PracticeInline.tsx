@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { EmojiIcon } from '../ui/EmojiIcon';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 
@@ -43,12 +44,19 @@ export function PracticeInline() {
       </div>
       <div className="font-bold mb-3 text-gray-900">{question.text}</div>
       {question.imageUrl && (
-        <img
-          src={question.imageUrl}
-          alt="Question visual"
-          className="w-full h-40 object-cover rounded-lg mb-3"
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-        />
+        <div className="relative w-full h-40 mb-3 rounded-lg overflow-hidden">
+          <img
+            src={question.imageUrl}
+            alt="Question visual"
+            className="w-full h-full object-cover"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          />
+          <QuestionImageWatermark
+            questionId={question.id}
+            userName="DDA User"
+            userPhone="+994XXXXXXXXX"
+          />
+        </div>
       )}
       <div className="space-y-2">
         {question.options.map((option) => (

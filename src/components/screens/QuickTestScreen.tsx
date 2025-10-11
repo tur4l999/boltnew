@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 // removed Card to avoid forced light backgrounds; using custom dark container
 import { Button } from '../ui/Button';
 import { SlideTransition } from '../ui/SlideTransition';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 import { VideoPlayer } from '../media/VideoPlayer';
@@ -354,21 +355,28 @@ export function QuickTestScreen() {
           {/* Image should complete the top frame */}
           {availableMedia.length > 0 && (
             <div
-              className="relative"
+              className="relative overflow-hidden rounded-lg"
               onTouchStart={onMediaTouchStart}
               onTouchMove={onMediaTouchMove}
               onTouchEnd={onMediaTouchEnd}
             >
               {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
-                <img
-                  src={question.imageUrl}
-                  alt="Sual şəkli"
-                  className="w-full h-48 object-cover cursor-zoom-in"
-                  onClick={openImagePreview}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+                <div className="relative">
+                  <img
+                    src={question.imageUrl}
+                    alt="Sual şəkli"
+                    className="w-full h-48 object-cover cursor-zoom-in"
+                    onClick={openImagePreview}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                  <QuestionImageWatermark
+                    questionId={question.id}
+                    userName="DDA User"
+                    userPhone="+994XXXXXXXXX"
+                  />
+                </div>
               )}
               {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
                 <div className="w-full bg-black">
@@ -554,21 +562,28 @@ export function QuickTestScreen() {
             onTouchMove={onPreviewTouchMove}
           >
             <div className="relative max-w-[95vw] max-h-[90vh]">
-              <img
-                ref={previewImgRef}
-                src={question.imageUrl}
-                alt="Sual şəkli"
-                className="select-none"
-                style={{
-                  transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
-                  transformOrigin: 'center center',
-                  maxWidth: '95vw',
-                  maxHeight: '90vh',
-                  objectFit: 'contain',
-                  display: 'block',
-                }}
-                draggable={false}
-              />
+              <div className="relative">
+                <img
+                  ref={previewImgRef}
+                  src={question.imageUrl}
+                  alt="Sual şəkli"
+                  className="select-none"
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                    transformOrigin: 'center center',
+                    maxWidth: '95vw',
+                    maxHeight: '90vh',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                  draggable={false}
+                />
+                <QuestionImageWatermark
+                  questionId={question.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
               <button
                 onClick={closeImagePreview}
                 className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"

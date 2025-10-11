@@ -6,6 +6,7 @@ import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
 import { AppealSubmitModal } from './AppealSubmitModal';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 
 export function ExamRunScreen() {
   const { navigate, currentScreen, isDarkMode, goBack, addExamResult } = useApp();
@@ -214,11 +215,16 @@ export function ExamRunScreen() {
               >
                 {/* removed placeholder layer to ensure image sits at very top */}
                 {/* no overlay on answered; keep content as-is */}
-                <div className="w-full h-36">
+                <div className="w-full h-36 relative">
                   <img
                     src={question.imageUrl}
                     alt={`Sual ${index + 1}`}
                     className="w-full h-full object-cover object-top block"
+                  />
+                  <QuestionImageWatermark
+                    questionId={question.id}
+                    userName="DDA User"
+                    userPhone="+994XXXXXXXXX"
                   />
                 </div>
                 <div className={`px-3 py-2 mt-1 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
@@ -236,12 +242,19 @@ export function ExamRunScreen() {
           {/* Question container without white background */}
           <div className="mt-2 rounded-xl p-4 text-white">
             {currentQuestion.imageUrl && (
-              <img
-                src={currentQuestion.imageUrl}
-                alt="Question visual"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+              <div className="relative w-full h-40 mb-3 rounded-lg overflow-hidden">
+                <img
+                  src={currentQuestion.imageUrl}
+                  alt="Question visual"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <QuestionImageWatermark
+                  questionId={currentQuestion.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
             )}
             <div className={`font-bold mb-3 text-white`}>
               {currentIndex + 1}. {currentQuestion.text}

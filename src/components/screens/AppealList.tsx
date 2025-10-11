@@ -4,6 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { FadeIn } from '../ui/FadeIn';
 import { QuestionViewModal } from './QuestionViewModal';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import type { Appeal } from '../../lib/types';
 
 interface AppealListProps {
@@ -155,16 +156,23 @@ export function AppealList({ appeals }: AppealListProps) {
                   {appeal.userComment}
                 </p>
                 {appeal.questionImageUrl && (
-                  <div className="relative">
+                  <div className="relative rounded-lg overflow-hidden">
                     <img
                       src={appeal.questionImageUrl}
                       alt={t.questionImage}
-                      className="w-full h-24 object-cover rounded-lg"
+                      className="w-full h-24 object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
                     />
-                    <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                    <QuestionImageWatermark
+                      questionId={appeal.questionId}
+                      userName="DDA User"
+                      userPhone="+994XXXXXXXXX"
+                      opacity={0.12}
+                      fontSize={8}
+                    />
+                    <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full z-20">
                       {t.questionHasImage}
                     </div>
                   </div>
@@ -332,16 +340,21 @@ export function AppealList({ appeals }: AppealListProps) {
                       {selectedAppeal.userComment}
                     </p>
                     {selectedAppeal.questionImageUrl && (
-                      <div className="relative group">
+                      <div className="relative group rounded-xl overflow-hidden">
                         <img
                           src={selectedAppeal.questionImageUrl}
                           alt={t.questionImage}
-                          className="w-full max-h-48 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-shadow duration-300"
+                          className="w-full max-h-48 object-cover shadow-lg group-hover:shadow-xl transition-shadow duration-300"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
                         />
-                        <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
+                        <QuestionImageWatermark
+                          questionId={selectedAppeal.questionId}
+                          userName="DDA User"
+                          userPhone="+994XXXXXXXXX"
+                        />
+                        <div className="absolute top-3 right-3 bg-black/70 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm z-20">
                           {t.questionHasImage}
                         </div>
                       </div>

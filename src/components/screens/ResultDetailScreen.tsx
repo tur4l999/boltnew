@@ -4,6 +4,7 @@ import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { EmojiIcon } from '../ui/EmojiIcon';
 import { VideoPlayer } from '../media/VideoPlayer';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import { AppealSubmitModal } from './AppealSubmitModal';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import type { StoredExamResult, Question } from '../../lib/types';
@@ -185,14 +186,19 @@ export function ResultDetailScreen() {
         <Card className="mb-4">
           {/* Question Image/Video */}
           {currentQuestion.imageUrl && (
-            <div className="mb-4">
+            <div className="mb-4 relative rounded-lg overflow-hidden">
               <img
                 src={currentQuestion.imageUrl}
                 alt="Sual şəkli"
-                className="w-full h-48 object-cover rounded-lg"
+                className="w-full h-48 object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
+              />
+              <QuestionImageWatermark
+                questionId={currentQuestion.id}
+                userName="DDA User"
+                userPhone="+994XXXXXXXXX"
               />
             </div>
           )}
