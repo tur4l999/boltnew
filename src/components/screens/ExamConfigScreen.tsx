@@ -145,6 +145,22 @@ export function ExamConfigScreen() {
                   </div>
                 </div>
 
+                <div className={`p-4 rounded-2xl ${
+                  isDarkMode ? 'bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-700/50' : 'bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200/50'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">💰</div>
+                    <div>
+                      <div className={`text-sm font-bold mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                        Ödəniş məlumatı
+                      </div>
+                      <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-orange-300' : 'text-orange-700'}`}>
+                        "İMTAHAN BAŞLA" düyməsinə klik etdikdə "Simulyator bileti" hesabından 1 bilet, bu hesab boş olduqda isə "BALANSDAN" 2 azn silinəcəkdir.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               {/* Enhanced Promo Section */}
               <div className={`p-4 rounded-2xl border-2 border-dashed transition-all duration-300 ${
                 isDarkMode 

@@ -9,7 +9,7 @@ export function TabBar() {
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠', gradient: 'from-emerald-500 to-green-500', useIcon: false },
     { key: 'Topics', label: 'Mövzular', emoji: '📚', gradient: 'from-blue-500 to-cyan-500', useIcon: false },
-    { key: 'Exam', label: t.exam, icon: 'test-tube', gradient: 'from-purple-500 to-pink-500', useIcon: true },
+    { key: 'Exam', label: t.exam, icon: 'target', gradient: 'from-purple-500 to-pink-500', useIcon: true },
     { key: 'Store', label: t.store, emoji: '🛍️', gradient: 'from-orange-500 to-red-500', useIcon: false },
   ];
 
