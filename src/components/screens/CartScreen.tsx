@@ -155,6 +155,20 @@ export function CartScreen() {
           )}
 
           <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+            <div className="flex items-start gap-2 mb-3">
+              <div className="text-xl">📚</div>
+              <div className="flex-1 text-xs leading-relaxed">
+                <p className={`font-semibold mb-1 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                  Sualların müəllif hüququnun qorunması
+                </p>
+                <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                  Platformamızda yerləşdirilən bütün test sualları müəllif hüququ ilə qorunur. İcazəsiz surətçıxarma, yayma və ya kommersiya məqsədilə istifadə qəti qadağandır.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className={`mt-3 ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
             <h3 className="font-bold mb-2">Ödəniş üsulu</h3>
             <div className="flex gap-2 text-sm">
               <button onClick={() => setPayment('balance')} className={`px-3 py-2 rounded-lg border ${payment==='balance' ? 'ring-2 ring-emerald-500 text-emerald-600' : ''} ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>Balans</button>
@@ -249,14 +263,14 @@ function PromoCode({ onApply, applied, error }: { onApply: (code: string)=>void;
       <button onClick={() => setOpen(v => !v)} className={`text-sm underline ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{open ? 'Promo kodu gizlət' : 'Promo kod daxil et'}</button>
       {open && (
         <div className={`mt-2 p-2 rounded-md ${isDarkMode ? 'ring-1 ring-emerald-700/50' : 'ring-1 ring-emerald-300/70'}`}>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="DDA10"
-              className={`flex-1 rounded-md border px-3 py-2 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
+              className={`w-28 rounded-md border px-2.5 py-1.5 text-sm outline-none ${isDarkMode ? 'bg-gray-900 border-gray-700 text-gray-100 placeholder-gray-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'}`}
             />
-            <button onClick={()=>onApply(code)} className={`px-3 py-2 rounded-md text-white bg-emerald-600 hover:bg-emerald-700`}>Tətbiq et</button>
+            <button onClick={()=>onApply(code)} className={`px-2.5 py-1.5 rounded-md text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap`}>Tətbiq et</button>
           </div>
           {applied && !error && <div className={`mt-2 text-xs ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>Promo kod uğurla tətbiq olundu.</div>}
           {!applied && error && <div className={`mt-2 text-xs ${isDarkMode ? 'text-red-400' : 'text-red-600'}`}>{error}</div>}

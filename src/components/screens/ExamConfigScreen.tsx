@@ -9,7 +9,7 @@ export function ExamConfigScreen() {
 
   const header = useMemo(() => {
     if (mode === 'final') return '📋 Yekun imtahan';
-    return '🧪 İmtahan simulyatoru';
+    return '📝 İmtahan simulyatoru';
   }, [mode]);
 
   const [showPromo, setShowPromo] = useState(false);
@@ -66,7 +66,7 @@ export function ExamConfigScreen() {
                   onClick={() => navigate('ExamConfig', { mode: 'simulator' })} 
                   fullWidth
                   size="xl"
-                  icon="🧪"
+                  icon="📝"
                   variant="primary"
                 >
                   İmtahan simulyatoru
