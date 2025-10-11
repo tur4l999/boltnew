@@ -244,11 +244,15 @@ export function SettingsScreen() {
               </div>
               <button
                 onClick={() => navigate('SchoolInfo')}
-                className={`text-xs mb-1 transition-all duration-200 hover:underline inline-flex items-center gap-1 ${
-                  isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+                className={`text-xs mb-1 px-2 py-1 rounded-lg transition-all duration-200 inline-flex items-center gap-1 ${
+                  isDarkMode 
+                    ? 'bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 border border-emerald-700/50' 
+                    : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200'
                 }`}
               >
-                Məktəb/Kurs: {schoolName} <span className="text-[10px]">→</span>
+                <Icon name="building" size={12} />
+                <span>Məktəb/Kurs: {schoolName}</span>
+                <span className="text-[10px]">→</span>
               </button>
               <div className={`text-sm transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
@@ -258,37 +262,28 @@ export function SettingsScreen() {
         </Card>
 
         {/* Balance, Tickets, and Driving Lessons Cards */}
-        <div className="grid grid-cols-3 gap-3 mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+        <div className="grid grid-cols-3 gap-2 mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
           <Card variant="elevated" padding="sm">
-            <div className="flex flex-col items-center justify-center py-2">
-              <Icon name="dollar-sign" size={20} className={isDarkMode ? 'text-emerald-400 mb-2' : 'text-emerald-600 mb-2'} />
-              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                {balance}
-              </div>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                AZN
+            <div className="flex items-center justify-center gap-1 py-1">
+              <Icon name="dollar-sign" size={14} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+              <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {balance} AZN
               </div>
             </div>
           </Card>
           <Card variant="elevated" padding="sm">
-            <div className="flex flex-col items-center justify-center py-2">
-              <Icon name="clipboard-check" size={20} className={isDarkMode ? 'text-blue-400 mb-2' : 'text-blue-600 mb-2'} />
-              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                {simulatorBalance}
-              </div>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Bilet
+            <div className="flex items-center justify-center gap-1 py-1">
+              <Icon name="clipboard-check" size={14} className={isDarkMode ? 'text-blue-400' : 'text-blue-600'} />
+              <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {simulatorBalance} Bilet
               </div>
             </div>
           </Card>
           <Card variant="elevated" padding="sm">
-            <div className="flex flex-col items-center justify-center py-2">
-              <Icon name="navigation" size={20} className={isDarkMode ? 'text-orange-400 mb-2' : 'text-orange-600 mb-2'} />
-              <div className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                {drivingLessons}
-              </div>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Sürmə
+            <div className="flex items-center justify-center gap-1 py-1">
+              <Icon name="navigation" size={14} className={isDarkMode ? 'text-orange-400' : 'text-orange-600'} />
+              <div className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                {drivingLessons} Sürmə
               </div>
             </div>
           </Card>
