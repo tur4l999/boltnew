@@ -325,7 +325,7 @@ export function ResultDetailScreen() {
                     <div className="rounded-xl overflow-hidden">
                       <VideoPlayer 
                         src={currentQuestion.videoUrl} 
-                        watermark="DDA.az" 
+                        watermark="DDA" 
                         heightClass="h-48"
                       />
                     </div>

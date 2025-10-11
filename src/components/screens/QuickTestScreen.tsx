@@ -380,7 +380,7 @@ export function QuickTestScreen() {
               )}
               {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
                 <div className="w-full bg-black">
-                  <VideoPlayer src={question.videoUrl} watermark="DDA.az" heightClass="h-48" />
+                  <VideoPlayer src={question.videoUrl} watermark="DDA" heightClass="h-48" />
                 </div>
               )}
               {availableMedia.length > 1 && (

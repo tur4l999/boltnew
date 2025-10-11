@@ -15,7 +15,7 @@ interface QuestionImageWatermarkProps {
 }
 
 export const QuestionImageWatermark: React.FC<QuestionImageWatermarkProps> = ({
-  userName = 'DDA.az User',
+  userName = 'DDA User',
   userPhone = '',
   questionId = '',
   className = '',
@@ -28,7 +28,7 @@ export const QuestionImageWatermark: React.FC<QuestionImageWatermarkProps> = ({
   });
   
   // Create watermark text
-  const watermarkText = `DDA.az • ${userName}`;
+  const watermarkText = `DDA • ${userName}`;
   const secondLine = userPhone ? `${userPhone} • ${timestamp}` : timestamp;
   
   // Pattern spacing - compact for images

@@ -24,7 +24,7 @@ export function AIChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Salam! Mən DDA.az AI köməkçisiyəm. Hal-hazırda tam fəaliyyət göstərmirəm, lakin gələcəkdə sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınıza cavab verə biləcəyəm. Hazırda test rejimindəyəm.',
+      text: 'Salam! Mən DDA AI köməkçisiyəm. Hal-hazırda tam fəaliyyət göstərmirəm, lakin gələcəkdə sürücülük qaydaları və imtahan hazırlığı ilə bağlı suallarınıza cavab verə biləcəyəm. Hazırda test rejimindəyəm.',
       isUser: false,
       timestamp: new Date()
     }
@@ -109,7 +109,7 @@ export function AIChatScreen() {
   };
 
   const getAIResponse = (question: string): string => {
-    return 'Təşəkkür edirəm! Hal-hazırda mən tam fəaliyyət göstərmirəm və test rejimindəyəm. Yaxın gələcəkdə sizə daha ətraflı və faydalı cavablar verə biləcəyəm. Bu vaxt ərzində DDA.az platformasındakı digər resurslardan - video dərslər, test sualları və qaydalar bölməsindən istifadə edə bilərsiniz.';
+    return 'Təşəkkür edirəm! Hal-hazırda mən tam fəaliyyət göstərmirəm və test rejimindəyəm. Yaxın gələcəkdə sizə daha ətraflı və faydalı cavablar verə biləcəyəm. Bu vaxt ərzində DDA platformasındakı digər resurslardan - video dərslər, test sualları və qaydalar bölməsindən istifadə edə bilərsiniz.';
   };
 
   const loadChatHistory = (chatId: string) => {
@@ -206,7 +206,7 @@ export function AIChatScreen() {
                   <EmojiIcon emoji="🤖" size={14} className="text-white" />
                 </div>
                 <div>
-                  <div className="font-bold text-gray-900">DDA.az AI Köməkçi</div>
+                  <div className="font-bold text-gray-900">DDA AI Köməkçi</div>
                   <div className="text-xs text-emerald-600">● Onlayn</div>
                 </div>
               </div>
