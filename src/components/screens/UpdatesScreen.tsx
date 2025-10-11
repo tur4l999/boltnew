@@ -15,7 +15,8 @@ export function UpdatesScreen() {
         'Yeni modern dizayn',
         'Sürətli performans',
         'Offline dəstəyi',
-        'AI çat köməkçisi'
+        'AI çat köməkçisi',
+        'Şəkillərə gizli watermark əlavə edildi'
       ]
     },
     {
