@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../../contexts/AppContext';
 // import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -6,9 +6,10 @@ import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 import { formatTime } from '../../lib/utils';
 import { AppealSubmitModal } from './AppealSubmitModal';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 
 export function ExamRunScreen() {
-  const { navigate, currentScreen, isDarkMode, goBack, addExamResult } = useApp();
+  const { navigate, currentScreen, isDarkMode, goBack, addExamResult, switchTab } = useApp();
   const { config } = currentScreen.params;
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15:00 format
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,6 +25,14 @@ export function ExamRunScreen() {
   const [overlayText, setOverlayText] = useState<'Cavab doğrudur' | 'Cavab yanlışdır' | ''>('');
   const [finalState, setFinalState] = useState<'pass' | 'fail' | null>(null);
   const [showAppealModal, setShowAppealModal] = useState(false);
+  
+  // Image preview state
+  const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const previewImgRef = useRef<HTMLImageElement | null>(null);
+  const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastTouch = useRef<{ x: number; y: number } | null>(null);
 
   function truncateText(text: string, maxChars: number): string {
     if (!text) return '';
@@ -146,6 +155,41 @@ export function ExamRunScreen() {
     }, 0);
   }
 
+  // Image preview functions
+  const openImagePreview = () => {
+    if (!currentQuestion?.imageUrl) return;
+    setIsImagePreviewOpen(true);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+  };
+
+  const closeImagePreview = () => {
+    setIsImagePreviewOpen(false);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+  };
+
+  const onPreviewWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.2 : 0.2;
+    setZoomScale(prev => Math.max(1, Math.min(5, prev + delta)));
+  };
+
+  const onPreviewTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
+  const onPreviewTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && lastTouch.current && zoomScale > 1) {
+      const dx = e.touches[0].clientX - lastTouch.current.x;
+      const dy = e.touches[0].clientY - lastTouch.current.y;
+      setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+      lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
   const currentOutcome = outcomes[currentQuestion?.id];
   const isConfirmed = !!currentOutcome;
 
@@ -160,7 +204,7 @@ export function ExamRunScreen() {
             {finalState === 'pass' ? 'İmtahandan keçdiniz' : 'İmtahandan kəsildiniz'}
           </div>
           <div className="w-full max-w-xs space-y-2 px-4">
-            <Button onClick={() => window.location.reload()} className="w-full" variant="secondary">Yenidən Başla</Button>
+            <Button onClick={() => { switchTab('Home'); navigate('Exam'); }} className="w-full" variant="secondary">Geri qayıt</Button>
             <Button onClick={finishExam} className="w-full">Nəticələr</Button>
             <Button onClick={() => navigate('Lesson', { moduleId: 'M1' })} className="w-full" variant="ghost">Dərsə Başla</Button>
           </div>
@@ -214,11 +258,16 @@ export function ExamRunScreen() {
               >
                 {/* removed placeholder layer to ensure image sits at very top */}
                 {/* no overlay on answered; keep content as-is */}
-                <div className="w-full h-36">
+                <div className="w-full h-36 relative">
                   <img
                     src={question.imageUrl}
                     alt={`Sual ${index + 1}`}
                     className="w-full h-full object-cover object-top block"
+                  />
+                  <QuestionImageWatermark
+                    questionId={question.id}
+                    userName="DDA User"
+                    userPhone="+994XXXXXXXXX"
                   />
                 </div>
                 <div className={`px-3 py-2 mt-1 ${answered ? 'text-white' : 'text-gray-900'} text-xs leading-tight`}>
@@ -236,12 +285,19 @@ export function ExamRunScreen() {
           {/* Question container without white background */}
           <div className="mt-2 rounded-xl p-4 text-white">
             {currentQuestion.imageUrl && (
-              <img
-                src={currentQuestion.imageUrl}
-                alt="Question visual"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+              <div className="relative w-full h-40 mb-3 rounded-lg overflow-hidden cursor-zoom-in" onClick={openImagePreview}>
+                <img
+                  src={currentQuestion.imageUrl}
+                  alt="Question visual"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <QuestionImageWatermark
+                  questionId={currentQuestion.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
             )}
             <div className={`font-bold mb-3 text-white`}>
               {currentIndex + 1}. {currentQuestion.text}
@@ -348,6 +404,51 @@ export function ExamRunScreen() {
           {formatTime(timeLeft)}
         </div>
       </div>
+
+      {/* Image Preview Modal */}
+      {isImagePreviewOpen && currentQuestion?.imageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/80" onClick={closeImagePreview} />
+          <div
+            ref={previewContainerRef}
+            className="absolute inset-0 flex items-center justify-center"
+            onWheel={onPreviewWheel}
+            onTouchStart={onPreviewTouchStart}
+            onTouchMove={onPreviewTouchMove}
+          >
+            <div className="relative max-w-[95vw] max-h-[90vh]">
+              <div className="relative">
+                <img
+                  ref={previewImgRef}
+                  src={currentQuestion.imageUrl}
+                  alt="Sual şəkli"
+                  className="select-none"
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                    transformOrigin: 'center center',
+                    maxWidth: '95vw',
+                    maxHeight: '90vh',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                  draggable={false}
+                />
+                <QuestionImageWatermark
+                  questionId={currentQuestion.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
+              <button
+                onClick={closeImagePreview}
+                className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
+              >
+                Bağla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Appeal Submit Modal */}
       <AppealSubmitModal

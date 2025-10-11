@@ -262,16 +262,23 @@ export function AppealForm({ onSuccess }: AppealFormProps) {
 
                       {/* Question Image Preview */}
                       {question.imageUrl && (
-                        <div className="relative ml-7">
+                        <div className="relative ml-7 rounded-lg overflow-hidden">
                           <img
                             src={question.imageUrl}
                             alt={t.questionImage}
-                            className="w-full h-20 object-cover rounded-lg"
+                            className="w-full h-20 object-cover"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                             }}
                           />
-                          <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                          <QuestionImageWatermark
+                            questionId={question.id}
+                            userName="DDA User"
+                            userPhone="+994XXXXXXXXX"
+                            opacity={0.12}
+                            fontSize={8}
+                          />
+                          <div className="absolute top-1 right-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full z-20">
                             {t.questionHasImage}
                           </div>
                         </div>

@@ -108,7 +108,7 @@ export const Watermark: React.FC<WatermarkProps> = ({
                   pointerEvents: 'none',
                 }}
               >
-                DDA.az • {config.userName}
+                DDA • {config.userName}
               </text>
               <text
                 x={30}
@@ -142,7 +142,7 @@ export const Watermark: React.FC<WatermarkProps> = ({
                   pointerEvents: 'none',
                 }}
               >
-                DDA.az • {config.userName}
+                DDA • {config.userName}
               </text>
               <text
                 x={spacing * 1.2}
@@ -176,7 +176,7 @@ export const Watermark: React.FC<WatermarkProps> = ({
                   pointerEvents: 'none',
                 }}
               >
-                DDA.az • {config.userName}
+                DDA • {config.userName}
               </text>
               <text
                 x={spacing * 2.2}

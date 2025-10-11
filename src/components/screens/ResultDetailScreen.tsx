@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { EmojiIcon } from '../ui/EmojiIcon';
 import { VideoPlayer } from '../media/VideoPlayer';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import { AppealSubmitModal } from './AppealSubmitModal';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import type { StoredExamResult, Question } from '../../lib/types';
@@ -17,6 +18,14 @@ export function ResultDetailScreen() {
   const [showAppealModal, setShowAppealModal] = useState(false);
   const [showTeacherQuestionModal, setShowTeacherQuestionModal] = useState(false);
   const [teacherQuestionText, setTeacherQuestionText] = useState('');
+  
+  // Image preview state
+  const [isImagePreviewOpen, setIsImagePreviewOpen] = useState(false);
+  const [zoomScale, setZoomScale] = useState(1);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const previewImgRef = useRef<HTMLImageElement | null>(null);
+  const previewContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastTouch = useRef<{ x: number; y: number } | null>(null);
 
   // Get the questions for this exam result
   const examQuestions = useMemo(() => {
@@ -88,6 +97,41 @@ export function ResultDetailScreen() {
       case 'simulator': return 'Simulyator İmtahanı';
       case 'final': return 'Final İmtahanı';
       default: return 'İmtahan';
+    }
+  };
+
+  // Image preview functions
+  const openImagePreview = () => {
+    if (!currentQuestion.imageUrl) return;
+    setIsImagePreviewOpen(true);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+  };
+
+  const closeImagePreview = () => {
+    setIsImagePreviewOpen(false);
+    setZoomScale(1);
+    setOffset({ x: 0, y: 0 });
+  };
+
+  const onPreviewWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.2 : 0.2;
+    setZoomScale(prev => Math.max(1, Math.min(5, prev + delta)));
+  };
+
+  const onPreviewTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
+  const onPreviewTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && lastTouch.current && zoomScale > 1) {
+      const dx = e.touches[0].clientX - lastTouch.current.x;
+      const dy = e.touches[0].clientY - lastTouch.current.y;
+      setOffset(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+      lastTouch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
   };
 
@@ -185,14 +229,19 @@ export function ResultDetailScreen() {
         <Card className="mb-4">
           {/* Question Image/Video */}
           {currentQuestion.imageUrl && (
-            <div className="mb-4">
+            <div className="mb-4 relative rounded-lg overflow-hidden cursor-zoom-in" onClick={openImagePreview}>
               <img
                 src={currentQuestion.imageUrl}
                 alt="Sual şəkli"
-                className="w-full h-48 object-cover rounded-lg"
+                className="w-full h-48 object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
                 }}
+              />
+              <QuestionImageWatermark
+                questionId={currentQuestion.id}
+                userName="DDA User"
+                userPhone="+994XXXXXXXXX"
               />
             </div>
           )}
@@ -319,7 +368,7 @@ export function ResultDetailScreen() {
                     <div className="rounded-xl overflow-hidden">
                       <VideoPlayer 
                         src={currentQuestion.videoUrl} 
-                        watermark="DDA.az" 
+                        watermark="DDA" 
                         heightClass="h-48"
                       />
                     </div>
@@ -474,6 +523,51 @@ export function ResultDetailScreen() {
               >
                 Göndər
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Image Preview Modal */}
+      {isImagePreviewOpen && currentQuestion.imageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/80" onClick={closeImagePreview} />
+          <div
+            ref={previewContainerRef}
+            className="absolute inset-0 flex items-center justify-center"
+            onWheel={onPreviewWheel}
+            onTouchStart={onPreviewTouchStart}
+            onTouchMove={onPreviewTouchMove}
+          >
+            <div className="relative max-w-[95vw] max-h-[90vh]">
+              <div className="relative">
+                <img
+                  ref={previewImgRef}
+                  src={currentQuestion.imageUrl}
+                  alt="Sual şəkli"
+                  className="select-none"
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                    transformOrigin: 'center center',
+                    maxWidth: '95vw',
+                    maxHeight: '90vh',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                  draggable={false}
+                />
+                <QuestionImageWatermark
+                  questionId={currentQuestion.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
+              <button
+                onClick={closeImagePreview}
+                className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
+              >
+                Bağla
+              </button>
             </div>
           </div>
         </div>

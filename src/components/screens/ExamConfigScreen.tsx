@@ -8,8 +8,8 @@ export function ExamConfigScreen() {
   const mode: 'simulator' | 'final' | undefined = currentScreen.params?.mode;
 
   const header = useMemo(() => {
-    if (mode === 'final') return '📋 Yekun imtahan';
-    return '🧪 İmtahan simulyatoru';
+    if (mode === 'final') return 'Yekun imtahan';
+    return 'İmtahan simulyatoru';
   }, [mode]);
 
   const [showPromo, setShowPromo] = useState(false);
@@ -51,7 +51,6 @@ export function ExamConfigScreen() {
         {!mode && (
           <div>
             <div className="text-center mb-8">
-              <div className="text-4xl mb-4">🧪</div>
               <h1 className="text-2xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 İmtahan Mərkəzi
               </h1>
@@ -66,7 +65,7 @@ export function ExamConfigScreen() {
                   onClick={() => navigate('ExamConfig', { mode: 'simulator' })} 
                   fullWidth
                   size="xl"
-                  icon="🧪"
+                  icon="📝"
                   variant="primary"
                 >
                   İmtahan simulyatoru
@@ -88,7 +87,6 @@ export function ExamConfigScreen() {
         {mode && (
           <div>
             <div className="text-center mb-8">
-              <div className="text-4xl mb-4">{mode === 'final' ? '📋' : '🧪'}</div>
               <h1 className="text-2xl font-black mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {header}
               </h1>
@@ -132,6 +130,22 @@ export function ExamConfigScreen() {
                 </div>
 
                 <div className={`p-4 rounded-2xl ${
+                  isDarkMode ? 'bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700/50' : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200/50'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">📚</div>
+                    <div>
+                      <div className={`text-sm font-bold mb-2 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
+                        Müəllif hüququnun qorunması
+                      </div>
+                      <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                        Platformamızda yerləşdirilən bütün test sualları müəllif hüququ ilə qorunur. İcazəsiz surətçıxarma, yayma və ya kommersiya məqsədilə istifadə qəti qadağandır.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={`p-4 rounded-2xl ${
                   isDarkMode ? 'bg-gradient-to-r from-orange-900/30 to-red-900/30 border border-orange-700/50' : 'bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200/50'
                 }`}>
                   <div className="flex items-start gap-3">
@@ -148,7 +162,7 @@ export function ExamConfigScreen() {
                 </div>
 
               {/* Enhanced Promo Section */}
-              <div className={`p-4 rounded-2xl border-2 border-dashed transition-all duration-300 ${
+              <div className={`p-3 rounded-2xl border-2 border-dashed transition-all duration-300 ${
                 isDarkMode 
                   ? 'border-emerald-700/50 bg-emerald-900/10 hover:bg-emerald-900/20' 
                   : 'border-emerald-300/50 bg-emerald-50/50 hover:bg-emerald-50/80'
@@ -158,47 +172,51 @@ export function ExamConfigScreen() {
                   onClick={() => setShowPromo(!showPromo)}
                   className="w-full flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="text-2xl">🎟️</div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-xl">🎟️</div>
                     <div className="text-left">
-                      <div className={`text-sm font-bold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                      <div className={`text-sm font-semibold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
                         Promokod var?
-                      </div>
-                      <div className={`text-xs ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                        Endirim kodu daxil edin
                       </div>
                     </div>
                   </div>
-                  <div className={`text-lg transition-transform duration-200 ${showPromo ? 'rotate-180' : ''} ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                  <div className={`text-base transition-transform duration-200 ${showPromo ? 'rotate-180' : ''} ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
                     ▼
                   </div>
                 </button>
 
                 {/* Collapsible promo area */}
-                <div className={`overflow-hidden transition-all duration-300 ${showPromo ? 'max-h-40 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                  <div className="flex gap-2">
+                <div className={`overflow-hidden transition-all duration-300 ${showPromo ? 'max-h-32 opacity-100 mt-3' : 'max-h-0 opacity-0'}`}>
+                  <div className="flex gap-1.5">
                     <input
                       type="text"
                       value={promoCode}
                       onChange={(e) => { setPromoCode(e.target.value); setPromoStatus('idle'); }}
-                      placeholder="Promokod daxil edin"
-                      className={`flex-1 px-4 py-3 rounded-2xl border-2 outline-none transition-all duration-300 ${
+                      placeholder="Kod daxil edin"
+                      className={`flex-1 min-w-0 px-2.5 py-1.5 text-sm rounded-lg border outline-none transition-all duration-300 ${
                         isDarkMode 
-                          ? 'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-emerald-500' 
+                          ? 'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500 focus:border-emerald-500' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
                       }`}
                     />
-                    <Button size="md" onClick={applyPromo} icon="✨">
+                    <button 
+                      onClick={applyPromo}
+                      className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg whitespace-nowrap transition-colors ${
+                        isDarkMode
+                          ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      }`}
+                    >
                       Tətbiq et
-                    </Button>
+                    </button>
                   </div>
                   {promoStatus !== 'idle' && (
-                    <div className={`text-sm mt-3 p-2 rounded-xl ${
+                    <div className={`text-xs mt-2 p-2 rounded-lg ${
                       promoStatus === 'ok' 
                         ? isDarkMode ? 'bg-emerald-900/30 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
                         : isDarkMode ? 'bg-red-900/30 text-red-300' : 'bg-red-100 text-red-700'
                     }`}>
-                      {promoStatus === 'ok' ? '✅ Promokod tətbiq olundu!' : '❌ Promokod düzgün deyil.'}
+                      {promoStatus === 'ok' ? '✅ Tətbiq olundu!' : '❌ Kod düzgün deyil.'}
                     </div>
                   )}
                 </div>

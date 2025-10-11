@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { FadeIn } from '../ui/FadeIn';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import type { Appeal } from '../../lib/types';
 
 interface QuestionViewModalProps {
@@ -116,16 +117,21 @@ export function QuestionViewModal({ isOpen, onClose, appeal }: QuestionViewModal
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     {t.questionImage}
                   </h3>
-                  <div className="relative">
+                  <div className="relative rounded-xl overflow-hidden">
                     <img
                       src={appeal.questionImageUrl}
                       alt={t.questionImage}
-                      className="w-full max-h-64 object-cover rounded-xl"
+                      className="w-full max-h-64 object-cover"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none';
                       }}
                     />
-                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                    <QuestionImageWatermark
+                      questionId={appeal.questionId}
+                      userName="DDA User"
+                      userPhone="+994XXXXXXXXX"
+                    />
+                    <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full z-20">
                       {t.viewQuestionImage}
                     </div>
                   </div>

@@ -3,6 +3,7 @@ import { useApp } from '../../contexts/AppContext';
 // removed Card to avoid forced light backgrounds; using custom dark container
 import { Button } from '../ui/Button';
 import { SlideTransition } from '../ui/SlideTransition';
+import { QuestionImageWatermark } from '../ui/QuestionImageWatermark';
 import { SAMPLE_QUESTIONS } from '../../lib/data';
 import { mistakesStore } from '../../lib/mistakesStore';
 import { VideoPlayer } from '../media/VideoPlayer';
@@ -46,6 +47,9 @@ export function QuickTestScreen() {
   const previewImgRef = useRef<HTMLImageElement | null>(null);
   const previewContainerRef = useRef<HTMLDivElement | null>(null);
   const lastTouch = useRef<{ x: number; y: number } | null>(null);
+  
+  // Video modal state (for when question has no image)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   const clampOffsetToBounds = (nx: number, ny: number, scale: number) => {
     const container = previewContainerRef.current;
@@ -354,26 +358,53 @@ export function QuickTestScreen() {
           {/* Image should complete the top frame */}
           {availableMedia.length > 0 && (
             <div
-              className="relative"
+              className="relative overflow-hidden rounded-lg"
               onTouchStart={onMediaTouchStart}
               onTouchMove={onMediaTouchMove}
               onTouchEnd={onMediaTouchEnd}
             >
               {availableMedia[mediaIndex] === 'image' && question.imageUrl && (
-                <img
-                  src={question.imageUrl}
-                  alt="Sual şəkli"
-                  className="w-full h-48 object-cover cursor-zoom-in"
-                  onClick={openImagePreview}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+                <div className="relative">
+                  <img
+                    src={question.imageUrl}
+                    alt="Sual şəkli"
+                    className="w-full h-48 object-cover cursor-zoom-in"
+                    onClick={openImagePreview}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                  <QuestionImageWatermark
+                    questionId={question.id}
+                    userName="DDA User"
+                    userPhone="+994XXXXXXXXX"
+                  />
+                </div>
               )}
               {availableMedia[mediaIndex] === 'video' && question.videoUrl && (
-                <div className="w-full bg-black">
-                  <VideoPlayer src={question.videoUrl} watermark="DDA.az" heightClass="h-48" />
-                </div>
+                <>
+                  {question.imageUrl ? (
+                    // If question has image, show video inline as before
+                    <div className="w-full bg-black">
+                      <VideoPlayer src={question.videoUrl} watermark="DDA" heightClass="h-48" />
+                    </div>
+                  ) : (
+                    // If no image, show play button to open video modal
+                    <div 
+                      className="w-full h-48 bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                      onClick={() => setIsVideoModalOpen(true)}
+                    >
+                      <div className="text-center">
+                        <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
+                          <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                        <div className="text-white text-sm font-medium">Videonu görmək üçün klikləyin</div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
               {availableMedia.length > 1 && (
                 <div className="absolute top-2 right-2 flex items-center gap-2">
@@ -554,23 +585,48 @@ export function QuickTestScreen() {
             onTouchMove={onPreviewTouchMove}
           >
             <div className="relative max-w-[95vw] max-h-[90vh]">
-              <img
-                ref={previewImgRef}
-                src={question.imageUrl}
-                alt="Sual şəkli"
-                className="select-none"
-                style={{
-                  transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
-                  transformOrigin: 'center center',
-                  maxWidth: '95vw',
-                  maxHeight: '90vh',
-                  objectFit: 'contain',
-                  display: 'block',
-                }}
-                draggable={false}
-              />
+              <div className="relative">
+                <img
+                  ref={previewImgRef}
+                  src={question.imageUrl}
+                  alt="Sual şəkli"
+                  className="select-none"
+                  style={{
+                    transform: `scale(${zoomScale}) translate(${offset.x / zoomScale}px, ${offset.y / zoomScale}px)`,
+                    transformOrigin: 'center center',
+                    maxWidth: '95vw',
+                    maxHeight: '90vh',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                  draggable={false}
+                />
+                <QuestionImageWatermark
+                  questionId={question.id}
+                  userName="DDA User"
+                  userPhone="+994XXXXXXXXX"
+                />
+              </div>
               <button
                 onClick={closeImagePreview}
+                className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
+              >
+                Bağla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Video Modal (when question has no image) */}
+      {isVideoModalOpen && question.videoUrl && !question.imageUrl && (
+        <div className="fixed inset-0 z-50">
+          <div className="absolute inset-0 bg-black/90" onClick={() => setIsVideoModalOpen(false)} />
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-4xl">
+              <VideoPlayer src={question.videoUrl} watermark="DDA" heightClass="h-[60vh]" />
+              <button
+                onClick={() => setIsVideoModalOpen(false)}
                 className="absolute -top-10 right-0 px-3 py-1 rounded-full text-sm font-bold bg-gray-800 text-gray-200 border border-gray-700"
               >
                 Bağla
