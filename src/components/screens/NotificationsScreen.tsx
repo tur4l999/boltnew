@@ -10,7 +10,7 @@ export function NotificationsScreen() {
   const { t, goBack, isDarkMode, navigate } = useApp();
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [showMenu, setShowMenu] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['today', 'yesterday']));
+  const [showSettings, setShowSettings] = useState(false);
   
   // Demo notification data with various types
   const notifications = [
@@ -120,73 +120,6 @@ export function NotificationsScreen() {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  // Categorize notifications by date
-  const categorizeNotifications = () => {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const weekAgo = new Date(today);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    const monthAgo = new Date(today);
-    monthAgo.setMonth(monthAgo.getMonth() - 1);
-
-    const categories: Record<string, typeof notifications> = {
-      today: [],
-      yesterday: [],
-      thisWeek: [],
-      thisMonth: [],
-      older: []
-    };
-
-    filteredNotifications.forEach(notification => {
-      const notifDate = new Date(notification.timestamp);
-      const notifDay = new Date(notifDate.getFullYear(), notifDate.getMonth(), notifDate.getDate());
-
-      if (notifDay.getTime() === today.getTime()) {
-        categories.today.push(notification);
-      } else if (notifDay.getTime() === yesterday.getTime()) {
-        categories.yesterday.push(notification);
-      } else if (notifDate >= weekAgo) {
-        categories.thisWeek.push(notification);
-      } else if (notifDate >= monthAgo) {
-        categories.thisMonth.push(notification);
-      } else {
-        categories.older.push(notification);
-      }
-    });
-
-    return categories;
-  };
-
-  const categories = categorizeNotifications();
-
-  const categoryLabels = {
-    today: 'Bugün',
-    yesterday: 'Dünən',
-    thisWeek: 'Bu həftə',
-    thisMonth: 'Bu ay',
-    older: 'Keçmiş'
-  };
-
-  const categoryIcons = {
-    today: '📅',
-    yesterday: '📆',
-    thisWeek: '📋',
-    thisMonth: '🗓️',
-    older: '📜'
-  };
-
-  const toggleCategory = (categoryKey: string) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(categoryKey)) {
-      newExpanded.delete(categoryKey);
-    } else {
-      newExpanded.add(categoryKey);
-    }
-    setExpandedCategories(newExpanded);
-  };
-
   const getColorClasses = (color: string, isRead: boolean) => {
     const opacity = isRead ? '20' : '30';
     const textOpacity = isRead ? '60' : '80';
@@ -238,7 +171,24 @@ export function NotificationsScreen() {
   };
 
   const formatTimestamp = (date: Date) => {
-    return date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    const dateStr = date.toLocaleDateString('az-AZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' });
+    
+    const notifDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const yesterdayDay = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
+    
+    if (notifDay.getTime() === todayDay.getTime()) {
+      return `Bugün, ${timeStr}`;
+    } else if (notifDay.getTime() === yesterdayDay.getTime()) {
+      return `Dünən, ${timeStr}`;
+    }
+    
+    return `${dateStr}, ${timeStr}`;
   };
 
   return (
@@ -358,25 +308,45 @@ export function NotificationsScreen() {
                     {/* Divider */}
                     <div className={`h-px ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
 
-                    {/* Notification settings */}
-                    <button
-                      onClick={() => {
-                        navigate('NotificationSettings');
-                        setShowMenu(false);
-                      }}
-                      className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
-                        isDarkMode 
-                          ? 'hover:bg-gray-700 text-gray-200' 
-                          : 'hover:bg-gray-50 text-gray-800'
-                      }`}
-                    >
-                      <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                        isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
-                      }`}>
-                        <EmojiIcon emoji="🔔" size={16} />
-                      </div>
-                      <span className="text-sm font-bold">Bildiriş ayarları</span>
-                    </button>
+                    {/* Notification settings - Collapsed/Expandable */}
+                    <div>
+                      <button
+                        onClick={() => setShowSettings(!showSettings)}
+                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                          isDarkMode 
+                            ? 'hover:bg-gray-700 text-gray-200' 
+                            : 'hover:bg-gray-50 text-gray-800'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                          isDarkMode ? 'bg-blue-900/50' : 'bg-blue-100'
+                        }`}>
+                          <EmojiIcon emoji="🔔" size={16} />
+                        </div>
+                        <span className="text-sm font-bold flex-1 text-left">Bildiriş ayarları</span>
+                        <span className={`text-lg transition-transform duration-300 ${
+                          showSettings ? 'rotate-180' : 'rotate-0'
+                        }`}>▼</span>
+                      </button>
+                      
+                      {showSettings && (
+                        <div className={`px-4 pb-3 space-y-2`}>
+                          <button
+                            onClick={() => {
+                              navigate('NotificationSettings');
+                              setShowMenu(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-left text-sm transition-all duration-200 ${
+                              isDarkMode 
+                                ? 'hover:bg-gray-700/50 text-gray-300' 
+                                : 'hover:bg-gray-100 text-gray-700'
+                            }`}
+                          >
+                            → Ayarlara keç
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </>
               )}
@@ -452,141 +422,70 @@ export function NotificationsScreen() {
             </Card>
           </FadeInUp>
         ) : (
-          // Categorized notifications list
-          <div className="space-y-4">
-            {Object.entries(categories).map(([categoryKey, categoryNotifications], catIndex) => {
-              if (categoryNotifications.length === 0) return null;
+          // Flat notifications list - no grouping
+          <div className="space-y-3">
+            {filteredNotifications.map((notification, index) => {
+              const colors = getColorClasses(notification.color, notification.isRead);
               
-              const isExpanded = expandedCategories.has(categoryKey);
-              const unreadInCategory = categoryNotifications.filter(n => !n.isRead).length;
-
               return (
-                <div key={categoryKey} className="animate-fadeInUp" style={{ animationDelay: `${catIndex * 50}ms` }}>
-                  {/* Category Header */}
+                <FadeInUp key={notification.id} delay={index * 30}>
                   <button
-                    onClick={() => toggleCategory(categoryKey)}
-                    className={`w-full flex items-center justify-between p-4 rounded-2xl mb-3 transition-all duration-300 ${
+                    onClick={() => {
+                      if (notification.action) {
+                        notification.action();
+                      }
+                    }}
+                    className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
                       isDarkMode
-                        ? 'bg-gray-800/80 hover:bg-gray-700/80 border-2 border-gray-700'
-                        : 'bg-white/80 hover:bg-gray-50 border-2 border-gray-200'
+                        ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
+                        : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
-                      }`}>
-                        <span className="text-xl">{categoryIcons[categoryKey as keyof typeof categoryIcons]}</span>
+                    {/* Unread indicator */}
+                    {!notification.isRead && (
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+                    )}
+
+                    <div className="flex gap-3">
+                      {/* Icon */}
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
+                        <EmojiIcon emoji={notification.emoji} size={24} />
                       </div>
-                      <div className="text-left">
-                        <div className={`font-black text-lg ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                          {categoryLabels[categoryKey as keyof typeof categoryLabels]}
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
+                          isDarkMode ? 'text-gray-100' : 'text-gray-900'
+                        } ${notification.isRead ? 'opacity-80' : ''}`}>
+                          {notification.title}
                         </div>
-                        <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          {categoryNotifications.length} bildiriş
-                          {unreadInCategory > 0 && ` • ${unreadInCategory} oxunmamış`}
+                        <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
+                          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                        } ${notification.isRead ? 'opacity-70' : ''}`}>
+                          {notification.message}
+                        </div>
+                        <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
+                          <span>📅</span>
+                          <span>{formatTimestamp(notification.timestamp)}</span>
                         </div>
                       </div>
-                    </div>
-                    <div className={`flex items-center gap-2`}>
-                      {unreadInCategory > 0 && (
-                        <div className="w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-bold">
-                          {unreadInCategory}
+
+                      {/* Arrow indicator */}
+                      {notification.action && (
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
+                          isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
+                        }`}>
+                          <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
                         </div>
                       )}
-                      <div className={`text-2xl transition-transform duration-300 ${
-                        isExpanded ? 'rotate-180' : 'rotate-0'
-                      } ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        ↓
-                      </div>
                     </div>
                   </button>
-
-                  {/* Category Notifications */}
-                  {isExpanded && (
-                    <div className="space-y-3 ml-2">
-                      {categoryNotifications.map((notification, index) => {
-                        const colors = getColorClasses(notification.color, notification.isRead);
-                        
-                        return (
-                          <SlideTransition key={notification.id} direction="right" delay={index * 30}>
-                            <button
-                              onClick={() => {
-                                if (notification.action) {
-                                  notification.action();
-                                }
-                              }}
-                              className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
-                                isDarkMode
-                                  ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
-                                  : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
-                              }`}
-                            >
-                              {/* Unread indicator */}
-                              {!notification.isRead && (
-                                <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
-                              )}
-
-                              <div className="flex gap-3">
-                                {/* Icon */}
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
-                                  <EmojiIcon emoji={notification.emoji} size={24} />
-                                </div>
-
-                                {/* Content */}
-                                <div className="flex-1 min-w-0">
-                                  <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
-                                    isDarkMode ? 'text-gray-100' : 'text-gray-900'
-                                  } ${notification.isRead ? 'opacity-80' : ''}`}>
-                                    {notification.title}
-                                  </div>
-                                  <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
-                                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                                  } ${notification.isRead ? 'opacity-70' : ''}`}>
-                                    {notification.message}
-                                  </div>
-                                  <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
-                                    <span>⏱</span>
-                                    <span>{formatTimestamp(notification.timestamp)}</span>
-                                  </div>
-                                </div>
-
-                                {/* Arrow indicator */}
-                                {notification.action && (
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
-                                    isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
-                                  }`}>
-                                    <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
-                                  </div>
-                                )}
-                              </div>
-                            </button>
-                          </SlideTransition>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                </FadeInUp>
               );
             })}
           </div>
         )}
 
-        {/* Settings button at bottom */}
-        {filteredNotifications.length > 0 && (
-          <FadeInUp delay={300}>
-            <button
-              onClick={() => navigate('NotificationSettings')}
-              className={`w-full mt-6 p-4 rounded-2xl border-2 flex items-center justify-center gap-2 transition-all duration-300 transform hover:scale-[1.02] ${
-                isDarkMode
-                  ? 'bg-gray-800/50 border-gray-700/50 text-gray-300 hover:bg-gray-700/50'
-                  : 'bg-white/50 border-gray-200/50 text-gray-700 hover:bg-gray-100/50'
-              }`}
-            >
-              <EmojiIcon emoji="⚙️" size={20} />
-              <span className="text-sm font-bold">Bildiriş ayarları</span>
-            </button>
-          </FadeInUp>
-        )}
       </div>
     </div>
   );
