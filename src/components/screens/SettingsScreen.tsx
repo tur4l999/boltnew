@@ -5,7 +5,7 @@ import { EmojiIcon } from '../ui/EmojiIcon';
 import { Icon } from '../icons/Icon';
 
 export function SettingsScreen() {
-  const { goBack, navigate, language, setLanguage, theme, setTheme, balance, simulatorBalance, activePackage, isDarkMode } = useApp();
+  const { goBack, navigate, language, setLanguage, theme, setTheme, balance, simulatorBalance, drivingLessons, activePackage, isDarkMode } = useApp();
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
   const [referralCode] = useState('DDA2025TURAL'); // Demo referral code
@@ -268,6 +268,13 @@ export function SettingsScreen() {
                     : 'bg-blue-100 text-blue-700 border border-blue-200/50 hover:bg-blue-200 hover:shadow-lg'
                 }`}>
                   <Icon name="clipboard-check" size={12} /> {simulatorBalance} Simulyator
+                </div>
+                <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 flex items-center gap-1 ${
+                  isDarkMode 
+                    ? 'bg-orange-900/30 text-orange-300 border border-orange-700/50 hover:bg-orange-900/50 hover:shadow-lg' 
+                    : 'bg-orange-100 text-orange-700 border border-orange-200/50 hover:bg-orange-200 hover:shadow-lg'
+                }`}>
+                  <EmojiIcon emoji="🚗" size={12} /> {drivingLessons} Sürmə təlimi
                 </div>
                 {activePackage && (
                   <div className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:scale-105 animate-glow flex items-center gap-1 ${
