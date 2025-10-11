@@ -43,7 +43,7 @@ export function Header() {
             <div className={`text-xs font-bold transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>
-              {t.hello}, {userName} <EmojiIcon emoji="👋" size={12} className="inline-block" />
+              {userName} <EmojiIcon emoji="👋" size={12} className="inline-block" />
             </div>
             <div className={`text-[10px] font-medium transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
