@@ -8,7 +8,7 @@ export function TabBar() {
   const tabs = [
     { key: 'Home', label: t.home, emoji: '🏠', gradient: 'from-emerald-500 to-green-500' },
     { key: 'Topics', label: 'Mövzular', emoji: '📚', gradient: 'from-blue-500 to-cyan-500' },
-    { key: 'Exam', label: t.exam, emoji: '📝', gradient: 'from-purple-500 to-pink-500' },
+    { key: 'Exam', label: t.exam, emoji: '🧪', gradient: 'from-purple-500 to-pink-500' },
     { key: 'Store', label: t.store, emoji: '🛍️', gradient: 'from-orange-500 to-red-500' },
   ];
 

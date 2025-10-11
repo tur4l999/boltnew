@@ -8,8 +8,8 @@ export function ExamConfigScreen() {
   const mode: 'simulator' | 'final' | undefined = currentScreen.params?.mode;
 
   const header = useMemo(() => {
-    if (mode === 'final') return '📋 Yekun imtahan';
-    return '📝 İmtahan simulyatoru';
+    if (mode === 'final') return 'Yekun imtahan';
+    return 'İmtahan simulyatoru';
   }, [mode]);
 
   const [showPromo, setShowPromo] = useState(false);
