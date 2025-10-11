@@ -162,7 +162,7 @@ export function ExamConfigScreen() {
                 </div>
 
               {/* Enhanced Promo Section */}
-              <div className={`p-4 rounded-2xl border-2 border-dashed transition-all duration-300 ${
+              <div className={`p-3 rounded-2xl border-2 border-dashed transition-all duration-300 ${
                 isDarkMode 
                   ? 'border-emerald-700/50 bg-emerald-900/10 hover:bg-emerald-900/20' 
                   : 'border-emerald-300/50 bg-emerald-50/50 hover:bg-emerald-50/80'
@@ -172,47 +172,51 @@ export function ExamConfigScreen() {
                   onClick={() => setShowPromo(!showPromo)}
                   className="w-full flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="text-2xl">🎟️</div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-xl">🎟️</div>
                     <div className="text-left">
-                      <div className={`text-sm font-bold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                      <div className={`text-sm font-semibold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
                         Promokod var?
-                      </div>
-                      <div className={`text-xs ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                        Endirim kodu daxil edin
                       </div>
                     </div>
                   </div>
-                  <div className={`text-lg transition-transform duration-200 ${showPromo ? 'rotate-180' : ''} ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                  <div className={`text-base transition-transform duration-200 ${showPromo ? 'rotate-180' : ''} ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
                     ▼
                   </div>
                 </button>
 
                 {/* Collapsible promo area */}
-                <div className={`overflow-hidden transition-all duration-300 ${showPromo ? 'max-h-40 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                  <div className="flex gap-2">
+                <div className={`overflow-hidden transition-all duration-300 ${showPromo ? 'max-h-32 opacity-100 mt-3' : 'max-h-0 opacity-0'}`}>
+                  <div className="flex gap-1.5">
                     <input
                       type="text"
                       value={promoCode}
                       onChange={(e) => { setPromoCode(e.target.value); setPromoStatus('idle'); }}
-                      placeholder="Promokod daxil edin"
-                      className={`flex-1 px-4 py-3 rounded-2xl border-2 outline-none transition-all duration-300 ${
+                      placeholder="Kod daxil edin"
+                      className={`flex-1 px-3 py-2 text-sm rounded-xl border outline-none transition-all duration-300 ${
                         isDarkMode 
-                          ? 'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-emerald-500' 
+                          ? 'bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-500 focus:border-emerald-500' 
                           : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-emerald-500'
                       }`}
                     />
-                    <Button size="md" onClick={applyPromo} icon="✨">
+                    <button 
+                      onClick={applyPromo}
+                      className={`px-3 py-2 text-sm font-medium rounded-xl whitespace-nowrap transition-colors ${
+                        isDarkMode
+                          ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                      }`}
+                    >
                       Tətbiq et
-                    </Button>
+                    </button>
                   </div>
                   {promoStatus !== 'idle' && (
-                    <div className={`text-sm mt-3 p-2 rounded-xl ${
+                    <div className={`text-xs mt-2 p-2 rounded-lg ${
                       promoStatus === 'ok' 
                         ? isDarkMode ? 'bg-emerald-900/30 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
                         : isDarkMode ? 'bg-red-900/30 text-red-300' : 'bg-red-100 text-red-700'
                     }`}>
-                      {promoStatus === 'ok' ? '✅ Promokod tətbiq olundu!' : '❌ Promokod düzgün deyil.'}
+                      {promoStatus === 'ok' ? '✅ Tətbiq olundu!' : '❌ Kod düzgün deyil.'}
                     </div>
                   )}
                 </div>
