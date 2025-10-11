@@ -48,7 +48,7 @@ export function Header() {
             <div className={`text-xs font-medium transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
-              {schoolName}
+              Məktəb/Kurs: {schoolName}
             </div>
           </div>
           

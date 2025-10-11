@@ -242,9 +242,14 @@ export function SettingsScreen() {
               } bg-clip-text text-transparent`}>
                 {userName}
               </div>
-              <div className={`text-xs mb-1 transition-colors duration-200 ${
-                isDarkMode ? 'text-gray-500' : 'text-gray-500'
-              }`}>{schoolName}</div>
+              <button
+                onClick={() => navigate('SchoolInfo')}
+                className={`text-xs mb-1 transition-all duration-200 hover:underline inline-flex items-center gap-1 ${
+                  isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+                }`}
+              >
+                Məktəb/Kurs: {schoolName} <span className="text-[10px]">→</span>
+              </button>
               <div className={`text-sm mb-3 transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>{userEmail}</div>
