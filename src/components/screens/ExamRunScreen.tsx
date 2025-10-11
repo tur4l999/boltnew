@@ -204,7 +204,7 @@ export function ExamRunScreen() {
             {finalState === 'pass' ? 'İmtahandan keçdiniz' : 'İmtahandan kəsildiniz'}
           </div>
           <div className="w-full max-w-xs space-y-2 px-4">
-            <Button onClick={() => window.location.reload()} className="w-full" variant="secondary">Yenidən Başla</Button>
+            <Button onClick={() => navigate('Exam')} className="w-full" variant="secondary">Geri qayıt</Button>
             <Button onClick={finishExam} className="w-full">Nəticələr</Button>
             <Button onClick={() => navigate('Lesson', { moduleId: 'M1' })} className="w-full" variant="ghost">Dərsə Başla</Button>
           </div>
