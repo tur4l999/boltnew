@@ -11,13 +11,36 @@ interface PartnerSchool {
   languages: string[];
   specialties: string[];
   location: string;
+  coordinates: { lat: number; lng: number };
   contact: string;
+  email: string;
   website?: string;
+}
+
+interface ApplicationForm {
+  schoolId: string;
+  name: string;
+  phone: string;
+  email: string;
+  category: string;
+  message: string;
 }
 
 export function PartnerSchoolsScreen() {
   const { goBack, isDarkMode } = useApp();
   const [selectedSchool, setSelectedSchool] = useState<string | null>(null);
+  const [hoveredSchool, setHoveredSchool] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [applicationSchool, setApplicationSchool] = useState<PartnerSchool | null>(null);
+  const [formData, setFormData] = useState<ApplicationForm>({
+    schoolId: '',
+    name: '',
+    phone: '',
+    email: '',
+    category: 'B',
+    message: ''
+  });
 
   const partnerSchools: PartnerSchool[] = [
     {
@@ -27,8 +50,10 @@ export function PartnerSchoolsScreen() {
       description: 'Bakının ən yaxşı sürücülük məktəblərindən biri. 20 illik təcrübə və peşəkar müəllimlər.',
       languages: ['Azərbaycan dili', 'Rus dili', 'İngilis dili'],
       specialties: ['B kateqoriya', 'C kateqoriya', 'D kateqoriya'],
-      location: 'Bakı şəhəri, Nəsimi rayonu',
-      contact: '+994 50 123 45 67'
+      location: 'Nəsimi rayonu',
+      coordinates: { lat: 40.4093, lng: 49.8671 },
+      contact: '+994 50 123 45 67',
+      email: 'info@surucu.az'
     },
     {
       id: '2',
@@ -37,8 +62,10 @@ export function PartnerSchoolsScreen() {
       description: 'Müasir avadanlıq və innovativ tədris metodları ilə təchiz olunmuş məktəb.',
       languages: ['Azərbaycan dili', 'Rus dili'],
       specialties: ['B kateqoriya', 'Moto', 'Avtomat transmissiya'],
-      location: 'Bakı şəhəri, Yasamal rayonu',
+      location: 'Yasamal rayonu',
+      coordinates: { lat: 40.3777, lng: 49.8384 },
       contact: '+994 55 234 56 78',
+      email: 'contact@esas.az',
       website: 'www.drivingacademy.az'
     },
     {
@@ -48,8 +75,10 @@ export function PartnerSchoolsScreen() {
       description: 'Beynəlxalq standartlara uyğun təhsil və sertifikatlaşdırma.',
       languages: ['Azərbaycan dili', 'İngilis dili', 'Türk dili'],
       specialties: ['B kateqoriya', 'C kateqoriya', 'Təhlükəsizlik təlimi'],
-      location: 'Bakı şəhəri, Xətai rayonu',
+      location: 'Xətai rayonu',
+      coordinates: { lat: 40.3953, lng: 49.9213 },
       contact: '+994 51 345 67 89',
+      email: 'info@prodrive.az',
       website: 'www.prodrive.az'
     },
     {
@@ -59,8 +88,10 @@ export function PartnerSchoolsScreen() {
       description: 'Yüksək keçid faizi və fərdi yanaşma ilə tanınan məktəb.',
       languages: ['Azərbaycan dili', 'Rus dili', 'İngilis dili', 'Türk dili'],
       specialties: ['B kateqoriya', 'Avtomat transmissiya', 'VIP təlim'],
-      location: 'Bakı şəhəri, Nərimanov rayonu',
+      location: 'Nərimanov rayonu',
+      coordinates: { lat: 40.4035, lng: 49.8580 },
       contact: '+994 70 456 78 90',
+      email: 'academy@automaster.az',
       website: 'www.automaster.az'
     },
     {
@@ -70,8 +101,10 @@ export function PartnerSchoolsScreen() {
       description: 'Əsas və əlavə kateqoriyalar üzrə geniş təlim proqramları.',
       languages: ['Azərbaycan dili', 'Rus dili'],
       specialties: ['B kateqoriya', 'C kateqoriya', 'D kateqoriya', 'E kateqoriya'],
-      location: 'Bakı şəhəri, Sabunçu rayonu',
-      contact: '+994 55 567 89 01'
+      location: 'Sabunçu rayonu',
+      coordinates: { lat: 40.4282, lng: 49.9536 },
+      contact: '+994 55 567 89 01',
+      email: 'qafqaz@driving.az'
     },
     {
       id: '6',
@@ -80,14 +113,44 @@ export function PartnerSchoolsScreen() {
       description: 'Virtual simulyatorlar və interaktiv təlim sistemləri ilə təchiz edilmiş müasir məktəb.',
       languages: ['Azərbaycan dili', 'İngilis dili'],
       specialties: ['B kateqoriya', 'Avtomat transmissiya', 'Elektromobil təlimi'],
-      location: 'Bakı şəhəri, Binəqədi rayonu',
+      location: 'Binəqədi rayonu',
+      coordinates: { lat: 40.4513, lng: 49.8202 },
       contact: '+994 50 678 90 12',
+      email: 'hello@smartdrive.az',
       website: 'www.smartdrive.az'
     }
   ];
 
+  // Filter schools based on search query
+  const filteredSchools = partnerSchools.filter(school => 
+    school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    school.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    school.specialties.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   const toggleSchool = (schoolId: string) => {
     setSelectedSchool(selectedSchool === schoolId ? null : schoolId);
+  };
+
+  const handleApplyClick = (school: PartnerSchool) => {
+    setApplicationSchool(school);
+    setFormData({ ...formData, schoolId: school.id });
+    setShowApplicationForm(true);
+  };
+
+  const handleSubmitApplication = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulate form submission
+    alert(`Müraciətiniz "${applicationSchool?.name}" məktəbinə göndərildi!\n\nAd: ${formData.name}\nTelefon: ${formData.phone}\nKateqoriya: ${formData.category}`);
+    setShowApplicationForm(false);
+    setFormData({
+      schoolId: '',
+      name: '',
+      phone: '',
+      email: '',
+      category: 'B',
+      message: ''
+    });
   };
 
   return (
@@ -107,7 +170,7 @@ export function PartnerSchoolsScreen() {
 
       <div className="relative z-10 p-4 pb-24">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-4">
           <button
             onClick={goBack}
             className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
@@ -118,20 +181,169 @@ export function PartnerSchoolsScreen() {
           >
             <span className="text-lg">←</span>
           </button>
-          <div>
+          <div className="flex-1">
             <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
               isDarkMode ? 'from-blue-400 to-green-400' : 'from-blue-600 to-green-600'
             } bg-clip-text text-transparent`}>
               Digər Məktəblər
             </h1>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Əməkdaşlıq etdiyimiz məktəblər
+              {filteredSchools.length} məktəb tapıldı
             </p>
           </div>
         </div>
 
+        {/* Search Bar */}
+        <div className="mb-4 animate-fadeInUp">
+          <div className={`relative rounded-2xl border-2 transition-all duration-200 ${
+            isDarkMode 
+              ? 'border-gray-700 bg-gray-800/80 backdrop-blur-sm' 
+              : 'border-gray-200 bg-white/80 backdrop-blur-sm'
+          }`}>
+            <div className="absolute left-4 top-1/2 -translate-y-1/2">
+              <EmojiIcon emoji="🔍" size={20} />
+            </div>
+            <input
+              type="text"
+              placeholder="Məktəb axtar..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full pl-12 pr-4 py-3 bg-transparent outline-none text-sm font-medium ${
+                isDarkMode ? 'text-gray-100 placeholder-gray-500' : 'text-gray-900 placeholder-gray-400'
+              }`}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className={`absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
+                  isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-200 hover:bg-gray-300 text-gray-600'
+                }`}
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Interactive Map */}
+        <Card variant="elevated" className="mb-4 overflow-hidden animate-fadeInUp" style={{ animationDelay: '50ms' }}>
+          <div className="relative h-64 bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700">
+            {/* Map Title */}
+            <div className={`absolute top-3 left-3 px-3 py-1.5 rounded-xl backdrop-blur-md z-10 ${
+              isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
+            }`}>
+              <div className="flex items-center gap-2">
+                <EmojiIcon emoji="🗺️" size={16} />
+                <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Bakı Məktəbləri
+                </span>
+              </div>
+            </div>
+
+            {/* SVG Map with Markers */}
+            <svg className="w-full h-full" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid meet">
+              {/* Map Background - Simplified Baku outline */}
+              <path
+                d="M50,80 Q100,60 150,70 T250,90 Q300,100 350,80 L360,120 Q340,140 300,150 T200,170 Q150,180 100,160 T50,130 Z"
+                className={isDarkMode ? 'fill-gray-700/50' : 'fill-blue-100/50'}
+                stroke={isDarkMode ? '#4B5563' : '#93C5FD'}
+                strokeWidth="2"
+              />
+              
+              {/* School Markers */}
+              {partnerSchools.map((school, index) => {
+                const x = 80 + (index % 3) * 120;
+                const y = 90 + Math.floor(index / 3) * 80;
+                const isSelected = selectedSchool === school.id;
+                const isHovered = hoveredSchool === school.id;
+                
+                return (
+                  <g
+                    key={school.id}
+                    transform={`translate(${x}, ${y})`}
+                    className="cursor-pointer transition-transform duration-300"
+                    style={{ 
+                      transform: isSelected || isHovered ? 'scale(1.2)' : 'scale(1)',
+                      transformOrigin: 'center'
+                    }}
+                    onClick={() => toggleSchool(school.id)}
+                    onMouseEnter={() => setHoveredSchool(school.id)}
+                    onMouseLeave={() => setHoveredSchool(null)}
+                  >
+                    {/* Marker Pin */}
+                    <path
+                      d="M0,-20 Q-8,-20 -8,-12 Q-8,-4 0,0 Q8,-4 8,-12 Q8,-20 0,-20 Z"
+                      className={
+                        isSelected 
+                          ? 'fill-green-500' 
+                          : isHovered 
+                          ? 'fill-blue-500' 
+                          : isDarkMode 
+                          ? 'fill-blue-400' 
+                          : 'fill-blue-600'
+                      }
+                      stroke="white"
+                      strokeWidth="1.5"
+                    />
+                    {/* Marker Circle */}
+                    <circle
+                      cx="0"
+                      cy="-12"
+                      r="5"
+                      className="fill-white"
+                    />
+                    {/* School Number */}
+                    <text
+                      x="0"
+                      y="-9"
+                      textAnchor="middle"
+                      className={`text-[8px] font-bold ${
+                        isSelected || isHovered ? 'fill-blue-600' : 'fill-blue-500'
+                      }`}
+                    >
+                      {index + 1}
+                    </text>
+                    {/* Label on hover/select */}
+                    {(isSelected || isHovered) && (
+                      <g>
+                        <rect
+                          x="-40"
+                          y="5"
+                          width="80"
+                          height="20"
+                          rx="4"
+                          className={isDarkMode ? 'fill-gray-800' : 'fill-white'}
+                          filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
+                        />
+                        <text
+                          x="0"
+                          y="18"
+                          textAnchor="middle"
+                          className={`text-[8px] font-bold ${isDarkMode ? 'fill-gray-100' : 'fill-gray-900'}`}
+                        >
+                          {school.name.slice(0, 15)}...
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
+            </svg>
+
+            {/* Map Legend */}
+            <div className={`absolute bottom-3 right-3 px-3 py-2 rounded-xl backdrop-blur-md ${
+              isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
+            }`}>
+              <div className="flex items-center gap-2 text-xs">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Məktəblər</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
         {/* Info Banner */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp">
+        <Card variant="elevated" padding="lg" className="mb-4 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
           <div className="flex items-start gap-3">
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
               isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
@@ -143,156 +355,184 @@ export function PartnerSchoolsScreen() {
                 Tərəfdaş Məktəblər
               </h3>
               <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                Bu məktəblərlə əməkdaşlıq edirik. Hər birinin xüsusiyyətlərini öyrənmək üçün üzərinə klikləyin.
+                Xəritədə və ya siyahıda məktəbləri seçin. Müraciət etmək üçün "Müraciət et" düyməsini klikləyin.
               </p>
             </div>
           </div>
         </Card>
 
-        {/* Schools Grid */}
-        <div className="space-y-4">
-          {partnerSchools.map((school, index) => (
-            <Card
-              key={school.id}
-              variant="elevated"
-              className={`overflow-hidden transition-all duration-300 cursor-pointer animate-fadeInUp ${
-                selectedSchool === school.id ? 'ring-2 ring-blue-500' : ''
-              }`}
-              style={{ animationDelay: `${(index + 1) * 50}ms` }}
-              onClick={() => toggleSchool(school.id)}
-            >
-              {/* School Header */}
-              <div className="p-4 flex items-center gap-4">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl flex-shrink-0 ${
-                  isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100'
-                }`}>
-                  {school.logo}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className={`font-bold text-base mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    {school.name}
-                  </h3>
-                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} line-clamp-2`}>
-                    {school.description}
-                  </p>
-                </div>
-                <div className={`text-2xl transition-transform duration-300 ${
-                  selectedSchool === school.id ? 'rotate-90' : ''
-                }`}>
-                  →
-                </div>
-              </div>
-
-              {/* Expanded Details */}
-              {selectedSchool === school.id && (
-                <div className={`border-t px-4 pb-4 pt-3 space-y-3 animate-fadeInUp ${
-                  isDarkMode ? 'border-gray-700' : 'border-gray-200'
-                }`}>
-                  {/* Languages */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <EmojiIcon emoji="🗣️" size={16} />
-                      <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Dillər:
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {school.languages.map((lang, idx) => (
-                        <span
-                          key={idx}
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            isDarkMode 
-                              ? 'bg-blue-900/30 text-blue-300' 
-                              : 'bg-blue-100 text-blue-700'
-                          }`}
-                        >
-                          {lang}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Specialties */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <EmojiIcon emoji="📋" size={16} />
-                      <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        İxtisaslar:
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {school.specialties.map((spec, idx) => (
-                        <span
-                          key={idx}
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            isDarkMode 
-                              ? 'bg-green-900/30 text-green-300' 
-                              : 'bg-green-100 text-green-700'
-                          }`}
-                        >
-                          {spec}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className="flex items-start gap-2">
-                    <EmojiIcon emoji="📍" size={16} />
-                    <div className="flex-1">
-                      <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Ünvan:
-                      </span>
-                      <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {school.location}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Contact */}
-                  <div className="flex items-center gap-2">
-                    <EmojiIcon emoji="📞" size={16} />
-                    <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Əlaqə:
-                    </span>
-                    <a 
-                      href={`tel:${school.contact}`}
-                      className={`text-xs font-medium ${
-                        isDarkMode ? 'text-blue-400' : 'text-blue-600'
-                      } hover:underline`}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {school.contact}
-                    </a>
-                  </div>
-
-                  {/* Website */}
-                  {school.website && (
-                    <div className="flex items-center gap-2">
-                      <EmojiIcon emoji="🌐" size={16} />
-                      <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Website:
-                      </span>
-                      <a 
-                        href={`https://${school.website}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`text-xs font-medium ${
-                          isDarkMode ? 'text-blue-400' : 'text-blue-600'
-                        } hover:underline`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {school.website}
-                      </a>
-                    </div>
-                  )}
-                </div>
-              )}
+        {/* Schools List */}
+        <div className="space-y-3">
+          {filteredSchools.length === 0 ? (
+            <Card variant="elevated" padding="lg" className="text-center">
+              <div className="text-4xl mb-3">🔍</div>
+              <p className={`font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Məktəb tapılmadı
+              </p>
+              <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                Başqa açar söz sınayın
+              </p>
             </Card>
-          ))}
+          ) : (
+            filteredSchools.map((school, index) => (
+              <Card
+                key={school.id}
+                variant="elevated"
+                className={`overflow-hidden transition-all duration-300 cursor-pointer animate-fadeInUp ${
+                  selectedSchool === school.id ? 'ring-2 ring-blue-500' : ''
+                }`}
+                style={{ animationDelay: `${(index + 2) * 50}ms` }}
+                onClick={() => toggleSchool(school.id)}
+              >
+                {/* School Header */}
+                <div className="p-4 flex items-center gap-4">
+                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-4xl flex-shrink-0 ${
+                    isDarkMode ? 'bg-gray-800/50' : 'bg-gray-100'
+                  }`}>
+                    {school.logo}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`font-bold text-base mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                      {school.name}
+                    </h3>
+                    <p className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'} line-clamp-2`}>
+                      {school.description}
+                    </p>
+                    <div className="flex items-center gap-1 text-xs">
+                      <EmojiIcon emoji="📍" size={12} />
+                      <span className={isDarkMode ? 'text-gray-500' : 'text-gray-500'}>
+                        {school.location}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`text-2xl transition-transform duration-300 ${
+                    selectedSchool === school.id ? 'rotate-90' : ''
+                  }`}>
+                    →
+                  </div>
+                </div>
+
+                {/* Expanded Details */}
+                {selectedSchool === school.id && (
+                  <div className={`border-t px-4 pb-4 pt-3 space-y-3 animate-fadeInUp ${
+                    isDarkMode ? 'border-gray-700' : 'border-gray-200'
+                  }`}>
+                    {/* Languages */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <EmojiIcon emoji="🗣️" size={16} />
+                        <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          Dillər:
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {school.languages.map((lang, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              isDarkMode 
+                                ? 'bg-blue-900/30 text-blue-300' 
+                                : 'bg-blue-100 text-blue-700'
+                            }`}
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Specialties */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <EmojiIcon emoji="📋" size={16} />
+                        <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          İxtisaslar:
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {school.specialties.map((spec, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              isDarkMode 
+                                ? 'bg-green-900/30 text-green-300' 
+                                : 'bg-green-100 text-green-700'
+                            }`}
+                          >
+                            {spec}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Contact Info */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex items-center gap-2">
+                        <EmojiIcon emoji="📞" size={14} />
+                        <a 
+                          href={`tel:${school.contact}`}
+                          className={`text-xs font-medium ${
+                            isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                          } hover:underline`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Zəng et
+                        </a>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <EmojiIcon emoji="✉️" size={14} />
+                        <a 
+                          href={`mailto:${school.email}`}
+                          className={`text-xs font-medium ${
+                            isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                          } hover:underline`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Email
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Website */}
+                    {school.website && (
+                      <div className="flex items-center gap-2">
+                        <EmojiIcon emoji="🌐" size={14} />
+                        <a 
+                          href={`https://${school.website}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`text-xs font-medium ${
+                            isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                          } hover:underline`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {school.website}
+                        </a>
+                      </div>
+                    )}
+
+                    {/* Apply Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleApplyClick(school);
+                      }}
+                      className={`w-full mt-2 py-3 rounded-xl font-bold text-sm transition-all duration-300 transform hover:scale-[1.02] ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-500 hover:to-green-500' 
+                          : 'bg-gradient-to-r from-blue-500 to-green-500 text-white hover:from-blue-600 hover:to-green-600'
+                      }`}
+                    >
+                      📝 Müraciət et
+                    </button>
+                  </div>
+                )}
+              </Card>
+            ))
+          )}
         </div>
 
-        {/* Bottom Info */}
+        {/* Bottom Partnership Info */}
         <Card variant="elevated" padding="lg" className="mt-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
           <div className="text-center">
             <div className="text-3xl mb-3">💼</div>
@@ -315,6 +555,169 @@ export function PartnerSchoolsScreen() {
           </div>
         </Card>
       </div>
+
+      {/* Application Form Modal */}
+      {showApplicationForm && applicationSchool && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowApplicationForm(false)}
+          ></div>
+          
+          {/* Modal */}
+          <div className={`relative w-full max-w-md rounded-3xl p-6 shadow-2xl animate-scaleIn ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}>
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
+                  {applicationSchool.logo}
+                </div>
+                <div>
+                  <h3 className={`font-bold text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    Müraciət formu
+                  </h3>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {applicationSchool.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowApplicationForm(false)}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                  isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                }`}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmitApplication} className="space-y-3">
+              <div>
+                <label className={`block text-xs font-bold mb-1.5 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Ad və Soyad *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-xl border-2 outline-none text-sm transition-colors ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500' 
+                      : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500'
+                  }`}
+                  placeholder="Adınızı daxil edin"
+                />
+              </div>
+
+              <div>
+                <label className={`block text-xs font-bold mb-1.5 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Telefon *
+                </label>
+                <input
+                  type="tel"
+                  required
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-xl border-2 outline-none text-sm transition-colors ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500' 
+                      : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500'
+                  }`}
+                  placeholder="+994 XX XXX XX XX"
+                />
+              </div>
+
+              <div>
+                <label className={`block text-xs font-bold mb-1.5 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-xl border-2 outline-none text-sm transition-colors ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500' 
+                      : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500'
+                  }`}
+                  placeholder="email@example.com"
+                />
+              </div>
+
+              <div>
+                <label className={`block text-xs font-bold mb-1.5 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Kateqoriya *
+                </label>
+                <select
+                  required
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className={`w-full px-4 py-2.5 rounded-xl border-2 outline-none text-sm transition-colors ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500' 
+                      : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500'
+                  }`}
+                >
+                  <option value="B">B kateqoriya</option>
+                  <option value="C">C kateqoriya</option>
+                  <option value="D">D kateqoriya</option>
+                  <option value="E">E kateqoriya</option>
+                  <option value="Moto">Motosiklet</option>
+                </select>
+              </div>
+
+              <div>
+                <label className={`block text-xs font-bold mb-1.5 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                  Əlavə qeyd
+                </label>
+                <textarea
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  rows={3}
+                  className={`w-full px-4 py-2.5 rounded-xl border-2 outline-none text-sm resize-none transition-colors ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-gray-100 focus:border-blue-500' 
+                      : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500'
+                  }`}
+                  placeholder="Əlavə məlumat və ya suallarınız..."
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowApplicationForm(false)}
+                  className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-300 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                  }`}
+                >
+                  İmtina
+                </button>
+                <button
+                  type="submit"
+                  className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all duration-300 transform hover:scale-[1.02] ${
+                    isDarkMode 
+                      ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white hover:from-blue-500 hover:to-green-500' 
+                      : 'bg-gradient-to-r from-blue-500 to-green-500 text-white hover:from-blue-600 hover:to-green-600'
+                  }`}
+                >
+                  Göndər
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
