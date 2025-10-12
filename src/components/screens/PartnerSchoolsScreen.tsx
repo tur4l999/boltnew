@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { EmojiIcon } from '../ui/EmojiIcon';
+
+// Fix Leaflet default icon paths
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDkuNCAxMi41IDI4LjUgMTIuNSAyOC41UzI1IDIxLjkgMjUgMTIuNUMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiIGZpbGw9IiMzYjgyZjYiLz48Y2lyY2xlIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNyIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==',
+  iconUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDkuNCAxMi41IDI4LjUgMTIuNSAyOC41UzI1IDIxLjkgMjUgMTIuNUMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiIGZpbGw9IiMzYjgyZjYiLz48Y2lyY2xlIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNyIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==',
+  shadowUrl: '',
+});
 
 interface PartnerSchool {
   id: string;
@@ -29,10 +40,10 @@ interface ApplicationForm {
 export function PartnerSchoolsScreen() {
   const { goBack, isDarkMode } = useApp();
   const [selectedSchool, setSelectedSchool] = useState<string | null>(null);
-  const [hoveredSchool, setHoveredSchool] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [applicationSchool, setApplicationSchool] = useState<PartnerSchool | null>(null);
+  const [mapExpanded, setMapExpanded] = useState(true);
   const [formData, setFormData] = useState<ApplicationForm>({
     schoolId: '',
     name: '',
@@ -121,6 +132,22 @@ export function PartnerSchoolsScreen() {
     }
   ];
 
+  // Custom marker icon
+  const createCustomIcon = (emoji: string) => {
+    return new L.Icon({
+      iconUrl: `data:image/svg+xml;base64,${btoa(`
+        <svg width="40" height="50" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 0C11.2 0 4 7.2 4 16c0 12 16 34 16 34s16-22 16-34c0-8.8-7.2-16-16-16z" fill="#3b82f6"/>
+          <circle cx="20" cy="16" r="12" fill="white"/>
+          <text x="20" y="22" text-anchor="middle" font-size="16">${emoji}</text>
+        </svg>
+      `)}`,
+      iconSize: [40, 50],
+      iconAnchor: [20, 50],
+      popupAnchor: [0, -50]
+    });
+  };
+
   // Filter schools based on search query
   const filteredSchools = partnerSchools.filter(school => 
     school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -151,6 +178,17 @@ export function PartnerSchoolsScreen() {
       category: 'B',
       message: ''
     });
+  };
+
+  const handleMapMarkerClick = (schoolId: string) => {
+    setSelectedSchool(schoolId);
+    // Scroll to school in list
+    setTimeout(() => {
+      const element = document.getElementById(`school-${schoolId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   return (
@@ -225,121 +263,95 @@ export function PartnerSchoolsScreen() {
           </div>
         </div>
 
-        {/* Interactive Map */}
+        {/* Interactive Map - Collapsible */}
         <Card variant="elevated" className="mb-4 overflow-hidden animate-fadeInUp" style={{ animationDelay: '50ms' }}>
-          <div className="relative h-64 bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-800 dark:to-gray-700">
-            {/* Map Title */}
-            <div className={`absolute top-3 left-3 px-3 py-1.5 rounded-xl backdrop-blur-md z-10 ${
-              isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
-            }`}>
-              <div className="flex items-center gap-2">
-                <EmojiIcon emoji="🗺️" size={16} />
-                <span className={`text-xs font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                  Bakı Məktəbləri
-                </span>
+          {/* Map Header */}
+          <button
+            onClick={() => setMapExpanded(!mapExpanded)}
+            className={`w-full p-4 flex items-center justify-between transition-colors ${
+              isDarkMode ? 'hover:bg-gray-700/30' : 'hover:bg-gray-50'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                isDarkMode ? 'bg-blue-600/20' : 'bg-blue-100'
+              }`}>
+                <EmojiIcon emoji="🗺️" size={20} />
+              </div>
+              <div className="text-left">
+                <h3 className={`font-bold text-base ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Məktəblərin Xəritəsi
+                </h3>
+                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  İnteraktiv xəritədə məktəbləri görün
+                </p>
               </div>
             </div>
+            <div className={`text-2xl transition-transform duration-300 ${
+              mapExpanded ? 'rotate-90' : ''
+            }`}>
+              ▶
+            </div>
+          </button>
 
-            {/* SVG Map with Markers */}
-            <svg className="w-full h-full" viewBox="0 0 400 250" preserveAspectRatio="xMidYMid meet">
-              {/* Map Background - Simplified Baku outline */}
-              <path
-                d="M50,80 Q100,60 150,70 T250,90 Q300,100 350,80 L360,120 Q340,140 300,150 T200,170 Q150,180 100,160 T50,130 Z"
-                className={isDarkMode ? 'fill-gray-700/50' : 'fill-blue-100/50'}
-                stroke={isDarkMode ? '#4B5563' : '#93C5FD'}
-                strokeWidth="2"
-              />
-              
-              {/* School Markers */}
-              {partnerSchools.map((school, index) => {
-                const x = 80 + (index % 3) * 120;
-                const y = 90 + Math.floor(index / 3) * 80;
-                const isSelected = selectedSchool === school.id;
-                const isHovered = hoveredSchool === school.id;
-                
-                return (
-                  <g
-                    key={school.id}
-                    transform={`translate(${x}, ${y})`}
-                    className="cursor-pointer transition-transform duration-300"
-                    style={{ 
-                      transform: isSelected || isHovered ? 'scale(1.2)' : 'scale(1)',
-                      transformOrigin: 'center'
-                    }}
-                    onClick={() => toggleSchool(school.id)}
-                    onMouseEnter={() => setHoveredSchool(school.id)}
-                    onMouseLeave={() => setHoveredSchool(null)}
-                  >
-                    {/* Marker Pin */}
-                    <path
-                      d="M0,-20 Q-8,-20 -8,-12 Q-8,-4 0,0 Q8,-4 8,-12 Q8,-20 0,-20 Z"
-                      className={
-                        isSelected 
-                          ? 'fill-green-500' 
-                          : isHovered 
-                          ? 'fill-blue-500' 
-                          : isDarkMode 
-                          ? 'fill-blue-400' 
-                          : 'fill-blue-600'
-                      }
-                      stroke="white"
-                      strokeWidth="1.5"
-                    />
-                    {/* Marker Circle */}
-                    <circle
-                      cx="0"
-                      cy="-12"
-                      r="5"
-                      className="fill-white"
-                    />
-                    {/* School Number */}
-                    <text
-                      x="0"
-                      y="-9"
-                      textAnchor="middle"
-                      className={`text-[8px] font-bold ${
-                        isSelected || isHovered ? 'fill-blue-600' : 'fill-blue-500'
-                      }`}
+          {/* Map Container */}
+          {mapExpanded && (
+            <div className="relative animate-fadeInUp">
+              <div className={`h-80 w-full ${isDarkMode ? 'brightness-90' : ''}`}>
+                <MapContainer
+                  center={[40.4093, 49.8671]}
+                  zoom={12}
+                  scrollWheelZoom={true}
+                  style={{ height: '100%', width: '100%', borderRadius: '0 0 1rem 1rem' }}
+                  className="z-0"
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    maxZoom={19}
+                  />
+                  {partnerSchools.map((school) => (
+                    <Marker
+                      key={school.id}
+                      position={[school.coordinates.lat, school.coordinates.lng]}
+                      icon={createCustomIcon(school.logo)}
+                      eventHandlers={{
+                        click: () => handleMapMarkerClick(school.id)
+                      }}
                     >
-                      {index + 1}
-                    </text>
-                    {/* Label on hover/select */}
-                    {(isSelected || isHovered) && (
-                      <g>
-                        <rect
-                          x="-40"
-                          y="5"
-                          width="80"
-                          height="20"
-                          rx="4"
-                          className={isDarkMode ? 'fill-gray-800' : 'fill-white'}
-                          filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
-                        />
-                        <text
-                          x="0"
-                          y="18"
-                          textAnchor="middle"
-                          className={`text-[8px] font-bold ${isDarkMode ? 'fill-gray-100' : 'fill-gray-900'}`}
-                        >
-                          {school.name.slice(0, 15)}...
-                        </text>
-                      </g>
-                    )}
-                  </g>
-                );
-              })}
-            </svg>
+                      <Popup>
+                        <div className="p-2 min-w-[200px]">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-2xl">{school.logo}</span>
+                            <h4 className="font-bold text-sm">{school.name}</h4>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-2">{school.description}</p>
+                          <div className="text-xs text-gray-500 mb-2">
+                            📍 {school.location}
+                          </div>
+                          <button
+                            onClick={() => handleApplyClick(school)}
+                            className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white text-xs font-bold rounded-lg hover:from-blue-600 hover:to-green-600 transition-all"
+                          >
+                            📝 Müraciət et
+                          </button>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
+                </MapContainer>
+              </div>
 
-            {/* Map Legend */}
-            <div className={`absolute bottom-3 right-3 px-3 py-2 rounded-xl backdrop-blur-md ${
-              isDarkMode ? 'bg-gray-900/80' : 'bg-white/80'
-            }`}>
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>Məktəblər</span>
+              {/* Map Controls Info */}
+              <div className={`px-4 py-3 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+                    💡 İpucu: Xəritəni zoom edin, hərəkət etdirin və markerləri klikləyin
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </Card>
 
         {/* Info Banner */}
@@ -377,6 +389,7 @@ export function PartnerSchoolsScreen() {
             filteredSchools.map((school, index) => (
               <Card
                 key={school.id}
+                id={`school-${school.id}`}
                 variant="elevated"
                 className={`overflow-hidden transition-all duration-300 cursor-pointer animate-fadeInUp ${
                   selectedSchool === school.id ? 'ring-2 ring-blue-500' : ''
