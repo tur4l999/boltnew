@@ -1,18 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import React, { useState } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { EmojiIcon } from '../ui/EmojiIcon';
-
-// Fix Leaflet default icon paths
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDkuNCAxMi41IDI4LjUgMTIuNSAyOC41UzI1IDIxLjkgMjUgMTIuNUMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiIGZpbGw9IiMzYjgyZjYiLz48Y2lyY2xlIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNyIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==',
-  iconUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIuNSAwQzUuNiAwIDAgNS42IDAgMTIuNWMwIDkuNCAxMi41IDI4LjUgMTIuNSAyOC41UzI1IDIxLjkgMjUgMTIuNUMyNSA1LjYgMTkuNCAwIDEyLjUgMHoiIGZpbGw9IiMzYjgyZjYiLz48Y2lyY2xlIGN4PSIxMi41IiBjeT0iMTIuNSIgcj0iNyIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==',
-  shadowUrl: '',
-});
 
 interface PartnerSchool {
   id: string;
@@ -44,6 +33,7 @@ export function PartnerSchoolsScreen() {
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [applicationSchool, setApplicationSchool] = useState<PartnerSchool | null>(null);
   const [mapExpanded, setMapExpanded] = useState(true);
+  const [selectedMapSchool, setSelectedMapSchool] = useState<string | null>(null);
   const [formData, setFormData] = useState<ApplicationForm>({
     schoolId: '',
     name: '',
@@ -132,22 +122,6 @@ export function PartnerSchoolsScreen() {
     }
   ];
 
-  // Custom marker icon
-  const createCustomIcon = (emoji: string) => {
-    return new L.Icon({
-      iconUrl: `data:image/svg+xml;base64,${btoa(`
-        <svg width="40" height="50" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 0C11.2 0 4 7.2 4 16c0 12 16 34 16 34s16-22 16-34c0-8.8-7.2-16-16-16z" fill="#3b82f6"/>
-          <circle cx="20" cy="16" r="12" fill="white"/>
-          <text x="20" y="22" text-anchor="middle" font-size="16">${emoji}</text>
-        </svg>
-      `)}`,
-      iconSize: [40, 50],
-      iconAnchor: [20, 50],
-      popupAnchor: [0, -50]
-    });
-  };
-
   // Filter schools based on search query
   const filteredSchools = partnerSchools.filter(school => 
     school.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -181,6 +155,7 @@ export function PartnerSchoolsScreen() {
   };
 
   const handleMapMarkerClick = (schoolId: string) => {
+    setSelectedMapSchool(selectedMapSchool === schoolId ? null : schoolId);
     setSelectedSchool(schoolId);
     // Scroll to school in list
     setTimeout(() => {
@@ -263,7 +238,7 @@ export function PartnerSchoolsScreen() {
           </div>
         </div>
 
-        {/* Interactive Map - Collapsible */}
+        {/* Interactive Map - Collapsible - Simplified SVG Version */}
         <Card variant="elevated" className="mb-4 overflow-hidden animate-fadeInUp" style={{ animationDelay: '50ms' }}>
           {/* Map Header */}
           <button
@@ -283,7 +258,7 @@ export function PartnerSchoolsScreen() {
                   Məktəblərin Xəritəsi
                 </h3>
                 <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  İnteraktiv xəritədə məktəbləri görün
+                  Məktəbləri xəritədə görün
                 </p>
               </div>
             </div>
@@ -294,60 +269,189 @@ export function PartnerSchoolsScreen() {
             </div>
           </button>
 
-          {/* Map Container */}
+          {/* Simplified Map Container */}
           {mapExpanded && (
             <div className="relative animate-fadeInUp">
-              <div className={`h-80 w-full ${isDarkMode ? 'brightness-90' : ''}`}>
-                <MapContainer
-                  center={[40.4093, 49.8671]}
-                  zoom={12}
-                  scrollWheelZoom={true}
-                  style={{ height: '100%', width: '100%', borderRadius: '0 0 1rem 1rem' }}
-                  className="z-0"
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    maxZoom={19}
-                  />
-                  {partnerSchools.map((school) => (
-                    <Marker
-                      key={school.id}
-                      position={[school.coordinates.lat, school.coordinates.lng]}
-                      icon={createCustomIcon(school.logo)}
-                      eventHandlers={{
-                        click: () => handleMapMarkerClick(school.id)
-                      }}
-                    >
-                      <Popup>
-                        <div className="p-2 min-w-[200px]">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-2xl">{school.logo}</span>
-                            <h4 className="font-bold text-sm">{school.name}</h4>
-                          </div>
-                          <p className="text-xs text-gray-600 mb-2">{school.description}</p>
-                          <div className="text-xs text-gray-500 mb-2">
-                            📍 {school.location}
-                          </div>
-                          <button
-                            onClick={() => handleApplyClick(school)}
-                            className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white text-xs font-bold rounded-lg hover:from-blue-600 hover:to-green-600 transition-all"
-                          >
-                            📝 Müraciət et
-                          </button>
-                        </div>
-                      </Popup>
-                    </Marker>
+              <div className={`h-80 w-full overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-gradient-to-br from-blue-50 to-green-50'}`}>
+                <svg className="w-full h-full" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+                  {/* Map Background - Baku outline */}
+                  <defs>
+                    <linearGradient id="mapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: isDarkMode ? '#1f2937' : '#dbeafe', stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: isDarkMode ? '#111827' : '#bbf7d0', stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  
+                  <rect width="800" height="600" fill="url(#mapGrad)" />
+                  
+                  {/* Grid lines */}
+                  {[...Array(10)].map((_, i) => (
+                    <g key={i}>
+                      <line
+                        x1={i * 80}
+                        y1={0}
+                        x2={i * 80}
+                        y2={600}
+                        stroke={isDarkMode ? '#374151' : '#e5e7eb'}
+                        strokeWidth="1"
+                        opacity="0.3"
+                      />
+                      <line
+                        x1={0}
+                        y1={i * 60}
+                        x2={800}
+                        y2={i * 60}
+                        stroke={isDarkMode ? '#374151' : '#e5e7eb'}
+                        strokeWidth="1"
+                        opacity="0.3"
+                      />
+                    </g>
                   ))}
-                </MapContainer>
+
+                  {/* Baku shoreline/shape */}
+                  <path
+                    d="M100,200 Q200,150 350,180 T600,220 Q700,240 750,200 L760,350 Q720,400 600,420 T350,460 Q200,480 100,420 Z"
+                    className={isDarkMode ? 'fill-gray-700/50' : 'fill-blue-200/30'}
+                    stroke={isDarkMode ? '#4B5563' : '#93C5FD'}
+                    strokeWidth="3"
+                  />
+
+                  {/* School Markers */}
+                  {partnerSchools.map((school, index) => {
+                    const col = index % 3;
+                    const row = Math.floor(index / 3);
+                    const x = 200 + col * 200;
+                    const y = 220 + row * 180;
+                    const isSelected = selectedMapSchool === school.id || selectedSchool === school.id;
+                    
+                    return (
+                      <g
+                        key={school.id}
+                        transform={`translate(${x}, ${y})`}
+                        className="cursor-pointer transition-all duration-300"
+                        style={{ 
+                          transform: isSelected ? `translate(${x}px, ${y}px) scale(1.3)` : `translate(${x}px, ${y}px) scale(1)`,
+                          transformOrigin: 'center'
+                        }}
+                        onClick={() => handleMapMarkerClick(school.id)}
+                      >
+                        {/* Pulse animation for selected */}
+                        {isSelected && (
+                          <circle
+                            cx="0"
+                            cy="0"
+                            r="35"
+                            className={isDarkMode ? 'fill-blue-500/20' : 'fill-blue-400/20'}
+                            style={{ animation: 'pulse 2s ease-in-out infinite' }}
+                          />
+                        )}
+                        
+                        {/* Marker Pin Shadow */}
+                        <ellipse
+                          cx="0"
+                          cy="5"
+                          rx="15"
+                          ry="5"
+                          fill="rgba(0,0,0,0.2)"
+                        />
+                        
+                        {/* Marker Pin */}
+                        <path
+                          d="M0,-35 Q-15,-35 -15,-20 Q-15,-5 0,5 Q15,-5 15,-20 Q15,-35 0,-35 Z"
+                          className={
+                            isSelected 
+                              ? 'fill-green-500' 
+                              : isDarkMode 
+                              ? 'fill-blue-400' 
+                              : 'fill-blue-600'
+                          }
+                          stroke="white"
+                          strokeWidth="2.5"
+                          filter="drop-shadow(0 4px 6px rgba(0,0,0,0.2))"
+                        />
+                        
+                        {/* Marker Inner Circle */}
+                        <circle
+                          cx="0"
+                          cy="-20"
+                          r="12"
+                          className="fill-white"
+                        />
+                        
+                        {/* School Emoji */}
+                        <text
+                          x="0"
+                          y="-12"
+                          textAnchor="middle"
+                          fontSize="20"
+                          style={{ userSelect: 'none' }}
+                        >
+                          {school.logo}
+                        </text>
+                        
+                        {/* Label */}
+                        <g opacity={isSelected ? 1 : 0.8}>
+                          <rect
+                            x="-60"
+                            y="15"
+                            width="120"
+                            height="30"
+                            rx="6"
+                            className={isDarkMode ? 'fill-gray-800' : 'fill-white'}
+                            filter="drop-shadow(0 2px 8px rgba(0,0,0,0.15))"
+                          />
+                          <text
+                            x="0"
+                            y="32"
+                            textAnchor="middle"
+                            fontSize="11"
+                            fontWeight="bold"
+                            className={isDarkMode ? 'fill-gray-100' : 'fill-gray-900'}
+                          >
+                            {school.name.slice(0, 18)}
+                          </text>
+                        </g>
+                        
+                        {/* Info icon */}
+                        <circle
+                          cx="0"
+                          cy="50"
+                          r="8"
+                          className={isDarkMode ? 'fill-blue-600' : 'fill-blue-500'}
+                          opacity={isSelected ? 1 : 0.7}
+                        />
+                        <text
+                          x="0"
+                          y="54"
+                          textAnchor="middle"
+                          fontSize="10"
+                          fontWeight="bold"
+                          className="fill-white"
+                        >
+                          i
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
               </div>
 
               {/* Map Controls Info */}
-              <div className={`px-4 py-3 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                <div className="flex items-center gap-2 text-xs">
+              <div className={`px-4 py-3 border-t ${isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-white/50'}`}>
+                <div className="flex items-center justify-between text-xs">
                   <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                    💡 İpucu: Xəritəni zoom edin, hərəkət etdirin və markerləri klikləyin
+                    💡 Məktəbləri seçmək üçün klikləyin
                   </span>
+                  {selectedMapSchool && (
+                    <button
+                      onClick={() => setSelectedMapSchool(null)}
+                      className={`px-2 py-1 rounded text-xs font-medium ${
+                        isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'
+                      }`}
+                    >
+                      Seçimi ləğv et
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
