@@ -17,6 +17,13 @@ import type {
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://manager.test-domain.co/az/api';
 const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_BLOG_API === 'true';
 
+// Debug logging
+console.log('[Blog API] Configuration:', {
+  API_BASE_URL,
+  USE_MOCK_API,
+  env: import.meta.env.VITE_USE_MOCK_BLOG_API,
+});
+
 /**
  * Mock data for development
  */
