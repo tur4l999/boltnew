@@ -18,11 +18,22 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://manager.test-d
 const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_BLOG_API === 'true';
 
 // Debug logging
-console.log('[Blog API] Configuration:', {
-  API_BASE_URL,
-  USE_MOCK_API,
-  env: import.meta.env.VITE_USE_MOCK_BLOG_API,
-});
+console.log('='.repeat(60));
+console.log('🚀 BLOG API KONFIQURASIYA');
+console.log('='.repeat(60));
+console.log('API_BASE_URL:', API_BASE_URL);
+console.log('USE_MOCK_API:', USE_MOCK_API);
+console.log('env.VITE_USE_MOCK_BLOG_API:', import.meta.env.VITE_USE_MOCK_BLOG_API);
+console.log('env.VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+console.log('='.repeat(60));
+if (USE_MOCK_API) {
+  console.warn('⚠️ DIQQƏT: MOCK MODE AKTIV - DEFAULT BLOGLAR GÖRÜNÜR!');
+  console.warn('Real bloglar üçün: VITE_USE_MOCK_BLOG_API=false olmalıdır');
+} else {
+  console.log('✅ REAL API MODE - Serverdən məlumatlar çəkiləcək');
+  console.log('✅ Server URL:', API_BASE_URL);
+}
+console.log('='.repeat(60));
 
 /**
  * Mock data for development
