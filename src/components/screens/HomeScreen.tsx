@@ -30,6 +30,7 @@ export function HomeScreen() {
     { key: 'qa', label: 'Sual-cavab', action: () => navigate('QA'), emoji: '💬' },
     { key: 'appeals', label: 'Apellyasiyalar', action: () => navigate('Appeals'), emoji: '📮' },
     { key: 'balance', label: 'Daxili balans', action: () => navigate('Balance'), emoji: '💰' },
+    { key: 'partner-schools', label: 'Digər məktəblər', action: () => navigate('PartnerSchools'), emoji: '🏫' },
     { key: 'blogs', label: 'Bloglar', action: () => navigate('Blogs'), emoji: '📰' },
   ];
   
