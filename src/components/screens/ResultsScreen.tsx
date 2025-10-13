@@ -8,7 +8,7 @@ import type { ExamType, StoredExamResult } from '../../lib/types';
 type DateFilter = 'all' | 'today' | 'thisWeek' | 'thisMonth' | 'lastMonth';
 
 export function ResultsScreen() {
-  const { t, navigate, currentScreen, isDarkMode, examResults } = useApp();
+  const { t, navigate, currentScreen, isDarkMode, examResults, goBack } = useApp();
   const { result } = currentScreen.params;
   
   // State for filters
@@ -157,14 +157,26 @@ export function ResultsScreen() {
     <div className={`px-4 pt-6 pb-24 min-h-screen transition-colors duration-200 ${
       isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
-      {/* Page Title */}
+      {/* Page Title with Back Button */}
       <div className="mb-6">
-        <h1 className={`text-2xl font-bold mb-2 transition-colors duration-200 ${
-          isDarkMode ? 'text-gray-100' : 'text-gray-900'
-        }`}>
-          Nəticələrim
-        </h1>
-        <p className={`text-sm transition-colors duration-200 ${
+        <div className="flex items-center gap-3 mb-2">
+          <button 
+            onClick={() => goBack()}
+            className={`group flex items-center justify-center w-10 h-10 rounded-xl border transition-all duration-300 ${
+              isDarkMode 
+                ? 'bg-gray-800 border-gray-700 hover:bg-gray-700 text-gray-200' 
+                : 'bg-white border-gray-200 hover:bg-gray-50 text-gray-700'
+            } hover:scale-105 hover:shadow-lg`}
+          >
+            <EmojiIcon emoji="←" size={20} />
+          </button>
+          <h1 className={`text-2xl font-bold transition-colors duration-200 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-900'
+          }`}>
+            Nəticələrim
+          </h1>
+        </div>
+        <p className={`text-sm ml-13 transition-colors duration-200 ${
           isDarkMode ? 'text-gray-400' : 'text-gray-600'
         }`}>
           İmtahan nəticələrinizi və statistikanızı izləyin
