@@ -5,8 +5,6 @@ import {
   Send, 
   Paperclip, 
   MoreVertical,
-  Phone,
-  Video,
   AlertCircle
 } from 'lucide-react';
 import type { QAChat, QAMessage, QAUser } from '../../lib/types';
@@ -142,20 +140,6 @@ export function QADetailScreen() {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-2">
-            <button
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-              }`}
-            >
-              <Phone size={20} />
-            </button>
-            <button
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-              }`}
-            >
-              <Video size={20} />
-            </button>
             <button
               className={`p-2 rounded-lg transition-colors ${
                 isDarkMode ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
