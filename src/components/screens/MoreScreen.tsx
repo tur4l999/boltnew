@@ -17,6 +17,7 @@ export function MoreScreen() {
     { key: 'rules', label: 'Qaydalar', emoji: '📘', action: () => navigate('Rules') },
     { key: 'books', label: 'PDF (kitablar)', emoji: '📚', action: () => navigate('SecurePdf'), badge: 'Premium' },
     { key: 'packages', label: 'Təlim paketləri', emoji: '📦', action: () => navigate('Packages') },
+    { key: 'partner-schools', label: 'Digər Məktəblər', emoji: '🏫', action: () => navigate('PartnerSchools') },
     { key: 'balance', label: 'Daxili balans', emoji: '💰', action: () => navigate('Transactions') },
     { key: 'certificate', label: 'Şəhadətnamə almaq', emoji: '🏆', action: () => alert('Şəhadətnamə almaq (demo)') },
     { key: 'practice', label: 'Praktiki təcrübə', emoji: '🚗', action: () => alert('Praktiki təcrübə (demo)') },

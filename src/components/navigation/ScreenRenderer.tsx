@@ -50,6 +50,7 @@ import { AboutScreen } from '../screens/AboutScreen';
 import { ReferralListScreen } from '../screens/ReferralListScreen';
 import { SecurePdfScreen } from '../screens/SecurePdfScreen';
 import { SchoolInfoScreen } from '../screens/SchoolInfoScreen';
+import { PartnerSchoolsScreen } from '../screens/PartnerSchoolsScreen';
 
 export function ScreenRenderer() {
   const { currentScreen, currentTab } = useApp();
@@ -118,9 +119,10 @@ export function ScreenRenderer() {
       {currentScreen.screen === 'ReferralList' && <ReferralListScreen />}
       {currentScreen.screen === 'SecurePdf' && <SecurePdfScreen />}
       {currentScreen.screen === 'SchoolInfo' && <SchoolInfoScreen />}
+      {currentScreen.screen === 'PartnerSchools' && <PartnerSchoolsScreen />}
       
       {/* Default */}
-      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'ApplicationForm', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList', 'SecurePdf', 'SchoolInfo'].includes(currentScreen.screen) && <HomeScreen />}
+      {!['Home', 'Topics', 'Store', 'More', 'QuickTest', 'Lesson', 'Practice', 'OnlineLessons', 'Exam', 'ExamConfig', 'ExamIntro', 'ExamRun', 'Results', 'ResultDetail', 'Mistakes', 'TeacherContact', 'Packages', 'ActivationScheduled', 'Transactions', 'Settings', 'ProductDetail', 'Cart', 'Rules', 'Signs', 'Blogs', 'Fines', 'DrivingPractice', 'Appeals', 'CertificateApplication', 'ApplicationForm', 'QA', 'QADetail', 'QAForm', 'Notifications', 'Profile', 'Security', 'Privacy', 'NotificationSettings', 'OfflineContent', 'Updates', 'HelpCenter', 'Contact', 'Feedback', 'About', 'ReferralList', 'SecurePdf', 'SchoolInfo', 'PartnerSchools'].includes(currentScreen.screen) && <HomeScreen />}
     </PageTransition>
   );
 }
