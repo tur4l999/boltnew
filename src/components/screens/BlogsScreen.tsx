@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../contexts/AppContext';
 import { Card } from '../ui/Card';
 import { BlogDetailScreen } from './BlogDetailScreen';
+import { getBlogs, getBlogCategories, logBlogEvent, type Blog, type BlogCategory } from '../../modules/blog';
 
 type BlogItem = {
   id: string;
@@ -22,104 +23,32 @@ type Category = {
   color: string;
 };
 
-const CATEGORIES: Category[] = [
-  { id: 'all', name: 'Hamısı', emoji: '📚', color: 'gray' },
-  { id: 'rules', name: 'Qaydalar', emoji: '⚖️', color: 'blue' },
-  { id: 'exam', name: 'İmtahan', emoji: '📝', color: 'emerald' },
-  { id: 'safety', name: 'Təhlükəsizlik', emoji: '🛡️', color: 'red' },
-  { id: 'tips', name: 'Məsləhətlər', emoji: '💡', color: 'yellow' },
-];
+const CATEGORY_EMOJIS: Record<string, string> = {
+  'all': '📚',
+  'rules': '⚖️',
+  'qaydalar': '⚖️',
+  'exam': '📝',
+  'imtahan': '📝',
+  'safety': '🛡️',
+  'təhlükəsizlik': '🛡️',
+  'tips': '💡',
+  'məsləhətlər': '💡',
+};
 
-const SAMPLE_BLOGS: BlogItem[] = [
-  {
-    id: 'b1',
-    title: 'Yol hərəkəti qaydalarında edilən son dəyişikliklər',
-    excerpt: 'Yeni qaydalar və sürücülərin bilməli olduğu vacib nüanslar haqda ətraflı məlumat.',
-    content: `2025-ci ildə yol hərəkəti qaydalarında vacib dəyişikliklər edilmişdir. Bu dəyişikliklər sürücülərin təhlükəsizliyini artırmaq və müasir standartlara uyğunlaşmaq məqsədi ilə həyata keçirilmişdir.
-
-**Əsas dəyişikliklər:**
-
-1. **Sürət limitləri** - Şəhər daxilində maksimum sürət 50 km/s-dan 60 km/s-a qaldırılmışdır.
-
-2. **Telefon istifadəsi** - Sürmə zamanı əl ilə telefon istifadəsinə görə cərimə məbləği artırılmışdır.
-
-3. **Təhlükəsizlik kəmərləri** - Arxa oturacaqda da təhlükəsizlik kəməri taxmaq məcburi edilmişdir.
-
-4. **Elektromobillər** - Elektromobillər üçün xüsusi parking yerləri ayrılmışdır və onların pozulmasına görə ciddi cərimələr tətbiq edilir.
-
-Bu qaydalar artıq qüvvədədir və bütün sürücülər onlara riayət etməlidirlər. Qaydaları pozanlara münasibətdə ciddi tədbirlər görüləcəkdir.`,
-    date: '2025-01-15',
-    tags: ['Qaydalar', 'Dəyişiklik', 'Təhlükəsizlik'],
-    image: '/image.png',
-    viewCount: 1247,
-    category: 'rules',
-  },
-  {
-    id: 'b2',
-    title: 'İmtahana hazırlıq üçün 5 effektiv üsul',
-    excerpt: 'Qısa müddətdə daha səmərəli hazırlıq aparmağın yolları və məşq üsulları.',
-    content: `Sürücülük imtahanına hazırlıq çətin proses ola bilər, lakin doğru üsullarla bu prosesi asanlaşdırmaq mümkündür.
-
-**5 Effektiv Hazırlıq Üsulu:**
-
-**1. Düzenli məşq rejimi**
-Hər gün ən azı 30 dəqiqə test həll edin. Sabit məşq yaddasda saxlanmanı gücləndirir.
-
-**2. Səhvləri təhlil edin**
-Hər səhvli cavabın səbəbini araşdırın və doğru variantı başa düşün.
-
-**3. Müxtəlif test formalarını istifadə edin**
-Yalnız mobil tətbiqdən deyil, müxtəlif mənbələrdən test həll edin.
-
-**4. Praktiki bilik əldə edin**
-Nəzəri bilikləri praktiki vəziyyətlərlə əlaqələndirin.
-
-**5. Stres idarəetməsi**
-İmtahan stresini azaltmaq üçün dərin nəfəs alma texnikalarını öyrənin.
-
-Bu üsulları tətbiq etməklə imtahanda uğur qazanma şansınız əhəmiyyətli dərəcədə artacaq. Unutmayın ki, səbir və düzenli məşq uğurun açarıdır.`,
-    date: '2025-01-05',
-    tags: ['İmtahan', 'Hazırlıq', 'Məşq'],
-    image: '/image copy.png',
-    viewCount: 892,
-    category: 'exam',
-  },
-  {
-    id: 'b3',
-    title: 'Sürücülər üçün qış mövsümünə hazırlaşma tövsiyələri',
-    excerpt: 'Avtomobilin texniki baxışı, təkərlər və təhlükəsizlik qaydaları haqqında məlumat.',
-    content: `Qış mövsümü sürücülər üçün xüsusi hazırlıq tələb edir. Təhlükəsiz sürmə üçün avtomobilinizi və özünüzü bu mövsümə hazırlayın.
-
-**Texniki Hazırlıq:**
-
-**Təkərlər və Şinlər**
-- Qış şinlərinin derinliyi minimum 4 mm olmalıdır
-- Şin təzyiqini yoxlayın (soyuqda təzyiq azalır)
-- Zəncir və digər qış aksesuarlarını hazır saxlayın
-
-**Mühərrik və Sistemlər**
-- Antifriz səviyyəsini yoxlayın (-25°C-ə qədər davamlı olmalıdır)
-- Akkumulyatoru test edin (soyuqda gücü azalır)
-- Fərən və arxa şüşə isitmələrini yoxlayın
-
-**Təhlükəsizlik Təchizatları**
-- Buz kazıyıcı və qar fırçası
-- İlk yardım çantası və fənər
-- Ehtiyat battaniye və isti geyim
-
-**Sürmə Texnikası:**
-- Yavaş başlayın və tormoz basın
-- Məsafəni 2 dəfə artırın
-- Kəskin manevrlərdən çəkinin
-
-Bu hazırlıqları etməklə qış mövsümündə təhlükəsiz və rahat sürə bilərsiniz.`,
-    date: '2024-12-20',
-    tags: ['Qış', 'Təhlükəsizlik', 'Təchizat'],
-    image: '/DDA_logo.png',
-    viewCount: 654,
-    category: 'safety',
-  },
-];
+// Map API Blog to BlogItem for compatibility with existing UI
+function mapBlogToItem(blog: Blog): BlogItem {
+  return {
+    id: blog.id,
+    title: blog.title,
+    excerpt: blog.small_description,
+    content: blog.description,
+    date: new Date(blog.created_at).toISOString().split('T')[0],
+    tags: [], // We can extract from meta if needed
+    image: blog.cover_image || undefined,
+    viewCount: blog.review_count || 0,
+    category: blog.category.slug || blog.category.id,
+  };
+}
 
 export function BlogsScreen() {
   const { isDarkMode } = useApp();
@@ -127,9 +56,58 @@ export function BlogsScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  
+  // API State
+  const [blogs, setBlogs] = useState<BlogItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([{ id: 'all', name: 'Hamısı', emoji: '📚', color: 'gray' }]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch blogs and categories on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        // Fetch blogs and categories in parallel
+        const [blogsResponse, categoriesResponse] = await Promise.all([
+          getBlogs(),
+          getBlogCategories(),
+        ]);
+
+        if (blogsResponse.success && blogsResponse.data) {
+          const mappedBlogs = blogsResponse.data.map(mapBlogToItem);
+          setBlogs(mappedBlogs);
+        } else {
+          setError(blogsResponse.error || 'Failed to load blogs');
+        }
+
+        if (categoriesResponse.success && categoriesResponse.data) {
+          const mappedCategories: Category[] = [
+            { id: 'all', name: 'Hamısı', emoji: '📚', color: 'gray' },
+            ...categoriesResponse.data.map(cat => ({
+              id: cat.slug || cat.id,
+              name: cat.name,
+              emoji: CATEGORY_EMOJIS[cat.slug?.toLowerCase() || ''] || '📂',
+              color: 'gray',
+            })),
+          ];
+          setCategories(mappedCategories);
+        }
+      } catch (err) {
+        console.error('Error fetching blog data:', err);
+        setError('Məlumatları yükləmək mümkün olmadı');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Filter blogs based on search term and category
-  const filteredBlogs = SAMPLE_BLOGS.filter(blog => {
+  const filteredBlogs = blogs.filter(blog => {
     const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
       blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -141,6 +119,8 @@ export function BlogsScreen() {
 
   const handleBlogClick = (blogId: string) => {
     setSelectedBlog(blogId);
+    // Log blog view event
+    logBlogEvent(blogId, 'view');
   };
 
   const handleNavigateBack = () => {
@@ -153,23 +133,22 @@ export function BlogsScreen() {
   };
 
   const getSelectedCategoryInfo = () => {
-    return CATEGORIES.find(cat => cat.id === selectedCategory) || CATEGORIES[0];
+    return categories.find(cat => cat.id === selectedCategory) || categories[0];
   };
 
-  const selectedBlogData = selectedBlog ? SAMPLE_BLOGS.find(b => b.id === selectedBlog) : null;
+  const selectedBlogData = selectedBlog ? blogs.find(b => b.id === selectedBlog) : null;
 
   // If a blog is selected, show the detail screen
   if (selectedBlogData) {
     return (
       <BlogDetailScreen
         blog={selectedBlogData}
-        allBlogs={SAMPLE_BLOGS}
+        allBlogs={blogs}
         onNavigateBack={handleNavigateBack}
         onNavigateToBlog={handleBlogClick}
       />
     );
   }
-
 
   return (
     <div className={`min-h-screen pb-24 transition-colors duration-300 ${
@@ -238,7 +217,7 @@ export function BlogsScreen() {
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     isDarkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
                   }`}>
-                    {selectedCategory === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === selectedCategory).length}
+                    {selectedCategory === 'all' ? blogs.length : blogs.filter(b => b.category === selectedCategory).length}
                   </span>
                 </div>
                 <svg 
@@ -261,7 +240,7 @@ export function BlogsScreen() {
                     : 'bg-white/95 border-gray-200 backdrop-blur-xl'
                 }`}>
                   <div className="p-2">
-                    {CATEGORIES.map((category, index) => (
+                    {categories.map((category, index) => (
                       <button
                         key={category.id}
                         onClick={() => handleCategorySelect(category.id)}
@@ -285,7 +264,7 @@ export function BlogsScreen() {
                             ? isDarkMode ? 'bg-emerald-400/20 text-emerald-300' : 'bg-emerald-100 text-emerald-700'
                             : isDarkMode ? 'bg-gray-700/50 text-gray-400' : 'bg-gray-100 text-gray-500'
                         }`}>
-                          {category.id === 'all' ? SAMPLE_BLOGS.length : SAMPLE_BLOGS.filter(b => b.category === category.id).length}
+                          {category.id === 'all' ? blogs.length : blogs.filter(b => b.category === category.id).length}
                         </span>
                       </button>
                     ))}
@@ -305,10 +284,58 @@ export function BlogsScreen() {
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="p-4">
+          <div className="space-y-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} variant="glass" className="overflow-hidden animate-pulse">
+                <div className="flex gap-4 mb-4">
+                  <div className={`w-20 h-20 rounded-2xl ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />
+                  <div className="flex-1 space-y-3">
+                    <div className={`h-4 rounded ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} w-3/4`} />
+                    <div className={`h-3 rounded ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} w-full`} />
+                    <div className={`h-3 rounded ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'} w-2/3`} />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !isLoading && (
+        <div className="p-4">
+          <Card variant="glass" className="text-center py-12 animate-fade-in-up">
+            <div>
+              <div className="text-6xl mb-4">⚠️</div>
+              <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                Xəta baş verdi
+              </h3>
+              <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {error}
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className={`px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
+                  isDarkMode 
+                    ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' 
+                    : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                }`}
+              >
+                Yenidən cəhd edin
+              </button>
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* Blog Cards Container */}
-      <div className="p-4">
-        <div className="space-y-6">
-          {filteredBlogs.map((blog, index) => (
+      {!isLoading && !error && (
+        <div className="p-4">
+          <div className="space-y-6">
+            {filteredBlogs.map((blog, index) => (
             <Card
               key={blog.id}
               variant="glass"
@@ -373,22 +400,22 @@ export function BlogsScreen() {
           ))}
         </div>
 
-        {/* No Results */}
-        {filteredBlogs.length === 0 && (
-          <Card variant="glass" className="text-center py-12 animate-fade-in-up">
-            <div>
-              <div className="text-6xl mb-4">📭</div>
-              <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                Heç bir məqalə tapılmadı
-              </h3>
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Axtarış termini dəyişdirərək yenidən cəhd edin
-              </p>
-            </div>
-          </Card>
-        )}
-
-      </div>
+          {/* No Results */}
+          {filteredBlogs.length === 0 && (
+            <Card variant="glass" className="text-center py-12 animate-fade-in-up">
+              <div>
+                <div className="text-6xl mb-4">📭</div>
+                <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  Heç bir məqalə tapılmadı
+                </h3>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Axtarış termini dəyişdirərək yenidən cəhd edin
+                </p>
+              </div>
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 }
