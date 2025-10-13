@@ -156,6 +156,7 @@ Nəzəri bilikləri praktiki vəziyyətlərlə əlaqələndirin.
  */
 export async function getBlogCategories(): Promise<ApiResponse<BlogCategory[]>> {
   if (USE_MOCK_API) {
+    console.log('[Blog API] Using MOCK data for categories');
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -166,6 +167,8 @@ export async function getBlogCategories(): Promise<ApiResponse<BlogCategory[]>> 
     });
   }
 
+  console.log('[Blog API] Fetching categories from:', `${API_BASE_URL}/blog-categories/`);
+  
   try {
     const response = await fetch(`${API_BASE_URL}/blog-categories/`, {
       method: 'GET',
@@ -174,18 +177,29 @@ export async function getBlogCategories(): Promise<ApiResponse<BlogCategory[]>> 
       },
     });
 
+    console.log('[Blog API] Categories response status:', response.status);
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('[Blog API] Categories data:', data);
+
+    // Handle paginated response
+    if (data.results) {
+      return {
+        success: true,
+        data: data.results,
+      };
+    }
 
     return {
       success: true,
-      data,
+      data: Array.isArray(data) ? data : [],
     };
   } catch (error) {
-    console.error('Failed to fetch blog categories:', error);
+    console.error('[Blog API] Failed to fetch blog categories:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch blog categories',
@@ -199,6 +213,7 @@ export async function getBlogCategories(): Promise<ApiResponse<BlogCategory[]>> 
  */
 export async function getBlogs(params?: BlogListParams): Promise<ApiResponse<Blog[]>> {
   if (USE_MOCK_API) {
+    console.log('[Blog API] Using MOCK data for blogs');
     return new Promise((resolve) => {
       setTimeout(() => {
         let filteredBlogs = [...MOCK_BLOGS];
@@ -245,6 +260,8 @@ export async function getBlogs(params?: BlogListParams): Promise<ApiResponse<Blo
     if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
 
     const url = `${API_BASE_URL}/blogs/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    console.log('[Blog API] Fetching blogs from:', url);
 
     const response = await fetch(url, {
       method: 'GET',
@@ -253,11 +270,14 @@ export async function getBlogs(params?: BlogListParams): Promise<ApiResponse<Blo
       },
     });
 
+    console.log('[Blog API] Blogs response status:', response.status);
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('[Blog API] Blogs data:', data);
 
     // Handle both paginated and non-paginated responses
     if (Array.isArray(data)) {
@@ -277,7 +297,7 @@ export async function getBlogs(params?: BlogListParams): Promise<ApiResponse<Blo
       };
     }
   } catch (error) {
-    console.error('Failed to fetch blogs:', error);
+    console.error('[Blog API] Failed to fetch blogs:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to fetch blogs',
