@@ -18,7 +18,6 @@ export function CertificateApplicationScreen() {
     { type: 'B', label: 'B kateqoriyası', description: 'Yüngül avtomobil', emoji: '🚗' },
     { type: 'C', label: 'C kateqoriyası', description: 'Yük avtomobili', emoji: '🚛' },
     { type: 'D', label: 'D kateqoriyası', description: 'Avtobus', emoji: '🚌' },
-    { type: 'E', label: 'E kateqoriyası', description: 'Qoşqu ilə', emoji: '🚚' },
     { type: 'AB', label: 'A+B kateqoriyası', description: 'Motosikl və avtomobil', emoji: '🏍️🚗' },
     { type: 'AC', label: 'A+C kateqoriyası', description: 'Motosikl və yük avtomobili', emoji: '🏍️🚛' },
     { type: 'BC', label: 'B+C kateqoriyası', description: 'Avtomobil və yük avtomobili', emoji: '🚗🚛' },
@@ -29,17 +28,6 @@ export function CertificateApplicationScreen() {
   ];
 
   const handleTypeSelection = (type: CertificateType) => {
-    // E kateqoriyası seçilirsə, əvvəlcə B, C və ya D olub-olmadığını yoxla
-    if (type === 'E') {
-      const hasBaseCategory = selectedTypes.some(t => ['B', 'C', 'D'].includes(t));
-      if (!hasBaseCategory) {
-        setWarningMessage('E kateqoriyası üçün əvvəlcə sahib olduğunuz kateqoriyanı (B, C və ya D) seçməlisiniz');
-        setShowWarning(true);
-        setTimeout(() => setShowWarning(false), 4000);
-        return;
-      }
-    }
-    
     setSelectedTypes((prev: CertificateType[]) => {
       if (prev.includes(type)) {
         return prev.filter((t: CertificateType) => t !== type);

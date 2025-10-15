@@ -424,12 +424,6 @@ export function StartIllustration({ className = '', isDark = false }: Illustrati
                 fill="white" opacity="0.98" stroke={gold} strokeWidth="0.8">
             <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="12s" repeatCount="indefinite" />
           </path>
-          
-          {/* Inner star glow - perfectly aligned */}
-          <path d="M0 -4.8 L1.5 -1.5 L5.2 -0.9 L2.4 1.8 L2.9 5.5 L0 3.8 L-2.9 5.5 L-2.4 1.8 L-5.2 -0.9 L-1.5 -1.5 Z" 
-                fill={gold} opacity="0.6">
-            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
-          </path>
         </g>
         
         {/* Decorative trim on trophy body */}
