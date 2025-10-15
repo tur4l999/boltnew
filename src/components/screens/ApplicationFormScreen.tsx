@@ -80,9 +80,16 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
   const { isDarkMode, goBack } = useApp();
   const [region, setRegion] = useState('');
   const [fullAddress, setFullAddress] = useState('');
+  const [idCardSeries, setIdCardSeries] = useState('');
+  const [idCardNumber, setIdCardNumber] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [driverLicenseNumber, setDriverLicenseNumber] = useState('');
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [requirementConfirmations, setRequirementConfirmations] = useState<RequirementConfirmations>({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  
+  // Check if driver license number is required
+  const needsDriverLicense = selectedTypes.some(type => ['D', 'BE', 'CE', 'DE'].includes(type));
 
   const certificateLabels: Record<CertificateType, { label: string; emoji: string }> = {
     'A': { label: 'A kateqoriyası', emoji: '🏍️' },
@@ -100,7 +107,12 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
   };
 
   const handleSubmit = () => {
-    if (!region || !fullAddress || !termsAgreed) {
+    if (!region || !fullAddress || !idCardSeries || !idCardNumber || !birthDate || !termsAgreed) {
+      return;
+    }
+    
+    // Check driver license number for specific categories
+    if (needsDriverLicense && !driverLicenseNumber) {
       return;
     }
     
@@ -134,7 +146,8 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
     return requirements.additionalRequirements.every((req) => requirementConfirmations[req.id]);
   });
   
-  const isFormValid = region && fullAddress && termsAgreed && allRequirementsConfirmed;
+  const isFormValid = region && fullAddress && idCardSeries && idCardNumber && birthDate && 
+    (!needsDriverLicense || driverLicenseNumber) && termsAgreed && allRequirementsConfirmed;
 
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
@@ -236,9 +249,9 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
                     </div>
                     
                     <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      • Yaş: <strong>{requirements.age}</strong>
+                      • {type} kateqoriyası <strong>{requirements.age}</strong> yaşı tamam olmuş şəxslərə verilir
                       {requirements.experience && (
-                        <span> | <strong>{requirements.experience.type}</strong> üzrə <strong>{requirements.experience.years} il</strong> təcrübə</span>
+                        <span className="block mt-1">• <strong>{requirements.experience.type}</strong> üzrə <strong>{requirements.experience.years} il</strong> təcrübə tələb olunur</span>
                       )}
                     </div>
                     
@@ -302,11 +315,93 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
           </div>
         </ScaleIn>
 
-        {/* Full Address */}
+        {/* ID Card Information */}
         <ScaleIn delay={400}>
           <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
             <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
-              Tam Ünvan
+              Şəxsiyyət vəsiqəsinin seriya və nömrəsi
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={idCardSeries}
+                onChange={(e) => setIdCardSeries(e.target.value.toUpperCase())}
+                placeholder="AZE"
+                maxLength={3}
+                className={`w-24 px-3 py-2.5 rounded-xl border-2 text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 text-center font-semibold ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                }`}
+              />
+              <input
+                type="text"
+                value={idCardNumber}
+                onChange={(e) => setIdCardNumber(e.target.value.replace(/\D/g, ''))}
+                placeholder="1234567"
+                maxLength={7}
+                className={`flex-1 px-3 py-2.5 rounded-xl border-2 text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                }`}
+              />
+            </div>
+          </div>
+        </ScaleIn>
+
+        {/* Birth Date */}
+        <ScaleIn delay={450}>
+          <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
+            <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+              Təvəllüd tarixi
+            </label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className={`w-full px-3 py-2.5 rounded-xl border-2 text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
+                  : 'bg-white border-gray-300 text-gray-900 focus:border-blue-500'
+              }`}
+            />
+            <p className={`text-xs mt-1.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Qeyd: Təvəllüd tarixini təsdiqləyin və ya dəyişdirin
+            </p>
+          </div>
+        </ScaleIn>
+
+        {/* Driver License Number - Only for D, BE, CE, DE */}
+        {needsDriverLicense && (
+          <ScaleIn delay={475}>
+            <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
+              <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                Sürücülük vəsiqəsinin nömrəsi
+              </label>
+              <input
+                type="text"
+                value={driverLicenseNumber}
+                onChange={(e) => setDriverLicenseNumber(e.target.value.toUpperCase())}
+                placeholder="Məsələn: AZE1234567"
+                className={`w-full px-3 py-2.5 rounded-xl border-2 text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                }`}
+              />
+              <p className={`text-xs mt-1.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Qeyd: Mövcud sürücülük vəsiqənizin nömrəsini daxil edin
+              </p>
+            </div>
+          </ScaleIn>
+        )}
+
+        {/* Full Address */}
+        <ScaleIn delay={needsDriverLicense ? 500 : 475}>
+          <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
+            <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+              Qeydiyyat ünvanı
             </label>
             <textarea
               value={fullAddress}
@@ -323,7 +418,7 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
         </ScaleIn>
 
         {/* Terms Agreement */}
-        <ScaleIn delay={500}>
+        <ScaleIn delay={needsDriverLicense ? 550 : 525}>
           <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
             <div className="flex items-start gap-3">
               <button
@@ -346,7 +441,7 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
         </ScaleIn>
 
         {/* Submit Button */}
-        <ScaleIn delay={600}>
+        <ScaleIn delay={needsDriverLicense ? 600 : 575}>
           <button
             onClick={handleSubmit}
             disabled={!isFormValid}

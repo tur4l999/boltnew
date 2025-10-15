@@ -36,8 +36,8 @@ export const onboardingTranslations = {
       
       // Slide 4: Get Started
       slide4: {
-        title: 'Başlayaq!',
-        body: 'İrəlilə və ilk sınağını indi et. Uğurlar diləyirik!',
+        title: 'Başlayaq',
+        body: 'Sizə uğurlar arzulayırıq!',
       },
     },
   },
@@ -70,8 +70,8 @@ export const onboardingTranslations = {
       
       // Slide 4: Get Started
       slide4: {
-        title: 'Let\'s get started!',
-        body: 'Move forward and take your first test now. We wish you success!',
+        title: 'Let\'s Begin',
+        body: 'We wish you success!',
       },
     },
   },
@@ -104,8 +104,8 @@ export const onboardingTranslations = {
       
       // Slide 4: Get Started
       slide4: {
-        title: 'Давайте начнем!',
-        body: 'Двигайтесь вперед и сдайте свой первый тест прямо сейчас. Желаем успехов!',
+        title: 'Начнем',
+        body: 'Желаем вам успехов!',
       },
     },
   },
