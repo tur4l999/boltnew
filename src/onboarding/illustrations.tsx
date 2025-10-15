@@ -378,104 +378,179 @@ export function StartIllustration({ className = '', isDark = false }: Illustrati
         <animateTransform attributeName="transform" type="rotate" from="360 120 120" to="0 120 120" dur="25s" repeatCount="indefinite" />
       </circle>
       
-      {/* Main Trophy */}
-      <g transform="translate(120, 80)" filter="url(#trophyShadow)">
-        {/* Trophy cup body */}
-        <path d="M-25 15 Q-25 5 -20 0 L20 0 Q25 5 25 15 L25 40 Q25 50 15 55 L-15 55 Q-25 50 -25 40 Z" 
+      {/* Main Trophy - Enhanced and Perfectly Centered */}
+      <g transform="translate(120, 75)" filter="url(#trophyShadow)">
+        {/* Trophy cup body - symmetrical and polished */}
+        <path d="M-28 15 Q-28 6 -22 2 L22 2 Q28 6 28 15 L28 42 Q28 52 18 58 L-18 58 Q-28 52 -28 42 Z" 
               fill="url(#trophyGradient)" />
         
-        {/* Trophy highlights */}
-        <path d="M-20 8 Q-18 5 -15 5 L15 5 Q18 5 20 8 L20 38 Q20 45 15 48 L-15 48 Q-20 45 -20 38 Z" 
+        {/* Trophy inner shine/highlight */}
+        <path d="M-22 10 Q-20 7 -16 7 L16 7 Q20 7 22 10 L22 40 Q22 48 16 52 L-16 52 Q-22 48 -22 40 Z" 
+              fill={gold} opacity="0.25" />
+        
+        {/* Vertical shine line */}
+        <rect x="-3" y="8" width="6" height="44" rx="3" fill="white" opacity="0.15" />
+        
+        {/* Trophy handles - perfectly symmetrical */}
+        <path d="M-28 12 Q-38 12 -42 20 Q-42 28 -34 32 L-28 32 Z" 
+              fill="url(#trophyGradient)" opacity="0.95" />
+        <path d="M-28 12 Q-36 12 -39 20 Q-39 27 -32 30 L-28 30 Z" 
               fill={gold} opacity="0.3" />
         
-        {/* Trophy handles */}
-        <path d="M-25 10 Q-35 10 -38 18 Q-38 25 -30 28 L-25 28 Z" 
-              fill="url(#trophyGradient)" opacity="0.9" />
-        <path d="M25 10 Q35 10 38 18 Q38 25 30 28 L25 28 Z" 
-              fill="url(#trophyGradient)" opacity="0.9" />
+        <path d="M28 12 Q38 12 42 20 Q42 28 34 32 L28 32 Z" 
+              fill="url(#trophyGradient)" opacity="0.95" />
+        <path d="M28 12 Q36 12 39 20 Q39 27 32 30 L28 30 Z" 
+              fill={gold} opacity="0.3" />
         
-        {/* Trophy rim/top edge */}
-        <ellipse cx="0" cy="0" rx="25" ry="6" fill={gold} />
-        <ellipse cx="0" cy="0" rx="22" ry="4" fill="#FCD34D" opacity="0.8" />
+        {/* Trophy rim/top edge - cleaner */}
+        <ellipse cx="0" cy="2" rx="28" ry="7" fill={gold} />
+        <ellipse cx="0" cy="2" rx="25" ry="5" fill="#FCD34D" opacity="0.9" />
+        <ellipse cx="0" cy="1" rx="20" ry="3" fill="white" opacity="0.4" />
         
-        {/* Trophy base/stand */}
-        <rect x="-18" y="55" width="36" height="8" rx="2" fill={gold} opacity="0.9" />
-        <rect x="-22" y="63" width="44" height="6" rx="2" fill="url(#trophyGradient)" />
-        <rect x="-15" y="69" width="30" height="4" rx="2" fill={gold} />
+        {/* Trophy base/stand - more elegant */}
+        <rect x="-20" y="58" width="40" height="8" rx="3" fill={gold} opacity="0.95" />
+        <rect x="-24" y="66" width="48" height="7" rx="3" fill="url(#trophyGradient)" />
+        <ellipse cx="0" cy="66" rx="24" ry="2" fill="white" opacity="0.2" />
+        <rect x="-16" y="73" width="32" height="5" rx="2" fill={gold} />
         
-        {/* Star emblem on trophy */}
-        <g transform="translate(0, 28)">
-          <circle cx="0" cy="0" r="12" fill="white" opacity="0.3" />
-          <path d="M0 -8 L2.5 -2 L9 -1 L4.5 3 L6 10 L0 6.5 L-6 10 L-4.5 3 L-9 -1 L-2.5 -2 Z" 
-                fill="white" opacity="0.9">
-            <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="8s" repeatCount="indefinite" />
+        {/* Star emblem on trophy - PERFECTLY centered */}
+        <g transform="translate(0, 32)">
+          {/* Background glow circles - perfectly aligned */}
+          <circle cx="0" cy="0" r="16" fill="white" opacity="0.2" />
+          <circle cx="0" cy="0" r="12" fill={gold} opacity="0.15" />
+          
+          {/* Main star - centered and proportional */}
+          <path d="M0 -8 L2.4 -2.4 L8.5 -1.5 L4 3 L5 9 L0 6 L-5 9 L-4 3 L-8.5 -1.5 L-2.4 -2.4 Z" 
+                fill="white" opacity="0.98" stroke={gold} strokeWidth="0.8">
+            <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="12s" repeatCount="indefinite" />
+          </path>
+          
+          {/* Inner star glow */}
+          <path d="M0 -5 L1.5 -1.5 L5.5 -1 L2.5 2 L3 6 L0 4 L-3 6 L-2.5 2 L-5.5 -1 L-1.5 -1.5 Z" 
+                fill={gold} opacity="0.6">
+            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
           </path>
         </g>
+        
+        {/* Decorative trim on trophy body */}
+        <rect x="-24" y="20" width="48" height="2" rx="1" fill={gold} opacity="0.4" />
+        <rect x="-24" y="45" width="48" height="2" rx="1" fill={gold} opacity="0.4" />
       </g>
       
-      {/* Floating confetti */}
+      {/* Floating confetti - balanced and colorful */}
       <g>
-        <rect x="50" y="60" width="4" height="8" rx="1" fill={primaryColor} opacity="0.7">
-          <animate attributeName="y" values="60;180;60" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite" />
-          <animateTransform attributeName="transform" type="rotate" from="0 52 64" to="360 52 64" dur="2s" repeatCount="indefinite" />
+        {/* Left side confetti */}
+        <rect x="45" y="50" width="5" height="10" rx="1.5" fill={primaryColor} opacity="0.75">
+          <animate attributeName="y" values="50;190;50" dur="3.5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.75;0.2;0.75" dur="3.5s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 47.5 55" to="360 47.5 55" dur="2.5s" repeatCount="indefinite" />
         </rect>
-        <rect x="180" y="80" width="6" height="4" rx="1" fill={gold} opacity="0.7">
-          <animate attributeName="y" values="80;200;80" dur="3.5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.5s" repeatCount="indefinite" />
-          <animateTransform attributeName="transform" type="rotate" from="0 183 82" to="360 183 82" dur="2.5s" repeatCount="indefinite" />
-        </rect>
-        <circle cx="70" cy="100" r="3" fill={accentColor} opacity="0.6">
-          <animate attributeName="cy" values="100;190;100" dur="3.2s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.2s" repeatCount="indefinite" />
-        </circle>
-        <rect x="165" y="120" width="5" height="5" rx="1" fill="#EF4444" opacity="0.6">
-          <animate attributeName="y" values="120;210;120" dur="2.8s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2.8s" repeatCount="indefinite" />
-          <animateTransform attributeName="transform" type="rotate" from="0 167.5 122.5" to="360 167.5 122.5" dur="2.2s" repeatCount="indefinite" />
-        </rect>
-        <circle cx="195" cy="70" r="2.5" fill={primaryColor} opacity="0.7">
-          <animate attributeName="cy" values="70;170;70" dur="3.8s" repeatCount="indefinite" />
+        <circle cx="65" cy="85" r="4" fill={gold} opacity="0.7">
+          <animate attributeName="cy" values="85;200;85" dur="3.8s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.8s" repeatCount="indefinite" />
         </circle>
+        <rect x="52" y="130" width="6" height="6" rx="1.5" fill={accentColor} opacity="0.65">
+          <animate attributeName="y" values="130;210;130" dur="3.2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.65;0.2;0.65" dur="3.2s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 55 133" to="360 55 133" dur="2.8s" repeatCount="indefinite" />
+        </rect>
+        
+        {/* Right side confetti */}
+        <rect x="185" y="65" width="7" height="5" rx="1.5" fill={gold} opacity="0.8">
+          <animate attributeName="y" values="65;195;65" dur="3.3s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.8;0.2;0.8" dur="3.3s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 188.5 67.5" to="360 188.5 67.5" dur="2.3s" repeatCount="indefinite" />
+        </rect>
+        <circle cx="175" cy="110" r="3.5" fill="#EF4444" opacity="0.7">
+          <animate attributeName="cy" values="110;205;110" dur="3.6s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.6s" repeatCount="indefinite" />
+        </circle>
+        <rect x="192" y="140" width="5" height="8" rx="1.5" fill={primaryColor} opacity="0.7">
+          <animate attributeName="y" values="140;215;140" dur="3.1s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.1s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 194.5 144" to="360 194.5 144" dur="2.6s" repeatCount="indefinite" />
+        </rect>
+        
+        {/* Top confetti */}
+        <circle cx="120" cy="30" r="3" fill={accentColor} opacity="0.6">
+          <animate attributeName="cy" values="30;180;30" dur="4s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4s" repeatCount="indefinite" />
+        </circle>
       </g>
       
-      {/* Shining stars */}
+      {/* Shining stars - symmetrically distributed */}
       <g>
-        <path d="M45 90 L47 95 L52 97 L47 99 L45 104 L43 99 L38 97 L43 95 Z" fill={gold} opacity="0.8">
-          <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
-          <animateTransform attributeName="transform" type="rotate" from="0 45 97" to="360 45 97" dur="20s" repeatCount="indefinite" />
+        {/* Top left star */}
+        <path d="M40 75 L42.5 81 L49 83 L42.5 85 L40 91 L37.5 85 L31 83 L37.5 81 Z" fill={gold} opacity="0.85">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 40 83" to="360 40 83" dur="20s" repeatCount="indefinite" />
         </path>
-        <path d="M190 110 L192 114 L196 116 L192 118 L190 122 L188 118 L184 116 L188 114 Z" fill={primaryColor} opacity="0.7">
-          <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.5s" repeatCount="indefinite" />
-          <animateTransform attributeName="transform" type="rotate" from="0 190 116" to="360 190 116" dur="25s" repeatCount="indefinite" />
+        
+        {/* Top right star */}
+        <path d="M200 75 L202.5 81 L209 83 L202.5 85 L200 91 L197.5 85 L191 83 L197.5 81 Z" fill={primaryColor} opacity="0.8">
+          <animate attributeName="opacity" values="0.4;0.95;0.4" dur="2.5s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 200 83" to="360 200 83" dur="25s" repeatCount="indefinite" />
         </path>
-        <path d="M65 155 L67 158 L70 160 L67 162 L65 165 L63 162 L60 160 L63 158 Z" fill={accentColor} opacity="0.6">
-          <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.2s" repeatCount="indefinite" />
+        
+        {/* Bottom left star */}
+        <path d="M55 165 L57 170 L62 172 L57 174 L55 179 L53 174 L48 172 L53 170 Z" fill={accentColor} opacity="0.75">
+          <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.2s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 55 172" to="360 55 172" dur="18s" repeatCount="indefinite" />
         </path>
+        
+        {/* Bottom right star */}
+        <path d="M185 165 L187 170 L192 172 L187 174 L185 179 L183 174 L178 172 L183 170 Z" fill={gold} opacity="0.7">
+          <animate attributeName="opacity" values="0.4;0.85;0.4" dur="2.4s" repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="rotate" from="0 185 172" to="360 185 172" dur="22s" repeatCount="indefinite" />
+        </path>
+        
+        {/* Small accent stars */}
+        <circle cx="75" cy="50" r="3" fill={accentColor} opacity="0.6">
+          <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.8s" repeatCount="indefinite" />
+          <animate attributeName="r" values="2.5;3.5;2.5" dur="1.8s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="165" cy="50" r="2.5" fill={gold} opacity="0.65">
+          <animate attributeName="opacity" values="0.35;0.85;0.35" dur="2.1s" repeatCount="indefinite" />
+          <animate attributeName="r" values="2;3;2" dur="2.1s" repeatCount="indefinite" />
+        </circle>
       </g>
       
-      {/* Success ribbons */}
-      <g transform="translate(120, 150)">
+      {/* Success ribbons - flowing elegantly */}
+      <g transform="translate(120, 153)">
         {/* Left ribbon */}
-        <path d="M-15 0 L-20 40 L-15 35 L-10 40 L-8 5 Z" fill="url(#ribbonGradient)" opacity="0.9">
+        <path d="M-18 0 L-24 45 L-18 39 L-12 45 L-10 8 Z" fill="url(#ribbonGradient)" opacity="0.92">
           <animate attributeName="d" 
-                   values="M-15 0 L-20 40 L-15 35 L-10 40 L-8 5 Z;M-15 0 L-22 40 L-15 34 L-8 40 L-8 5 Z;M-15 0 L-20 40 L-15 35 L-10 40 L-8 5 Z" 
-                   dur="2s" repeatCount="indefinite" />
+                   values="M-18 0 L-24 45 L-18 39 L-12 45 L-10 8 Z;M-18 0 L-26 45 L-18 38 L-10 45 L-10 8 Z;M-18 0 L-24 45 L-18 39 L-12 45 L-10 8 Z" 
+                   dur="2.5s" repeatCount="indefinite" />
         </path>
-        {/* Right ribbon */}
-        <path d="M15 0 L20 40 L15 35 L10 40 L8 5 Z" fill="url(#ribbonGradient)" opacity="0.9">
+        <path d="M-18 0 L-22 45 L-18 40 L-14 45 L-12 8 Z" fill={primaryColor} opacity="0.3">
           <animate attributeName="d" 
-                   values="M15 0 L20 40 L15 35 L10 40 L8 5 Z;M15 0 L22 40 L15 34 L8 40 L8 5 Z;M15 0 L20 40 L15 35 L10 40 L8 5 Z" 
-                   dur="2s" repeatCount="indefinite" />
+                   values="M-18 0 L-22 45 L-18 40 L-14 45 L-12 8 Z;M-18 0 L-24 45 L-18 39 L-12 45 L-12 8 Z;M-18 0 L-22 45 L-18 40 L-14 45 L-12 8 Z" 
+                   dur="2.5s" repeatCount="indefinite" />
+        </path>
+        
+        {/* Right ribbon */}
+        <path d="M18 0 L24 45 L18 39 L12 45 L10 8 Z" fill="url(#ribbonGradient)" opacity="0.92">
+          <animate attributeName="d" 
+                   values="M18 0 L24 45 L18 39 L12 45 L10 8 Z;M18 0 L26 45 L18 38 L10 45 L10 8 Z;M18 0 L24 45 L18 39 L12 45 L10 8 Z" 
+                   dur="2.5s" repeatCount="indefinite" />
+        </path>
+        <path d="M18 0 L22 45 L18 40 L14 45 L12 8 Z" fill={primaryColor} opacity="0.3">
+          <animate attributeName="d" 
+                   values="M18 0 L22 45 L18 40 L14 45 L12 8 Z;M18 0 L24 45 L18 39 L12 45 L12 8 Z;M18 0 L22 45 L18 40 L14 45 L12 8 Z" 
+                   dur="2.5s" repeatCount="indefinite" />
         </path>
       </g>
       
-      {/* Checkmark badge */}
-      <g transform="translate(165, 165)">
-        <circle cx="0" cy="0" r="18" fill="white" filter="url(#trophyShadow)" />
-        <circle cx="0" cy="0" r="16" fill="url(#ribbonGradient)" />
-        <path d="M-5 0 L-2 4 L6 -5" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Success checkmark badge */}
+      <g transform="translate(168, 168)">
+        <circle cx="0" cy="0" r="20" fill="white" filter="url(#trophyShadow)" />
+        <circle cx="0" cy="0" r="18" fill="url(#ribbonGradient)" />
+        <circle cx="0" cy="0" r="15" fill={primaryColor} opacity="0.3">
+          <animate attributeName="r" values="15;17;15" dur="2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0.1;0.3" dur="2s" repeatCount="indefinite" />
+        </circle>
+        <path d="M-6 0 L-2 5 L7 -6" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </svg>
   );
