@@ -93,7 +93,7 @@ export function ProgressBar({ total, activeIndex, isDark = false }: ProgressBarP
   const fillColor = isDark ? '#10B981' : '#10B981';
   
   return (
-    <div className="w-full max-w-xs mx-auto">
+    <div className="w-full max-w-iphone16 mx-auto">
       <div
         className="h-1 rounded-full overflow-hidden"
         style={{ backgroundColor: bgColor }}

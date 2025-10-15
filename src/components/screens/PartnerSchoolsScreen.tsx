@@ -683,7 +683,7 @@ export function PartnerSchoolsScreen() {
           ></div>
           
           {/* Modal */}
-          <div className={`relative w-full max-w-md rounded-3xl p-6 shadow-2xl animate-scale-in ${
+          <div className={`relative w-full max-w-iphone16 rounded-3xl p-6 shadow-2xl animate-scale-in ${
             isDarkMode ? 'bg-gray-800' : 'bg-white'
           }`}>
             {/* Header */}

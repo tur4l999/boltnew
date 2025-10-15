@@ -181,7 +181,7 @@ export function PrivacyScreen() {
           style={{ animation: 'fadeIn 0.3s ease-out' }}
         >
           <div 
-            className={`max-w-md w-full rounded-3xl p-6 shadow-2xl ${
+            className={`max-w-iphone16 w-full rounded-3xl p-6 shadow-2xl ${
               isDarkMode ? 'bg-gray-800 border-2 border-red-500/30' : 'bg-white border-2 border-red-300'
             }`}
             style={{ animation: 'scaleIn 0.3s ease-out' }}

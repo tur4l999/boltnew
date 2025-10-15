@@ -234,6 +234,20 @@ html {
   }
 }
 
+/* iPhone 16 optimization (393px width) */
+@media (max-width: 393px) {
+  /* Ensure content fits perfectly */
+  html {
+    font-size: 16px;
+  }
+  
+  /* Optimize spacing for iPhone 16 */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
 @media (max-width: 320px) {
   /* Extra small screens optimization */
   .animate-bounce-subtle {

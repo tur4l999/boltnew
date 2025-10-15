@@ -350,7 +350,7 @@ export function NotificationsScreen() {
       </div>
 
       {/* Content */}
-      <div className="max-w-md mx-auto p-4 pb-24">
+      <div className="max-w-iphone16 mx-auto p-4 pb-24">
         {filteredNotifications.length === 0 ? (
           // Empty state
           <FadeInUp delay={100}>

@@ -434,7 +434,7 @@ export function DrivingPracticeScreen() {
       {/* Booking Confirmation Modal */}
       {showBookingForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-iphone16">
             <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               {t.confirmBooking}
             </h3>
@@ -524,7 +524,7 @@ export function DrivingPracticeScreen() {
       {/* Truck Unavailable Alert */}
       {showTruckAlert && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-iphone16">
             <div className="text-center">
               <div className="text-6xl mb-4">🚛</div>
               <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -547,7 +547,7 @@ export function DrivingPracticeScreen() {
       {/* Region Coming Soon Alert */}
       {showRegionAlert && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-md">
+          <Card className="w-full max-w-iphone16">
             <div className="text-center">
               <div className="text-6xl mb-4">🏙️</div>
               <h3 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>

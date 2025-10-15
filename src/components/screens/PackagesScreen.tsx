@@ -994,7 +994,7 @@ export function PackagesScreen() {
             }
             
             return (
-              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col ${
+              <div className={`relative z-10 w-full max-w-iphone16 rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col ${
                 isDarkMode ? 'bg-gray-900' : 'bg-white'
               }`}>
                 
@@ -1202,7 +1202,7 @@ export function PackagesScreen() {
       {scheduledPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => { setScheduledPopupOpen(false); switchTab('Home'); }} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-iphone16 rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <button
@@ -1246,7 +1246,7 @@ export function PackagesScreen() {
             const days = pkg ? selectedDays[pkg.id] : 0;
             
             return (
-              <div className={`relative z-10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ${
+              <div className={`relative z-10 w-full max-w-iphone16 rounded-3xl overflow-hidden shadow-2xl ${
                 isDarkMode ? 'bg-gray-900' : 'bg-white'
               }`}>
                 
@@ -1641,7 +1641,7 @@ export function PackagesScreen() {
       {insufficientTrainingOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setInsufficientTrainingOpen(false)} />
-          <div className={`relative z-10 w-[92%] max-w-md rounded-2xl p-5 shadow-xl border ${
+          <div className={`relative z-10 w-[92%] max-w-iphone16 rounded-2xl p-5 shadow-xl border ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <div className="text-4xl mb-2"><EmojiIcon emoji="⚠️" size={32} /></div>
