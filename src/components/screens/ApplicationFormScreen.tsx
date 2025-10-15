@@ -83,9 +83,13 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
   const [idCardSeries, setIdCardSeries] = useState('');
   const [idCardNumber, setIdCardNumber] = useState('');
   const [birthDate, setBirthDate] = useState('');
+  const [driverLicenseNumber, setDriverLicenseNumber] = useState('');
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [requirementConfirmations, setRequirementConfirmations] = useState<RequirementConfirmations>({});
   const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  
+  // Check if driver license number is required
+  const needsDriverLicense = selectedTypes.some(type => ['D', 'BE', 'CE', 'DE'].includes(type));
 
   const certificateLabels: Record<CertificateType, { label: string; emoji: string }> = {
     'A': { label: 'A kateqoriyası', emoji: '🏍️' },
@@ -104,6 +108,11 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
 
   const handleSubmit = () => {
     if (!region || !fullAddress || !idCardSeries || !idCardNumber || !birthDate || !termsAgreed) {
+      return;
+    }
+    
+    // Check driver license number for specific categories
+    if (needsDriverLicense && !driverLicenseNumber) {
       return;
     }
     
@@ -137,7 +146,8 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
     return requirements.additionalRequirements.every((req) => requirementConfirmations[req.id]);
   });
   
-  const isFormValid = region && fullAddress && idCardSeries && idCardNumber && birthDate && termsAgreed && allRequirementsConfirmed;
+  const isFormValid = region && fullAddress && idCardSeries && idCardNumber && birthDate && 
+    (!needsDriverLicense || driverLicenseNumber) && termsAgreed && allRequirementsConfirmed;
 
   return (
     <div className={`min-h-screen transition-all duration-300 relative overflow-hidden ${
@@ -362,8 +372,33 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
           </div>
         </ScaleIn>
 
+        {/* Driver License Number - Only for D, BE, CE, DE */}
+        {needsDriverLicense && (
+          <ScaleIn delay={475}>
+            <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
+              <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+                Sürücülük vəsiqəsinin nömrəsi
+              </label>
+              <input
+                type="text"
+                value={driverLicenseNumber}
+                onChange={(e) => setDriverLicenseNumber(e.target.value.toUpperCase())}
+                placeholder="Məsələn: AZE1234567"
+                className={`w-full px-3 py-2.5 rounded-xl border-2 text-sm transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20 ${
+                  isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-500'
+                }`}
+              />
+              <p className={`text-xs mt-1.5 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                Qeyd: Mövcud sürücülük vəsiqənizin nömrəsini daxil edin
+              </p>
+            </div>
+          </ScaleIn>
+        )}
+
         {/* Full Address */}
-        <ScaleIn delay={500}>
+        <ScaleIn delay={needsDriverLicense ? 500 : 475}>
           <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
             <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
               Qeydiyyat ünvanı
@@ -383,7 +418,7 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
         </ScaleIn>
 
         {/* Terms Agreement */}
-        <ScaleIn delay={550}>
+        <ScaleIn delay={needsDriverLicense ? 550 : 525}>
           <div className={`rounded-2xl p-4 mb-4 ${isDarkMode ? 'bg-gray-800/60' : 'bg-white/80'}`}>
             <div className="flex items-start gap-3">
               <button
@@ -406,7 +441,7 @@ export function ApplicationFormScreen({ selectedTypes }: ApplicationFormScreenPr
         </ScaleIn>
 
         {/* Submit Button */}
-        <ScaleIn delay={650}>
+        <ScaleIn delay={needsDriverLicense ? 600 : 575}>
           <button
             onClick={handleSubmit}
             disabled={!isFormValid}
