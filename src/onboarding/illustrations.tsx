@@ -414,19 +414,19 @@ export function StartIllustration({ className = '', isDark = false }: Illustrati
         <rect x="-16" y="73" width="32" height="5" rx="2" fill={gold} />
         
         {/* Star emblem on trophy - PERFECTLY centered */}
-        <g transform="translate(0, 32)">
-          {/* Background glow circles - perfectly aligned */}
-          <circle cx="0" cy="0" r="16" fill="white" opacity="0.2" />
-          <circle cx="0" cy="0" r="12" fill={gold} opacity="0.15" />
+        <g transform="translate(0, 30)">
+          {/* Background glow circles - perfectly aligned with center */}
+          <circle cx="0" cy="0" r="15" fill="white" opacity="0.2" />
+          <circle cx="0" cy="0" r="11" fill={gold} opacity="0.15" />
           
-          {/* Main star - centered and proportional */}
-          <path d="M0 -8 L2.4 -2.4 L8.5 -1.5 L4 3 L5 9 L0 6 L-5 9 L-4 3 L-8.5 -1.5 L-2.4 -2.4 Z" 
+          {/* Main star - perfectly centered and proportional */}
+          <path d="M0 -7.5 L2.3 -2.3 L8 -1.4 L3.8 2.8 L4.8 8.5 L0 5.7 L-4.8 8.5 L-3.8 2.8 L-8 -1.4 L-2.3 -2.3 Z" 
                 fill="white" opacity="0.98" stroke={gold} strokeWidth="0.8">
             <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="12s" repeatCount="indefinite" />
           </path>
           
-          {/* Inner star glow */}
-          <path d="M0 -5 L1.5 -1.5 L5.5 -1 L2.5 2 L3 6 L0 4 L-3 6 L-2.5 2 L-5.5 -1 L-1.5 -1.5 Z" 
+          {/* Inner star glow - perfectly aligned */}
+          <path d="M0 -4.8 L1.5 -1.5 L5.2 -0.9 L2.4 1.8 L2.9 5.5 L0 3.8 L-2.9 5.5 L-2.4 1.8 L-5.2 -0.9 L-1.5 -1.5 Z" 
                 fill={gold} opacity="0.6">
             <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite" />
           </path>
