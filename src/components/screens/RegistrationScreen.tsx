@@ -313,8 +313,8 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
                           : 'border-gray-200 bg-white hover:border-gray-300 hover:scale-105'
                       }`}
                     >
-                      <Icon name="user" size={32} className={gender === 'male' ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
-                      <div className={`font-bold text-lg mt-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                      <div className={`text-4xl mb-2`}>👨</div>
+                      <div className={`font-bold text-lg ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                         Kişi
                       </div>
                     </button>
@@ -331,8 +331,8 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
                           : 'border-gray-200 bg-white hover:border-gray-300 hover:scale-105'
                       }`}
                     >
-                      <Icon name="user" size={32} className={gender === 'female' ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
-                      <div className={`font-bold text-lg mt-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                      <div className={`text-4xl mb-2`}>👩</div>
+                      <div className={`font-bold text-lg ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                         Qadın
                       </div>
                     </button>
