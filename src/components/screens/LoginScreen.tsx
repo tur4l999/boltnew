@@ -5,6 +5,8 @@ import { Input } from '../ui/Input';
 import { useApp } from '../../contexts/AppContext';
 import { RegistrationScreen } from './RegistrationScreen';
 import { ForgotPasswordScreen } from './ForgotPasswordScreen';
+import { EmailVerificationScreen } from './EmailVerificationScreen';
+import { PhoneVerificationScreen } from './PhoneVerificationScreen';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -18,6 +20,9 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+  const [registrationData, setRegistrationData] = useState<{email: string; phone: string} | null>(null);
   const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   const { isDarkMode } = useApp();
 
@@ -41,9 +46,43 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
     return (
       <RegistrationScreen 
         onBack={() => setShowRegister(false)}
-        onRegister={() => {
+        onRegister={(data: {email: string; phone: string}) => {
+          setRegistrationData(data);
           setShowRegister(false);
-          alert('Qeydiyyat tamamlandı! İndi hesabınıza daxil ola bilərsiniz.');
+          setShowEmailVerification(true);
+        }}
+      />
+    );
+  }
+
+  if (showEmailVerification && registrationData) {
+    return (
+      <EmailVerificationScreen
+        email={registrationData.email}
+        onVerified={() => {
+          setShowEmailVerification(false);
+          setShowPhoneVerification(true);
+        }}
+        onBack={() => {
+          setShowEmailVerification(false);
+          setShowRegister(true);
+        }}
+      />
+    );
+  }
+
+  if (showPhoneVerification && registrationData) {
+    return (
+      <PhoneVerificationScreen
+        phone={registrationData.phone}
+        onVerified={() => {
+          setShowPhoneVerification(false);
+          setRegistrationData(null);
+          alert('Qeydiyyat tamamlandı! E-mail və telefon nömrəsi təsdiqləndi. İndi hesabınıza daxil ola bilərsiniz.');
+        }}
+        onBack={() => {
+          setShowPhoneVerification(false);
+          setShowEmailVerification(true);
         }}
       />
     );
