@@ -3,6 +3,7 @@ import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Input } from '../ui/Input';
 import { useApp } from '../../contexts/AppContext';
+import { VerificationModal } from './VerificationModal';
 
 interface RegistrationScreenProps {
   onBack: () => void;
@@ -18,6 +19,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showVerification, setShowVerification] = useState(false);
   const [errors, setErrors] = useState<{
     fullName?: string;
     email?: string;
@@ -69,9 +71,29 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
     // Simulate registration delay
     setTimeout(() => {
       setIsLoading(false);
-      onRegister();
+      setShowVerification(true);
     }, 1500);
   };
+
+  const handleVerificationComplete = () => {
+    onRegister();
+  };
+
+  const handleVerificationBack = () => {
+    setShowVerification(false);
+  };
+
+  // Show verification modal if verification is needed
+  if (showVerification) {
+    return (
+      <VerificationModal
+        email={email}
+        phone={phone}
+        onVerificationComplete={handleVerificationComplete}
+        onBack={handleVerificationBack}
+      />
+    );
+  }
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-4 relative transition-all duration-300 ${
