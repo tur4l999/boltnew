@@ -14,23 +14,27 @@ Bu yenilik qeydiyyat prosesini təkmilləşdirərək aşağıdakı funksiyaları
 
 ### 1. Çox Addımlı Qeydiyyat Formu
 
-Qeydiyyat 3 addıma bölünüb ki, istifadəçi özünü sıxılmış hiss etməsin:
+Qeydiyyat 4 addıma bölünüb ki, istifadəçi özünü sıxılmış hiss etməsin:
 
-#### **Addım 1: Əlaqə Məlumatları**
+#### **Addım 1: Əsas Məlumatlar** (1/4)
 - Ad və Soyad
-- E-mail ünvanı
-- Telefon nömrəsi
 
-#### **Addım 2: Şəxsi Məlumatlar**
+#### **Addım 2: Şəxsi Məlumatlar** (2/4)
 - Doğum tarixi (tarix seçici ilə)
 - Cins (👨 Kişi / 👩 Qadın - vizual düymələrlə)
 
-#### **Addım 3: Şifrə**
+#### **Addım 3: Şifrə** (3/4)
 - Şifrə yaradılması
 - Şifrə təkrarı
 - Göstər/Gizlə funksiyası
 
+#### **Addım 4: Əlaqə Məlumatları** (4/4 - Son addım)
+- E-mail ünvanı
+- Telefon nömrəsi
+
 **Progress Göstəricisi:** Hər addımda istifadəçi hansı mərhələdə olduğunu görür.
+
+**⚡ Kritik fərq:** E-mail və telefon **ən son addımdadır** - buna görə də təsdiqləmə zamanı geri qayıtdıqda yalnız bu 2 məlumat dəyişilir, digər bütün məlumatlar (ad, doğum tarixi, cins, şifrə) saxlanılır!
 
 ### 2. E-mail Təsdiqi
 
@@ -99,38 +103,63 @@ verifySMSCode(phone: string, code: string)
 ```
 1. İstifadəçi "Qeydiyyatdan keç" düyməsinə basar
    ↓
-2. Addım 1: Əlaqə məlumatlarını daxil edir (Ad, Email, Telefon)
+2. Addım 1: Ad və Soyadını daxil edir (1/4)
    ↓
-3. Addım 2: Doğum tarixi və cins seçir
+3. Addım 2: Doğum tarixi və cins seçir (2/4)
    ↓
-4. Addım 3: Şifrə yaradır
+4. Addım 3: Şifrə yaradır (3/4)
    ↓
-5. "Qeydiyyatdan keç" düyməsinə basar
+5. Addım 4: Email və Telefon daxil edir (4/4 - SON ADDIM)
    ↓
-6. E-mail təsdiqləmə ekranı açılır
+6. "Qeydiyyatdan keç" düyməsinə basar
+   ↓
+7. E-mail təsdiqləmə ekranı açılır
    │  • 6 rəqəmli kodu daxil edir
-   │  • ❌ Əgər email səhvdirsə → "E-mail ünvanını dəyişdir" düyməsinə basaraq düzəliş edə bilər
+   │  • ❌ Əgər email səhvdirsə → "E-mail ünvanını dəyişdir" düyməsinə basar
+   │  • → Addım 4-ə (Əlaqə məlumatları) qayıdır
+   │  • → Ad, doğum tarixi, cins, şifrə SAXLANıLıR ✅
+   │  • → Yalnız email/telefon dəyişdirilir
    ↓
-7. Email təsdiqləndi ✅
+8. Email təsdiqləndi ✅
    ↓
-8. Telefon təsdiqləmə ekranı açılır
+9. Telefon təsdiqləmə ekranı açılır
    │  • 6 rəqəmli SMS kodu daxil edir
-   │  • ❌ Əgər telefon səhvdirsə → "Telefon nömrəsini dəyişdir" düyməsinə basaraq düzəliş edə bilər
+   │  • ❌ Əgər telefon səhvdirsə → "Telefon nömrəsini dəyişdir" düyməsinə basar
+   │  • → Addım 4-ə (Əlaqə məlumatları) qayıdır
+   │  • → Ad, doğum tarixi, cins, şifrə SAXLANıLıR ✅
+   │  • → Yalnız email/telefon dəyişdirilir
    ↓
-9. Telefon təsdiqləndi ✅
+10. Telefon təsdiqləndi ✅
    ↓
-10. ✅ Qeydiyyat tam tamamlanır
+11. ✅ Qeydiyyat TAM TAMAMLANIR
 ```
 
-### 🔄 Düzəliş Etmə İmkanı
+### 🎯 Kritik Xüsusiyyət: Email və Telefon Son Addımdadır
 
-**E-mail və telefon nömrələri axırda təsdiqlənir**, buna görə də:
-- ✅ İstifadəçi qeydiyyatı tamamlayır
-- ✅ Sonra email təsdiqi gəlir
-- ✅ Əgər email səhvdirsə → geri gedib düzəldə bilər
-- ✅ Sonra telefon təsdiqi gəlir
-- ✅ Əgər telefon səhvdirsə → geri gedib düzəldə bilər
-- ✅ Bütün məlumatlar saxlanılır, itirilmir
+**Niyə bu qədər vacibdir?**
+
+❌ **Köhnə yanaşma** (əgər əvvəldə olsaydı):
+- Təsdiqləmədə geri qayıtsa → Bütün məlumatlar (ad, doğum tarixi, cins, şifrə) itər
+- İstifadəçi hər şeyi yenidən daxil etməli olar
+- Çox narahatçılıq yaradır
+
+✅ **Yeni yanaşma** (indi son addımdadır):
+- Təsdiqləmədə geri qayıtsa → Yalnız Addım 4-ə (Email və Telefon) qayıdır
+- Ad, doğum tarixi, cins, şifrə SAXLANILIR
+- Yalnız email və ya telefonu düzəldir
+- Rahat və stresssiz təcrübə
+
+### 🔄 Düzəliş Etmə Ssenarisi
+
+**Missal:**
+1. İstifadəçi qeydiyyatı tamamlayır
+2. Email təsdiqi gəlir
+3. Email-ə kod gəlmir (yanlış email daxil edilib)
+4. "E-mail ünvanını dəyişdir" düyməsinə basır
+5. Addım 4-ə qayıdır
+6. **Ad, doğum tarixi, cins, şifrə hələ də oradadır** ✅
+7. Yalnız email-i düzəldir
+8. Davam edir və uğurla təsdiqləyir
 
 ## 📁 Əlavə/Dəyişdirilən Fayllar
 

@@ -20,7 +20,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [step, setStep] = useState<'info' | 'personal' | 'password'>('info');
+  const [step, setStep] = useState<'basic' | 'personal' | 'password' | 'contact'>('basic');
   const [errors, setErrors] = useState<{
     fullName?: string;
     email?: string;
@@ -35,17 +35,9 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
   const validateStep = () => {
     const newErrors: typeof errors = {};
 
-    if (step === 'info') {
+    if (step === 'basic') {
       if (!fullName.trim()) {
         newErrors.fullName = 'Ad və soyad daxil edilməlidir';
-      }
-      if (!email.trim()) {
-        newErrors.email = 'E-mail ünvanı daxil edilməlidir';
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
-      }
-      if (!phone.trim()) {
-        newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
       }
     } else if (step === 'personal') {
       if (!birthDate) {
@@ -65,6 +57,15 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
       } else if (password !== confirmPassword) {
         newErrors.confirmPassword = 'Şifrələr uyğun gəlmir';
       }
+    } else if (step === 'contact') {
+      if (!email.trim()) {
+        newErrors.email = 'E-mail ünvanı daxil edilməlidir';
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
+      }
+      if (!phone.trim()) {
+        newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
+      }
     }
 
     setErrors(newErrors);
@@ -76,10 +77,12 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
       return;
     }
 
-    if (step === 'info') {
+    if (step === 'basic') {
       setStep('personal');
     } else if (step === 'personal') {
       setStep('password');
+    } else if (step === 'password') {
+      setStep('contact');
     }
   };
 
@@ -157,13 +160,13 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
 
         {/* Progress Indicator */}
         <div className="flex items-center justify-center gap-2 mb-6">
-          {['info', 'personal', 'password'].map((s, idx) => (
+          {['basic', 'personal', 'password', 'contact'].map((s, idx) => (
             <div
               key={s}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 s === step
                   ? 'w-8 bg-gradient-to-r from-emerald-500 to-green-500'
-                  : idx < ['info', 'personal', 'password'].indexOf(step)
+                  : idx < ['basic', 'personal', 'password', 'contact'].indexOf(step)
                   ? 'w-6 bg-emerald-400/60'
                   : 'w-4 bg-gray-300/40'
               }`}
@@ -179,14 +182,14 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
         } hover:shadow-2xl`}>
           <div className="space-y-5">
             {/* Step 1: Basic Info */}
-            {step === 'info' && (
+            {step === 'basic' && (
               <>
                 <div className="text-center mb-4">
                   <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Əlaqə məlumatları
+                    Əsas məlumatlar
                   </h3>
                   <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 1/3
+                    Addım 1/4
                   </p>
                 </div>
                 
@@ -198,28 +201,6 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   placeholder="Adınızı və soyadınızı daxil edin"
                   icon="👤"
                   error={errors.fullName}
-                  required
-                />
-                
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={setEmail}
-                  label="E-mail ünvanı"
-                  placeholder="E-poçtunuzu daxil edin"
-                  icon="📧"
-                  error={errors.email}
-                  required
-                />
-                
-                <Input
-                  type="tel"
-                  value={phone}
-                  onChange={setPhone}
-                  label="Telefon nömrəsi"
-                  placeholder="+994 XX XXX XX XX"
-                  icon="📱"
-                  error={errors.phone}
                   required
                 />
 
@@ -240,7 +221,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                     Şəxsi məlumatlar
                   </h3>
                   <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 2/3
+                    Addım 2/4
                   </p>
                 </div>
 
@@ -307,7 +288,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
 
                 <div className="flex gap-3">
                   <Button
-                    onClick={() => setStep('info')}
+                    onClick={() => setStep('basic')}
                     variant="secondary"
                     className={`flex-1 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
                       isDarkMode 
@@ -335,7 +316,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                     Şifrə yaradın
                   </h3>
                   <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 3/3
+                    Addım 3/4
                   </p>
                 </div>
                 
@@ -400,6 +381,62 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                     ← Geri
                   </Button>
                   <Button
+                    onClick={handleNext}
+                    className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
+                  >
+                    Davam et →
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {/* Step 4: Contact Info */}
+            {step === 'contact' && (
+              <>
+                <div className="text-center mb-4">
+                  <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    Əlaqə məlumatları
+                  </h3>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Addım 4/4 - Son addım
+                  </p>
+                </div>
+                
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={setEmail}
+                  label="E-mail ünvanı"
+                  placeholder="E-poçtunuzu daxil edin"
+                  icon="📧"
+                  error={errors.email}
+                  required
+                />
+                
+                <Input
+                  type="tel"
+                  value={phone}
+                  onChange={setPhone}
+                  label="Telefon nömrəsi"
+                  placeholder="+994 XX XXX XX XX"
+                  icon="📱"
+                  error={errors.phone}
+                  required
+                />
+
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => setStep('password')}
+                    variant="secondary"
+                    className={`flex-1 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
+                      isDarkMode 
+                        ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    ← Geri
+                  </Button>
+                  <Button
                     onClick={handleRegister}
                     disabled={isLoading}
                     className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
@@ -419,7 +456,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
               </>
             )}
 
-            {step === 'info' && (
+            {step === 'basic' && (
               <Button
                 onClick={onBack}
                 variant="secondary"
