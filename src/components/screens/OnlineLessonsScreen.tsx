@@ -612,7 +612,7 @@ export function OnlineLessonsScreen() {
       {showNotificationPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={() => setShowNotificationPopup(null)} />
-          <div className={`relative z-10 w-full max-w-sm rounded-3xl shadow-2xl border-2 overflow-hidden animate-in zoom-in-95 duration-300 ${
+          <div className={`relative z-10 w-full max-w-iphone16 rounded-3xl shadow-2xl border-2 overflow-hidden animate-in zoom-in-95 duration-300 ${
             isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
           }`}>
             <div className={`p-6 ${

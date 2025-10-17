@@ -230,7 +230,7 @@ export function QADetailScreen() {
       <div className={`p-4 border-t ${
         isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
-        <div className="max-w-md mx-auto">
+        <div className="max-w-iphone16 mx-auto">
           <div className="flex items-end space-x-2">
             <button
               onClick={handleFileAttach}

@@ -145,7 +145,7 @@ export function OnboardingScreen({
         {/* Illustration - Fade in with key change */}
         <div
           key={`illustration-${slideKey}`}
-          className="w-full max-w-sm mb-12"
+          className="w-full max-w-iphone16 mb-12"
           style={{
             animation: 'fadeInAnim 600ms ease-in-out',
             opacity: 1,

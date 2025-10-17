@@ -24,7 +24,7 @@ export function TabBar() {
         ? 'bg-gray-800/95 border-gray-700/50 shadow-2xl' 
         : 'bg-white/95 border-gray-200/50 shadow-2xl'
     }`}>
-      <div className="max-w-md mx-auto grid grid-cols-5 px-2 py-2">
+      <div className="max-w-iphone16 mx-auto grid grid-cols-5 px-2 py-2">
         {tabs.map((tab) => {
           const isActive = currentScreen.screen === tab.key;
           return (

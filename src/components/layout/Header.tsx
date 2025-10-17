@@ -11,7 +11,7 @@ export function Header() {
   
   return (
     <div className="sticky top-0 z-30 mt-0">
-      <div className={`max-w-md mx-auto backdrop-blur-xl border-b-2 transition-all duration-300 ${
+      <div className={`max-w-iphone16 mx-auto backdrop-blur-xl border-b-2 transition-all duration-300 ${
         isDarkMode 
           ? 'bg-gray-800/90 border-gray-700/50 shadow-lg' 
           : 'bg-white/90 border-gray-200/50 shadow-lg'

@@ -455,7 +455,7 @@ export function ResultDetailScreen() {
       {showTeacherQuestionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60" onClick={() => setShowTeacherQuestionModal(false)} />
-          <div className={`relative z-10 w-full max-w-md rounded-2xl p-6 shadow-xl transition-colors duration-200 ${
+          <div className={`relative z-10 w-full max-w-iphone16 rounded-2xl p-6 shadow-xl transition-colors duration-200 ${
             isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
           }`}>
             <div className={`text-lg font-bold mb-4 transition-colors duration-200 ${

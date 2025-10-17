@@ -294,7 +294,7 @@ export function ForgotPasswordScreen({ onBack, onSuccess }: ForgotPasswordScreen
         } animate-pulse`} style={{ animationDelay: '2s', animationDuration: '6s' }}></div>
       </div>
       
-      <div className="w-full max-w-md relative z-10 animate-fade-in-up">
+      <div className="w-full max-w-iphone16 relative z-10 animate-fade-in-up">
         {/* Logo Section */}
         <div className="text-center mb-8">
           <div className={`w-32 h-32 mx-auto mb-6 rounded-3xl shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${

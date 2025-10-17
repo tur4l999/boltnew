@@ -38,7 +38,7 @@ export function AppealSubmitModal({ isOpen, onClose, questionId, questionText }:
       <Card 
         variant="glass"
         padding="lg"
-        className={`w-full max-w-md ${
+        className={`w-full max-w-iphone16 ${
           isDarkMode ? 'bg-gray-800/90' : 'bg-white/90'
         }`}
       >

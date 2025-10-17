@@ -343,7 +343,7 @@ export function QuickTestScreen() {
       {showExitConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60" onClick={() => setShowExitConfirm(false)} />
-          <div className="relative z-10 w-[90%] max-w-sm rounded-2xl p-5 shadow-xl border bg-gray-900 border-gray-700 text-gray-100">
+          <div className="relative z-10 w-[90%] max-w-iphone16 rounded-2xl p-5 shadow-xl border bg-gray-900 border-gray-700 text-gray-100">
             <div className="text-base font-bold mb-3">İmtahanı bitirmək istədiyinizdən əminsiniz?</div>
             <div className="flex items-center justify-end gap-2">
               <Button variant="ghost" className="border-gray-600 text-white hover:bg-gray-800" onClick={() => setShowExitConfirm(false)}>Bağla</Button>
