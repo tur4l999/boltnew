@@ -23,7 +23,19 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [showPhoneVerification, setShowPhoneVerification] = useState(false);
   const [showEditRegistration, setShowEditRegistration] = useState(false);
-  const [registrationData, setRegistrationData] = useState<{email: string; phone: string; fullData?: any} | null>(null);
+  const [registrationData, setRegistrationData] = useState<{
+    email: string; 
+    phone: string; 
+    fullData?: {
+      fullName?: string;
+      email?: string;
+      phone?: string;
+      birthDate?: string;
+      gender?: string;
+      password?: string;
+      confirmPassword?: string;
+    }
+  } | null>(null);
   const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   const { isDarkMode } = useApp();
 
@@ -49,13 +61,17 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         onBack={() => {
           setShowRegister(false);
           setShowEditRegistration(false);
+          if (!showEditRegistration) {
+            setRegistrationData(null);
+          }
         }}
-        onRegister={(data: {email: string; phone: string}) => {
+        onRegister={(data: {email: string; phone: string; fullData: any}) => {
           setRegistrationData(data);
           setShowRegister(false);
           setShowEditRegistration(false);
           setShowEmailVerification(true);
         }}
+        initialData={showEditRegistration && registrationData?.fullData ? registrationData.fullData : undefined}
       />
     );
   }

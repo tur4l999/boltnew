@@ -1,26 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Input } from '../ui/Input';
+import { Icon } from '../icons/Icon';
 import { useApp } from '../../contexts/AppContext';
+
+interface RegistrationData {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  birthDate?: string;
+  gender?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
 interface RegistrationScreenProps {
   onBack: () => void;
-  onRegister: (data: { email: string; phone: string }) => void;
+  onRegister: (data: { email: string; phone: string; fullData: RegistrationData }) => void;
+  initialData?: RegistrationData;
 }
 
-export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenProps) {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [gender, setGender] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+export function RegistrationScreen({ onBack, onRegister, initialData }: RegistrationScreenProps) {
+  const [fullName, setFullName] = useState(initialData?.fullName || '');
+  const [email, setEmail] = useState(initialData?.email || '');
+  const [phone, setPhone] = useState(initialData?.phone || '');
+  const [birthDate, setBirthDate] = useState(initialData?.birthDate || '');
+  const [gender, setGender] = useState(initialData?.gender || '');
+  const [password, setPassword] = useState(initialData?.password || '');
+  const [confirmPassword, setConfirmPassword] = useState(initialData?.confirmPassword || '');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(initialData?.email ? 3 : 1); // If editing, go to step 3
   const [errors, setErrors] = useState<{
     fullName?: string;
     email?: string;
@@ -31,6 +43,20 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
     confirmPassword?: string;
   }>({});
   const { isDarkMode } = useApp();
+
+  // Update form when initialData changes
+  useEffect(() => {
+    if (initialData) {
+      setFullName(initialData.fullName || '');
+      setEmail(initialData.email || '');
+      setPhone(initialData.phone || '');
+      setBirthDate(initialData.birthDate || '');
+      setGender(initialData.gender || '');
+      setPassword(initialData.password || '');
+      setConfirmPassword(initialData.confirmPassword || '');
+      if (initialData.email) setStep(3); // Go to contact step when editing
+    }
+  }, [initialData]);
 
   const validateStep = () => {
     const newErrors: typeof errors = {};
@@ -87,7 +113,19 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      onRegister({ email, phone });
+      onRegister({ 
+        email, 
+        phone,
+        fullData: {
+          fullName,
+          email,
+          phone,
+          birthDate,
+          gender,
+          password,
+          confirmPassword
+        }
+      });
     }, 1500);
   };
 
@@ -189,7 +227,11 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
             {step === 1 && (
               <div className="animate-fade-in space-y-6">
                 <div className="text-center">
-                  <div className="text-5xl mb-4">👤</div>
+                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                  }`}>
+                    <Icon name="user" size={40} className="text-emerald-600" />
+                  </div>
                   <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Tanış olaq
                   </h3>
@@ -204,7 +246,6 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   onChange={setFullName}
                   label="Ad və Soyad"
                   placeholder="Məsələn: Əli Məmmədov"
-                  icon="👤"
                   error={errors.fullName}
                   required
                 />
@@ -233,7 +274,11 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
             {step === 2 && (
               <div className="animate-fade-in space-y-6">
                 <div className="text-center">
-                  <div className="text-5xl mb-4">🎂</div>
+                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                  }`}>
+                    <Icon name="calendar" size={40} className="text-emerald-600" />
+                  </div>
                   <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Bir az tanış olaq
                   </h3>
@@ -250,7 +295,6 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                     type="date"
                     value={birthDate}
                     onChange={setBirthDate}
-                    icon="🎂"
                     error={errors.birthDate}
                     required
                   />
@@ -274,8 +318,8 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                           : 'border-gray-200 bg-white hover:border-gray-300 hover:scale-105'
                       }`}
                     >
-                      <div className="text-4xl mb-2">👨</div>
-                      <div className={`font-bold text-lg ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                      <Icon name="user" size={32} className={gender === 'male' ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                      <div className={`font-bold text-lg mt-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                         Kişi
                       </div>
                     </button>
@@ -292,8 +336,8 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                           : 'border-gray-200 bg-white hover:border-gray-300 hover:scale-105'
                       }`}
                     >
-                      <div className="text-4xl mb-2">👩</div>
-                      <div className={`font-bold text-lg ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
+                      <Icon name="user" size={32} className={gender === 'female' ? 'text-emerald-600' : isDarkMode ? 'text-gray-400' : 'text-gray-500'} />
+                      <div className={`font-bold text-lg mt-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
                         Qadın
                       </div>
                     </button>
@@ -325,7 +369,11 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
             {step === 3 && (
               <div className="animate-fade-in space-y-6">
                 <div className="text-center">
-                  <div className="text-5xl mb-4">📱</div>
+                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                  }`}>
+                    <Icon name="smartphone" size={40} className="text-emerald-600" />
+                  </div>
                   <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Əlaqə məlumatları
                   </h3>
@@ -340,7 +388,6 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   onChange={setEmail}
                   label="E-mail ünvanı"
                   placeholder="email@example.com"
-                  icon="📧"
                   error={errors.email}
                   required
                 />
@@ -351,7 +398,6 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   onChange={setPhone}
                   label="Telefon nömrəsi"
                   placeholder="+994 XX XXX XX XX"
-                  icon="📱"
                   error={errors.phone}
                   required
                 />
@@ -380,7 +426,11 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
             {step === 4 && (
               <div className="animate-fade-in space-y-6">
                 <div className="text-center">
-                  <div className="text-5xl mb-4">🔐</div>
+                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                  }`}>
+                    <Icon name="lock" size={40} className="text-emerald-600" />
+                  </div>
                   <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Təhlükəsiz şifrə
                   </h3>
@@ -395,18 +445,17 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   onChange={setPassword}
                   label="Şifrə"
                   placeholder="Ən azı 6 simvol"
-                  icon="🔐"
                   error={errors.password}
                   required
                   rightElement={
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
+                      className={`transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      {showPassword ? '🙈' : '👁️'}
+                      <Icon name={showPassword ? 'eye-off' : 'eye'} size={20} />
                     </button>
                   }
                 />
@@ -417,18 +466,17 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
                   onChange={setConfirmPassword}
                   label="Şifrə təkrarı"
                   placeholder="Şifrənizi təkrar daxil edin"
-                  icon="🔐"
                   error={errors.confirmPassword}
                   required
                   rightElement={
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
+                      className={`transition-colors duration-200 ${
                         isDarkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
                       }`}
                     >
-                      {showConfirmPassword ? '🙈' : '👁️'}
+                      <Icon name={showConfirmPassword ? 'eye-off' : 'eye'} size={20} />
                     </button>
                   }
                 />

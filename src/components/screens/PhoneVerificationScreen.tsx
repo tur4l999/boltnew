@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { Input } from '../ui/Input';
+import { Icon } from '../icons/Icon';
 import { useApp } from '../../contexts/AppContext';
 
 interface PhoneVerificationScreenProps {
@@ -82,7 +83,7 @@ export function PhoneVerificationScreen({ phone, onVerified, onBack, onEditPhone
               ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600/50' 
               : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
           }`}>
-            <div className="text-4xl">📱</div>
+            <Icon name="smartphone" size={48} className="text-emerald-600" />
           </div>
           
           <div>
@@ -126,7 +127,6 @@ export function PhoneVerificationScreen({ phone, onVerified, onBack, onEditPhone
               onChange={(value) => setCode(value.replace(/\D/g, '').slice(0, 6))}
               label="SMS təsdiqləmə kodu"
               placeholder="000000"
-              icon="💬"
               error={error}
               required
             />
@@ -206,7 +206,7 @@ export function PhoneVerificationScreen({ phone, onVerified, onBack, onEditPhone
           isDarkMode ? 'text-gray-500' : 'text-gray-400'
         }`}>
           <div className="flex items-center justify-center gap-2 text-xs">
-            <span>ℹ️</span>
+            <Icon name="info" size={16} className={isDarkMode ? 'text-gray-500' : 'text-gray-400'} />
             <span>SMS 5 dəqiqə ərzində etibarlıdır</span>
           </div>
         </div>
