@@ -5,6 +5,8 @@ import { Input } from '../ui/Input';
 import { useApp } from '../../contexts/AppContext';
 import { RegistrationScreen } from './RegistrationScreen';
 import { ForgotPasswordScreen } from './ForgotPasswordScreen';
+import { EmailVerificationScreen } from './EmailVerificationScreen';
+import { PhoneVerificationScreen } from './PhoneVerificationScreen';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -18,6 +20,22 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+  const [showEditRegistration, setShowEditRegistration] = useState(false);
+  const [registrationData, setRegistrationData] = useState<{
+    email: string; 
+    phone: string; 
+    fullData?: {
+      fullName?: string;
+      email?: string;
+      phone?: string;
+      birthDate?: string;
+      gender?: string;
+      password?: string;
+      confirmPassword?: string;
+    }
+  } | null>(null);
   const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   const { isDarkMode } = useApp();
 
@@ -37,13 +55,63 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   };
 
   // Handle different screen states
-  if (showRegister) {
+  if (showRegister || showEditRegistration) {
     return (
       <RegistrationScreen 
-        onBack={() => setShowRegister(false)}
-        onRegister={() => {
+        onBack={() => {
           setShowRegister(false);
-          alert('Qeydiyyat tamamlandı! İndi hesabınıza daxil ola bilərsiniz.');
+          setShowEditRegistration(false);
+          if (!showEditRegistration) {
+            setRegistrationData(null);
+          }
+        }}
+        onRegister={(data: {email: string; phone: string; fullData: any}) => {
+          setRegistrationData(data);
+          setShowRegister(false);
+          setShowEditRegistration(false);
+          setShowEmailVerification(true);
+        }}
+        initialData={showEditRegistration && registrationData?.fullData ? registrationData.fullData : undefined}
+      />
+    );
+  }
+
+  if (showEmailVerification && registrationData) {
+    return (
+      <EmailVerificationScreen
+        email={registrationData.email}
+        onVerified={() => {
+          setShowEmailVerification(false);
+          setShowPhoneVerification(true);
+        }}
+        onBack={() => {
+          setShowEmailVerification(false);
+          setShowEditRegistration(true);
+        }}
+        onEditEmail={() => {
+          setShowEmailVerification(false);
+          setShowEditRegistration(true);
+        }}
+      />
+    );
+  }
+
+  if (showPhoneVerification && registrationData) {
+    return (
+      <PhoneVerificationScreen
+        phone={registrationData.phone}
+        onVerified={() => {
+          setShowPhoneVerification(false);
+          setRegistrationData(null);
+          alert('Qeydiyyat tamamlandı! E-mail və telefon nömrəsi təsdiqləndi. İndi hesabınıza daxil ola bilərsiniz.');
+        }}
+        onBack={() => {
+          setShowPhoneVerification(false);
+          setShowEmailVerification(true);
+        }}
+        onEditPhone={() => {
+          setShowPhoneVerification(false);
+          setShowEditRegistration(true);
         }}
       />
     );
