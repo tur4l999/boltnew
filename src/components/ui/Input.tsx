@@ -13,6 +13,7 @@ interface InputProps {
   icon?: ReactNode;
   rightElement?: ReactNode;
   className?: string;
+  maxLength?: number;
 }
 
 export function Input({
@@ -26,7 +27,8 @@ export function Input({
   required = false,
   icon,
   rightElement,
-  className = ''
+  className = '',
+  maxLength
 }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const { isDarkMode } = useApp();
@@ -65,6 +67,7 @@ export function Input({
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           disabled={disabled}
+          maxLength={maxLength}
           className={`w-full px-4 py-4 border-2 rounded-2xl focus:outline-none focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all duration-300 relative z-10 ${
             icon ? 'pl-12' : ''
           } ${
