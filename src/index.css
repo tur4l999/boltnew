@@ -54,6 +54,23 @@
 
   html {
     font-family: var(--font-sans);
+    /* Hide scrollbar globally */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    /* Hide scrollbar globally */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -216,6 +233,18 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+body {
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+/* Ensure all scrollable containers hide scrollbars */
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Responsive design optimizations */
@@ -245,6 +274,16 @@ html {
   .container {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
+  }
+  
+  /* Hide scrollbar for iPhone 16 */
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
   }
 }
 

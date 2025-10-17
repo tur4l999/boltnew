@@ -57,7 +57,7 @@ function AppContent() {
         <div className="max-w-iphone16 mx-auto h-screen relative">
           <div className={`h-full transition-colors duration-200 ${
             isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-          } overflow-y-auto ${!hideTabBar ? 'pb-20' : ''}`}
+          } overflow-y-auto scrollbar-hide ${!hideTabBar ? 'pb-20' : ''}`}
           id="app-scroll-container"
           >
             {/* Sticky iPhone-like status bar inside the scroll container */}
