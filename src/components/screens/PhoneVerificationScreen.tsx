@@ -8,9 +8,10 @@ interface PhoneVerificationScreenProps {
   phone: string;
   onVerified: () => void;
   onBack: () => void;
+  onEditPhone?: () => void;
 }
 
-export function PhoneVerificationScreen({ phone, onVerified, onBack }: PhoneVerificationScreenProps) {
+export function PhoneVerificationScreen({ phone, onVerified, onBack, onEditPhone }: PhoneVerificationScreenProps) {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -92,11 +93,23 @@ export function PhoneVerificationScreen({ phone, onVerified, onBack }: PhoneVeri
             } bg-clip-text text-transparent`}>
               Telefon təsdiqi
             </h1>
-            <p className={`text-sm font-medium mt-2 px-4 transition-colors duration-200 ${
+            <div className={`text-sm font-medium mt-2 px-4 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              <span className="font-bold">{phone}</span> nömrəsinə göndərilən 6 rəqəmli SMS kodu daxil edin
-            </p>
+              <p className="mb-2">
+                <span className="font-bold">{phone}</span> nömrəsinə göndərilən 6 rəqəmli SMS kodu daxil edin
+              </p>
+              {onEditPhone && (
+                <button
+                  onClick={onEditPhone}
+                  className={`text-xs underline transition-colors duration-200 ${
+                    isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+                  }`}
+                >
+                  ✏️ Telefon nömrəsini dəyişdir
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

@@ -40,6 +40,7 @@ Qeydiyyat 3 addıma bölünüb ki, istifadəçi özünü sıxılmış hiss etmə
 - 60 saniyə geri sayma ilə təkrar göndərmə düyməsi
 - 10 dəqiqə etibarlılıq müddəti
 - Avtomatik email göndərilməsi (simulyasiya)
+- ✏️ **"E-mail ünvanını dəyişdir" düyməsi** - Səhv olarsa düzəliş imkanı
 
 **Fayllar:**
 - `/src/components/screens/EmailVerificationScreen.tsx`
@@ -52,6 +53,7 @@ Qeydiyyat 3 addıma bölünüb ki, istifadəçi özünü sıxılmış hiss etmə
 - 60 saniyə geri sayma ilə təkrar göndərmə düyməsi
 - 5 dəqiqə etibarlılıq müddəti
 - Avtomatik SMS göndərilməsi (simulyasiya)
+- ✏️ **"Telefon nömrəsini dəyişdir" düyməsi** - Səhv olarsa düzəliş imkanı
 
 **Fayllar:**
 - `/src/components/screens/PhoneVerificationScreen.tsx`
@@ -97,7 +99,7 @@ verifySMSCode(phone: string, code: string)
 ```
 1. İstifadəçi "Qeydiyyatdan keç" düyməsinə basar
    ↓
-2. Addım 1: Əlaqə məlumatlarını daxil edir
+2. Addım 1: Əlaqə məlumatlarını daxil edir (Ad, Email, Telefon)
    ↓
 3. Addım 2: Doğum tarixi və cins seçir
    ↓
@@ -106,15 +108,29 @@ verifySMSCode(phone: string, code: string)
 5. "Qeydiyyatdan keç" düyməsinə basar
    ↓
 6. E-mail təsdiqləmə ekranı açılır
+   │  • 6 rəqəmli kodu daxil edir
+   │  • ❌ Əgər email səhvdirsə → "E-mail ünvanını dəyişdir" düyməsinə basaraq düzəliş edə bilər
    ↓
-7. E-maildəki 6 rəqəmli kodu daxil edir
+7. Email təsdiqləndi ✅
    ↓
 8. Telefon təsdiqləmə ekranı açılır
+   │  • 6 rəqəmli SMS kodu daxil edir
+   │  • ❌ Əgər telefon səhvdirsə → "Telefon nömrəsini dəyişdir" düyməsinə basaraq düzəliş edə bilər
    ↓
-9. SMS-dəki 6 rəqəmli kodu daxil edir
+9. Telefon təsdiqləndi ✅
    ↓
-10. ✅ Qeydiyyat tamamlanır
+10. ✅ Qeydiyyat tam tamamlanır
 ```
+
+### 🔄 Düzəliş Etmə İmkanı
+
+**E-mail və telefon nömrələri axırda təsdiqlənir**, buna görə də:
+- ✅ İstifadəçi qeydiyyatı tamamlayır
+- ✅ Sonra email təsdiqi gəlir
+- ✅ Əgər email səhvdirsə → geri gedib düzəldə bilər
+- ✅ Sonra telefon təsdiqi gəlir
+- ✅ Əgər telefon səhvdirsə → geri gedib düzəldə bilər
+- ✅ Bütün məlumatlar saxlanılır, itirilmir
 
 ## 📁 Əlavə/Dəyişdirilən Fayllar
 
@@ -176,6 +192,8 @@ Sistem:
 - ✅ Sürətli tamamlanır
 - ✅ Çox məlumat tələb edən görünmür
 - ✅ E-mail və telefon təsdiqi ayrılıqda aparılır
+- ✅ **Təsdiq axırda aparılır - səhv olarsa düzəliş edilə bilər**
+- ✅ **Düzəliş imkanı var - məlumatlar itirilmir**
 - ✅ Modern və estetik dizayndır
 
 ---

@@ -8,9 +8,10 @@ interface EmailVerificationScreenProps {
   email: string;
   onVerified: () => void;
   onBack: () => void;
+  onEditEmail?: () => void;
 }
 
-export function EmailVerificationScreen({ email, onVerified, onBack }: EmailVerificationScreenProps) {
+export function EmailVerificationScreen({ email, onVerified, onBack, onEditEmail }: EmailVerificationScreenProps) {
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -92,11 +93,23 @@ export function EmailVerificationScreen({ email, onVerified, onBack }: EmailVeri
             } bg-clip-text text-transparent`}>
               E-mail təsdiqi
             </h1>
-            <p className={`text-sm font-medium mt-2 px-4 transition-colors duration-200 ${
+            <div className={`text-sm font-medium mt-2 px-4 transition-colors duration-200 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              <span className="font-bold">{email}</span> ünvanına göndərilən 6 rəqəmli kodu daxil edin
-            </p>
+              <p className="mb-2">
+                <span className="font-bold">{email}</span> ünvanına göndərilən 6 rəqəmli kodu daxil edin
+              </p>
+              {onEditEmail && (
+                <button
+                  onClick={onEditEmail}
+                  className={`text-xs underline transition-colors duration-200 ${
+                    isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-emerald-600 hover:text-emerald-700'
+                  }`}
+                >
+                  ✏️ E-mail ünvanını dəyişdir
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

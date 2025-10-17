@@ -22,7 +22,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [showPhoneVerification, setShowPhoneVerification] = useState(false);
-  const [registrationData, setRegistrationData] = useState<{email: string; phone: string} | null>(null);
+  const [showEditRegistration, setShowEditRegistration] = useState(false);
+  const [registrationData, setRegistrationData] = useState<{email: string; phone: string; fullData?: any} | null>(null);
   const [errors, setErrors] = useState<{email?: string; password?: string}>({});
   const { isDarkMode } = useApp();
 
@@ -42,13 +43,17 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   };
 
   // Handle different screen states
-  if (showRegister) {
+  if (showRegister || showEditRegistration) {
     return (
       <RegistrationScreen 
-        onBack={() => setShowRegister(false)}
+        onBack={() => {
+          setShowRegister(false);
+          setShowEditRegistration(false);
+        }}
         onRegister={(data: {email: string; phone: string}) => {
           setRegistrationData(data);
           setShowRegister(false);
+          setShowEditRegistration(false);
           setShowEmailVerification(true);
         }}
       />
@@ -65,7 +70,11 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         }}
         onBack={() => {
           setShowEmailVerification(false);
-          setShowRegister(true);
+          setShowEditRegistration(true);
+        }}
+        onEditEmail={() => {
+          setShowEmailVerification(false);
+          setShowEditRegistration(true);
         }}
       />
     );
@@ -83,6 +92,10 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         onBack={() => {
           setShowPhoneVerification(false);
           setShowEmailVerification(true);
+        }}
+        onEditPhone={() => {
+          setShowPhoneVerification(false);
+          setShowEditRegistration(true);
         }}
       />
     );
