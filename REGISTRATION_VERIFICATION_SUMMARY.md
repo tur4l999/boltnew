@@ -2,39 +2,36 @@
 
 ## 🎯 İcmal
 
-Bu yenilik qeydiyyat prosesini təkmilləşdirərək aşağıdakı funksiyaları əlavə edir:
+Bu yenilik qeydiyyat prosesini **sadə və sürətli** edərək aşağıdakı funksiyaları təmin edir:
 
-1. ✅ **3 addımlı qeydiyyat prosesi** - Rahat və sürətli təcrübə
-2. ✅ **E-mail təsdiqi** - Ayrıca təsdiqləmə ekranı ilə
-3. ✅ **Telefon təsdiqi (SMS)** - Ayrıca təsdiqləmə ekranı ilə
-4. ✅ **Doğum tarixi** - Təmiz UI ilə
-5. ✅ **Cins seçimi** - Emoji ilə vizual seçim
+1. ✅ **Tək səhifəli forma** - Bütün məlumatlar bir yerdə, ürək sıxmır
+2. ✅ **Əsas məlumatlar** - Ad, Email, Telefon, Şifrə (tələb olunan)
+3. ✅ **Əlavə məlumatlar** - Doğum tarixi və Cins (istəyə bağlı, collapse edilmiş)
+4. ✅ **E-mail təsdiqi** - Qeydiyyatdan sonra
+5. ✅ **Telefon təsdiqi (SMS)** - E-mail təsdiqindən sonra
 
 ## 📋 Əsas Xüsusiyyətlər
 
-### 1. Çox Addımlı Qeydiyyat Formu
+### 1. Tək Səhifəli Qeydiyyat Formu
 
-Qeydiyyat 4 addıma bölünüb ki, istifadəçi özünü sıxılmış hiss etməsin:
+**Sadə və sürətli forma** - bütün məlumatlar bir səhifədə:
 
-#### **Addım 1: Əsas Məlumatlar** (1/4)
-- Ad və Soyad
+#### **Tələb olunan məlumatlar:**
+- 👤 Ad və Soyad
+- 📧 E-mail ünvanı
+- 📱 Telefon nömrəsi
+- 🔐 Şifrə və təkrarı
 
-#### **Addım 2: Şəxsi Məlumatlar** (2/4)
-- Doğum tarixi (tarix seçici ilə)
-- Cins (👨 Kişi / 👩 Qadın - vizual düymələrlə)
+#### **İstəyə bağlı məlumatlar** (collapse edilmiş):
+- 🎂 Doğum tarixi
+- 👨👩 Cins (kompakt düymələr)
 
-#### **Addım 3: Şifrə** (3/4)
-- Şifrə yaradılması
-- Şifrə təkrarı
-- Göstər/Gizlə funksiyası
-
-#### **Addım 4: Əlaqə Məlumatları** (4/4 - Son addım)
-- E-mail ünvanı
-- Telefon nömrəsi
-
-**Progress Göstəricisi:** Hər addımda istifadəçi hansı mərhələdə olduğunu görür.
-
-**⚡ Kritik fərq:** E-mail və telefon **ən son addımdadır** - buna görə də təsdiqləmə zamanı geri qayıtdıqda yalnız bu 2 məlumat dəyişilir, digər bütün məlumatlar (ad, doğum tarixi, cins, şifrə) saxlanılır!
+**Xüsusiyyətlər:**
+- ✅ Bütün sahələr bir səhifədə
+- ✅ Əlavə məlumatlar gizli (istəyirsə açır)
+- ✅ Sürətli doldurma
+- ✅ Ürək sıxmır, rahatdır
+- ✅ Progress bar yoxdur - lazım deyil
 
 ### 2. E-mail Təsdiqi
 
@@ -103,63 +100,61 @@ verifySMSCode(phone: string, code: string)
 ```
 1. İstifadəçi "Qeydiyyatdan keç" düyməsinə basar
    ↓
-2. Addım 1: Ad və Soyadını daxil edir (1/4)
+2. TƏK SƏHİFƏLİ FORMA AÇILIR
+   │
+   ├─ Ad və Soyad ✍️
+   ├─ Email 📧
+   ├─ Telefon 📱
+   ├─ Şifrə 🔐
+   ├─ Şifrə təkrarı 🔐
+   │
+   └─ [Əlavə məlumatlar ▼] (collapse edilmiş - istəyə bağlı)
+       ├─ Doğum tarixi 🎂
+       └─ Cins 👨👩
    ↓
-3. Addım 2: Doğum tarixi və cins seçir (2/4)
+3. "Qeydiyyatdan keç" düyməsinə basar
    ↓
-4. Addım 3: Şifrə yaradır (3/4)
-   ↓
-5. Addım 4: Email və Telefon daxil edir (4/4 - SON ADDIM)
-   ↓
-6. "Qeydiyyatdan keç" düyməsinə basar
-   ↓
-7. E-mail təsdiqləmə ekranı açılır
+4. E-mail təsdiqləmə ekranı açılır
    │  • 6 rəqəmli kodu daxil edir
    │  • ❌ Əgər email səhvdirsə → "E-mail ünvanını dəyişdir" düyməsinə basar
-   │  • → Addım 4-ə (Əlaqə məlumatları) qayıdır
-   │  • → Ad, doğum tarixi, cins, şifrə SAXLANıLıR ✅
-   │  • → Yalnız email/telefon dəyişdirilir
+   │  • → Qeydiyyat formasına qayıdır
+   │  • → BÜTÜN MƏLUMATLAR SAXLANıLıR ✅
+   │  • → Yalnız email-i düzəldir
    ↓
-8. Email təsdiqləndi ✅
+5. Email təsdiqləndi ✅
    ↓
-9. Telefon təsdiqləmə ekranı açılır
+6. Telefon təsdiqləmə ekranı açılır
    │  • 6 rəqəmli SMS kodu daxil edir
    │  • ❌ Əgər telefon səhvdirsə → "Telefon nömrəsini dəyişdir" düyməsinə basar
-   │  • → Addım 4-ə (Əlaqə məlumatları) qayıdır
-   │  • → Ad, doğum tarixi, cins, şifrə SAXLANıLıR ✅
-   │  • → Yalnız email/telefon dəyişdirilir
+   │  • → Qeydiyyat formasına qayıdır
+   │  • → BÜTÜN MƏLUMATLAR SAXLANıLıR ✅
+   │  • → Yalnız telefonu düzəldir
    ↓
-10. Telefon təsdiqləndi ✅
+7. Telefon təsdiqləndi ✅
    ↓
-11. ✅ Qeydiyyat TAM TAMAMLANIR
+8. ✅ Qeydiyyat TAM TAMAMLANIR
 ```
 
-### 🎯 Kritik Xüsusiyyət: Email və Telefon Son Addımdadır
+### 🎯 Üstünlüklər
 
-**Niyə bu qədər vacibdir?**
+✅ **Sadəlik** - Bütün məlumatlar bir yerdə  
+✅ **Sürət** - Heç bir addım yoxdur, sürətli doldurulur  
+✅ **Ürək sıxmır** - Az sahə, rahat görünüş  
+✅ **Optional sahələr** - Doğum tarixi və cins gizlidir (istəyirsə açır)  
+✅ **Düzəliş asan** - Təsdiqləmədə geri qayıtsa həmə şey saxlanılır  
 
-❌ **Köhnə yanaşma** (əgər əvvəldə olsaydı):
-- Təsdiqləmədə geri qayıtsa → Bütün məlumatlar (ad, doğum tarixi, cins, şifrə) itər
-- İstifadəçi hər şeyi yenidən daxil etməli olar
-- Çox narahatçılıq yaradır
-
-✅ **Yeni yanaşma** (indi son addımdadır):
-- Təsdiqləmədə geri qayıtsa → Yalnız Addım 4-ə (Email və Telefon) qayıdır
-- Ad, doğum tarixi, cins, şifrə SAXLANILIR
-- Yalnız email və ya telefonu düzəldir
-- Rahat və stresssiz təcrübə
-
-### 🔄 Düzəliş Etmə Ssenarisi
+### 🔄 Düzəliş Ssenarisi
 
 **Missal:**
-1. İstifadəçi qeydiyyatı tamamlayır
-2. Email təsdiqi gəlir
-3. Email-ə kod gəlmir (yanlış email daxil edilib)
-4. "E-mail ünvanını dəyişdir" düyməsinə basır
-5. Addım 4-ə qayıdır
-6. **Ad, doğum tarixi, cins, şifrə hələ də oradadır** ✅
-7. Yalnız email-i düzəldir
-8. Davam edir və uğurla təsdiqləyir
+1. İstifadəçi formanı doldurur (30 saniyə)
+2. "Qeydiyyatdan keç" basır
+3. Email təsdiqi gəlir
+4. Email səhvdir (kod gəlmir)
+5. "E-mail ünvanını dəyişdir" basır
+6. **Forma açılır - HƏR ŞEY ORADADIR!** ✅
+7. Yalnız email-i düzəldir (5 saniyə)
+8. Təsdiqləyir ✅
+9. Uğurlu qeydiyyat! 🎉
 
 ## 📁 Əlavə/Dəyişdirilən Fayllar
 

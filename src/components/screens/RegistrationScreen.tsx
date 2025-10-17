@@ -20,7 +20,7 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [step, setStep] = useState<'basic' | 'personal' | 'password' | 'contact'>('basic');
+  const [showOptionalFields, setShowOptionalFields] = useState(false);
   const [errors, setErrors] = useState<{
     fullName?: string;
     email?: string;
@@ -32,62 +32,41 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
   }>({});
   const { isDarkMode } = useApp();
 
-  const validateStep = () => {
+  const validateForm = () => {
     const newErrors: typeof errors = {};
 
-    if (step === 'basic') {
-      if (!fullName.trim()) {
-        newErrors.fullName = 'Ad və soyad daxil edilməlidir';
-      }
-    } else if (step === 'personal') {
-      if (!birthDate) {
-        newErrors.birthDate = 'Doğum tarixini seçin';
-      }
-      if (!gender) {
-        newErrors.gender = 'Cinsinizi seçin';
-      }
-    } else if (step === 'password') {
-      if (!password) {
-        newErrors.password = 'Şifrə daxil edilməlidir';
-      } else if (password.length < 6) {
-        newErrors.password = 'Şifrə ən azı 6 simvoldan ibarət olmalıdır';
-      }
-      if (!confirmPassword) {
-        newErrors.confirmPassword = 'Şifrə təkrarı daxil edilməlidir';
-      } else if (password !== confirmPassword) {
-        newErrors.confirmPassword = 'Şifrələr uyğun gəlmir';
-      }
-    } else if (step === 'contact') {
-      if (!email.trim()) {
-        newErrors.email = 'E-mail ünvanı daxil edilməlidir';
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
-      }
-      if (!phone.trim()) {
-        newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
-      }
+    if (!fullName.trim()) {
+      newErrors.fullName = 'Ad və soyad daxil edilməlidir';
+    }
+
+    if (!email.trim()) {
+      newErrors.email = 'E-mail ünvanı daxil edilməlidir';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
+    }
+
+    if (!password) {
+      newErrors.password = 'Şifrə daxil edilməlidir';
+    } else if (password.length < 6) {
+      newErrors.password = 'Şifrə ən azı 6 simvoldan ibarət olmalıdır';
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = 'Şifrə təkrarı daxil edilməlidir';
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = 'Şifrələr uyğun gəlmir';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
-    if (!validateStep()) {
-      return;
-    }
-
-    if (step === 'basic') {
-      setStep('personal');
-    } else if (step === 'personal') {
-      setStep('password');
-    } else if (step === 'password') {
-      setStep('contact');
-    }
-  };
-
   const handleRegister = async () => {
-    if (!validateStep()) {
+    if (!validateForm()) {
       return;
     }
 
@@ -158,317 +137,207 @@ export function RegistrationScreen({ onBack, onRegister }: RegistrationScreenPro
           </div>
         </div>
 
-        {/* Progress Indicator */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-          {['basic', 'personal', 'password', 'contact'].map((s, idx) => (
-            <div
-              key={s}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                s === step
-                  ? 'w-8 bg-gradient-to-r from-emerald-500 to-green-500'
-                  : idx < ['basic', 'personal', 'password', 'contact'].indexOf(step)
-                  ? 'w-6 bg-emerald-400/60'
-                  : 'w-4 bg-gray-300/40'
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Registration Form */}
-        <Card className={`p-8 transition-all duration-300 backdrop-blur-lg ${
+        {/* Registration Form - Single Page */}
+        <Card className={`p-6 transition-all duration-300 backdrop-blur-lg ${
           isDarkMode 
             ? 'bg-gray-800/90 border-gray-600/30 shadow-2xl' 
             : 'bg-white/95 border-white/50 shadow-xl'
         } hover:shadow-2xl`}>
-          <div className="space-y-5">
-            {/* Step 1: Basic Info */}
-            {step === 'basic' && (
-              <>
-                <div className="text-center mb-4">
-                  <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Əsas məlumatlar
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 1/4
-                  </p>
-                </div>
-                
-                <Input
-                  type="text"
-                  value={fullName}
-                  onChange={setFullName}
-                  label="Ad və Soyad"
-                  placeholder="Adınızı və soyadınızı daxil edin"
-                  icon="👤"
-                  error={errors.fullName}
-                  required
-                />
+          <div className="space-y-4">
+            {/* Basic Info */}
+            <div>
+              <Input
+                type="text"
+                value={fullName}
+                onChange={setFullName}
+                label="Ad və Soyad"
+                placeholder="Adınızı və soyadınızı daxil edin"
+                icon="👤"
+                error={errors.fullName}
+                required
+              />
+            </div>
 
-                <Button
-                  onClick={handleNext}
-                  className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
-                >
-                  Davam et →
-                </Button>
-              </>
-            )}
+            {/* Contact - Compact */}
+            <div className="grid grid-cols-1 gap-4">
+              <Input
+                type="email"
+                value={email}
+                onChange={setEmail}
+                label="E-mail"
+                placeholder="email@example.com"
+                icon="📧"
+                error={errors.email}
+                required
+              />
+              
+              <Input
+                type="tel"
+                value={phone}
+                onChange={setPhone}
+                label="Telefon"
+                placeholder="+994 XX XXX XX XX"
+                icon="📱"
+                error={errors.phone}
+                required
+              />
+            </div>
 
-            {/* Step 2: Personal Info */}
-            {step === 'personal' && (
-              <>
-                <div className="text-center mb-4">
-                  <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Şəxsi məlumatlar
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 2/4
-                  </p>
-                </div>
-
-                <div>
-                  <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Doğum tarixi <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    type="date"
-                    value={birthDate}
-                    onChange={setBirthDate}
-                    icon="🎂"
-                    error={errors.birthDate}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className={`block text-sm font-medium mb-3 ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Cins <span className="text-red-500">*</span>
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setGender('male')}
-                      className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                        gender === 'male'
-                          ? isDarkMode
-                            ? 'border-emerald-500 bg-emerald-500/10'
-                            : 'border-emerald-600 bg-emerald-50'
-                          : isDarkMode
-                          ? 'border-gray-600 bg-gray-700/40 hover:border-gray-500'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-3xl mb-2">👨</div>
-                      <div className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                        Kişi
-                      </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setGender('female')}
-                      className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                        gender === 'female'
-                          ? isDarkMode
-                            ? 'border-emerald-500 bg-emerald-500/10'
-                            : 'border-emerald-600 bg-emerald-50'
-                          : isDarkMode
-                          ? 'border-gray-600 bg-gray-700/40 hover:border-gray-500'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-3xl mb-2">👩</div>
-                      <div className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                        Qadın
-                      </div>
-                    </button>
-                  </div>
-                  {errors.gender && (
-                    <p className="mt-2 text-sm text-red-500">{errors.gender}</p>
-                  )}
-                </div>
-
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => setStep('basic')}
-                    variant="secondary"
-                    className={`flex-1 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
+            {/* Password */}
+            <div className="grid grid-cols-1 gap-4">
+              <Input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={setPassword}
+                label="Şifrə"
+                placeholder="Min 6 simvol"
+                icon="🔐"
+                error={errors.password}
+                required
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className={`text-lg transition-colors duration-200 ${
                       isDarkMode 
-                        ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                        ? 'text-gray-400 hover:text-gray-200' 
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    ← Geri
-                  </Button>
-                  <Button
-                    onClick={handleNext}
-                    className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
-                  >
-                    Davam et →
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {/* Step 3: Password */}
-            {step === 'password' && (
-              <>
-                <div className="text-center mb-4">
-                  <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Şifrə yaradın
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 3/4
-                  </p>
-                </div>
-                
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={setPassword}
-                  label="Şifrə"
-                  placeholder="Şifrənizi daxil edin (min 6 simvol)"
-                  icon="🔐"
-                  error={errors.password}
-                  required
-                  rightElement={
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
-                        isDarkMode 
-                          ? 'text-gray-400 hover:text-gray-200' 
-                          : 'text-gray-500 hover:text-gray-700'
-                      }`}
-                    >
-                      {showPassword ? '🙈' : '👁️'}
-                    </button>
-                  }
-                />
-                
-                <Input
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={setConfirmPassword}
-                  label="Şifrə təkrarı"
-                  placeholder="Şifrənizi təkrar daxil edin"
-                  icon="🔐"
-                  error={errors.confirmPassword}
-                  required
-                  rightElement={
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className={`text-lg transition-colors duration-200 hover:scale-110 transform ${
-                        isDarkMode 
-                          ? 'text-gray-400 hover:text-gray-200' 
-                          : 'text-gray-500 hover:text-gray-700'
-                      }`}
-                    >
-                      {showConfirmPassword ? '🙈' : '👁️'}
-                    </button>
-                  }
-                />
-
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => setStep('personal')}
-                    variant="secondary"
-                    className={`flex-1 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
+                    {showPassword ? '🙈' : '👁️'}
+                  </button>
+                }
+              />
+              
+              <Input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                label="Şifrə təkrarı"
+                placeholder="Şifrənizi təkrar daxil edin"
+                icon="🔐"
+                error={errors.confirmPassword}
+                required
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className={`text-lg transition-colors duration-200 ${
                       isDarkMode 
-                        ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                        ? 'text-gray-400 hover:text-gray-200' 
+                        : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    ← Geri
-                  </Button>
-                  <Button
-                    onClick={handleNext}
-                    className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
-                  >
-                    Davam et →
-                  </Button>
-                </div>
-              </>
-            )}
+                    {showConfirmPassword ? '🙈' : '👁️'}
+                  </button>
+                }
+              />
+            </div>
 
-            {/* Step 4: Contact Info */}
-            {step === 'contact' && (
-              <>
-                <div className="text-center mb-4">
-                  <h3 className={`text-lg font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Əlaqə məlumatları
-                  </h3>
-                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Addım 4/4 - Son addım
-                  </p>
-                </div>
-                
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={setEmail}
-                  label="E-mail ünvanı"
-                  placeholder="E-poçtunuzu daxil edin"
-                  icon="📧"
-                  error={errors.email}
-                  required
-                />
-                
-                <Input
-                  type="tel"
-                  value={phone}
-                  onChange={setPhone}
-                  label="Telefon nömrəsi"
-                  placeholder="+994 XX XXX XX XX"
-                  icon="📱"
-                  error={errors.phone}
-                  required
-                />
-
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => setStep('password')}
-                    variant="secondary"
-                    className={`flex-1 py-3 text-base font-medium rounded-xl transition-all duration-300 ${
-                      isDarkMode 
-                        ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
-                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    ← Geri
-                  </Button>
-                  <Button
-                    onClick={handleRegister}
-                    disabled={isLoading}
-                    className={`flex-1 py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
-                      isLoading ? 'animate-pulse' : ''
-                    } bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        Qeydiyyat...
-                      </div>
-                    ) : (
-                      'Qeydiyyatdan keç'
-                    )}
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {step === 'basic' && (
-              <Button
-                onClick={onBack}
-                variant="secondary"
-                className={`w-full py-3 text-base font-medium rounded-xl transition-all duration-300 ${
-                  isDarkMode 
-                    ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            {/* Optional Personal Info - Collapsed by default */}
+            <div className={`border-t pt-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <button
+                type="button"
+                onClick={() => setShowOptionalFields(!showOptionalFields)}
+                className={`w-full flex items-center justify-between py-2 text-sm font-medium transition-colors ${
+                  isDarkMode ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                ← Girişə qayıt
-              </Button>
-            )}
+                <span className="flex items-center gap-2">
+                  <span>Əlavə məlumatlar</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    isDarkMode ? 'bg-gray-700 text-gray-400' : 'bg-gray-100 text-gray-500'
+                  }`}>İstəyə bağlı</span>
+                </span>
+                <span className="text-lg">{showOptionalFields ? '▲' : '▼'}</span>
+              </button>
+              
+              {showOptionalFields && (
+                <div className="mt-4 space-y-4 animate-fade-in">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={`block text-xs font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Doğum tarixi
+                      </label>
+                      <Input
+                        type="date"
+                        value={birthDate}
+                        onChange={setBirthDate}
+                        icon="🎂"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className={`block text-xs font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        Cins
+                      </label>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setGender('male')}
+                          className={`flex-1 p-2 rounded-lg border transition-all duration-200 ${
+                            gender === 'male'
+                              ? isDarkMode
+                                ? 'border-emerald-500 bg-emerald-500/10'
+                                : 'border-emerald-600 bg-emerald-50'
+                              : isDarkMode
+                              ? 'border-gray-600 bg-gray-700/40 hover:border-gray-500'
+                              : 'border-gray-200 bg-white hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="text-xl">👨</div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setGender('female')}
+                          className={`flex-1 p-2 rounded-lg border transition-all duration-200 ${
+                            gender === 'female'
+                              ? isDarkMode
+                                ? 'border-emerald-500 bg-emerald-500/10'
+                                : 'border-emerald-600 bg-emerald-50'
+                              : isDarkMode
+                              ? 'border-gray-600 bg-gray-700/40 hover:border-gray-500'
+                              : 'border-gray-200 bg-white hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="text-xl">👩</div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              onClick={handleRegister}
+              disabled={isLoading}
+              className={`w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
+                isLoading ? 'animate-pulse' : ''
+              } bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center gap-3">
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  Qeydiyyat aparılır...
+                </div>
+              ) : (
+                'Qeydiyyatdan keç'
+              )}
+            </Button>
+
+            <Button
+              onClick={onBack}
+              variant="secondary"
+              className={`w-full py-3 text-base font-medium rounded-xl transition-all duration-300 ${
+                isDarkMode 
+                  ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' 
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
+            >
+              ← Girişə qayıt
+            </Button>
           </div>
         </Card>
 
