@@ -32,7 +32,7 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(initialData?.email ? 3 : 1); // If editing, go to step 3
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(initialData?.email ? 4 : 1); // If editing, go to step 4 (contact)
   const [errors, setErrors] = useState<{
     fullName?: string;
     email?: string;
@@ -54,7 +54,7 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
       setGender(initialData.gender || '');
       setPassword(initialData.password || '');
       setConfirmPassword(initialData.confirmPassword || '');
-      if (initialData.email) setStep(3); // Go to contact step when editing
+      if (initialData.email) setStep(4); // Go to contact step (now step 4) when editing
     }
   }, [initialData]);
 
@@ -73,15 +73,7 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
         newErrors.gender = 'Cinsinizi seçin';
       }
     } else if (step === 3) {
-      if (!email.trim()) {
-        newErrors.email = 'E-mail ünvanı daxil edilməlidir';
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
-      }
-      if (!phone.trim()) {
-        newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
-      }
-    } else if (step === 4) {
+      // Step 3 is now PASSWORD
       if (!password) {
         newErrors.password = 'Şifrə daxil edilməlidir';
       } else if (password.length < 6) {
@@ -91,6 +83,16 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
         newErrors.confirmPassword = 'Şifrə təkrarı daxil edilməlidir';
       } else if (password !== confirmPassword) {
         newErrors.confirmPassword = 'Şifrələr uyğun gəlmir';
+      }
+    } else if (step === 4) {
+      // Step 4 is now CONTACT
+      if (!email.trim()) {
+        newErrors.email = 'E-mail ünvanı daxil edilməlidir';
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        newErrors.email = 'E-mail ünvanı düzgün formatda deyil';
+      }
+      if (!phone.trim()) {
+        newErrors.phone = 'Telefon nömrəsi daxil edilməlidir';
       }
     }
 
@@ -130,11 +132,11 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 relative transition-all duration-300 ${
+    <div className={`min-h-screen flex items-start justify-center p-4 pt-6 relative transition-all duration-300 ${
       isDarkMode 
         ? 'bg-gradient-to-b from-gray-900 via-slate-800 to-gray-900' 
         : 'bg-gradient-to-b from-gray-50 via-white to-emerald-50/30'
-    } pt-11`}>
+    }`}>
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className={`absolute top-1/4 left-1/6 w-64 h-64 rounded-full blur-3xl ${
@@ -147,12 +149,12 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
       
       <div className="w-full max-w-iphone16 relative z-10 animate-fade-in-up">
         {/* Logo Section */}
-        <div className="text-center mb-8">
-          <div className={`w-32 h-32 mx-auto mb-6 rounded-3xl shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${
+        <div className="text-center mb-4">
+          <div className={`w-20 h-20 mx-auto mb-3 rounded-2xl shadow-lg flex items-center justify-center transition-all duration-300 ${
             isDarkMode 
               ? 'bg-gradient-to-br from-gray-800 to-gray-700 border border-gray-600/50' 
               : 'bg-gradient-to-br from-white to-gray-50 border border-gray-200/50'
-          } backdrop-blur-sm relative overflow-hidden`}>
+          } backdrop-blur-sm`}>
             <img 
               src="/DDA_logo.png" 
               alt="Digital Driving Academy Logo" 
@@ -173,23 +175,16 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
           </div>
           
           <div>
-            <h1 className={`text-2xl font-black transition-all duration-300 bg-gradient-to-r ${
-              isDarkMode 
-                ? 'from-emerald-400 via-green-400 to-emerald-500' 
-                : 'from-emerald-600 via-green-600 to-emerald-700'
-            } bg-clip-text text-transparent`}>
+            <h1 className={`text-xl font-bold transition-all duration-300 ${
+              isDarkMode ? 'text-gray-100' : 'text-gray-900'
+            }`}>
               Qeydiyyat
             </h1>
-            <p className={`text-sm font-medium mt-2 transition-colors duration-200 ${
-              isDarkMode ? 'text-gray-500' : 'text-gray-600'
-            }`}>
-              Hesab yaradın və təhsilə başlayın
-            </p>
           </div>
         </div>
 
         {/* Beautiful Progress Indicator */}
-        <div className="flex items-center justify-center gap-3 mb-8">
+        <div className="flex items-center justify-center gap-3 mb-6">
           {[1, 2, 3, 4].map((s) => (
             <div key={s} className="flex flex-col items-center gap-2">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
@@ -217,25 +212,25 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
         </div>
 
         {/* Registration Form */}
-        <Card className={`p-8 transition-all duration-300 backdrop-blur-lg ${
+        <Card className={`p-6 transition-all duration-300 backdrop-blur-lg ${
           isDarkMode 
             ? 'bg-gray-800/90 border-gray-600/30 shadow-2xl' 
             : 'bg-white/95 border-white/50 shadow-xl'
-        } hover:shadow-2xl min-h-[400px]`}>
-          <div className="space-y-6">
+        } hover:shadow-2xl min-h-[360px]`}>
+          <div className="space-y-5">
             {/* Step 1: Name */}
             {step === 1 && (
-              <div className="animate-fade-in space-y-6">
+              <div className="animate-fade-in space-y-5">
                 <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
                   }`}>
-                    <Icon name="user" size={40} className="text-emerald-600" />
+                    <Icon name="user" size={32} className="text-emerald-600" />
                   </div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Tanış olaq
                   </h3>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     Adınızı və soyadınızı daxil edin
                   </p>
                 </div>
@@ -250,17 +245,17 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
                   required
                 />
 
-                <div className="pt-4">
+                <div className="pt-2">
                   <Button
                     onClick={handleNext}
-                    className="w-full py-4 text-lg font-bold rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
+                    className="w-full py-3.5 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
                   >
                     Davam et →
                   </Button>
                   <Button
                     onClick={onBack}
                     variant="secondary"
-                    className={`w-full mt-3 py-3 text-base font-medium rounded-xl ${
+                    className={`w-full mt-2 py-3 text-sm font-medium rounded-xl ${
                       isDarkMode ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -272,17 +267,17 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
 
             {/* Step 2: Birth Date & Gender */}
             {step === 2 && (
-              <div className="animate-fade-in space-y-6">
+              <div className="animate-fade-in space-y-5">
                 <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
                   }`}>
-                    <Icon name="calendar" size={40} className="text-emerald-600" />
+                    <Icon name="calendar" size={32} className="text-emerald-600" />
                   </div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Bir az tanış olaq
                   </h3>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     Doğum tarixiniz və cinsiniz
                   </p>
                 </div>
@@ -365,76 +360,19 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
               </div>
             )}
 
-            {/* Step 3: Contact */}
+            {/* Step 3: Password (swapped with step 4) */}
             {step === 3 && (
-              <div className="animate-fade-in space-y-6">
+              <div className="animate-fade-in space-y-5">
                 <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                  <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center ${
                     isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
                   }`}>
-                    <Icon name="smartphone" size={40} className="text-emerald-600" />
+                    <Icon name="lock" size={32} className="text-emerald-600" />
                   </div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
-                    Əlaqə məlumatları
-                  </h3>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Təsdiqləmə üçün lazım olacaq
-                  </p>
-                </div>
-
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={setEmail}
-                  label="E-mail ünvanı"
-                  placeholder="email@example.com"
-                  error={errors.email}
-                  required
-                />
-                
-                <Input
-                  type="tel"
-                  value={phone}
-                  onChange={setPhone}
-                  label="Telefon nömrəsi"
-                  placeholder="+994 XX XXX XX XX"
-                  error={errors.phone}
-                  required
-                />
-
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    onClick={handleBack}
-                    variant="secondary"
-                    className={`flex-1 py-4 text-base font-medium rounded-xl ${
-                      isDarkMode ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    ← Geri
-                  </Button>
-                  <Button
-                    onClick={handleNext}
-                    className="flex-[2] py-4 text-lg font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
-                  >
-                    Davam et →
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 4: Password */}
-            {step === 4 && (
-              <div className="animate-fade-in space-y-6">
-                <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
-                  }`}>
-                    <Icon name="lock" size={40} className="text-emerald-600" />
-                  </div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                  <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                     Təhlükəsiz şifrə
                   </h3>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     Hesabınızı qorumaq üçün şifrə yaradın
                   </p>
                 </div>
@@ -481,11 +419,68 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
                   }
                 />
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex gap-3 pt-2">
                   <Button
                     onClick={handleBack}
                     variant="secondary"
-                    className={`flex-1 py-4 text-base font-medium rounded-xl ${
+                    className={`flex-1 py-3 text-sm font-medium rounded-xl ${
+                      isDarkMode ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    ← Geri
+                  </Button>
+                  <Button
+                    onClick={handleNext}
+                    className="flex-[2] py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl"
+                  >
+                    Davam et →
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Step 4: Contact (swapped with step 3) */}
+            {step === 4 && (
+              <div className="animate-fade-in space-y-5">
+                <div className="text-center">
+                  <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center ${
+                    isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                  }`}>
+                    <Icon name="smartphone" size={32} className="text-emerald-600" />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                    Əlaqə məlumatları
+                  </h3>
+                  <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Təsdiqləmə üçün lazım olacaq
+                  </p>
+                </div>
+
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={setEmail}
+                  label="E-mail ünvanı"
+                  placeholder="email@example.com"
+                  error={errors.email}
+                  required
+                />
+                
+                <Input
+                  type="tel"
+                  value={phone}
+                  onChange={setPhone}
+                  label="Telefon nömrəsi"
+                  placeholder="+994 XX XXX XX XX"
+                  error={errors.phone}
+                  required
+                />
+
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    onClick={handleBack}
+                    variant="secondary"
+                    className={`flex-1 py-3 text-sm font-medium rounded-xl ${
                       isDarkMode ? 'bg-gray-700/40 hover:bg-gray-600/40 text-gray-200' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }`}
                   >
@@ -494,17 +489,17 @@ export function RegistrationScreen({ onBack, onRegister, initialData }: Registra
                   <Button
                     onClick={handleRegister}
                     disabled={isLoading}
-                    className={`flex-[2] py-4 text-lg font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
+                    className={`flex-[2] py-3 text-base font-bold rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] ${
                       isLoading ? 'animate-pulse' : ''
                     } bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg hover:shadow-xl`}
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center gap-2">
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         Qeydiyyat...
                       </div>
                     ) : (
-                      'Qeydiyyatdan keç 🎉'
+                      'Qeydiyyatdan keç'
                     )}
                   </Button>
                 </div>

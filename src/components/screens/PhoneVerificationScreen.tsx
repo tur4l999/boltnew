@@ -126,30 +126,10 @@ export function PhoneVerificationScreen({ phone, onVerified, onBack, onEditPhone
               value={code}
               onChange={(value) => setCode(value.replace(/\D/g, '').slice(0, 6))}
               label="SMS təsdiqləmə kodu"
-              placeholder="000000"
+              placeholder="6 rəqəmli kod"
               error={error}
               required
             />
-
-            {/* Code display */}
-            <div className="flex justify-center gap-2">
-              {[0, 1, 2, 3, 4, 5].map((idx) => (
-                <div
-                  key={idx}
-                  className={`w-12 h-14 rounded-xl border-2 flex items-center justify-center text-2xl font-bold transition-all duration-200 ${
-                    code[idx]
-                      ? isDarkMode
-                        ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                        : 'border-emerald-600 bg-emerald-50 text-emerald-600'
-                      : isDarkMode
-                      ? 'border-gray-600 bg-gray-700/40 text-gray-500'
-                      : 'border-gray-200 bg-white text-gray-400'
-                  }`}
-                >
-                  {code[idx] || '•'}
-                </div>
-              ))}
-            </div>
 
             <Button
               onClick={handleVerify}
