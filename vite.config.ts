@@ -20,7 +20,15 @@ export default defineConfig(({ command, mode }) => {
     },
     server: {
       port: 3000,
-      host: true
+      host: true,
+      proxy: {
+        '/api': {
+          target: 'http://manager.test-domain.co',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, '/az/api')
+        }
+      }
     }
   }
 })
