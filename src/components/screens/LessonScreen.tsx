@@ -607,6 +607,20 @@ export function LessonScreen() {
           : 'bg-white/80 border-gray-200'
       }`}>
         <div className="p-4">
+          {/* Back button for video3d tab */}
+          {activeTab === 'video3d' && (
+            <button
+              onClick={() => navigate('Home')}
+              className={`mb-3 flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+                isDarkMode
+                  ? 'bg-gray-800 text-gray-100 hover:bg-gray-700'
+                  : 'bg-white text-gray-900 hover:bg-gray-50 shadow-md'
+              }`}
+            >
+              <span className="text-xl">←</span>
+              <span className="font-bold">Geri</span>
+            </button>
+          )}
           <div className="relative">
             <button
               onClick={() => setModuleDropdownOpen(!moduleDropdownOpen)}
@@ -705,7 +719,10 @@ export function LessonScreen() {
               return (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    navigate('Lesson', { moduleId, tab: tab.key });
+                  }}
                   className={`relative p-3 rounded-xl transition-all duration-300 transform hover:scale-105 ${
                     isActive
                       ? is3DTab

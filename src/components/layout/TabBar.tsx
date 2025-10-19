@@ -18,6 +18,11 @@ export function TabBar() {
     return null;
   }
 
+  // Hide TabBar on Lesson screen when video3d tab is active
+  if (currentScreen?.screen === 'Lesson' && currentScreen?.params && (currentScreen.params as any).tab === 'video3d') {
+    return null;
+  }
+
   return (
     <div className={`absolute bottom-0 left-0 right-0 z-50 backdrop-blur-xl border-t-2 ${
       isDarkMode 
