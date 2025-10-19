@@ -18,8 +18,8 @@ export function TabBar() {
     return null;
   }
 
-  // Hide TabBar on Lesson screen when video3d tab is active
-  if (currentScreen?.screen === 'Lesson' && currentScreen?.params && (currentScreen.params as any).tab === 'video3d') {
+  // Hide TabBar on entire Lesson screen (all tabs)
+  if (currentScreen?.screen === 'Lesson') {
     return null;
   }
 
