@@ -24,14 +24,6 @@ export function SettingsScreen() {
     { value: 'ru', label: '🇷🇺 Русский язык' }
   ];
 
-  const handleResetOnboarding = async () => {
-    if (confirm('Onboarding ekranlarını yenidən görmək istəyirsiniz?')) {
-      const { resetOnboarding } = await import('../../onboarding');
-      await resetOnboarding();
-      alert('Onboarding sıfırlandı! Tətbiqi yenidən açın.');
-      window.location.reload();
-    }
-  };
 
   const settingsItems = [
     {
@@ -54,7 +46,6 @@ export function SettingsScreen() {
             alert('✅ Keş təmizləndi!\n\n📦 Azad edildi: ~45 MB\n🚀 Tətbiq performansı yaxşılaşdırıldı\n\nTətbiq daha sürətli işləyəcək.');
           }
         } },
-        { key: 'resetOnboarding', label: 'Onboarding sıfırla', icon: 'refresh-cw', description: 'Giriş ekranlarını yenidən göstər', action: handleResetOnboarding },
         { key: 'updates', label: 'Versiya', icon: 'info', description: 'Tətbiq versiyası: 2.5.1', action: null }
       ]
     },
