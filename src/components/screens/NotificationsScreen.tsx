@@ -202,27 +202,27 @@ export function NotificationsScreen() {
           ? 'bg-gray-800/90 border-gray-700/50' 
           : 'bg-white/90 border-gray-200/50'
       }`}>
-        <div className="max-w-md mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-md mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
             <button
               onClick={goBack}
-              className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                 isDarkMode 
                   ? 'bg-gray-700/50 text-gray-100 hover:bg-gray-600/50' 
                   : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
               }`}
             >
-              <span className="text-xl">←</span>
+              <span className="text-base">←</span>
             </button>
             
             <div className="flex-1">
-              <h1 className={`text-xl font-bold transition-colors duration-200 ${
+              <h1 className={`text-base font-bold transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-100' : 'text-gray-900'
               }`}>
                 {t.notifications}
               </h1>
               {unreadCount > 0 && (
-                <p className={`text-sm transition-colors duration-200 ${
+                <p className={`text-xs transition-colors duration-200 ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
                   {unreadCount} oxunmamış bildiriş
@@ -234,13 +234,13 @@ export function NotificationsScreen() {
             <div className="relative">
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
                   isDarkMode 
                     ? 'bg-gray-700/50 text-gray-100 hover:bg-gray-600/50' 
                     : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                 } ${showMenu ? 'ring-2 ring-emerald-500' : ''}`}
               >
-                <EmojiIcon emoji="⚙️" size={18} />
+                <EmojiIcon emoji="⚙️" size={14} />
               </button>
 
               {/* Dropdown Menu */}
@@ -253,7 +253,7 @@ export function NotificationsScreen() {
                   />
                   
                   {/* Menu */}
-                  <div className={`absolute right-0 mt-2 w-56 rounded-2xl shadow-2xl border-2 overflow-hidden z-50 transition-all duration-300 ${
+                  <div className={`absolute right-0 mt-2 w-48 rounded-xl shadow-2xl border-2 overflow-hidden z-50 transition-all duration-300 ${
                     isDarkMode 
                       ? 'bg-gray-800 border-gray-700' 
                       : 'bg-white border-gray-200'
@@ -265,18 +265,18 @@ export function NotificationsScreen() {
                           alert('Hamısı oxundu kimi işarələndi (demo)');
                           setShowMenu(false);
                         }}
-                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                        className={`w-full px-3 py-2 flex items-center gap-2 transition-all duration-200 ${
                           isDarkMode 
                             ? 'hover:bg-gray-700 text-gray-200' 
                             : 'hover:bg-gray-50 text-gray-800'
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${
                           isDarkMode ? 'bg-emerald-700/50' : 'bg-emerald-100'
                         }`}>
-                          <EmojiIcon emoji="✓" size={16} />
+                          <EmojiIcon emoji="✓" size={12} />
                         </div>
-                        <span className="text-sm font-bold">Hamısını oxu</span>
+                        <span className="text-xs font-bold">Hamısını oxu</span>
                       </button>
                     )}
 
@@ -289,18 +289,18 @@ export function NotificationsScreen() {
                             setShowMenu(false);
                           }
                         }}
-                        className={`w-full px-4 py-3 flex items-center gap-3 transition-all duration-200 ${
+                        className={`w-full px-3 py-2 flex items-center gap-2 transition-all duration-200 ${
                           isDarkMode 
                             ? 'hover:bg-red-900/20 text-red-400' 
                             : 'hover:bg-red-50 text-red-600'
                         }`}
                       >
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${
                           isDarkMode ? 'bg-red-900/50' : 'bg-red-100'
                         }`}>
-                          <EmojiIcon emoji="🗑️" size={16} />
+                          <EmojiIcon emoji="🗑️" size={12} />
                         </div>
-                        <span className="text-sm font-bold">Hamısını sil</span>
+                        <span className="text-xs font-bold">Hamısını sil</span>
                       </button>
                     )}
 
@@ -311,10 +311,10 @@ export function NotificationsScreen() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-3">
             <button
               onClick={() => setActiveTab('all')}
-              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
+              className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
                 activeTab === 'all'
                   ? isDarkMode
                     ? 'bg-emerald-700 text-emerald-100 shadow-lg'
@@ -328,7 +328,7 @@ export function NotificationsScreen() {
             </button>
             <button
               onClick={() => setActiveTab('unread')}
-              className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
+              className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 relative ${
                 activeTab === 'unread'
                   ? isDarkMode
                     ? 'bg-emerald-700 text-emerald-100 shadow-lg'
@@ -340,7 +340,7 @@ export function NotificationsScreen() {
             >
               Oxunmamış ({unreadCount})
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] flex items-center justify-center animate-pulse">
                   {unreadCount}
                 </span>
               )}
@@ -354,22 +354,22 @@ export function NotificationsScreen() {
         {filteredNotifications.length === 0 ? (
           // Empty state
           <FadeInUp delay={100}>
-            <Card className={`p-8 text-center ${
+            <Card className={`p-6 text-center ${
               isDarkMode 
                 ? 'bg-gray-800/80 border-gray-700/50' 
                 : 'bg-white/80 border-gray-200/50'
             }`}>
-              <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${
+              <div className={`w-14 h-14 mx-auto rounded-full flex items-center justify-center mb-3 ${
                 isDarkMode ? 'bg-gray-700/50' : 'bg-gray-100'
               }`}>
-                <span className="text-4xl">🔔</span>
+                <span className="text-2xl">🔔</span>
               </div>
-              <h3 className={`text-lg font-bold mb-2 ${
+              <h3 className={`text-sm font-bold mb-1 ${
                 isDarkMode ? 'text-gray-200' : 'text-gray-800'
               }`}>
                 Bildiriş yoxdur
               </h3>
-              <p className={`text-sm ${
+              <p className={`text-xs ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>
                 {activeTab === 'unread' 
@@ -392,7 +392,7 @@ export function NotificationsScreen() {
                         notification.action();
                       }
                     }}
-                    className={`w-full text-left rounded-2xl border-2 p-4 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
+                    className={`w-full text-left rounded-xl border-2 p-2.5 transition-all duration-300 transform hover:shadow-lg group relative overflow-hidden ${
                       isDarkMode
                         ? `${colors.bg} border-gray-700/50 hover:border-gray-600 hover:scale-[1.02]`
                         : `${colors.bg} border-gray-200/50 hover:border-gray-300 hover:scale-[1.02]`
@@ -400,28 +400,28 @@ export function NotificationsScreen() {
                   >
                     {/* Unread indicator */}
                     {!notification.isRead && (
-                      <div className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></div>
+                      <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                     )}
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       {/* Icon */}
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
-                        <EmojiIcon emoji={notification.emoji} size={24} />
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 ${colors.icon}`}>
+                        <EmojiIcon emoji={notification.emoji} size={18} />
                       </div>
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <div className={`text-sm font-bold mb-1 transition-colors duration-200 ${
+                        <div className={`text-xs font-bold mb-0.5 transition-colors duration-200 ${
                           isDarkMode ? 'text-gray-100' : 'text-gray-900'
                         } ${notification.isRead ? 'opacity-80' : ''}`}>
                           {notification.title}
                         </div>
-                        <div className={`text-sm mb-2 line-clamp-2 transition-colors duration-200 ${
+                        <div className={`text-[10px] mb-1 line-clamp-2 transition-colors duration-200 ${
                           isDarkMode ? 'text-gray-300' : 'text-gray-700'
                         } ${notification.isRead ? 'opacity-70' : ''}`}>
                           {notification.message}
                         </div>
-                        <div className={`text-xs font-medium ${colors.text} flex items-center gap-2`}>
+                        <div className={`text-[9px] font-medium ${colors.text} flex items-center gap-1`}>
                           <span>📅</span>
                           <span>{formatTimestamp(notification.timestamp)}</span>
                         </div>
@@ -429,10 +429,10 @@ export function NotificationsScreen() {
 
                       {/* Arrow indicator */}
                       {notification.action && (
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1 ${
                           isDarkMode ? 'bg-gray-700/30' : 'bg-gray-200/50'
                         }`}>
-                          <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
+                          <span className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>→</span>
                         </div>
                       )}
                     </div>
