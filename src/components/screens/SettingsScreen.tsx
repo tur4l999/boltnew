@@ -24,14 +24,6 @@ export function SettingsScreen() {
     { value: 'ru', label: '🇷🇺 Русский язык' }
   ];
 
-  const handleResetOnboarding = async () => {
-    if (confirm('Onboarding ekranlarını yenidən görmək istəyirsiniz?')) {
-      const { resetOnboarding } = await import('../../onboarding');
-      await resetOnboarding();
-      alert('Onboarding sıfırlandı! Tətbiqi yenidən açın.');
-      window.location.reload();
-    }
-  };
 
   const settingsItems = [
     {
@@ -54,7 +46,6 @@ export function SettingsScreen() {
             alert('✅ Keş təmizləndi!\n\n📦 Azad edildi: ~45 MB\n🚀 Tətbiq performansı yaxşılaşdırıldı\n\nTətbiq daha sürətli işləyəcək.');
           }
         } },
-        { key: 'resetOnboarding', label: 'Onboarding sıfırla', icon: 'refresh-cw', description: 'Giriş ekranlarını yenidən göstər', action: handleResetOnboarding },
         { key: 'updates', label: 'Versiya', icon: 'info', description: 'Tətbiq versiyası: 2.5.1', action: null }
       ]
     },
@@ -101,11 +92,11 @@ export function SettingsScreen() {
               <span className="text-lg">←</span>
             </button>
             <div>
-              <h1 className={`text-xl font-black transition-colors duration-200 bg-gradient-to-r ${
-                isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
-              } bg-clip-text text-transparent`}>
-                Parametrlər
-              </h1>
+            <h1 className={`text-base font-black transition-colors duration-200 bg-gradient-to-r ${
+              isDarkMode ? 'from-emerald-400 to-green-400' : 'from-emerald-600 to-green-600'
+            } bg-clip-text text-transparent`}>
+              Parametrlər
+            </h1>
             </div>
           </div>
           
@@ -118,14 +109,14 @@ export function SettingsScreen() {
                   setThemeMenuOpen(!themeMenuOpen);
                   setLanguageMenuOpen(false);
                 }}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
                   isDarkMode 
                     ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
                     : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
                 }`}
                 title="Tema"
               >
-                <Icon name="palette" size={18} />
+                <Icon name="palette" size={16} />
               </button>
               
               {themeMenuOpen && (
@@ -172,14 +163,14 @@ export function SettingsScreen() {
                   setLanguageMenuOpen(!languageMenuOpen);
                   setThemeMenuOpen(false);
                 }}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
+                className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 ${
                   isDarkMode 
                     ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' 
                     : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
                 }`}
                 title="Dil"
               >
-                <Icon name="globe" size={18} />
+                <Icon name="globe" size={16} />
               </button>
               
               {languageMenuOpen && (
@@ -222,14 +213,14 @@ export function SettingsScreen() {
         </div>
 
         {/* Enhanced Profile Card with Modern Animations */}
-        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center gap-4">
+        <Card variant="elevated" padding="sm" className="mb-4 animate-fadeInUp hover-lift" style={{ animationDelay: '200ms' }}>
+          <div className="flex items-center gap-3">
             <div className="relative group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-xl shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-600 via-green-600 to-emerald-500 text-white flex items-center justify-center font-black text-base shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                 {userName.charAt(0).toUpperCase()}
               </div>
               {activePackage && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[10px] leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-yellow-900 text-[9px] leading-none grid place-items-center border-2 border-white shadow-lg animate-bounce-subtle">
                   <span className="font-bold">★</span>
                 </div>
               )}
@@ -237,24 +228,24 @@ export function SettingsScreen() {
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-600 to-green-600 opacity-20 blur-lg scale-110 group-hover:opacity-30 group-hover:scale-125 transition-all duration-300"></div>
             </div>
             <div className="flex-1">
-              <div className={`font-bold text-lg mb-1 transition-all duration-200 bg-gradient-to-r ${
+              <div className={`font-bold text-sm mb-1 transition-all duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-900 to-gray-700'
               } bg-clip-text text-transparent`}>
                 {userName}
               </div>
               <button
                 onClick={() => navigate('SchoolInfo')}
-                className={`text-xs mb-1 px-2 py-1 rounded-lg transition-all duration-200 inline-flex items-center gap-1 ${
+                className={`text-[10px] mb-1 px-1.5 py-0.5 rounded-lg transition-all duration-200 inline-flex items-center gap-1 ${
                   isDarkMode 
                     ? 'bg-emerald-900/30 text-emerald-400 hover:bg-emerald-900/50 border border-emerald-700/50' 
                     : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200'
                 }`}
               >
-                <Icon name="building" size={12} />
+                <Icon name="building" size={10} />
                 <span>Məktəb/Kurs: {schoolName}</span>
-                <span className="text-[10px]">→</span>
+                <span className="text-[8px]">→</span>
               </button>
-              <div className={`text-sm transition-colors duration-200 ${
+              <div className={`text-xs transition-colors duration-200 ${
                 isDarkMode ? 'text-gray-400' : 'text-gray-600'
               }`}>{userEmail}</div>
             </div>
@@ -262,7 +253,7 @@ export function SettingsScreen() {
         </Card>
 
         {/* Balance, Tickets, and Driving Lessons Cards */}
-        <div className="grid grid-cols-3 gap-2 mb-6 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
+        <div className="grid grid-cols-3 gap-2 mb-4 animate-fadeInUp" style={{ animationDelay: '300ms' }}>
           <Card variant="elevated" padding="sm">
             <div className="flex items-center justify-center gap-1 py-1">
               <span className={`text-sm font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>₼</span>
@@ -291,11 +282,11 @@ export function SettingsScreen() {
 
         {/* Active Package Badge */}
         {activePackage && (
-          <div className="mb-6 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
-            <Card variant="elevated" padding="md">
+          <div className="mb-4 animate-fadeInUp" style={{ animationDelay: '400ms' }}>
+            <Card variant="elevated" padding="sm">
               <div className="flex items-center justify-center gap-2">
-                <Icon name="crown" size={18} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
-                <span className={`font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+                <Icon name="crown" size={14} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
+                <span className={`font-bold text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                   {activePackage.name}
                 </span>
               </div>
@@ -304,50 +295,50 @@ export function SettingsScreen() {
         )}
 
         {/* Referral Section */}
-        <Card variant="elevated" padding="md" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
-          <div className="flex items-center gap-2 mb-3">
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+        <Card variant="elevated" padding="sm" className="mb-4 animate-fadeInUp" style={{ animationDelay: '500ms' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <div className={`w-7 h-7 rounded-xl flex items-center justify-center ${
               isDarkMode ? 'bg-gradient-to-br from-purple-600/20 to-pink-600/20' : 'bg-gradient-to-br from-purple-100 to-pink-100'
             }`}>
-              <Icon name="gift" size={18} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
+              <Icon name="gift" size={14} className={isDarkMode ? 'text-purple-400' : 'text-purple-600'} />
             </div>
-            <h3 className={`font-bold text-base transition-colors duration-200 ${
+            <h3 className={`font-bold text-sm transition-colors duration-200 ${
               isDarkMode ? 'text-gray-100' : 'text-gray-900'
             }`}>Referal proqram</h3>
           </div>
           
           {/* 1. Əvvəlcə statistika */}
-          <div className={`p-4 rounded-2xl mb-4 ${
+          <div className={`p-3 rounded-xl mb-3 ${
             isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
           }`}>
-            <div className={`text-sm mb-3 flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              <Icon name="target" size={16} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+            <div className={`text-xs mb-2 flex items-center gap-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <Icon name="target" size={12} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
               Dostlarınızı dəvət edin və hər biri üçün bonus qazanın!
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => navigate('ReferralList')}
-                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                className={`text-center p-2 rounded-lg transition-all duration-300 hover:scale-105 ${
                   isDarkMode ? 'bg-emerald-900/30 hover:bg-emerald-900/40' : 'bg-emerald-100 hover:bg-emerald-200'
                 }`}
               >
-                <div className={`text-xl font-bold ${
+                <div className={`text-base font-bold ${
                   isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
                 }`}>5</div>
-                <div className={`text-xs ${
+                <div className={`text-[10px] ${
                   isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
                 }`}>Dəvət edilən</div>
               </button>
               <button
                 onClick={() => navigate('ReferralList')}
-                className={`text-center p-3 rounded-xl transition-all duration-300 hover:scale-105 ${
+                className={`text-center p-2 rounded-lg transition-all duration-300 hover:scale-105 ${
                   isDarkMode ? 'bg-yellow-900/30 hover:bg-yellow-900/40' : 'bg-yellow-100 hover:bg-yellow-200'
                 }`}
               >
-                <div className={`text-xl font-bold ${
+                <div className={`text-base font-bold ${
                   isDarkMode ? 'text-yellow-300' : 'text-yellow-700'
                 }`}>80 AZN</div>
-                <div className={`text-xs ${
+                <div className={`text-[10px] ${
                   isDarkMode ? 'text-yellow-400' : 'text-yellow-600'
                 }`}>Qazanılan bonus</div>
               </button>
@@ -355,16 +346,16 @@ export function SettingsScreen() {
           </div>
           
           {/* 2. Sonra referal kodu */}
-          <div className={`p-4 rounded-2xl ${
+          <div className={`p-3 rounded-xl ${
             isDarkMode 
               ? 'border-purple-500/30 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-2' 
               : 'border-purple-300/50 bg-gradient-to-r from-purple-50 to-pink-50 border-2'
           }`}>
-            <div className={`text-sm mb-2 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+            <div className={`text-xs mb-1.5 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
               Sizin referal kodunuz
             </div>
-            <div className="flex items-center gap-3">
-              <div className={`flex-1 px-4 py-2 rounded-xl border font-mono text-lg font-bold ${
+            <div className="flex items-center gap-2">
+              <div className={`flex-1 px-2 py-1.5 rounded-lg border font-mono text-sm font-bold ${
                 isDarkMode 
                   ? 'border-purple-500/50 bg-purple-900/30 text-purple-200' 
                   : 'border-purple-300 bg-purple-100 text-purple-800'
@@ -376,30 +367,30 @@ export function SettingsScreen() {
                   navigator.clipboard.writeText(referralCode);
                   alert('Referal kod kopyalandı!');
                 }}
-                className={`px-4 py-2 rounded-xl border font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
+                className={`px-2 py-1.5 rounded-lg border text-xs font-bold transition-all duration-300 transform hover:scale-105 flex items-center gap-1 ${
                   isDarkMode 
                     ? 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white' 
                     : 'border-purple-500 bg-purple-600 hover:bg-purple-700 text-white'
                 }`}
               >
-                <Icon name="copy" size={16} /> Kopyala
+                <Icon name="copy" size={12} /> Kopyala
               </button>
             </div>
           </div>
           
-          <div className={`mt-4 p-4 rounded-2xl ${
+          <div className={`mt-3 p-3 rounded-xl ${
             isDarkMode ? 'bg-gray-800/50' : 'bg-gray-50'
           }`}>
             
             <button
               onClick={() => alert('Referal proqram haqqında ətraflı məlumat (demo)')}
-              className={`w-full mt-4 p-3 rounded-xl border font-bold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 ${
+              className={`w-full mt-2 p-2 rounded-lg border text-xs font-bold transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-1.5 ${
                 isDarkMode 
                   ? 'border-purple-500/50 bg-purple-900/30 hover:bg-purple-900/50 text-purple-300' 
                   : 'border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700'
               }`}
             >
-              <Icon name="book-open" size={18} /> Proqram haqqında ətraflı
+              <Icon name="book-open" size={14} /> Proqram haqqında ətraflı
             </button>
           </div>
         </Card>
@@ -408,20 +399,20 @@ export function SettingsScreen() {
         {settingsItems.map((section, sectionIndex) => (
           <div 
             key={section.section} 
-            className="mb-8 animate-fadeInUp"
+            className="mb-4 animate-fadeInUp"
             style={{ animationDelay: `${(sectionIndex + 4) * 100}ms` }}
           >
-            <div className="flex items-center gap-3 mb-4 px-1">
-              <div className={`w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 ${
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all duration-300 ${
                 isDarkMode ? 'bg-gradient-to-br from-emerald-600/20 to-green-600/20' : 'bg-gradient-to-br from-emerald-100 to-green-100'
               }`}>
                 <Icon 
                   name={section.sectionIcon as any} 
-                  size={20}
+                  size={14}
                   className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}
                 />
               </div>
-              <h3 className={`font-bold text-base transition-colors duration-200 bg-gradient-to-r ${
+              <h3 className={`font-bold text-xs transition-colors duration-200 bg-gradient-to-r ${
                 isDarkMode ? 'from-gray-100 to-gray-300' : 'from-gray-800 to-gray-600'
               } bg-clip-text text-transparent`}>
                 {section.section}
@@ -434,7 +425,7 @@ export function SettingsScreen() {
                     key={item.key}
                     onClick={item.action || undefined}
                     disabled={!item.action}
-                    className={`w-full p-3 flex items-center gap-3 text-left transition-all duration-300 rounded-xl transform group relative overflow-hidden ${
+                    className={`w-full p-2 flex items-center gap-2 text-left transition-all duration-300 rounded-lg transform group relative overflow-hidden ${
                       item.action 
                         ? `hover:scale-[1.01] active:scale-[0.99] cursor-pointer ${
                             isDarkMode 
@@ -454,28 +445,28 @@ export function SettingsScreen() {
                       }`}></div>
                     )}
                     
-                    <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-lg transition-all duration-300 ${
+                    <div className={`relative w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
                       isDarkMode 
                         ? 'bg-gradient-to-br from-gray-700/60 to-gray-600/60 group-hover:from-gray-600/80 group-hover:to-gray-500/80' 
                         : 'bg-gradient-to-br from-gray-100 to-gray-200/80 group-hover:from-gray-200 group-hover:to-gray-300/80'
                     } shadow-lg group-hover:shadow-xl`}>
                       <Icon 
                         name={item.icon as any} 
-                        size={18}
+                        size={14}
                         className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}
                       />
                     </div>
                     <div className="flex-1 relative">
-                      <div className="font-bold text-sm mb-1">
+                      <div className="font-bold text-xs mb-0.5">
                         {item.label}
                       </div>
-                      <div className={`text-xs ${
+                      <div className={`text-[10px] ${
                         isDarkMode ? 'text-gray-400' : 'text-gray-600'
                       }`}>
                         {item.description}
                       </div>
                     </div>
-                    <div className={`relative transition-all duration-300 text-2xl ${
+                    <div className={`relative transition-all duration-300 text-lg ${
                       isDarkMode ? 'text-gray-400' : 'text-gray-400'
                     }`}>
                       →
@@ -488,14 +479,14 @@ export function SettingsScreen() {
         ))}
 
         {/* Enhanced Logout Button with Modern Design */}
-        <Card variant="elevated" padding="sm" className="mb-6 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
+        <Card variant="elevated" padding="xs" className="mb-6 animate-fadeInUp" style={{ animationDelay: '600ms' }}>
           <button
             onClick={() => {
               if (confirm('Hesabdan çıxmaq istədiyinizə əminsiniz?')) {
                 alert('Çıxış (demo)');
               }
             }}
-            className={`w-full p-3 flex items-center justify-center gap-3 rounded-xl transition-all duration-300 font-bold text-sm transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
+            className={`w-full p-2 flex items-center justify-center gap-2 rounded-lg transition-all duration-300 font-bold text-xs transform hover:scale-[1.02] active:scale-[0.98] group relative overflow-hidden ${
               isDarkMode 
                 ? 'text-red-400 hover:bg-gradient-to-r hover:from-red-900/30 hover:to-pink-900/30 border-2 border-red-500/30 hover:border-red-400/50' 
                 : 'text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 border-2 border-red-300/30 hover:border-red-400/50'
@@ -508,12 +499,12 @@ export function SettingsScreen() {
                 : 'bg-gradient-to-r from-red-400/10 via-transparent to-pink-400/10'
             }`}></div>
             
-            <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all duration-300 ${
+            <div className={`relative w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
               isDarkMode 
                 ? 'bg-gradient-to-br from-red-900/40 to-pink-900/40 group-hover:from-red-800/60 group-hover:to-pink-800/60' 
                 : 'bg-gradient-to-br from-red-100 to-pink-100 group-hover:from-red-200 group-hover:to-pink-200'
             } shadow-lg group-hover:shadow-xl`}>
-              <Icon name="log-out" size={20} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
+              <Icon name="log-out" size={16} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
             </div>
             <span className="relative">
               Hesabdan çıx

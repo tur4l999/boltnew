@@ -117,31 +117,31 @@ export function NotificationSettingsScreen() {
       </div>
 
       <div className="relative z-10 p-4 pb-24">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 mb-4">
           <button
             onClick={goBack}
-            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+            className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
               isDarkMode 
                 ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
                 : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
             }`}
           >
-            <span className="text-lg">←</span>
+            <span className="text-base">←</span>
           </button>
           <div>
-            <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
+            <h1 className={`text-base font-black transition-colors duration-200 bg-gradient-to-r ${
               isDarkMode ? 'from-blue-400 to-cyan-400' : 'from-blue-600 to-cyan-600'
             } bg-clip-text text-transparent`}>
               Bildiriş Ayarları
             </h1>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Bildiriş növlərini idarə edin
             </p>
           </div>
         </div>
 
         {/* Bildiriş Kanalları */}
-        <Card variant="elevated" padding="lg" className="mb-4 animate-fadeInUp">
+        <Card variant="elevated" padding="sm" className="mb-3 animate-fadeInUp">
           <button
             onClick={() => toggleDropdown('channels')}
             className="w-full flex items-center justify-between"

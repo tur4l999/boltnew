@@ -197,38 +197,38 @@ export function SecurityScreen() {
       </div>
 
       <div className="relative z-10 p-4 pb-24">
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 mb-4">
           <button
             onClick={goBack}
-            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
+            className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center transition-all duration-300 transform hover:scale-110 active:scale-95 ${
               isDarkMode 
                 ? 'border-gray-600/50 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 backdrop-blur-sm' 
                 : 'border-gray-300/50 bg-white/80 hover:bg-gray-50/80 text-gray-700 backdrop-blur-sm'
             }`}
           >
-            <span className="text-lg">←</span>
+            <span className="text-base">←</span>
           </button>
           <div>
-            <h1 className={`text-2xl font-black transition-colors duration-200 bg-gradient-to-r ${
+            <h1 className={`text-base font-black transition-colors duration-200 bg-gradient-to-r ${
               isDarkMode ? 'from-red-400 to-pink-400' : 'from-red-600 to-pink-600'
             } bg-clip-text text-transparent`}>
               Təhlükəsizlik
             </h1>
-            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Hesabınızı qoruyun
             </p>
           </div>
         </div>
 
         {/* Password Section */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp">
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+        <Card variant="elevated" padding="sm" className="mb-4 animate-fadeInUp">
+          <div className="flex items-center gap-2 mb-3">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
               isDarkMode ? 'bg-red-600/20' : 'bg-red-100'
             }`}>
-              <Icon name="lock" size={20} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
+              <Icon name="lock" size={16} className={isDarkMode ? 'text-red-400' : 'text-red-600'} />
             </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <h2 className={`font-black text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               Şifrə
             </h2>
           </div>
@@ -236,43 +236,43 @@ export function SecurityScreen() {
           {!showPasswordChange ? (
             <button
               onClick={handlePasswordChangeClick}
-              className={`w-full p-4 rounded-2xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
+              className={`w-full p-2.5 rounded-xl border-2 flex items-center justify-between transition-all duration-300 hover:scale-[1.02] ${
                 isDarkMode 
                   ? 'border-gray-700 bg-gray-800/50 hover:bg-gray-700/50 text-gray-200' 
                   : 'border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-900'
               }`}
             >
-              <div className="flex items-center gap-4">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   isDarkMode ? 'bg-yellow-600/20' : 'bg-yellow-100'
                 }`}>
-                  <Icon name="lock" size={20} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
+                  <Icon name="lock" size={16} className={isDarkMode ? 'text-yellow-400' : 'text-yellow-600'} />
                 </div>
                 <div className="text-left">
-                  <div className="font-bold">Şifrəni dəyişdir</div>
-                  <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <div className="font-bold text-xs">Şifrəni dəyişdir</div>
+                  <div className={`text-[10px] ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     Son dəyişiklik: 30 gün əvvəl
                   </div>
                 </div>
               </div>
-              <div className="text-2xl">→</div>
+              <div className="text-lg">→</div>
             </button>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-2">
               {/* Email göndərildi mesajı */}
               {emailSent && (
-                <div className={`p-4 rounded-2xl border-2 animate-fadeInUp ${
+                <div className={`p-2.5 rounded-xl border-2 animate-fadeInUp ${
                   isDarkMode 
                     ? 'border-emerald-500/50 bg-emerald-900/20' 
                     : 'border-emerald-500/50 bg-emerald-50'
                 }`}>
-                  <div className="flex items-center gap-3">
-                    <Icon name="mail" size={24} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+                  <div className="flex items-center gap-2">
+                    <Icon name="mail" size={18} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
                     <div>
-                      <div className={`font-bold ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                      <div className={`font-bold text-xs ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
                         ✅ Təsdiqləmə kodu göndərildi
                       </div>
-                      <div className={`text-sm ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                      <div className={`text-[10px] ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
                         {userEmail} ünvanına kod göndərildi
                       </div>
                     </div>
@@ -282,11 +282,11 @@ export function SecurityScreen() {
 
               {/* Step 1: Verification Code */}
               {step === 'code' && (
-                <div className={`p-4 rounded-2xl border-2 ${
+                <div className={`p-2.5 rounded-xl border-2 ${
                   isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
                 }`}>
-                  <div className="mb-4">
-                    <label className={`block text-sm font-bold mb-2 ${
+                  <div className="mb-2">
+                    <label className={`block text-xs font-bold mb-1 ${
                       isDarkMode ? 'text-gray-300' : 'text-gray-700'
                     }`}>
                       Təsdiqləmə kodu
@@ -297,21 +297,21 @@ export function SecurityScreen() {
                       onChange={(e) => setVerificationCode(e.target.value)}
                       placeholder="6 rəqəmli kodu daxil edin"
                       maxLength={6}
-                      className={`w-full px-4 py-3 rounded-xl border-2 font-mono text-lg text-center transition-all duration-300 ${
+                      className={`w-full px-2 py-2 rounded-lg border-2 font-mono text-sm text-center transition-all duration-300 ${
                         isDarkMode 
                           ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
                           : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
                       } focus:outline-none`}
                     />
-                    <div className={`text-xs mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className={`text-[10px] mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       💡 Demo üçün kod: <span className="font-bold">123456</span>
                     </div>
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-2">
                     <button
                       onClick={handleVerifyCode}
                       disabled={verificationCode.length !== 6}
-                      className={`flex-1 py-3 rounded-xl font-bold transition-all duration-300 ${
+                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                         verificationCode.length === 6
                           ? isDarkMode
                             ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
@@ -325,7 +325,7 @@ export function SecurityScreen() {
                     </button>
                     <button
                       onClick={handleCancel}
-                      className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+                      className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                         isDarkMode 
                           ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
                           : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -339,12 +339,12 @@ export function SecurityScreen() {
 
               {/* Step 2: New Password */}
               {step === 'newPassword' && (
-                <div className={`p-4 rounded-2xl border-2 ${
+                <div className={`p-2.5 rounded-xl border-2 ${
                   isDarkMode ? 'border-gray-700 bg-gray-800/50' : 'border-gray-200 bg-gray-50'
                 }`}>
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <div>
-                      <label className={`block text-sm font-bold mb-2 ${
+                      <label className={`block text-xs font-bold mb-1 ${
                         isDarkMode ? 'text-gray-300' : 'text-gray-700'
                       }`}>
                         Yeni şifrə
@@ -354,7 +354,7 @@ export function SecurityScreen() {
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="Ən azı 8 simvol"
-                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
+                        className={`w-full px-2 py-1.5 text-xs rounded-lg border-2 transition-all duration-300 ${
                           isDarkMode 
                             ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
                             : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
@@ -362,7 +362,7 @@ export function SecurityScreen() {
                       />
                     </div>
                     <div>
-                      <label className={`block text-sm font-bold mb-2 ${
+                      <label className={`block text-xs font-bold mb-1 ${
                         isDarkMode ? 'text-gray-300' : 'text-gray-700'
                       }`}>
                         Şifrəni təsdiqlə
@@ -372,18 +372,18 @@ export function SecurityScreen() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Şifrəni təkrar daxil edin"
-                        className={`w-full px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
+                        className={`w-full px-2 py-1.5 text-xs rounded-lg border-2 transition-all duration-300 ${
                           isDarkMode 
                             ? 'border-gray-600 bg-gray-700 text-gray-200 placeholder-gray-500 focus:border-emerald-500' 
                             : 'border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-emerald-500'
                         } focus:outline-none`}
                       />
                     </div>
-                    <div className="flex gap-3 pt-2">
+                    <div className="flex gap-2 pt-1">
                       <button
                         onClick={handleChangePassword}
                         disabled={newPassword.length < 8 || confirmPassword.length < 8}
-                        className={`flex-1 py-3 rounded-xl font-bold transition-all duration-300 ${
+                        className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                           newPassword.length >= 8 && confirmPassword.length >= 8
                             ? isDarkMode
                               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
@@ -397,7 +397,7 @@ export function SecurityScreen() {
                       </button>
                       <button
                         onClick={handleCancel}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all duration-300 ${
+                        className={`px-3 py-2 rounded-lg text-xs font-bold transition-all duration-300 ${
                           isDarkMode 
                             ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
                             : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
@@ -414,19 +414,19 @@ export function SecurityScreen() {
         </Card>
 
         {/* Two Factor Authentication */}
-        <Card variant="elevated" padding="lg" className="mb-6 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+        <Card variant="elevated" padding="sm" className="mb-4 animate-fadeInUp" style={{ animationDelay: '100ms' }}>
+          <div className="flex items-center gap-2 mb-3">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
               isDarkMode ? 'bg-emerald-600/20' : 'bg-emerald-100'
             }`}>
-              <Icon name="shield" size={20} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
+              <Icon name="shield" size={16} className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'} />
             </div>
-            <h2 className={`font-black text-xl ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+            <h2 className={`font-black text-sm ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
               İki faktorlu autentifikasiya
             </h2>
           </div>
 
-          <div className={`p-4 rounded-2xl border-2 mb-4 ${
+          <div className={`p-2.5 rounded-xl border-2 mb-2 ${
             twoFactorEnabled
               ? isDarkMode
                 ? 'border-emerald-500/50 bg-emerald-900/20'
@@ -435,10 +435,10 @@ export function SecurityScreen() {
                 ? 'border-gray-700 bg-gray-800/50'
                 : 'border-gray-200 bg-gray-50'
           }`}>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
               <div>
-                <div className="font-bold mb-1">SMS təsdiqləmə</div>
-                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className="font-bold text-xs mb-0.5">SMS təsdiqləmə</div>
+                <div className={`text-[10px] ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {twoFactorEnabled ? '✓ Aktiv' : 'Deaktiv'}
                 </div>
               </div>
@@ -456,8 +456,8 @@ export function SecurityScreen() {
               </button>
             </div>
             {twoFactorEnabled && (
-              <div className={`p-3 rounded-xl ${isDarkMode ? 'bg-emerald-900/30' : 'bg-emerald-100'}`}>
-                <div className={`text-sm flex items-center gap-2 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+              <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-emerald-900/30' : 'bg-emerald-100'}`}>
+                <div className={`text-xs flex items-center gap-1 ${isDarkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
                   <Icon name="phone" size={16} />
                   Təsdiqləmə kodu: +994 XX XXX XX 23
                 </div>
@@ -465,7 +465,7 @@ export function SecurityScreen() {
             )}
           </div>
 
-          <div className={`p-4 rounded-2xl border-2 ${
+          <div className={`p-2.5 rounded-xl border-2 ${
             biometricEnabled
               ? isDarkMode
                 ? 'border-emerald-500/50 bg-emerald-900/20'
@@ -474,15 +474,15 @@ export function SecurityScreen() {
                 ? 'border-gray-700 bg-gray-800/50'
                 : 'border-gray-200 bg-gray-50'
           }`}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex-1">
-                <div className="font-bold mb-1 flex items-center gap-2">
+                <div className="font-bold text-xs mb-0.5 flex items-center gap-2">
                   Biometrik autentifikasiya
                   {biometricProcessing && (
                     <div className="animate-spin">⏳</div>
                   )}
                 </div>
-                <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <div className={`text-[10px] ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                   {biometricSupported 
                     ? 'Face ID / Touch ID / Barmaq izi'
                     : '❌ Bu cihazda dəstəklənmir'}
@@ -506,18 +506,18 @@ export function SecurityScreen() {
             </div>
             
             {biometricEnabled && (
-              <div className={`p-3 rounded-xl border ${
+              <div className={`p-2 rounded-lg border ${
                 isDarkMode 
                   ? 'bg-emerald-900/30 border-emerald-700/30' 
                   : 'bg-emerald-100 border-emerald-200'
               }`}>
-                <div className={`text-sm font-medium flex items-center gap-2 ${
+                <div className={`text-xs font-medium flex items-center gap-1 ${
                   isDarkMode ? 'text-emerald-300' : 'text-emerald-700'
                 }`}>
-                  <Icon name="check" size={16} />
+                  <Icon name="check" size={12} />
                   <span>Biometrik giriş aktivdir</span>
                 </div>
-                <div className={`text-xs mt-1 ${
+                <div className={`text-[10px] mt-0.5 ${
                   isDarkMode ? 'text-emerald-400' : 'text-emerald-600'
                 }`}>
                   Tətbiqə biometrik məlumatlarınızla giriş edə bilərsiniz
@@ -526,13 +526,13 @@ export function SecurityScreen() {
             )}
             
             {!biometricSupported && (
-              <div className={`mt-3 p-3 rounded-xl ${
+              <div className={`mt-2 p-2 rounded-lg ${
                 isDarkMode ? 'bg-amber-900/20' : 'bg-amber-50'
               }`}>
-                <div className={`text-xs flex items-start gap-2 ${
+                <div className={`text-[10px] flex items-start gap-1 ${
                   isDarkMode ? 'text-amber-300' : 'text-amber-700'
                 }`}>
-                  <Icon name="warning" size={14} className="flex-shrink-0 mt-0.5" />
+                  <Icon name="warning" size={12} className="flex-shrink-0 mt-0.5" />
                   <span>Bu cihazda biometrik autentifikasiya dəstəklənmir və ya brauzerdə aktiv deyil.</span>
                 </div>
               </div>
